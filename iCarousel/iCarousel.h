@@ -1,5 +1,5 @@
 //
-//  PageView.h
+//  iCarousel.h
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2010 Charcoal Design. All rights reserved.
@@ -31,8 +31,8 @@ iCarouselType;
 @property (nonatomic, retain, readonly) NSArray *pageViews;
 
 - (void)scrollToPage:(NSUInteger)index animated:(BOOL)animated;
-- (void)scrollToNextPage:(BOOL)animated;
-- (void)scrollToPreviousPage:(BOOL)animated;
+- (void)removeItemAtIndex:(NSUInteger)index animated:(BOOL)animated;
+- (void)insertItemAtIndex:(NSUInteger)index animated:(BOOL)animated;
 - (void)reloadData;
 
 @end

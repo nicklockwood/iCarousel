@@ -1,5 +1,5 @@
 //
-//  PageView.m
+//  iCarousel.m
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2010 Charcoal Design. All rights reserved.
@@ -97,7 +97,6 @@
 	//position the view at the vanishing point
     float boundsWidth = scrollView.bounds.size.width;
     float offset = boundsWidth/2 + scrollView.contentOffset.x;
-    view.layer.transform = CATransform3DIdentity;
     view.center = CGPointMake(offset, scrollView.frame.size.height/2.0);
     
     //set up base transform
@@ -252,14 +251,70 @@
 	}
 }
 
-- (void)scrollToNextPage:(BOOL)animated
-{	
-	[self scrollToPage:self.currentPage + 1 animated:animated];
+- (void)removeItemAtIndex:(NSUInteger)index animated:(BOOL)animated
+{
+    if (animated)
+    {
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+        [UIView setAnimationDuration:0.4];
+    }
+    
+    UIView *itemView = [pageViews objectAtIndex:index];
+    [itemView removeFromSuperview];
+    [(NSMutableArray *)pageViews removeObjectAtIndex:index];
+    numberOfPages --;
+    scrollView.contentSize = CGSizeMake(pageWidth * numberOfPages, scrollView.frame.size.height);
+	for (NSUInteger i = index; i < numberOfPages; i++)
+    {
+		UIView *view = [pageViews objectAtIndex:i];
+		[self transformPageView:view atIndex:i];
+	}
+    
+    if (animated)
+    {
+        [UIView commitAnimations];
+    }
 }
 
-- (void)scrollToPreviousPage:(BOOL)animated
+- (void)showItemView:(UIView *)view
 {
-	[self scrollToPage:self.currentPage - 1 animated:animated];
+    view.hidden = NO;
+}
+
+- (void)insertItemAtIndex:(NSUInteger)index animated:(BOOL)animated
+{    
+    UIView *itemView = [dataSource carousel:self viewForPageAtIndex:index];
+    [(NSMutableArray *)pageViews insertObject:itemView atIndex:index];
+    itemView.alpha = 0.0;
+    [scrollView addSubview:itemView];
+    
+    if (animated)
+    {
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+        [UIView setAnimationDuration:0.4];
+    }
+    
+    numberOfPages ++;
+    scrollView.contentSize = CGSizeMake(pageWidth * numberOfPages, scrollView.frame.size.height);
+	for (NSUInteger i = index + 1; i < numberOfPages; i++)
+    {
+		UIView *view = [pageViews objectAtIndex:i];
+		[self transformPageView:view atIndex:i];
+	}
+    
+    if (animated)
+    {   
+        [UIView commitAnimations];
+        [self transformPageView:itemView atIndex:index];
+        [self performSelector:@selector(showItemView:) withObject:itemView afterDelay:animated? 0.395: 0.0];
+    }
+    else
+    {
+        [self transformPageView:itemView atIndex:index];
+        itemView.alpha = 1.0;
+    }
 }
 
 - (void)didMoveToSuperview
