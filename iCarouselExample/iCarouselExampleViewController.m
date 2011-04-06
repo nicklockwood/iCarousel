@@ -53,7 +53,7 @@
                                                        delegate:self
                                               cancelButtonTitle:nil
                                          destructiveButtonTitle:nil
-                                              otherButtonTitles:@"Linear", @"Cylinder", @"Inverted Cylinder", @"CoverFlow", nil];
+                                              otherButtonTitles:@"Linear", @"Rotary", @"Inverted Rotary", @"Cylinder", @"Inverted Cylinder", @"CoverFlow", nil];
     [sheet showInView:self.view];
     [sheet release];
 }
@@ -70,17 +70,17 @@
 #pragma mark -
 #pragma mark iCarousel methods
 
-- (NSUInteger)numberOfPagesInCarousel:(iCarousel *)carousel
+- (NSUInteger)numberOfItemsInCarousel:(iCarousel *)carousel
 {
     return 12;
 }
 
-- (UIView *)carousel:(iCarousel *)carousel viewForPageAtIndex:(NSUInteger)index
+- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index
 {
     return [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]] autorelease];
 }
 
-- (float)carouselPageWidth:(iCarousel *)carousel
+- (float)carouselItemWidth:(iCarousel *)carousel
 {
     return 210;
 }
