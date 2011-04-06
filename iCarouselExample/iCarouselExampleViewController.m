@@ -53,7 +53,7 @@
                                                        delegate:self
                                               cancelButtonTitle:nil
                                          destructiveButtonTitle:nil
-                                              otherButtonTitles:@"Linear", @"Rotary", @"Inverted Rotary", @"Cylinder", @"Inverted Cylinder", @"CoverFlow", nil];
+                                              otherButtonTitles:@"Linear", @"Rotary", @"Inverted Rotary", @"Cylinder", @"Inverted Cylinder", @"CoverFlow", @"Custom", nil];
     [sheet showInView:self.view];
     [sheet release];
 }
@@ -77,12 +77,41 @@
 
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index
 {
-    return [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]] autorelease];
+    //create a numbered view
+    UIView *view = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]] autorelease];
+    UILabel *label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
+    label.text = [NSString stringWithFormat:@"%i", index];
+    label.backgroundColor = [UIColor clearColor];
+    label.textAlignment = UITextAlignmentCenter;
+    label.font = [label.font fontWithSize:50];
+    [view addSubview:label];
+    return view;
 }
 
 - (float)carouselItemWidth:(iCarousel *)carousel
 {
+    //slightly wider than item view
     return 210;
+}
+
+- (CATransform3D)carousel:(iCarousel *)carousel transformForItemView:(UIView *)view withOffset:(float)offset
+{
+    //implement 'flip3D' style carousel
+    
+    //set opacity based on distance from camera
+    view.alpha = 1.0 - fminf(fmaxf(offset, 0.0), 1.0);
+    
+    //do 3d transform
+    CATransform3D transform = CATransform3DIdentity;
+    transform.m34 = -1.0/500.0;
+    transform = CATransform3DRotate(transform, M_PI / 8.0, 0, 1.0, 0);
+    return CATransform3DTranslate(transform, 0.0, 0.0, offset * self.carousel.itemWidth);
+}
+
+- (BOOL)carouselShouldWrap:(iCarousel *)carousel
+{
+    //wrap all carousels
+    return YES;
 }
 
 @end

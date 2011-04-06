@@ -20,15 +20,16 @@
 
 - (void)layOutItemViews;
 - (void)transformItemView:(UIView *)view atIndex:(NSInteger)index;
+- (BOOL)shouldWrap;
 
 @end
 
 
 @implementation iCarousel
 
-@synthesize type;
 @synthesize dataSource;
 @synthesize delegate;
+@synthesize type;
 @synthesize numberOfItems;
 @synthesize itemViews;
 @synthesize scrollView;
@@ -89,7 +90,25 @@
     [self layOutItemViews];
 }
 
-- (CATransform3D)transformForItemWithOffset:(float)offset
+- (BOOL)shouldWrap
+{
+    if ([(NSObject *)delegate respondsToSelector:@selector(carouselShouldWrap:)])
+    {
+        return [delegate carouselShouldWrap:self];
+    }
+    switch (type)
+    {
+        case iCarouselTypeRotary:
+        case iCarouselTypeInvertedRotary:
+        case iCarouselTypeCylinder:
+        case iCarouselTypeInvertedCylinder:
+            return YES;
+        default:
+            return NO;
+    }
+}
+
+- (CATransform3D)transformForItemView:(UIView *)view withOffset:(float)offset
 {
     //set up base transform
     CATransform3D transform = CATransform3DIdentity;
@@ -105,44 +124,48 @@
         case iCarouselTypeRotary:
         case iCarouselTypeInvertedRotary:
         {
-            float radius = (itemWidth/2.0) / tan(M_PI/numberOfItems);
-            float angle = offset / numberOfItems * 2.0 * M_PI;
+            float arc = M_PI * 2.0;
+            float radius = itemWidth / 2.0 / tan(arc/2.0/numberOfItems);
+            float angle = offset / numberOfItems * arc;
             
-            if (type == iCarouselTypeRotary) {
+            if (type == iCarouselTypeInvertedRotary) {
                 radius = -radius;
                 angle = -angle;
             }
             
-            transform = CATransform3DTranslate(transform, fabs(radius) * cos(angle), 0, fabs(radius) * sin(angle) + radius);
-            return transform;
+            return CATransform3DTranslate(transform, radius * sin(angle), 0, radius * cos(angle) - radius);
         }
         case iCarouselTypeCylinder:
         case iCarouselTypeInvertedCylinder:
         {
-            float radius = (itemWidth/2.0) / tan(M_PI/numberOfItems);
-            float angle = offset / numberOfItems * 2.0 * M_PI;
+            float arc = M_PI * 2.0;
+            float radius = itemWidth / 2.0 / tan(arc/2.0/numberOfItems);
+            float angle = offset / numberOfItems * arc;
             
-            if (type == iCarouselTypeInvertedCylinder) {
+            if (type == iCarouselTypeCylinder) {
                 radius = -radius;
                 angle = -angle;
             }
             
-            transform = CATransform3DTranslate(transform, 0, 0, -radius);
-            transform = CATransform3DRotate(transform, angle, 0, 1, 0);
             transform = CATransform3DTranslate(transform, 0, 0, radius);
-            return transform;
+            transform = CATransform3DRotate(transform, -angle, 0, 1, 0);
+            return CATransform3DTranslate(transform, 0, 0, -radius);
         }
         case iCarouselTypeCoverFlow:
         {
+            float tilt = 0.9;
+            float spacing = 0.25;
+            
             float clampedOffset = fmax(-1.0, fmin(1.0, offset));
-            transform = CATransform3DTranslate(transform, (clampedOffset * 0.5 + offset * 0.25) * itemWidth,
-                                               0, fabs(clampedOffset) * -itemWidth * 0.5);
-            return CATransform3DRotate(transform, -clampedOffset * M_PI_2, 0, 1, 0);
+            float x = (clampedOffset * 0.5 * tilt + offset * spacing) * itemWidth;
+            float z = fabs(clampedOffset) * -itemWidth * 0.5;
+            transform = CATransform3DTranslate(transform, x, 0, z);
+            return CATransform3DRotate(transform, -clampedOffset * M_PI_2 * tilt, 0, 1, 0);
         }
         case iCarouselTypeCustom:
         default:
         {
-            return [delegate carousel:self transformForItemWithOffset:offset];
+            return [delegate carousel:self transformForItemView:view withOffset:offset];
         }
     }
 }
@@ -155,11 +178,23 @@
     view.center = CGPointMake(frameOffset, scrollView.frame.size.height/2.0);
     
     //calculate relative position
-    float offset = self.currentItemIndex - index - scrollView.contentOffset.x / itemWidth;
+    float scrollOffset = scrollView.contentOffset.x / itemWidth;
+    float offset = index - scrollOffset;
+    if ([self shouldWrap])
+    {
+        if (offset > numberOfItems/2)
+        {
+            offset -= numberOfItems;
+        }
+        else if (offset < -numberOfItems/2)
+        {
+            offset += numberOfItems;
+        }
+    }
     
     //transform view
-    view.layer.doubleSided = NO;
-    view.layer.transform = [self transformForItemWithOffset:offset];
+    //view.layer.doubleSided = NO;
+    view.layer.transform = [self transformForItemView:view withOffset:offset];
 }
 
 - (void)layoutSubviews
@@ -172,18 +207,21 @@
 
 - (void)layOutItemViews
 {
-    //set scroll size
-	if ([(NSObject *)dataSource respondsToSelector:@selector(carouselItemWidth:)])
+    //set scrollview size
+	if ([(NSObject *)delegate respondsToSelector:@selector(carouselItemWidth:)])
     {
 		itemWidth = [delegate carouselItemWidth:self];
 	}
-    else
-    {
-        itemWidth = self.frame.size.width;
-	}
     scrollView.center = CGPointMake(self.bounds.size.width/2.0, self.bounds.size.height/2.0);
     scrollView.bounds = CGRectMake(0.0, 0.0, itemWidth, self.bounds.size.height);
-    scrollView.contentSize = CGSizeMake(itemWidth * numberOfItems, scrollView.frame.size.height);
+    
+    //set content size and offset
+    float contentWidth = itemWidth * numberOfItems;
+    scrollView.contentSize = CGSizeMake(contentWidth, scrollView.frame.size.height);
+    if ([self shouldWrap])
+    {
+        scrollView.contentSize = CGSizeMake(contentWidth + itemWidth, scrollView.frame.size.height);
+    }
 	
 	for (NSUInteger i = 0; i < numberOfItems; i++)
     {
@@ -220,6 +258,9 @@
         [scrollView addSubview:view];
 	}
     
+    //set item width (may be overidden by delegate)
+    itemWidth = [([itemViews count]? [itemViews objectAtIndex:0]: self) bounds].size.width;
+
     //layout views
     [self layOutItemViews];
 }
@@ -227,8 +268,8 @@
 - (NSInteger)currentItemIndex
 {	
 	CGPoint offset = scrollView.contentOffset;
-	NSInteger itemIndex = round(offset.x / scrollView.frame.size.width); 
-	return MAX(MIN(itemIndex, 0), self.numberOfItems - 1);
+	NSInteger itemIndex = round(offset.x / scrollView.frame.size.width);
+	return MIN(MAX(itemIndex, 0), self.numberOfItems - 1);
 }
 
 - (void)scrollToItemAtIndex:(NSUInteger)index animated:(BOOL)animated
@@ -236,7 +277,7 @@
 	if (index < numberOfItems)
     {
 		previousItemIndex = self.currentItemIndex;
-		[scrollView scrollRectToVisible:CGRectMake(scrollView.frame.size.width * index, 0, scrollView.frame.size.width, scrollView.frame.size.height)
+		[scrollView scrollRectToVisible:CGRectMake(itemWidth * index, 0, itemWidth, scrollView.frame.size.height)
 							   animated:animated];
 	}
 }
@@ -347,7 +388,19 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)_scrollView
 {	
-	if ([(NSObject *)delegate respondsToSelector:@selector(carouselDidScroll:)])
+    if ([self shouldWrap])
+    {
+        float contentWidth = scrollView.contentSize.width - itemWidth;
+        if (scrollView.contentOffset.x < 0)
+        {
+            scrollView.contentOffset = CGPointMake(scrollView.contentOffset.x + contentWidth, 0);
+        }
+        else if (scrollView.contentOffset.x > contentWidth)
+        {
+            scrollView.contentOffset = CGPointMake(scrollView.contentOffset.x - contentWidth, 0);
+        }
+    }
+    if ([(NSObject *)delegate respondsToSelector:@selector(carouselDidScroll:)])
     {
 		[delegate carouselDidScroll:self];
 	}

@@ -26,9 +26,9 @@ iCarouselType;
 
 @interface iCarousel : UIView
 
-@property (nonatomic, assign) iCarouselType type;
 @property (nonatomic, assign) IBOutlet id<iCarouselDataSource> dataSource;
 @property (nonatomic, assign) IBOutlet id<iCarouselDelegate> delegate;
+@property (nonatomic, assign) iCarouselType type;
 @property (nonatomic, readonly) NSInteger numberOfItems;
 @property (nonatomic, readonly) NSInteger currentItemIndex;
 @property (nonatomic, readonly) float itemWidth;
@@ -56,6 +56,7 @@ iCarouselType;
 - (void)carouselDidScroll:(iCarousel *)carousel;
 - (void)carouselCurrentItemIndexUpdated:(iCarousel *)carousel;
 - (float)carouselItemWidth:(iCarousel *)carousel;
-- (CATransform3D)carousel:(iCarousel *)carousel transformForItemWithOffset:(float)offset;
+- (BOOL)carouselShouldWrap:(iCarousel *)carousel;
+- (CATransform3D)carousel:(iCarousel *)carousel transformForItemView:(UIView *)view withOffset:(float)offset;
 
 @end
