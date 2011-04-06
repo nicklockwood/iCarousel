@@ -6,7 +6,6 @@
 //
 
 #import "iCarousel.h"
-#import <QuartzCore/QuartzCore.h>
 
 
 #define PERSPECTIVE - 1.0/500.0
@@ -14,13 +13,13 @@
 
 @interface iCarousel () <UIScrollViewDelegate>
 
-@property (nonatomic, retain) NSArray *pageViews;
+@property (nonatomic, retain) NSMutableArray *itemViews;
 @property (nonatomic, retain) UIScrollView *scrollView;
-@property (nonatomic, assign) NSUInteger oldIndex;
-@property (nonatomic, assign) float pageWidth;
+@property (nonatomic, assign) NSInteger previousItemIndex;
+@property (nonatomic, assign) float itemWidth;
 
-- (void)layoutPages;
-- (void)transformPageView:(UIView *)view atIndex:(NSUInteger)index;
+- (void)layOutItemViews;
+- (void)transformItemView:(UIView *)view atIndex:(NSInteger)index;
 
 @end
 
@@ -30,16 +29,14 @@
 @synthesize type;
 @synthesize dataSource;
 @synthesize delegate;
-@synthesize numberOfPages;
-@synthesize scrollEnabled;
-@synthesize pageViews;
+@synthesize numberOfItems;
+@synthesize itemViews;
 @synthesize scrollView;
-@synthesize oldIndex;
-@synthesize pageWidth;
+@synthesize previousItemIndex;
+@synthesize itemWidth;
 
 - (void)setup
 {
-	self.scrollEnabled = YES;
     self.autoresizesSubviews = NO;
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(handleLowMemory:)
@@ -51,7 +48,7 @@
     scrollView.clipsToBounds = NO;
 	scrollView.delaysContentTouches = YES;
 	scrollView.pagingEnabled = YES;
-	scrollView.scrollEnabled = scrollEnabled;
+	scrollView.scrollEnabled = YES;
 	scrollView.showsHorizontalScrollIndicator = NO;
 	scrollView.showsVerticalScrollIndicator = NO;
 	scrollView.scrollsToTop = NO;
@@ -89,16 +86,11 @@
 - (void)setType:(iCarouselType)_type
 {
     type = _type;
-    [self layoutPages];
+    [self layOutItemViews];
 }
 
-- (void)transformPageView:(UIView *)view atIndex:(NSUInteger)index
+- (CATransform3D)transformForItemWithOffset:(float)offset
 {
-	//position the view at the vanishing point
-    float boundsWidth = scrollView.bounds.size.width;
-    float offset = boundsWidth/2 + scrollView.contentOffset.x;
-    view.center = CGPointMake(offset, scrollView.frame.size.height/2.0);
-    
     //set up base transform
     CATransform3D transform = CATransform3DIdentity;
     transform.m34 = PERSPECTIVE;
@@ -108,87 +100,95 @@
     {
         case iCarouselTypeLinear:
         {
-            //update transform
-            transform = CATransform3DTranslate(transform, index * pageWidth - offset + pageWidth/2.0, 0, 0);
-            break;
+            return CATransform3DTranslate(transform, offset * itemWidth, 0, 0);
+        }
+        case iCarouselTypeRotary:
+        case iCarouselTypeInvertedRotary:
+        {
+            float radius = (itemWidth/2.0) / tan(M_PI/numberOfItems);
+            float angle = offset / numberOfItems * 2.0 * M_PI;
+            
+            if (type == iCarouselTypeRotary) {
+                radius = -radius;
+                angle = -angle;
+            }
+            
+            transform = CATransform3DTranslate(transform, fabs(radius) * cos(angle), 0, fabs(radius) * sin(angle) + radius);
+            return transform;
         }
         case iCarouselTypeCylinder:
         case iCarouselTypeInvertedCylinder:
         {
-            float radius = (pageWidth/2.0) / tan(M_PI/numberOfPages);
-            float angle = (((float)index*pageWidth + scrollView.contentOffset.x) / scrollView.contentSize.width) * 2 * M_PI;
+            float radius = (itemWidth/2.0) / tan(M_PI/numberOfItems);
+            float angle = offset / numberOfItems * 2.0 * M_PI;
             
-            if (type == iCarouselTypeCylinder) {
+            if (type == iCarouselTypeInvertedCylinder) {
                 radius = -radius;
                 angle = -angle;
             }
             
             transform = CATransform3DTranslate(transform, 0, 0, -radius);
-            transform = CATransform3DRotate(transform, -angle, 0, 1, 0);
+            transform = CATransform3DRotate(transform, angle, 0, 1, 0);
             transform = CATransform3DTranslate(transform, 0, 0, radius);
-            break;
+            return transform;
         }
         case iCarouselTypeCoverFlow:
         {
-            //calculate positioning factors
-            float factor = scrollView.contentOffset.x / pageWidth;
-            float page = round(factor);
-            factor = factor - floor(factor);
-            if (factor > 0.5)
-            {
-                factor -= 1.0;
-            }
-            factor = page - (float)index + factor;
-            float clampedFactor = fmax(-1.0, fmin(1.0, factor));
-            
-            //calculate positions and rotations
-            float rotation = clampedFactor * M_PI_2;
-            float spacing = factor * 0.75 * pageWidth;
-            float distance = fabs(clampedFactor) * scrollView.frame.size.width/2;
-            
-            //update transform
-            transform = CATransform3DTranslate(transform, index * pageWidth + pageWidth/2.0 - offset + spacing - (clampedFactor  * pageWidth)/2, 0, -distance);
-            transform = CATransform3DRotate(transform, rotation, 0, 1, 0);
-            break;
+            float clampedOffset = fmax(-1.0, fmin(1.0, offset));
+            transform = CATransform3DTranslate(transform, (clampedOffset * 0.5 + offset * 0.25) * itemWidth,
+                                               0, fabs(clampedOffset) * -itemWidth * 0.5);
+            return CATransform3DRotate(transform, -clampedOffset * M_PI_2, 0, 1, 0);
         }
+        case iCarouselTypeCustom:
         default:
         {
-            //no transform
+            return [delegate carousel:self transformForItemWithOffset:offset];
         }
     }
+}
+
+- (void)transformItemView:(UIView *)view atIndex:(NSInteger)index
+{
+	//position the view at the vanishing point
+    float boundsWidth = scrollView.bounds.size.width;
+    float frameOffset = boundsWidth/2 + scrollView.contentOffset.x;
+    view.center = CGPointMake(frameOffset, scrollView.frame.size.height/2.0);
+    
+    //calculate relative position
+    float offset = self.currentItemIndex - index - scrollView.contentOffset.x / itemWidth;
     
     //transform view
     view.layer.doubleSided = NO;
-    view.layer.transform = transform;
+    view.layer.transform = [self transformForItemWithOffset:offset];
 }
 
 - (void)layoutSubviews
 {
     if (scrollView.bounds.size.height != self.bounds.size.height || scrollView.frame.origin.y != 0.0)
     {
-        [self layoutPages];
+        [self layOutItemViews];
     }
 }
 
-- (void)layoutPages
+- (void)layOutItemViews
 {
     //set scroll size
-	if ([(NSObject *)dataSource respondsToSelector:@selector(carouselPageWidth:)])
+	if ([(NSObject *)dataSource respondsToSelector:@selector(carouselItemWidth:)])
     {
-		pageWidth = [dataSource carouselPageWidth:self];
+		itemWidth = [delegate carouselItemWidth:self];
 	}
     else
     {
-        pageWidth = self.frame.size.width;
+        itemWidth = self.frame.size.width;
 	}
     scrollView.center = CGPointMake(self.bounds.size.width/2.0, self.bounds.size.height/2.0);
-    scrollView.bounds = CGRectMake(0.0, 0.0, pageWidth, self.bounds.size.height);
-    scrollView.contentSize = CGSizeMake(pageWidth * numberOfPages, scrollView.frame.size.height);
+    scrollView.bounds = CGRectMake(0.0, 0.0, itemWidth, self.bounds.size.height);
+    scrollView.contentSize = CGSizeMake(itemWidth * numberOfItems, scrollView.frame.size.height);
 	
-	for (NSUInteger i = 0; i < numberOfPages; i++)
+	for (NSUInteger i = 0; i < numberOfItems; i++)
     {
-		UIView *view = [pageViews objectAtIndex:i];
-		[self transformPageView:view atIndex:i];
+		UIView *view = [itemViews objectAtIndex:i];
+		[self transformItemView:view atIndex:i];
 	}
 	
     //call delegate
@@ -201,74 +201,80 @@
 - (void)reloadData
 {
 	//remove old views
-	for (UIView *view in pageViews)
+	for (UIView *view in itemViews)
     {
 		[view removeFromSuperview];
 	}
 	
 	//load new views
-	numberOfPages = [dataSource numberOfPagesInCarousel:self];
-	self.pageViews = [NSMutableArray arrayWithCapacity:numberOfPages];
-	for (NSUInteger i = 0; i < numberOfPages; i++)
+	numberOfItems = [dataSource numberOfItemsInCarousel:self];
+	self.itemViews = [NSMutableArray arrayWithCapacity:numberOfItems];
+	for (NSUInteger i = 0; i < numberOfItems; i++)
     {
-        UIView *view = [dataSource carousel:self viewForPageAtIndex:i];
+        UIView *view = [dataSource carousel:self viewForItemAtIndex:i];
         if (view == nil)
         {
 			view = [[[UIView alloc] init] autorelease];
         }
-		[(NSMutableArray *)pageViews addObject:view];
+		[itemViews addObject:view];
         [scrollView addSubview:view];
 	}
     
     //layout views
-    [self layoutPages];
+    [self layOutItemViews];
 }
 
-- (void)setScrollEnabled:(BOOL)_scrollEnabled
-{	
-	scrollEnabled = _scrollEnabled;
-	scrollView.scrollEnabled = scrollEnabled;
-}
-
-- (NSUInteger)currentPage
+- (NSInteger)currentItemIndex
 {	
 	CGPoint offset = scrollView.contentOffset;
-	NSUInteger page = round(offset.x / scrollView.frame.size.width); 
-	if (page > self.numberOfPages - 1)
-    {
-		page = self.numberOfPages - 1;
-	}
-	return page;
+	NSInteger itemIndex = round(offset.x / scrollView.frame.size.width); 
+	return MAX(MIN(itemIndex, 0), self.numberOfItems - 1);
 }
 
-- (void)scrollToPage:(NSUInteger)index animated:(BOOL)animated
+- (void)scrollToItemAtIndex:(NSUInteger)index animated:(BOOL)animated
 {	
-	if (index < numberOfPages)
+	if (index < numberOfItems)
     {
-		oldIndex = self.currentPage;
+		previousItemIndex = self.currentItemIndex;
 		[scrollView scrollRectToVisible:CGRectMake(scrollView.frame.size.width * index, 0, scrollView.frame.size.width, scrollView.frame.size.height)
 							   animated:animated];
 	}
 }
 
+- (void)removeItemView:(UIView *)itemView
+{
+    [itemView removeFromSuperview];
+}
+
 - (void)removeItemAtIndex:(NSUInteger)index animated:(BOOL)animated
 {
+    UIView *itemView = [itemViews objectAtIndex:index];
+    
     if (animated)
     {
         [UIView beginAnimations:nil context:nil];
         [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+        [UIView setAnimationDuration:0.1];
+        itemView.alpha = 0.0;
+        [UIView commitAnimations];
+        [self performSelector:@selector(removeItemView:) withObject:itemView afterDelay:0.1];
+        
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
         [UIView setAnimationDuration:0.4];
     }
-    
-    UIView *itemView = [pageViews objectAtIndex:index];
-    [itemView removeFromSuperview];
-    [(NSMutableArray *)pageViews removeObjectAtIndex:index];
-    numberOfPages --;
-    scrollView.contentSize = CGSizeMake(pageWidth * numberOfPages, scrollView.frame.size.height);
-	for (NSUInteger i = index; i < numberOfPages; i++)
+    else
     {
-		UIView *view = [pageViews objectAtIndex:i];
-		[self transformPageView:view atIndex:i];
+        [itemView removeFromSuperview];
+    }
+    
+    [itemViews removeObjectAtIndex:index];
+    numberOfItems --;
+    scrollView.contentSize = CGSizeMake(itemWidth * numberOfItems, scrollView.frame.size.height);
+	for (NSUInteger i = index; i < numberOfItems; i++)
+    {
+		UIView *view = [itemViews objectAtIndex:i];
+		[self transformItemView:view atIndex:i];
 	}
     
     if (animated)
@@ -277,15 +283,19 @@
     }
 }
 
-- (void)showItemView:(UIView *)view
+- (void)showItemView:(UIView *)itemView
 {
-    view.hidden = NO;
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+    [UIView setAnimationDuration:0.1];
+    itemView.alpha = 1.0;
+    [UIView commitAnimations];
 }
 
 - (void)insertItemAtIndex:(NSUInteger)index animated:(BOOL)animated
-{    
-    UIView *itemView = [dataSource carousel:self viewForPageAtIndex:index];
-    [(NSMutableArray *)pageViews insertObject:itemView atIndex:index];
+{
+    UIView *itemView = [dataSource carousel:self viewForItemAtIndex:index];
+    [itemViews insertObject:itemView atIndex:index];
     itemView.alpha = 0.0;
     [scrollView addSubview:itemView];
     
@@ -296,23 +306,23 @@
         [UIView setAnimationDuration:0.4];
     }
     
-    numberOfPages ++;
-    scrollView.contentSize = CGSizeMake(pageWidth * numberOfPages, scrollView.frame.size.height);
-	for (NSUInteger i = index + 1; i < numberOfPages; i++)
+    numberOfItems ++;
+    scrollView.contentSize = CGSizeMake(itemWidth * numberOfItems, scrollView.frame.size.height);
+	for (NSUInteger i = index + 1; i < numberOfItems; i++)
     {
-		UIView *view = [pageViews objectAtIndex:i];
-		[self transformPageView:view atIndex:i];
+		UIView *view = [itemViews objectAtIndex:i];
+		[self transformItemView:view atIndex:i];
 	}
     
     if (animated)
     {   
         [UIView commitAnimations];
-        [self transformPageView:itemView atIndex:index];
-        [self performSelector:@selector(showItemView:) withObject:itemView afterDelay:animated? 0.395: 0.0];
+        [self transformItemView:itemView atIndex:index];
+        [self performSelector:@selector(showItemView:) withObject:itemView afterDelay:animated? 0.3: 0.0];
     }
     else
     {
-        [self transformPageView:itemView atIndex:index];
+        [self transformItemView:itemView atIndex:index];
         itemView.alpha = 1.0;
     }
 }
@@ -337,15 +347,19 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)_scrollView
 {	
-	for (NSUInteger i = 0; i < numberOfPages; i++)
+	if ([(NSObject *)delegate respondsToSelector:@selector(carouselDidScroll:)])
     {
-		[self transformPageView:[pageViews objectAtIndex:i] atIndex:i];
-	}
-    if (oldIndex != self.currentPage && [(NSObject *)delegate respondsToSelector:@selector(carouselDidScroll:)])
-    {
-		oldIndex = self.currentPage;
 		[delegate carouselDidScroll:self];
-	};
+	}
+    for (NSUInteger i = 0; i < numberOfItems; i++)
+    {
+		[self transformItemView:[itemViews objectAtIndex:i] atIndex:i];
+	}
+    if (previousItemIndex != self.currentItemIndex && [(NSObject *)delegate respondsToSelector:@selector(carouselCurrentItemIndexUpdated:)])
+    {
+		previousItemIndex = self.currentItemIndex;
+		[delegate carouselCurrentItemIndexUpdated:self];
+	}
 }
 	 
 #pragma mark -
@@ -354,7 +368,7 @@
 - (void)dealloc {
 	
 	[scrollView release];
-	[pageViews release];
+	[itemViews release];
 	[super dealloc];
 }
 
