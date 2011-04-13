@@ -1,3 +1,11 @@
+Version 1.1
+
+- Added itemViews property
+- Added perspective property
+- Added scrollEnabled property
+- Added placeholder views feature
+- Fixed vanishing views bug in example project
+
 Version 1.0
 
 - Initial release

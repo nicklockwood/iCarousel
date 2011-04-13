@@ -8,12 +8,10 @@
 #import "iCarousel.h"
 
 
-#define PERSPECTIVE - 1.0/500.0
-
-
 @interface iCarousel () <UIScrollViewDelegate>
 
-@property (nonatomic, retain) NSMutableArray *itemViews;
+@property (nonatomic, retain) NSArray *itemViews;
+@property (nonatomic, retain) NSArray *placeholderViews;
 @property (nonatomic, retain) UIScrollView *scrollView;
 @property (nonatomic, assign) NSInteger previousItemIndex;
 @property (nonatomic, assign) float itemWidth;
@@ -30,15 +28,19 @@
 @synthesize dataSource;
 @synthesize delegate;
 @synthesize type;
+@synthesize perspective;
 @synthesize numberOfItems;
+@synthesize numberOfPlaceholders;
 @synthesize itemViews;
+@synthesize placeholderViews;
 @synthesize scrollView;
 @synthesize previousItemIndex;
 @synthesize itemWidth;
 
 - (void)setup
 {
-    self.autoresizesSubviews = NO;
+    self.perspective = -1.0/500.0;
+    
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(handleLowMemory:)
 												 name:UIApplicationDidReceiveMemoryWarningNotification
@@ -90,9 +92,19 @@
     [self layOutItemViews];
 }
 
+- (BOOL)scrollEnabled
+{
+    return scrollView.scrollEnabled;
+}
+
+- (void)setScrollEnabled:(BOOL)_scrollEnabled
+{
+    scrollView.scrollEnabled = _scrollEnabled;
+}
+
 - (BOOL)shouldWrap
 {
-    if ([(NSObject *)delegate respondsToSelector:@selector(carouselShouldWrap:)])
+    if ([delegate respondsToSelector:@selector(carouselShouldWrap:)])
     {
         return [delegate carouselShouldWrap:self];
     }
@@ -109,10 +121,10 @@
 }
 
 - (CATransform3D)transformForItemView:(UIView *)view withOffset:(float)offset
-{
+{    
     //set up base transform
     CATransform3D transform = CATransform3DIdentity;
-    transform.m34 = PERSPECTIVE;
+    transform.m34 = perspective;
     
     //perform transform
     switch (type)
@@ -128,7 +140,9 @@
             float radius = itemWidth / 2.0 / tan(arc/2.0/numberOfItems);
             float angle = offset / numberOfItems * arc;
             
-            if (type == iCarouselTypeInvertedRotary) {
+            if (type == iCarouselTypeInvertedRotary)
+            {
+                view.layer.doubleSided = NO;
                 radius = -radius;
                 angle = -angle;
             }
@@ -142,14 +156,16 @@
             float radius = itemWidth / 2.0 / tan(arc/2.0/numberOfItems);
             float angle = offset / numberOfItems * arc;
             
-            if (type == iCarouselTypeCylinder) {
+            if (type == iCarouselTypeInvertedCylinder)
+            {
+                view.layer.doubleSided = NO;
                 radius = -radius;
                 angle = -angle;
             }
             
-            transform = CATransform3DTranslate(transform, 0, 0, radius);
-            transform = CATransform3DRotate(transform, -angle, 0, 1, 0);
-            return CATransform3DTranslate(transform, 0, 0, -radius);
+            transform = CATransform3DTranslate(transform, 0, 0, -radius);
+            transform = CATransform3DRotate(transform, angle, 0, 1, 0);
+            return CATransform3DTranslate(transform, 0, 0, radius);
         }
         case iCarouselTypeCoverFlow:
         {
@@ -191,9 +207,8 @@
             offset += numberOfItems;
         }
     }
-    
+
     //transform view
-    //view.layer.doubleSided = NO;
     view.layer.transform = [self transformForItemView:view withOffset:offset];
 }
 
@@ -205,13 +220,38 @@
     }
 }
 
+- (void)transformItemViews
+{
+    //lay out items
+	for (NSUInteger i = 0; i < numberOfItems; i++)
+    {
+		UIView *view = [itemViews objectAtIndex:i];
+		[self transformItemView:view atIndex:i];
+	}
+    
+    //lay out placeholders
+    for (NSInteger i = 0; i < numberOfPlaceholders; i++)
+    {
+		UIView *view = [placeholderViews objectAtIndex:i];
+		[self transformItemView:view atIndex:-(i+1)];
+	}
+    for (NSInteger i = 0; i < numberOfPlaceholders; i++)
+    {
+		UIView *view = [placeholderViews objectAtIndex:i + numberOfPlaceholders];
+		[self transformItemView:view atIndex:i + numberOfItems];
+	}
+}
+
 - (void)layOutItemViews
 {
     //set scrollview size
-	if ([(NSObject *)delegate respondsToSelector:@selector(carouselItemWidth:)])
+	if ([delegate respondsToSelector:@selector(carouselItemWidth:)])
     {
 		itemWidth = [delegate carouselItemWidth:self];
 	}
+    
+    //resize scrollview, preserving offset
+    CGPoint contentOffset = scrollView.contentOffset;
     scrollView.center = CGPointMake(self.bounds.size.width/2.0, self.bounds.size.height/2.0);
     scrollView.bounds = CGRectMake(0.0, 0.0, itemWidth, self.bounds.size.height);
     
@@ -222,15 +262,15 @@
     {
         scrollView.contentSize = CGSizeMake(contentWidth + itemWidth, scrollView.frame.size.height);
     }
+    
+    //contentOffset.x = fmin(contentOffset.x, contentWidth - itemWidth);
+    scrollView.contentOffset = contentOffset;
 	
-	for (NSUInteger i = 0; i < numberOfItems; i++)
-    {
-		UIView *view = [itemViews objectAtIndex:i];
-		[self transformItemView:view atIndex:i];
-	}
+    //transform views
+    [self transformItemViews];
 	
     //call delegate
-	if ([(NSObject *)delegate respondsToSelector:@selector(carouselDidScroll:)])
+	if ([delegate respondsToSelector:@selector(carouselDidScroll:)])
     {
 		[delegate carouselDidScroll:self];
 	}
@@ -240,6 +280,10 @@
 {
 	//remove old views
 	for (UIView *view in itemViews)
+    {
+		[view removeFromSuperview];
+	}
+    for (UIView *view in placeholderViews)
     {
 		[view removeFromSuperview];
 	}
@@ -254,9 +298,26 @@
         {
 			view = [[[UIView alloc] init] autorelease];
         }
-		[itemViews addObject:view];
+		[(NSMutableArray *)itemViews addObject:view];
         [scrollView addSubview:view];
 	}
+    
+    //load placeholders
+    if ([dataSource respondsToSelector:@selector(numberOfPlaceholdersInCarousel:)])
+    {
+        numberOfPlaceholders = [dataSource numberOfPlaceholdersInCarousel:self];
+        self.placeholderViews = [NSMutableArray arrayWithCapacity:numberOfPlaceholders * 2];
+        for (NSUInteger i = 0; i < numberOfPlaceholders * 2; i++)
+        {
+            UIView *view = [dataSource carouselPlaceholderView:self];
+            if (view == nil)
+            {
+                view = [[[UIView alloc] init] autorelease];
+            }
+            [(NSMutableArray *)placeholderViews addObject:view];
+            [scrollView addSubview:view];
+        }
+    }
     
     //set item width (may be overidden by delegate)
     itemWidth = [([itemViews count]? [itemViews objectAtIndex:0]: self) bounds].size.width;
@@ -274,17 +335,28 @@
 
 - (void)scrollToItemAtIndex:(NSUInteger)index animated:(BOOL)animated
 {	
-	if (index < numberOfItems)
+	if ([self shouldWrap])
     {
-		previousItemIndex = self.currentItemIndex;
-		[scrollView scrollRectToVisible:CGRectMake(itemWidth * index, 0, itemWidth, scrollView.frame.size.height)
-							   animated:animated];
-	}
-}
-
-- (void)removeItemView:(UIView *)itemView
-{
-    [itemView removeFromSuperview];
+        index = (index + numberOfItems) % numberOfItems;
+    }
+    else
+    {
+        index = MIN(MAX(0, index), numberOfItems - 1);
+    }
+    previousItemIndex = self.currentItemIndex;
+    if ([self shouldWrap] && previousItemIndex == 0 && index == numberOfItems - 1)
+    {
+        [scrollView scrollRectToVisible:CGRectMake(itemWidth * numberOfItems, 0, itemWidth, scrollView.frame.size.height) animated:NO];
+        
+    }
+    else if ([self shouldWrap] && index == 0 && previousItemIndex == numberOfItems - 1)
+    {
+        [scrollView scrollRectToVisible:CGRectMake(itemWidth * previousItemIndex, 0, itemWidth, scrollView.frame.size.height) animated:NO];
+        index = numberOfItems;
+        //TODO: find a better solution to wrapping problem
+        [self performSelector:@selector(scrollViewDidEndDecelerating:) withObject:scrollView afterDelay:0.3];
+    }
+    [scrollView scrollRectToVisible:CGRectMake(itemWidth * index - 1, 0, itemWidth, scrollView.frame.size.height) animated:animated];
 }
 
 - (void)removeItemAtIndex:(NSUInteger)index animated:(BOOL)animated
@@ -298,7 +370,7 @@
         [UIView setAnimationDuration:0.1];
         itemView.alpha = 0.0;
         [UIView commitAnimations];
-        [self performSelector:@selector(removeItemView:) withObject:itemView afterDelay:0.1];
+        [itemView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.1];
         
         [UIView beginAnimations:nil context:nil];
         [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
@@ -309,14 +381,10 @@
         [itemView removeFromSuperview];
     }
     
-    [itemViews removeObjectAtIndex:index];
+    [(NSMutableArray *)itemViews removeObjectAtIndex:index];
     numberOfItems --;
     scrollView.contentSize = CGSizeMake(itemWidth * numberOfItems, scrollView.frame.size.height);
-	for (NSUInteger i = index; i < numberOfItems; i++)
-    {
-		UIView *view = [itemViews objectAtIndex:i];
-		[self transformItemView:view atIndex:i];
-	}
+	[self transformItemViews];
     
     if (animated)
     {
@@ -326,6 +394,8 @@
 
 - (void)showItemView:(UIView *)itemView
 {
+    itemView.alpha = 0.0;
+    [scrollView addSubview:itemView];
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
     [UIView setAnimationDuration:0.1];
@@ -336,9 +406,7 @@
 - (void)insertItemAtIndex:(NSUInteger)index animated:(BOOL)animated
 {
     UIView *itemView = [dataSource carousel:self viewForItemAtIndex:index];
-    [itemViews insertObject:itemView atIndex:index];
-    itemView.alpha = 0.0;
-    [scrollView addSubview:itemView];
+    [(NSMutableArray *)itemViews insertObject:itemView atIndex:index];
     
     if (animated)
     {
@@ -349,11 +417,7 @@
     
     numberOfItems ++;
     scrollView.contentSize = CGSizeMake(itemWidth * numberOfItems, scrollView.frame.size.height);
-	for (NSUInteger i = index + 1; i < numberOfItems; i++)
-    {
-		UIView *view = [itemViews objectAtIndex:i];
-		[self transformItemView:view atIndex:i];
-	}
+	[self transformItemViews];
     
     if (animated)
     {   
@@ -400,21 +464,30 @@
             scrollView.contentOffset = CGPointMake(scrollView.contentOffset.x - contentWidth, 0);
         }
     }
-    if ([(NSObject *)delegate respondsToSelector:@selector(carouselDidScroll:)])
+    if ([delegate respondsToSelector:@selector(carouselDidScroll:)])
     {
 		[delegate carouselDidScroll:self];
 	}
-    for (NSUInteger i = 0; i < numberOfItems; i++)
+    [self transformItemViews];
+    NSInteger currentItemIndex = self.currentItemIndex;
+    if (previousItemIndex != currentItemIndex && [delegate respondsToSelector:@selector(carouselCurrentItemIndexUpdated:)])
     {
-		[self transformItemView:[itemViews objectAtIndex:i] atIndex:i];
-	}
-    if (previousItemIndex != self.currentItemIndex && [(NSObject *)delegate respondsToSelector:@selector(carouselCurrentItemIndexUpdated:)])
-    {
-		previousItemIndex = self.currentItemIndex;
-		[delegate carouselCurrentItemIndexUpdated:self];
+		previousItemIndex = currentItemIndex;
+        if (currentItemIndex > -1)
+        {
+            [delegate carouselCurrentItemIndexUpdated:self];
+        }
 	}
 }
-	 
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)_scrollView
+{
+   if ([self shouldWrap] && scrollView.contentOffset.x > scrollView.contentSize.width - itemWidth * 2)
+   {
+       scrollView.contentOffset = CGPointMake(0, 0);
+   }
+}
+
 #pragma mark -
 #pragma mark Memory management
 
@@ -422,6 +495,7 @@
 	
 	[scrollView release];
 	[itemViews release];
+    [placeholderViews release];
 	[super dealloc];
 }
 

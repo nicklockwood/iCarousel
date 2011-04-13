@@ -63,6 +63,12 @@
 
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
+    //restore view opacities to normal
+    for (UIView *view in carousel.itemViews)
+    {
+        view.alpha = 1.0;
+    }
+        
     carousel.type = buttonIndex;
     navItem.title = [actionSheet buttonTitleAtIndex:buttonIndex];
 }
@@ -103,7 +109,7 @@
     
     //do 3d transform
     CATransform3D transform = CATransform3DIdentity;
-    transform.m34 = -1.0/500.0;
+    transform.m34 = self.carousel.perspective;
     transform = CATransform3DRotate(transform, M_PI / 8.0, 0, 1.0, 0);
     return CATransform3DTranslate(transform, 0.0, 0.0, offset * self.carousel.itemWidth);
 }
