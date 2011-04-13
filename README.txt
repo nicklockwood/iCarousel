@@ -1,7 +1,7 @@
 Purpose
 --------------
 
-iCarousel is a class designed to simplify the implementation of various types of carousel (paged, scrolling views) on iPhone and iPad. iCarousel implements a number of common effects such as cylindrical, flat and "CoverFlow" style carousels, as well as providing hooks to implement your own bespoke effects. Unlike other   "CoverFlow" libraries, iCarousel can work with any kind of view, not just images, so it is ideal for presenting paged data in a fluid and impressive way in your app.
+iCarousel is a class designed to simplify the implementation of various types of carousel (paged, scrolling views) on iPhone and iPad. iCarousel implements a number of common effects such as cylindrical, flat and "CoverFlow" style carousels, as well as providing hooks to implement your own bespoke effects. Unlike many other "CoverFlow" libraries, iCarousel can work with any kind of view, not just images, so it is ideal for presenting paged data in a fluid and impressive way in your app. It also makes it extremely easy to swap between different carousel effects with minimal code changes.
 
 
 Installation
@@ -42,9 +42,21 @@ An object that supports the iCarouselDelegate protocol and can respond to carous
 
 Used to switch the carousel display types (see above for details).
 
+@property (nonatomic, assign) float perspective;
+
+Used to tweak the perspective foreshortening effect for the various 3D carousel views. Should be a negative value, less than 0 and greater than -0.01. Values outside of this range will yield very strange results. The default is -1/500, or -0.005;
+
+@property (nonatomic, assign) BOOL scrollEnabled;
+
+Enables and disables user scrolling of the carousel. The carousel can still be scrolled programmatically if this property is set to NO.
+
 @property (nonatomic, readonly) NSInteger numberOfItems;
 
 The number of items currently displayed in the carousel (read only).
+
+@property (nonatomic, readonly) NSArray *itemViews;
+
+An array of the item views currently displayed in the carousel (read only).
 
 @property (nonatomic, readonly) NSInteger currentItemIndex;
 
@@ -89,6 +101,16 @@ Return the number of items (views) in the carousel.
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index;
 
 Return a view to be displayed at the specified index in the carousel. Unlike UITableView, there is no dequeuing system for iCarousel item views, but you should ensure that each time the carousel:viewForPageAtIndex: method is called, it returns a new view instance, as returning multiple copies of the same view may cause display issues with the carousel.
+
+The iCarouselDataSource protocol has the following optional methods:
+
+- (NSUInteger)numberOfPlaceholdersInCarousel:(iCarousel *)carousel;
+
+Returns the number of placeholder views to display in the carousel. Placeholder views are intended to be used when the number of items in the carousel is too few to fill the carousel width, and you wish to display something in the empty space. They move with the carousel and behave just like any other carousel item, but they do not count towards the numberOfItems value, and cannot be set as the currently selected item. Note that the placeholders are mirrored on either side of the carousel, so if you only need one placeholder on either side of the real items, return a value of 1, not 2. Also, note that placeholder views cannot be used with a wrapped carousel type. 
+
+- (UIView *)carouselPlaceholderView:(iCarousel *)carousel;
+
+Return a view to be displayed as the placeholder view. Placeholder views should be identical as they may be displayed in any order, however, as with the regular item views, you must return a unique view instance for each call to carouselPlaceholderView: to avoid display issues.
 
 The iCarouselDelegate protocol has the following optional methods:
 
