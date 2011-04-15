@@ -1,6 +1,7 @@
 Version 1.1.1
 
 - Fixed bug when inserting items into the carousel without animation
+- Fixed page scrolling bug on iOS 4.2 and earlier
 
 Version 1.1
 
