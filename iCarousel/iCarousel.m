@@ -207,7 +207,7 @@
             offset += numberOfItems;
         }
     }
-
+    
     //transform view
     view.layer.transform = [self transformForItemView:view withOffset:offset];
 }
@@ -321,7 +321,7 @@
     
     //set item width (may be overidden by delegate)
     itemWidth = [([itemViews count]? [itemViews objectAtIndex:0]: self) bounds].size.width;
-
+    
     //layout views
     [self layOutItemViews];
 }
@@ -392,17 +392,6 @@
     }
 }
 
-- (void)showItemView:(UIView *)itemView
-{
-    itemView.alpha = 0.0;
-    [scrollView addSubview:itemView];
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-    [UIView setAnimationDuration:0.1];
-    itemView.alpha = 1.0;
-    [UIView commitAnimations];
-}
-
 - (void)insertItemAtIndex:(NSUInteger)index animated:(BOOL)animated
 {
     UIView *itemView = [dataSource carousel:self viewForItemAtIndex:index];
@@ -423,12 +412,20 @@
     {   
         [UIView commitAnimations];
         [self transformItemView:itemView atIndex:index];
-        [self performSelector:@selector(showItemView:) withObject:itemView afterDelay:animated? 0.3: 0.0];
+        itemView.alpha = 0.0;
+        [scrollView addSubview:itemView];
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+        [UIView setAnimationDelay:0.3];
+        [UIView setAnimationDuration:0.1];
+        itemView.alpha = 1.0;
+        [UIView commitAnimations];
     }
     else
     {
         [self transformItemView:itemView atIndex:index];
         itemView.alpha = 1.0;
+        [scrollView addSubview:itemView];
     }
 }
 
@@ -482,10 +479,10 @@
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)_scrollView
 {
-   if ([self shouldWrap] && scrollView.contentOffset.x > scrollView.contentSize.width - itemWidth * 2)
-   {
-       scrollView.contentOffset = CGPointMake(0, 0);
-   }
+    if ([self shouldWrap] && scrollView.contentOffset.x > scrollView.contentSize.width - itemWidth * 2)
+    {
+        scrollView.contentOffset = CGPointMake(0, 0);
+    }
 }
 
 #pragma mark -
