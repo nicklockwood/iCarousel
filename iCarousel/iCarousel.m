@@ -47,10 +47,10 @@
 											   object:nil];
 	
 	scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
+    scrollView.pagingEnabled = YES;
     scrollView.autoresizesSubviews = NO;
     scrollView.clipsToBounds = NO;
 	scrollView.delaysContentTouches = YES;
-	scrollView.pagingEnabled = YES;
 	scrollView.scrollEnabled = YES;
 	scrollView.showsHorizontalScrollIndicator = NO;
 	scrollView.showsVerticalScrollIndicator = NO;
@@ -356,7 +356,7 @@
         //TODO: find a better solution to wrapping problem
         [self performSelector:@selector(scrollViewDidEndDecelerating:) withObject:scrollView afterDelay:0.3];
     }
-    [scrollView scrollRectToVisible:CGRectMake(itemWidth * index - 1, 0, itemWidth, scrollView.frame.size.height) animated:animated];
+    [scrollView setContentOffset:CGPointMake(itemWidth * index, 0) animated:animated];
 }
 
 - (void)removeItemAtIndex:(NSUInteger)index animated:(BOOL)animated
