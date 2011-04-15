@@ -1,3 +1,7 @@
+Version 1.1.1
+
+- Fixed bug when inserting items into the carousel without animation
+
 Version 1.1
 
 - Added itemViews property
