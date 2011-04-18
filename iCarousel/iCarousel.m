@@ -186,12 +186,21 @@
     }
 }
 
+- (UIView *)containView:(UIView *)view
+{
+    UIView *containerView = [[[UIView alloc] init] autorelease];
+    [containerView addSubview:view];
+    return containerView;
+}
+
 - (void)transformItemView:(UIView *)view atIndex:(NSInteger)index
 {
 	//position the view at the vanishing point
     float boundsWidth = scrollView.bounds.size.width;
     float frameOffset = boundsWidth/2 + scrollView.contentOffset.x;
-    view.center = CGPointMake(frameOffset, scrollView.frame.size.height/2.0);
+    view.superview.bounds = view.bounds;
+    view.center = CGPointMake(view.bounds.size.width/2.0, view.bounds.size.height/2.0);
+    view.superview.center = CGPointMake(frameOffset, scrollView.frame.size.height/2.0);
     
     //calculate relative position
     float scrollOffset = scrollView.contentOffset.x / itemWidth;
@@ -209,7 +218,7 @@
     }
     
     //transform view
-    view.layer.transform = [self transformForItemView:view withOffset:offset];
+    view.superview.layer.transform = [self transformForItemView:view withOffset:offset];
 }
 
 - (void)layoutSubviews
@@ -281,11 +290,11 @@
 	//remove old views
 	for (UIView *view in itemViews)
     {
-		[view removeFromSuperview];
+		[view.superview removeFromSuperview];
 	}
     for (UIView *view in placeholderViews)
     {
-		[view removeFromSuperview];
+		[view.superview removeFromSuperview];
 	}
 	
 	//load new views
@@ -299,7 +308,7 @@
 			view = [[[UIView alloc] init] autorelease];
         }
 		[(NSMutableArray *)itemViews addObject:view];
-        [scrollView addSubview:view];
+        [scrollView addSubview:[self containView:view]];
 	}
     
     //load placeholders
@@ -315,7 +324,7 @@
                 view = [[[UIView alloc] init] autorelease];
             }
             [(NSMutableArray *)placeholderViews addObject:view];
-            [scrollView addSubview:view];
+            [scrollView addSubview:[self containView:view]];
         }
     }
     
@@ -346,12 +355,12 @@
     previousItemIndex = self.currentItemIndex;
     if ([self shouldWrap] && previousItemIndex == 0 && index == numberOfItems - 1)
     {
-        [scrollView scrollRectToVisible:CGRectMake(itemWidth * numberOfItems, 0, itemWidth, scrollView.frame.size.height) animated:NO];
+        scrollView.contentOffset = CGPointMake(itemWidth * numberOfItems, 0);
         
     }
     else if ([self shouldWrap] && index == 0 && previousItemIndex == numberOfItems - 1)
     {
-        [scrollView scrollRectToVisible:CGRectMake(itemWidth * previousItemIndex, 0, itemWidth, scrollView.frame.size.height) animated:NO];
+        scrollView.contentOffset = CGPointMake(itemWidth * previousItemIndex, 0);
         index = numberOfItems;
         //TODO: find a better solution to wrapping problem
         [self performSelector:@selector(scrollViewDidEndDecelerating:) withObject:scrollView afterDelay:0.3];
@@ -368,9 +377,9 @@
         [UIView beginAnimations:nil context:nil];
         [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
         [UIView setAnimationDuration:0.1];
-        itemView.alpha = 0.0;
+        itemView.superview.alpha = 0.0;
         [UIView commitAnimations];
-        [itemView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.1];
+        [itemView.superview performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.1];
         
         [UIView beginAnimations:nil context:nil];
         [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
@@ -378,7 +387,7 @@
     }
     else
     {
-        [itemView removeFromSuperview];
+        [itemView.superview removeFromSuperview];
     }
     
     [(NSMutableArray *)itemViews removeObjectAtIndex:index];
@@ -394,38 +403,34 @@
 
 - (void)insertItemAtIndex:(NSUInteger)index animated:(BOOL)animated
 {
+    numberOfItems ++;
+    scrollView.contentSize = CGSizeMake(itemWidth * numberOfItems, scrollView.frame.size.height);
+    
     UIView *itemView = [dataSource carousel:self viewForItemAtIndex:index];
     [(NSMutableArray *)itemViews insertObject:itemView atIndex:index];
+    [scrollView addSubview:[self containView:itemView]];
+    [self transformItemView:itemView atIndex:index];
+    itemView.superview.alpha = 0.0;
     
     if (animated)
     {
         [UIView beginAnimations:nil context:nil];
         [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
         [UIView setAnimationDuration:0.4];
-    }
-    
-    numberOfItems ++;
-    scrollView.contentSize = CGSizeMake(itemWidth * numberOfItems, scrollView.frame.size.height);
-	[self transformItemViews];
-    
-    if (animated)
-    {   
+        [self transformItemViews];   
         [UIView commitAnimations];
-        [self transformItemView:itemView atIndex:index];
-        itemView.alpha = 0.0;
-        [scrollView addSubview:itemView];
+        
         [UIView beginAnimations:nil context:nil];
         [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
         [UIView setAnimationDelay:0.3];
         [UIView setAnimationDuration:0.1];
-        itemView.alpha = 1.0;
+        itemView.superview.alpha = 1.0;
         [UIView commitAnimations];
     }
     else
     {
-        [self transformItemView:itemView atIndex:index];
-        itemView.alpha = 1.0;
-        [scrollView addSubview:itemView];
+        [self transformItemViews]; 
+        itemView.superview.alpha = 1.0;
     }
 }
 

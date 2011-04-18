@@ -1,3 +1,8 @@
+Version 1.1.2
+
+- Smoother animation when inserting items into carousel
+- iCarousel no longer modifies item view alpha when adding/removing items
+
 Version 1.1.1
 
 - Fixed bug when inserting items into the carousel without animation
