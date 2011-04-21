@@ -11,6 +11,8 @@
 
 @interface iCarouselExampleViewController () <UIActionSheetDelegate>
 
+@property (nonatomic, assign) BOOL wrap;
+
 @end
 
 
@@ -18,6 +20,7 @@
 
 @synthesize carousel;
 @synthesize navItem;
+@synthesize wrap;
 
 - (void)dealloc
 {
@@ -33,6 +36,7 @@
 {
     [super viewDidLoad];
     carousel.type = iCarouselTypeCoverFlow;
+    wrap = YES;
 }
 
 - (void)viewDidUnload
@@ -56,6 +60,13 @@
                                               otherButtonTitles:@"Linear", @"Rotary", @"Inverted Rotary", @"Cylinder", @"Inverted Cylinder", @"CoverFlow", @"Custom", nil];
     [sheet showInView:self.view];
     [sheet release];
+}
+
+- (IBAction)toggleWrap
+{
+    wrap = !wrap;
+    navItem.rightBarButtonItem.title = wrap? @"Wrap: ON": @"Wrap: OFF";
+    [carousel reloadData];
 }
 
 #pragma mark -
@@ -117,7 +128,7 @@
 - (BOOL)carouselShouldWrap:(iCarousel *)carousel
 {
     //wrap all carousels
-    return YES;
+    return wrap;
 }
 
 @end
