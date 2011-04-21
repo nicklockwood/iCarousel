@@ -1,3 +1,10 @@
+Version 1.2
+
+- Smooth scrolling and acceleration, no longer based on UIScrollView
+- Added decelerationRate and bounces properties
+- Tap any visible item in the carousel to center it
+- Fixed crash on memory warning
+
 Version 1.1.2
 
 - Smoother animation when inserting items into carousel
