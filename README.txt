@@ -132,7 +132,7 @@ This method is called whenever the carousel scrolls far enough for the currentIt
 
 - (float)carouselItemWidth:(iCarousel *)carousel;
 
-Returns the width of each item in the carousel - i.e. the spacing for each item view This defaults to the width of the carousel component, meaning that only one item will be visible at a time.
+Returns the width of each item in the carousel - i.e. the spacing for each item view. If the method is not implemented, this defaults to the width of the first item view that is returned by the carousel:viewForItemAtIndex: method.
 
 - (BOOL)carouselShouldWrap:(iCarousel *)carousel;
 
@@ -140,4 +140,4 @@ Return YES if you want the carousel to wrap around when it reaches the end, and 
 
 - (CATransform3D)carousel:(iCarousel *)carousel transformForItemView:(UIView *)view withOffset:(float)offset;
 
-This method can be used to provide a custom transform for each carousel view. The offset argument is the distance of the view from the middle of the carousel. The  currently centered item view would have an offset of 0, the one to the right would have an offset value of 1.0, the one to the left an offset value of -1.0, and so on. To implement the linear carousel style, you would therefore simply multiply the offset value by the item width and use it as the x value of the transform. If you need to manipulate the view in other ways as it scrolls, such as settings its alpha opacity, you can manipulate the view property directly. You should not manipulate the view.layer.transform property however, as this will be overwritten by the return value. Also, manipulating the view frame, center or bounds is not recommended as the effect may be unpredictable and subject to undocumented change in future releases.
+This method can be used to provide a custom transform for each carousel view. The offset argument is the distance of the view from the middle of the carousel. The  currently centered item view would have an offset of 0, the one to the right would have an offset value of 1.0, the one to the left an offset value of -1.0, and so on. To implement the linear carousel style, you would therefore simply multiply the offset value by the item width and use it as the x value of the transform. If you need to manipulate the view in other ways as it scrolls, such as settings its alpha opacity, you can manipulate the view property directly. Manipulating the view frame, center or bounds is not recommended as the effect may be unpredictable and subject to undocumented change in future releases.
