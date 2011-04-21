@@ -16,5 +16,6 @@
 @property (nonatomic, retain) IBOutlet UINavigationItem *navItem;
 
 - (IBAction)switchCarouselType;
+- (IBAction)toggleWrap;
 
 @end
