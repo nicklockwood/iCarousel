@@ -46,6 +46,14 @@ Used to switch the carousel display types (see above for details).
 
 Used to tweak the perspective foreshortening effect for the various 3D carousel views. Should be a negative value, less than 0 and greater than -0.01. Values outside of this range will yield very strange results. The default is -1/500, or -0.005;
 
+@property (nonatomic, assign) float decelerationRate;
+
+The rate at which the carousel decelerates when flicked. The default value is 0.9, values should be in the range 0.0 (carousel stops instantly when released) to 1 .0 (carousel continues indefinitely until it reaches the end).
+
+@property (nonatomic, assign) BOOL bounces;
+
+Sets whether the carousel should bounce past the end and return, or stop dead. Note that this has no effect on carousel types that are designed to wrap, or where the carouselShouldWrap delegate method returns YES.
+
 @property (nonatomic, assign) BOOL scrollEnabled;
 
 Enables and disables user scrolling of the carousel. The carousel can still be scrolled programmatically if this property is set to NO.
