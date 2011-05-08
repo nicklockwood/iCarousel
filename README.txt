@@ -130,6 +130,10 @@ This method is called whenever the carousel is scrolled. It is called regardless
 
 This method is called whenever the carousel scrolls far enough for the currentItemIndex property to change. It is called regardless of whether the item index was updated programatically or through user interaction.
 
+- (void)carouselCurrentItemTapped:(iCaroussel *)carousel;
+
+This method is called when the user tap the current item.
+
 - (float)carouselItemWidth:(iCarousel *)carousel;
 
 Returns the width of each item in the carousel - i.e. the spacing for each item view. If the method is not implemented, this defaults to the width of the first item view that is returned by the carousel:viewForItemAtIndex: method.
