@@ -131,4 +131,15 @@
     return wrap;
 }
 
+- (void)carouselCurrentItemTapped:(iCarousel *)caroussel
+{
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Info"
+                                                        message:[NSString stringWithFormat:@"Current item tapped. Index: %d", caroussel.currentItemIndex]
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+    [alertView show];
+    [alertView release];
+}
+
 @end

@@ -569,14 +569,12 @@
     if (index != NSNotFound)
     {
         [self scrollToItemAtIndex:index animated:YES];
+        
+        // Call delegate
+        if (index == self.currentItemIndex && [delegate respondsToSelector:@selector(carouselCurrentItemTapped:)]) {
+            [delegate carouselCurrentItemTapped:self];
+        }
     }
-}
-     
-- (BOOL)gestureRecognizerShouldBegin:(UITapGestureRecognizer *)tapGesture
-{
-    UIView *itemView = [tapGesture.view.subviews objectAtIndex:0];
-    NSInteger index = [itemViews indexOfObject:itemView];
-    return (index != self.currentItemIndex);
 }
 
 #pragma mark -
