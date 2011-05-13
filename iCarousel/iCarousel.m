@@ -410,6 +410,7 @@
     
     [(NSMutableArray *)itemViews removeObjectAtIndex:index];
     numberOfItems --;
+    [self scrollToItemAtIndex:self.currentItemIndex animated:NO];
 	[self transformItemViews];
     
     if (animated)

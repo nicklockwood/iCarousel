@@ -9,9 +9,13 @@
 #import "iCarouselExampleViewController.h"
 
 
+#define NUMBER_OF_ITEMS 12
+
+
 @interface iCarouselExampleViewController () <UIActionSheetDelegate>
 
 @property (nonatomic, assign) BOOL wrap;
+@property (nonatomic, retain) NSMutableArray *items;
 
 @end
 
@@ -21,6 +25,21 @@
 @synthesize carousel;
 @synthesize navItem;
 @synthesize wrap;
+@synthesize items;
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    if ((self = [super initWithCoder:aDecoder]))
+    {
+        //set up data
+        self.items = [NSMutableArray array];
+        for (int i = 0; i < NUMBER_OF_ITEMS; i++)
+        {
+            [items addObject:[NSNumber numberWithInt:i]];
+        }
+    }
+    return self;
+}
 
 - (void)dealloc
 {
@@ -69,6 +88,23 @@
     [carousel reloadData];
 }
 
+- (IBAction)insertItem
+{
+    NSInteger index = carousel.currentItemIndex;
+    [items insertObject:[NSNumber numberWithInt:index] atIndex:index];
+    [carousel insertItemAtIndex:index animated:YES];
+}
+
+- (IBAction)removeItem
+{
+    if (carousel.numberOfItems > 0)
+    {
+        NSInteger index = carousel.currentItemIndex;
+        [carousel removeItemAtIndex:index animated:YES];
+        [items removeObjectAtIndex:index];
+    }
+}
+
 #pragma mark -
 #pragma mark UIActionSheet methods
 
@@ -89,7 +125,7 @@
 
 - (NSUInteger)numberOfItemsInCarousel:(iCarousel *)carousel
 {
-    return 12;
+    return [items count];
 }
 
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index
@@ -97,7 +133,7 @@
     //create a numbered view
     UIView *view = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]] autorelease];
     UILabel *label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
-    label.text = [NSString stringWithFormat:@"%i", index];
+    label.text = [NSString stringWithFormat:@"%i", [[items objectAtIndex:index] intValue]];
     label.backgroundColor = [UIColor clearColor];
     label.textAlignment = UITextAlignmentCenter;
     label.font = [label.font fontWithSize:50];
