@@ -1,7 +1,7 @@
 Version 1.2.1
 
 - Fixed scrolling issue with carousel when last item is removed
-- Added insert/delete buttons to exampled project
+- Added insert/delete buttons to example project
 
 Version 1.2
 
