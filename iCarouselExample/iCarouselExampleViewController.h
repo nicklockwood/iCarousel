@@ -17,5 +17,7 @@
 
 - (IBAction)switchCarouselType;
 - (IBAction)toggleWrap;
+- (IBAction)insertItem;
+- (IBAction)removeItem;
 
 @end

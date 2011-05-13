@@ -1,3 +1,8 @@
+Version 1.2.1
+
+- Fixed scrolling issue with carousel when last item is removed
+- Added insert/delete buttons to exampled project
+
 Version 1.2
 
 - Smooth scrolling and acceleration, no longer based on UIScrollView
