@@ -378,6 +378,7 @@
         startTime = [[NSProcessInfo processInfo] systemUptime];
         startOffset = scrollOffset;
         endOffset = itemWidth * index;
+        [delegate carouselDidEndDecelerating:index];
     }
     else
     {
@@ -577,6 +578,11 @@
 {
     UIView *itemView = [tapGesture.view.subviews objectAtIndex:0];
     NSInteger index = [itemViews indexOfObject:itemView];
+    
+    if ((index != self.currentItemIndex)) {
+        [delegate carouselSelectedIndex:index];
+    }
+    
     return (index != self.currentItemIndex);
 }
 
