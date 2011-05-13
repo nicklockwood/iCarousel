@@ -74,6 +74,10 @@ The currently centered item in the carousel (read only).
 
 The display width of items in the carousel (read only).
 
+@property (nonatomic, readonly) UIPageControl * pageControl;
+
+The UIPageControl which shows this carousel pages count and current page. Its hidden value should be changed to NO if you want it to show (read only).
+
 
 Methods
 --------------

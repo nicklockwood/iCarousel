@@ -60,6 +60,7 @@
 @synthesize startTime;
 @synthesize scrolling;
 @synthesize previousTranslation;
+@synthesize pageControl;
 
 - (void)setup
 {
@@ -71,11 +72,21 @@
     contentView = [[UIView alloc] initWithFrame:self.bounds];
     [self addSubview:contentView];
     
+    pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, self.bounds.size.height - 32, self.bounds.size.width, 32)];
+    pageControl.defersCurrentPageDisplay = YES;
+    pageControl.hidden = YES;
+    [pageControl addTarget:self action:@selector(pageControlChanged:) forControlEvents:UIControlEventValueChanged];
+    [self addSubview:pageControl];
+    
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPan:)];
     [contentView addGestureRecognizer:panGesture];
     [panGesture release];
     
     timer = [NSTimer scheduledTimerWithTimeInterval:1.0/60.0 target:self selector:@selector(step) userInfo:nil repeats:YES];
+}
+
+- (void) pageControlChanged:(UIPageControl *)sender {
+    [self scrollToItemAtIndex:sender.currentPage animated:YES];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder
@@ -305,6 +316,7 @@
 	
 	//load new views
 	numberOfItems = [dataSource numberOfItemsInCarousel:self];
+	pageControl.numberOfPages = numberOfItems;
 	self.itemViews = [NSMutableArray arrayWithCapacity:numberOfItems];
 	for (NSUInteger i = 0; i < numberOfItems; i++)
     {
@@ -480,6 +492,7 @@
 		[delegate carouselDidScroll:self];
 	}
     NSInteger currentItemIndex = self.currentItemIndex;
+    pageControl.currentPage = currentItemIndex;
     if (previousItemIndex != currentItemIndex && [delegate respondsToSelector:@selector(carouselCurrentItemIndexUpdated:)])
     {
 		previousItemIndex = currentItemIndex;
@@ -589,6 +602,7 @@
     [contentView release];
 	[itemViews release];
     [placeholderViews release];
+    [pageControl release];
 	[super dealloc];
 }
 
