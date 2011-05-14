@@ -70,5 +70,7 @@ iCarouselType;
 - (float)carouselItemWidth:(iCarousel *)carousel;
 - (BOOL)carouselShouldWrap:(iCarousel *)carousel;
 - (CATransform3D)carousel:(iCarousel *)carousel transformForItemView:(UIView *)view withOffset:(float)offset;
+- (void)carouselDidEndDecelerating:(NSUInteger)index;
+- (void)carouselSelectedIndex:(NSUInteger)index;
 
 @end

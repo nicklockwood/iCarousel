@@ -168,4 +168,12 @@
     return wrap;
 }
 
+- (void)carouselDidEndDecelerating:(NSUInteger)index{
+
+}
+
+- (void)carouselSelectedIndex:(NSUInteger)index{
+
+}
+
 @end
