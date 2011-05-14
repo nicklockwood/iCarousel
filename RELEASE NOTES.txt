@@ -1,3 +1,8 @@
+Version 1.2.2
+
+- Remove an iOS 4-specific API so that iCarousel will work on iOS 3.2
+- Fixed crash when removing last item in a carousel or inserting items into an empty carousel
+
 Version 1.2.1
 
 - Fixed scrolling issue with carousel when last item is removed
