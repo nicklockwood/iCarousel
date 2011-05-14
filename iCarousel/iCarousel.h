@@ -39,6 +39,7 @@ iCarouselType;
 @property (nonatomic, retain, readonly) NSArray *itemViews;
 @property (nonatomic, retain, readonly) NSArray *placeholderViews;
 @property (nonatomic, readonly) float itemWidth;
+@property (nonatomic, readonly) UIPageControl * pageControl;
 
 - (void)scrollToItemAtIndex:(NSUInteger)index animated:(BOOL)animated;
 - (void)removeItemAtIndex:(NSUInteger)index animated:(BOOL)animated;
