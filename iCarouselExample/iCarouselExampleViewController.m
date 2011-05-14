@@ -9,7 +9,8 @@
 #import "iCarouselExampleViewController.h"
 
 
-#define NUMBER_OF_ITEMS 12
+#define NUMBER_OF_ITEMS 20
+#define ITEM_SPACING 210
 
 
 @interface iCarouselExampleViewController () <UIActionSheetDelegate>
@@ -91,7 +92,7 @@
 - (IBAction)insertItem
 {
     NSInteger index = carousel.currentItemIndex;
-    [items insertObject:[NSNumber numberWithInt:index] atIndex:index];
+    [items insertObject:[NSNumber numberWithInt:carousel.numberOfItems] atIndex:index];
     [carousel insertItemAtIndex:index animated:YES];
 }
 
@@ -144,7 +145,7 @@
 - (float)carouselItemWidth:(iCarousel *)carousel
 {
     //slightly wider than item view
-    return 210;
+    return ITEM_SPACING;
 }
 
 - (CATransform3D)carousel:(iCarousel *)carousel transformForItemView:(UIView *)view withOffset:(float)offset

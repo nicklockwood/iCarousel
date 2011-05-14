@@ -65,7 +65,7 @@
 					<object class="IBUIView" id="474539717">
 						<reference key="NSNextResponder" ref="774585933"/>
 						<int key="NSvFlags">274</int>
-						<string key="NSFrame">{{0, 44}, {320, 416}}</string>
+						<string key="NSFrame">{{0, 44}, {320, 372}}</string>
 						<reference key="NSSuperview" ref="774585933"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="838375038"/>
@@ -316,8 +316,8 @@
 						<reference key="parent" ref="774585933"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">27</int>
-						<reference key="object" ref="957972384"/>
+						<int key="objectID">25</int>
+						<reference key="object" ref="329874513"/>
 						<reference key="parent" ref="838375038"/>
 					</object>
 					<object class="IBObjectRecord">
@@ -326,8 +326,8 @@
 						<reference key="parent" ref="838375038"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">25</int>
-						<reference key="object" ref="329874513"/>
+						<int key="objectID">27</int>
+						<reference key="object" ref="957972384"/>
 						<reference key="parent" ref="838375038"/>
 					</object>
 				</object>
