@@ -112,7 +112,7 @@
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     //restore view opacities to normal
-    for (UIView *view in carousel.itemViews)
+    for (UIView *view in [carousel.itemViews allValues])
     {
         view.alpha = 1.0;
     }

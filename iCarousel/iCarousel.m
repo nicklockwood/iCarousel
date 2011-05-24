@@ -41,6 +41,7 @@
 @synthesize type;
 @synthesize perspective;
 @synthesize numberOfItems;
+@synthesize numberOfVisibleItems;
 @synthesize numberOfPlaceholders;
 @synthesize contentView;
 @synthesize itemViews;
@@ -63,11 +64,14 @@
 
 - (void)setup
 {
+    numberOfVisibleItems = 5;
+
     perspective = -1.0/500.0;
     decelerationRate = 0.9;
     scrollEnabled = YES;
     bounces = YES;
     
+
     contentView = [[UIView alloc] initWithFrame:self.bounds];
     [self addSubview:contentView];
     
@@ -238,21 +242,49 @@
     [self layOutItemViews];
 }
 
+- (void)updateCurrentViews {
+    // calcuate min/max, save prev items
+    indexMin = MAX(0, self.currentItemIndex - floor(numberOfVisibleItems/2));
+    indexMax = MAX(0,MIN(self.currentItemIndex + floor(numberOfVisibleItems/2), numberOfItems-1));
+
+    NSLog(@"updateCurrentViews: currentIndex:%d prev:%d [min:%d max:%d] (total: %d)", self.currentItemIndex, self.previousItemIndex, indexMin, indexMax, self.numberOfItems);
+
+    NSMutableArray *purgeList = [NSMutableArray arrayWithArray:[itemViews allKeys]];
+    for (NSUInteger i=indexMin; i<=indexMax; i++) {
+        UIView *view = [itemViews objectForKey:[NSNumber numberWithInt:i]];
+        if (!view) {
+            UIView *view = [dataSource carousel:self viewForItemAtIndex:i];
+            if (view == nil) {
+                view = [[[UIView alloc] init] autorelease];
+            }
+
+            [(NSMutableDictionary *)itemViews setObject:view forKey:[NSNumber numberWithInteger:i]];
+            [contentView addSubview:[self containView:view]];
+        }else {
+            [purgeList removeObject:[NSNumber numberWithInt:i]];
+        }
+    }
+    
+    // delete old cached views
+    for (NSNumber *deleteKey in purgeList) {
+        UIView *deleteView = [itemViews objectForKey:deleteKey];
+        [[deleteView superview] removeFromSuperview];
+        [(NSMutableDictionary *)itemViews removeObjectForKey:deleteKey];
+    }
+}
+
 - (void)transformItemViews
 {
-    //lay out items
-	for (NSUInteger i = 0; i < numberOfItems; i++)
-    {
-		UIView *view = [itemViews objectAtIndex:i];
-		[self transformItemView:view atIndex:i];
-        view.userInteractionEnabled = (i == self.currentItemIndex);
-	}
-    
-    //bring current view to front
-    if ([itemViews count])
-    {
-        [contentView addSubview:[[itemViews objectAtIndex:self.currentItemIndex] superview]];
-    }
+ [itemViews enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+     NSUInteger index = [key integerValue];
+     UIView *view = (UIView *)obj;
+     [self transformItemView:view atIndex:index];
+
+     view.userInteractionEnabled = (index == self.currentItemIndex);
+     if (index == self.currentItemIndex) {
+         [contentView bringSubviewToFront:view];
+     }
+ }];
     
     //lay out placeholders
     for (NSInteger i = 0; i < numberOfPlaceholders; i++)
@@ -293,29 +325,27 @@
 
 - (void)reloadData
 {
+    // reset potentially broken scrollOffset
+//    if (isnan(scrollOffset)) {
+        scrollOffset = 0;
+//    }
+
 	//remove old views
-	for (UIView *view in itemViews)
-    {
+    for (UIView *view in placeholderViews) {
 		[view.superview removeFromSuperview];
 	}
-    for (UIView *view in placeholderViews)
-    {
-		[view.superview removeFromSuperview];
-	}
-	
-	//load new views
+
+    // force delete cache!
+    [itemViews enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        [[obj superview] removeFromSuperview];
+    }];
+    [(NSMutableDictionary *)itemViews removeAllObjects];
+
+    //load new views
 	numberOfItems = [dataSource numberOfItemsInCarousel:self];
-	self.itemViews = [NSMutableArray arrayWithCapacity:numberOfItems];
-	for (NSUInteger i = 0; i < numberOfItems; i++)
-    {
-        UIView *view = [dataSource carousel:self viewForItemAtIndex:i];
-        if (view == nil)
-        {
-			view = [[[UIView alloc] init] autorelease];
-        }
-		[(NSMutableArray *)itemViews addObject:view];
-        [contentView addSubview:[self containView:view]];
-	}
+	self.itemViews = [NSMutableDictionary dictionaryWithCapacity:numberOfVisibleItems];
+
+    [self updateCurrentViews];
     
     //load placeholders
     if ([dataSource respondsToSelector:@selector(numberOfPlaceholdersInCarousel:)])
@@ -335,7 +365,7 @@
     }
     
     //set item width (may be overidden by delegate)
-    itemWidth = [([itemViews count]? [itemViews objectAtIndex:0]: self) bounds].size.width;
+    itemWidth = [([itemViews count]? [[itemViews allValues] lastObject]: self) bounds].size.width;
     
     //layout views
     [self layOutItemViews];
@@ -392,6 +422,7 @@
 
 - (void)removeItemAtIndex:(NSUInteger)index animated:(BOOL)animated
 {
+    /*
     UIView *itemView = [itemViews objectAtIndex:index];
     
     if (animated)
@@ -420,11 +451,11 @@
     if (animated)
     {
         [UIView commitAnimations];
-    }
+    }*/
 }
 
 - (void)insertItemAtIndex:(NSUInteger)index animated:(BOOL)animated
-{
+{/*
     numberOfItems ++;
 
     UIView *itemView = [dataSource carousel:self viewForItemAtIndex:index];
@@ -452,7 +483,7 @@
     {
         [self transformItemViews]; 
         itemView.superview.alpha = 1.0;
-    }
+    }*/
 }
 
 - (void)didMoveToSuperview
@@ -478,6 +509,7 @@
     {
         scrollOffset = fmin(fmax(0.0, scrollOffset), numberOfItems * itemWidth - itemWidth);
     }
+    [self updateCurrentViews];
     [self transformItemViews];
     if ([delegate respondsToSelector:@selector(carouselDidScroll:)])
     {
@@ -567,10 +599,20 @@
     }
 }
 
+- (NSInteger)indexForView:(UIView *)view {
+    __block NSInteger index = NSNotFound;
+    [itemViews enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        if (obj == view) {
+            index = [key integerValue];
+        }
+    }];
+    return index;
+}
+
 - (void)didTap:(UITapGestureRecognizer *)tapGesture
 {
     UIView *itemView = [tapGesture.view.subviews objectAtIndex:0];
-    NSInteger index = [itemViews indexOfObject:itemView];
+    NSInteger index = [self indexForView:itemView];
     if (index != NSNotFound)
     {
         [self scrollToItemAtIndex:index animated:YES];
@@ -580,7 +622,7 @@
 - (BOOL)gestureRecognizerShouldBegin:(UITapGestureRecognizer *)tapGesture
 {
     UIView *itemView = [tapGesture.view.subviews objectAtIndex:0];
-    NSInteger index = [itemViews indexOfObject:itemView];
+    NSInteger index = [self indexForView:itemView];
     return (index != self.currentItemIndex);
 }
 

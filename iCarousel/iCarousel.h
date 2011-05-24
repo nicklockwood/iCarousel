@@ -24,7 +24,9 @@ iCarouselType;
 
 @protocol iCarouselDataSource, iCarouselDelegate;
 
-@interface iCarousel : UIView
+@interface iCarousel : UIView {
+    NSUInteger indexMin, indexMax;
+}
 
 @property (nonatomic, assign) IBOutlet id<iCarouselDataSource> dataSource;
 @property (nonatomic, assign) IBOutlet id<iCarouselDelegate> delegate;
@@ -34,9 +36,10 @@ iCarouselType;
 @property (nonatomic, assign) BOOL scrollEnabled;
 @property (nonatomic, assign) BOOL bounces;
 @property (nonatomic, readonly) NSInteger numberOfItems;
+@property (nonatomic, readonly) NSInteger numberOfVisibleItems;
 @property (nonatomic, readonly) NSInteger numberOfPlaceholders;
 @property (nonatomic, readonly) NSInteger currentItemIndex;
-@property (nonatomic, retain, readonly) NSArray *itemViews;
+@property (nonatomic, retain, readonly) NSDictionary *itemViews;
 @property (nonatomic, retain, readonly) NSArray *placeholderViews;
 @property (nonatomic, readonly) float itemWidth;
 
