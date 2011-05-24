@@ -11,7 +11,7 @@
 @interface iCarousel () <UIGestureRecognizerDelegate>
 
 @property (nonatomic, retain) UIView *contentView;
-@property (nonatomic, retain) NSArray *itemViews;
+@property (nonatomic, retain) NSDictionary *itemViews;
 @property (nonatomic, retain) NSArray *placeholderViews;
 @property (nonatomic, assign) NSInteger previousItemIndex;
 @property (nonatomic, assign) float itemWidth;
