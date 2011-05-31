@@ -168,4 +168,8 @@
     return wrap;
 }
 
+- (void)carouselCurrentItemTapped{
+	NSLog(@"Current Item tappped, index: %d", [carousel currentItemIndex]);
+}
+
 @end
