@@ -623,6 +623,9 @@
 {
     UIView *itemView = [tapGesture.view.subviews objectAtIndex:0];
     NSInteger index = [self indexForView:itemView];
+	if (index == self.currentItemIndex) {
+		[delegate carouselCurrentItemTapped];
+	}
     return (index != self.currentItemIndex);
 }
 
