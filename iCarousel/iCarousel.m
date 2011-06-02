@@ -349,7 +349,7 @@
     }
     else if ([self shouldWrap])
     {
-        return (index + numberOfItems) % numberOfItems;
+        return index - floor((float)index / (float)numberOfItems) * numberOfItems;
     }
     else
     {
