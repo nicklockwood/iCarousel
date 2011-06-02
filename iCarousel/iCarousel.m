@@ -72,6 +72,7 @@
     [self addSubview:contentView];
     
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPan:)];
+	panGesture.delegate = self;
     [contentView addGestureRecognizer:panGesture];
     [panGesture release];
     
@@ -577,11 +578,23 @@
     }
 }
      
-- (BOOL)gestureRecognizerShouldBegin:(UITapGestureRecognizer *)tapGesture
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gesture
 {
-    UIView *itemView = [tapGesture.view.subviews objectAtIndex:0];
-    NSInteger index = [itemViews indexOfObject:itemView];
-    return (index != self.currentItemIndex);
+	if ([gesture isKindOfClass:[UITapGestureRecognizer class]])
+	{
+		//if side items are tapped, center them
+		UIView *itemView = [gesture.view.subviews objectAtIndex:0];
+		NSInteger index = [itemViews indexOfObject:itemView];
+		return (index != self.currentItemIndex);
+	}
+	else if ([gesture isKindOfClass:[UIPanGestureRecognizer class]])
+	{
+		//ignore vertical swipes
+		UIPanGestureRecognizer *panGesture = (UIPanGestureRecognizer *)gesture;
+		CGPoint translation = [panGesture translationInView:self];
+		return fabs(translation.x) > fabs(translation.y);
+	}
+	return YES;
 }
 
 #pragma mark -
