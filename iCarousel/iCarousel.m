@@ -592,7 +592,7 @@
 		//ignore vertical swipes
 		UIPanGestureRecognizer *panGesture = (UIPanGestureRecognizer *)gesture;
 		CGPoint translation = [panGesture translationInView:self];
-		return fabs(translation.x) > fabs(translation.y);
+		return fabs(translation.x) >= fabs(translation.y);
 	}
 	return YES;
 }

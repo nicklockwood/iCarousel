@@ -10,16 +10,15 @@
 		01308D9313491C3500453707 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01308D9213491C3500453707 /* UIKit.framework */; };
 		01308D9513491C3500453707 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01308D9413491C3500453707 /* Foundation.framework */; };
 		01308D9713491C3500453707 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01308D9613491C3500453707 /* CoreGraphics.framework */; };
-		01308D9D13491C3500453707 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 01308D9B13491C3500453707 /* InfoPlist.strings */; };
-		01308DA013491C3500453707 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 01308D9F13491C3500453707 /* main.m */; };
-		01308DA313491C3500453707 /* iCarouselExampleAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 01308DA213491C3500453707 /* iCarouselExampleAppDelegate.m */; };
-		01308DA613491C3500453707 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01308DA413491C3500453707 /* MainWindow.xib */; };
-		01308DA913491C3500453707 /* iCarouselExampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01308DA813491C3500453707 /* iCarouselExampleViewController.m */; };
-		01308DAC13491C3500453707 /* iCarouselExampleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01308DAA13491C3500453707 /* iCarouselExampleViewController.xib */; };
-		01308DBD13491CCE00453707 /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 01308DBC13491CCE00453707 /* iCarousel.m */; };
 		01308DC013491F7200453707 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01308DBF13491F7200453707 /* QuartzCore.framework */; };
-		01308DC3134930F400453707 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 01308DC1134930F300453707 /* background.png */; };
-		01308DC4134930F400453707 /* page.png in Resources */ = {isa = PBXBuildFile; fileRef = 01308DC2134930F300453707 /* page.png */; };
+		0148358213A36B9700E687AC /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0148358113A36B9700E687AC /* iCarousel.m */; };
+		0148358813A36C2000E687AC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0148358313A36C2000E687AC /* main.m */; };
+		0148359313A36C3700E687AC /* iCarouselExampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0148358B13A36C3700E687AC /* iCarouselExampleViewController.m */; };
+		0148359413A36C3700E687AC /* iCarouselExampleAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0148358D13A36C3700E687AC /* iCarouselExampleAppDelegate.m */; };
+		0148359513A36C3700E687AC /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0148358F13A36C3700E687AC /* MainWindow.xib */; };
+		0148359613A36C3700E687AC /* iCarouselExampleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0148359113A36C3700E687AC /* iCarouselExampleViewController.xib */; };
+		0148359913A36C5D00E687AC /* page.png in Resources */ = {isa = PBXBuildFile; fileRef = 0148359713A36C5D00E687AC /* page.png */; };
+		0148359A13A36C5D00E687AC /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 0148359813A36C5D00E687AC /* background.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,21 +26,21 @@
 		01308D9213491C3500453707 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		01308D9413491C3500453707 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		01308D9613491C3500453707 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		01308D9A13491C3500453707 /* iCarouselExample-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "iCarouselExample-Info.plist"; sourceTree = "<group>"; };
-		01308D9C13491C3500453707 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		01308D9E13491C3500453707 /* iCarouselExample-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iCarouselExample-Prefix.pch"; sourceTree = "<group>"; };
-		01308D9F13491C3500453707 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		01308DA113491C3500453707 /* iCarouselExampleAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = iCarouselExampleAppDelegate.h; sourceTree = "<group>"; };
-		01308DA213491C3500453707 /* iCarouselExampleAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iCarouselExampleAppDelegate.m; sourceTree = "<group>"; };
-		01308DA513491C3500453707 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
-		01308DA713491C3500453707 /* iCarouselExampleViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = iCarouselExampleViewController.h; sourceTree = "<group>"; };
-		01308DA813491C3500453707 /* iCarouselExampleViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iCarouselExampleViewController.m; sourceTree = "<group>"; };
-		01308DAB13491C3500453707 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/iCarouselExampleViewController.xib; sourceTree = "<group>"; };
-		01308DBB13491CCE00453707 /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
-		01308DBC13491CCE00453707 /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
 		01308DBF13491F7200453707 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		01308DC1134930F300453707 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
-		01308DC2134930F300453707 /* page.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page.png; sourceTree = "<group>"; };
+		0148358013A36B9700E687AC /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
+		0148358113A36B9700E687AC /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
+		0148358313A36C2000E687AC /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = SOURCE_ROOT; };
+		0148358413A36C2000E687AC /* iCarouselExample-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "iCarouselExample-Prefix.pch"; sourceTree = SOURCE_ROOT; };
+		0148358513A36C2000E687AC /* iCarouselExample-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "iCarouselExample-Info.plist"; sourceTree = SOURCE_ROOT; };
+		0148358713A36C2000E687AC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = SOURCE_ROOT; };
+		0148358B13A36C3700E687AC /* iCarouselExampleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarouselExampleViewController.m; sourceTree = SOURCE_ROOT; };
+		0148358C13A36C3700E687AC /* iCarouselExampleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarouselExampleViewController.h; sourceTree = SOURCE_ROOT; };
+		0148358D13A36C3700E687AC /* iCarouselExampleAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarouselExampleAppDelegate.m; sourceTree = SOURCE_ROOT; };
+		0148358E13A36C3700E687AC /* iCarouselExampleAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarouselExampleAppDelegate.h; sourceTree = SOURCE_ROOT; };
+		0148359013A36C3700E687AC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = SOURCE_ROOT; };
+		0148359213A36C3700E687AC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/iCarouselExampleViewController.xib; sourceTree = SOURCE_ROOT; };
+		0148359713A36C5D00E687AC /* page.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page.png; sourceTree = SOURCE_ROOT; };
+		0148359813A36C5D00E687AC /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,7 +61,7 @@
 		01308D8313491C3500453707 = {
 			isa = PBXGroup;
 			children = (
-				01308DBA13491CCE00453707 /* iCarousel */,
+				0148357F13A36B9700E687AC /* iCarousel */,
 				01308D9813491C3500453707 /* iCarouselExample */,
 				01308D9113491C3500453707 /* Frameworks */,
 				01308D8F13491C3500453707 /* Products */,
@@ -91,12 +90,12 @@
 		01308D9813491C3500453707 /* iCarouselExample */ = {
 			isa = PBXGroup;
 			children = (
-				01308DA113491C3500453707 /* iCarouselExampleAppDelegate.h */,
-				01308DA213491C3500453707 /* iCarouselExampleAppDelegate.m */,
-				01308DA413491C3500453707 /* MainWindow.xib */,
-				01308DA713491C3500453707 /* iCarouselExampleViewController.h */,
-				01308DA813491C3500453707 /* iCarouselExampleViewController.m */,
-				01308DAA13491C3500453707 /* iCarouselExampleViewController.xib */,
+				0148358B13A36C3700E687AC /* iCarouselExampleViewController.m */,
+				0148358C13A36C3700E687AC /* iCarouselExampleViewController.h */,
+				0148358D13A36C3700E687AC /* iCarouselExampleAppDelegate.m */,
+				0148358E13A36C3700E687AC /* iCarouselExampleAppDelegate.h */,
+				0148358F13A36C3700E687AC /* MainWindow.xib */,
+				0148359113A36C3700E687AC /* iCarouselExampleViewController.xib */,
 				01308DC5134930FA00453707 /* Images */,
 				01308D9913491C3500453707 /* Supporting Files */,
 			);
@@ -106,30 +105,31 @@
 		01308D9913491C3500453707 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				01308D9A13491C3500453707 /* iCarouselExample-Info.plist */,
-				01308D9B13491C3500453707 /* InfoPlist.strings */,
-				01308D9E13491C3500453707 /* iCarouselExample-Prefix.pch */,
-				01308D9F13491C3500453707 /* main.m */,
+				0148358313A36C2000E687AC /* main.m */,
+				0148358413A36C2000E687AC /* iCarouselExample-Prefix.pch */,
+				0148358513A36C2000E687AC /* iCarouselExample-Info.plist */,
+				0148358613A36C2000E687AC /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		01308DBA13491CCE00453707 /* iCarousel */ = {
-			isa = PBXGroup;
-			children = (
-				01308DBB13491CCE00453707 /* iCarousel.h */,
-				01308DBC13491CCE00453707 /* iCarousel.m */,
-			);
-			path = iCarousel;
 			sourceTree = "<group>";
 		};
 		01308DC5134930FA00453707 /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				01308DC2134930F300453707 /* page.png */,
-				01308DC1134930F300453707 /* background.png */,
+				0148359713A36C5D00E687AC /* page.png */,
+				0148359813A36C5D00E687AC /* background.png */,
 			);
 			name = Images;
+			sourceTree = "<group>";
+		};
+		0148357F13A36B9700E687AC /* iCarousel */ = {
+			isa = PBXGroup;
+			children = (
+				0148358013A36B9700E687AC /* iCarousel.h */,
+				0148358113A36B9700E687AC /* iCarousel.m */,
+			);
+			name = iCarousel;
+			path = ../iCarousel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -179,11 +179,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				01308D9D13491C3500453707 /* InfoPlist.strings in Resources */,
-				01308DA613491C3500453707 /* MainWindow.xib in Resources */,
-				01308DAC13491C3500453707 /* iCarouselExampleViewController.xib in Resources */,
-				01308DC3134930F400453707 /* background.png in Resources */,
-				01308DC4134930F400453707 /* page.png in Resources */,
+				0148359513A36C3700E687AC /* MainWindow.xib in Resources */,
+				0148359613A36C3700E687AC /* iCarouselExampleViewController.xib in Resources */,
+				0148359913A36C5D00E687AC /* page.png in Resources */,
+				0148359A13A36C5D00E687AC /* background.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -194,36 +193,36 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				01308DA013491C3500453707 /* main.m in Sources */,
-				01308DA313491C3500453707 /* iCarouselExampleAppDelegate.m in Sources */,
-				01308DA913491C3500453707 /* iCarouselExampleViewController.m in Sources */,
-				01308DBD13491CCE00453707 /* iCarousel.m in Sources */,
+				0148358213A36B9700E687AC /* iCarousel.m in Sources */,
+				0148358813A36C2000E687AC /* main.m in Sources */,
+				0148359313A36C3700E687AC /* iCarouselExampleViewController.m in Sources */,
+				0148359413A36C3700E687AC /* iCarouselExampleAppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		01308D9B13491C3500453707 /* InfoPlist.strings */ = {
+		0148358613A36C2000E687AC /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				01308D9C13491C3500453707 /* en */,
+				0148358713A36C2000E687AC /* en */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		01308DA413491C3500453707 /* MainWindow.xib */ = {
+		0148358F13A36C3700E687AC /* MainWindow.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				01308DA513491C3500453707 /* en */,
+				0148359013A36C3700E687AC /* en */,
 			);
 			name = MainWindow.xib;
 			sourceTree = "<group>";
 		};
-		01308DAA13491C3500453707 /* iCarouselExampleViewController.xib */ = {
+		0148359113A36C3700E687AC /* iCarouselExampleViewController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				01308DAB13491C3500453707 /* en */,
+				0148359213A36C3700E687AC /* en */,
 			);
 			name = iCarouselExampleViewController.xib;
 			sourceTree = "<group>";
@@ -270,8 +269,8 @@
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "iCarouselExample/iCarouselExample-Prefix.pch";
-				INFOPLIST_FILE = "iCarouselExample/iCarouselExample-Info.plist";
+				GCC_PREFIX_HEADER = "iCarouselExample-Prefix.pch";
+				INFOPLIST_FILE = "iCarouselExample-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -285,8 +284,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "iCarouselExample/iCarouselExample-Prefix.pch";
-				INFOPLIST_FILE = "iCarouselExample/iCarouselExample-Info.plist";
+				GCC_PREFIX_HEADER = "iCarouselExample-Prefix.pch";
+				INFOPLIST_FILE = "iCarouselExample-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
