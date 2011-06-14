@@ -33,12 +33,15 @@ iCarouselType;
 @property (nonatomic, assign) float decelerationRate;
 @property (nonatomic, assign) BOOL scrollEnabled;
 @property (nonatomic, assign) BOOL bounces;
+@property (nonatomic, assign) CGSize contentOffset;
+@property (nonatomic, assign) CGSize viewpointOffset;
 @property (nonatomic, readonly) NSInteger numberOfItems;
 @property (nonatomic, readonly) NSInteger numberOfPlaceholders;
 @property (nonatomic, readonly) NSInteger currentItemIndex;
 @property (nonatomic, retain, readonly) NSArray *itemViews;
 @property (nonatomic, retain, readonly) NSArray *placeholderViews;
 @property (nonatomic, readonly) float itemWidth;
+@property (nonatomic, retain, readonly) UIView *contentView;
 
 - (void)scrollToItemAtIndex:(NSUInteger)index animated:(BOOL)animated;
 - (void)removeItemAtIndex:(NSUInteger)index animated:(BOOL)animated;

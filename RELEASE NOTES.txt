@@ -1,3 +1,10 @@
+Version 1.2.3
+
+- Added contentOffset and viewpointOffset properties for adjusting layout and perspective
+- Made contentView property public
+- Fixed issue when inserting items into an empty carousel
+- Fixed issue when scrolling more than one step in a wrapped carousel 
+
 Version 1.2.2
 
 - Remove an iOS 4-specific API so that iCarousel will work on iOS 3.2

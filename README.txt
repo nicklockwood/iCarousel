@@ -46,6 +46,16 @@ Used to switch the carousel display types (see above for details).
 
 Used to tweak the perspective foreshortening effect for the various 3D carousel views. Should be a negative value, less than 0 and greater than -0.01. Values outside of this range will yield very strange results. The default is -1/500, or -0.005;
 
+@property (nonatomic, assign) CGSize contentOffset;
+
+This property is used to adjust the offset of the carousel item views relative to the center of the carousel. It defaults to CGSizeZero, meaning that the carousel items are centered. Changing this value moves both the carousel items without changing their perspective, i.e. the vanishing point moves with the carousel items, so if you move the carousel items down, it *does not* appear as if you are looking down on the carousel.
+
+@property (nonatomic, assign) CGSize viewpointOffset;
+
+This property is used to adjust the user viewpoint relative to the carousel items. It has the opposite effect to adjusting the contentOffset, i.e. if you move the viewpoint up then the carousel appears to move down. Unlike the contentOffset, moving the viewpoint also changes the perspective vanishing point relative to the carousel items, so if you move the viewpoint up, it will appear as if you are looking down on the carousel.
+
+Note that the viewpointOffset transform is concatenated with the carousel item transform used by the carousel (or the custom transform you have supplied using the transformForItemView delegate method), so if the carousel items are rotated or scaled then this may not have the desired effect.
+
 @property (nonatomic, assign) float decelerationRate;
 
 The rate at which the carousel decelerates when flicked. The default value is 0.9, values should be in the range 0.0 (carousel stops instantly when released) to 1 .0 (carousel continues indefinitely until it reaches the end).
@@ -65,6 +75,10 @@ The number of items currently displayed in the carousel (read only).
 @property (nonatomic, readonly) NSArray *itemViews;
 
 An array of the item views currently displayed in the carousel (read only).
+
+@property (nonatomic, readonly) UIView *contentView;
+
+The view containing the carousel item views. You can add subviews to this view if you want to intersperse a view with the carousel items. If you want a view to appear in front or behind the carousel items, you should add it directly to the iCarousel view itself instead. Note that the order of views inside the contentView is subject to frequent and undocumented change while the app is running. Any views added to the contentView should have their userInteractionEnabled property set to NO to prevent conflicts with iCarousel's touch event handling.
 
 @property (nonatomic, readonly) NSInteger currentItemIndex;
 

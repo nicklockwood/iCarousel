@@ -8,6 +8,10 @@
 #import "iCarousel.h"
 
 
+#define SCROLL_DURATION 0.4
+#define INSERT_DURATION 0.4
+
+
 @interface iCarousel () <UIGestureRecognizerDelegate>
 
 @property (nonatomic, retain) UIView *contentView;
@@ -55,6 +59,8 @@
 @synthesize scrollEnabled;
 @synthesize decelerationRate;
 @synthesize bounces;
+@synthesize contentOffset;
+@synthesize viewpointOffset;
 @synthesize startOffset;
 @synthesize endOffset;
 @synthesize startTime;
@@ -67,7 +73,11 @@
     decelerationRate = 0.9;
     scrollEnabled = YES;
     bounces = YES;
+	contentOffset = CGSizeZero;
+	viewpointOffset = CGSizeZero;
     
+	self.itemViews = [NSMutableArray array];
+	
     contentView = [[UIView alloc] initWithFrame:self.bounds];
     [self addSubview:contentView];
     
@@ -212,7 +222,8 @@
 {
     view.superview.bounds = view.bounds;
     view.center = CGPointMake(view.bounds.size.width/2.0, view.bounds.size.height/2.0);
-    view.superview.center = CGPointMake(self.bounds.size.width/2.0, self.bounds.size.height/2.0);
+    view.superview.center = CGPointMake(self.bounds.size.width/2.0 + contentOffset.width,
+										self.bounds.size.height/2.0 + contentOffset.height);
     
     //calculate relative position
     float itemOffset = scrollOffset / itemWidth;
@@ -230,7 +241,8 @@
     }
     
     //transform view
-    view.superview.layer.transform = [self transformForItemView:view withOffset:offset];
+	CATransform3D transform = [self transformForItemView:view withOffset:offset];
+    view.superview.layer.transform = CATransform3DTranslate(transform, -viewpointOffset.width, -viewpointOffset.height, 0);
 }
 
 - (void)layoutSubviews
@@ -363,26 +375,35 @@
     return [self clampedIndex:round(scrollOffset / itemWidth)];
 }
 
+- (NSInteger)minScrollDistanceFromIndex:(NSUInteger)fromIndex toIndex:(NSUInteger)toIndex
+{
+	NSInteger directDistance = toIndex - fromIndex;
+	NSInteger wrappedDistance = MIN(toIndex, fromIndex) + numberOfItems - MAX(toIndex, fromIndex);
+	if (fromIndex < toIndex)
+	{
+		wrappedDistance = -wrappedDistance;
+	}
+	return (ABS(directDistance) < ABS(wrappedDistance))? directDistance: wrappedDistance;
+}
+
 - (void)scrollToItemAtIndex:(NSUInteger)index animated:(BOOL)animated
 {	
 	index = [self clampedIndex:index];
-    previousItemIndex = self.currentItemIndex;
-    if ([self shouldWrap] && previousItemIndex == 0 && index == numberOfItems - 1)
-    {
-        scrollOffset = itemWidth * numberOfItems;
-        
-    }
-    else if ([self shouldWrap] && index == 0 && previousItemIndex == numberOfItems - 1)
-    {
-        scrollOffset = -itemWidth;
-    }
     
     if (animated)
     {
         scrolling = YES;
         startTime = CACurrentMediaTime();
         startOffset = scrollOffset;
-        endOffset = itemWidth * index;
+		if ([self shouldWrap])
+		{
+			previousItemIndex = self.currentItemIndex;
+			endOffset = (previousItemIndex + [self minScrollDistanceFromIndex:previousItemIndex toIndex:index]) * itemWidth;
+		}
+        else
+		{
+			endOffset = itemWidth * index;
+		}
     }
     else
     {
@@ -406,7 +427,7 @@
         
         [UIView beginAnimations:nil context:nil];
         [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-        [UIView setAnimationDuration:0.4];
+        [UIView setAnimationDuration:INSERT_DURATION];
     }
     else
     {
@@ -438,13 +459,13 @@
     {
         [UIView beginAnimations:nil context:nil];
         [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-        [UIView setAnimationDuration:0.4];
+        [UIView setAnimationDuration:INSERT_DURATION];
         [self transformItemViews];   
         [UIView commitAnimations];
         
         [UIView beginAnimations:nil context:nil];
         [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-        [UIView setAnimationDelay:0.3];
+        [UIView setAnimationDelay:INSERT_DURATION - 0.1];
         [UIView setAnimationDuration:0.1];
         itemView.superview.alpha = 1.0;
         [UIView commitAnimations];
@@ -503,7 +524,7 @@
     
     if (scrolling)
     {
-        NSTimeInterval time = (currentTime - startTime ) / 0.4;
+        NSTimeInterval time = (currentTime - startTime ) / SCROLL_DURATION;
         if (time >= 1.0)
         {
             time = 1.0;
