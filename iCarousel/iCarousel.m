@@ -75,6 +75,7 @@
     decelerationRate = 0.9;
     scrollEnabled = YES;
     bounces = YES;
+	scrollOffset = 0;
 	contentOffset = CGSizeZero;
 	viewpointOffset = CGSizeZero;
     
@@ -82,7 +83,7 @@
 	
     contentView = [[UIView alloc] initWithFrame:self.bounds];
     [self addSubview:contentView];
-    
+	
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPan:)];
 	panGesture.delegate = self;
     [contentView addGestureRecognizer:panGesture];
@@ -284,10 +285,10 @@
     {
 		itemWidth = [delegate carouselItemWidth:self];
 	}
-
+	
     //adjust scroll offset
     scrollOffset = scrollOffset / prevItemWidth * itemWidth;
-        
+	
     //transform views
     [self transformItemViews];
 	
@@ -344,6 +345,12 @@
     //set item width (may be overidden by delegate)
     itemWidth = [([itemViews count]? [itemViews objectAtIndex:0]: self) bounds].size.width;
     
+	//bring current item to front
+	if (numberOfItems > 0)
+	{
+		[contentView addSubview:[[itemViews objectAtIndex:self.currentItemIndex] superview]];
+	}
+	
     //layout views
     [self layOutItemViews];
 }
@@ -470,7 +477,7 @@
 {
 	index = [self clampedIndex:index];
     numberOfItems ++;
-
+	
     UIView *itemView = [dataSource carousel:self viewForItemAtIndex:index];
     [(NSMutableArray *)itemViews insertObject:itemView atIndex:index];
     [contentView addSubview:[self containView:itemView]];
@@ -499,10 +506,12 @@
     }
 }
 
-- (void)willMoveToSuperview:(UIView *)newSuperview
+- (void)didMoveToSuperview
 {
-	if (newSuperview)
+	if (self.superview)
 	{
+		[self reloadData];
+		[timer invalidate];
 		self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0/60.0 target:self selector:@selector(step) userInfo:nil repeats:YES];
 	}
 	else
@@ -510,11 +519,6 @@
 		[timer invalidate];
 		timer = nil;
 	}
-}
-
-- (void)didMoveToSuperview
-{
-    [self reloadData];
 }
 
 - (void)didScroll
@@ -529,13 +533,18 @@
 		[delegate carouselDidScroll:self];
 	}
     NSInteger currentItemIndex = self.currentItemIndex;
-    if (previousItemIndex != currentItemIndex && [delegate respondsToSelector:@selector(carouselCurrentItemIndexUpdated:)])
-    {
+    if (previousItemIndex != currentItemIndex)
+	{
 		previousItemIndex = currentItemIndex;
-        if (currentItemIndex > -1)
-        {
-            [delegate carouselCurrentItemIndexUpdated:self];
-        }
+		
+		//bring current item to front
+		[contentView addSubview:[[itemViews objectAtIndex:currentItemIndex] superview]];
+		
+		//call delegate
+		if ([delegate respondsToSelector:@selector(carouselCurrentItemIndexUpdated:)])
+		{
+			[delegate carouselCurrentItemIndexUpdated:self];
+		}
 	}
 }
 
@@ -621,7 +630,7 @@
         [self scrollToItemAtIndex:index animated:YES];
     }
 }
-     
+
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gesture
 {
 	if ([gesture isKindOfClass:[UITapGestureRecognizer class]])
