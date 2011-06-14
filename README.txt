@@ -96,7 +96,15 @@ The iCarousel class has the following methods:
 
 - (void)scrollToItemAtIndex:(NSUInteger)index animated:(BOOL)animated;
 
-This will center the carousel on the specified item;
+This will center the carousel on the specified item, either immediately or with a smooth animation. For wrapped carousels, the carousel will automatically determine the shortest (direct, or wraparound) distance to scroll. If you need to control the scroll direction, use the scrollByNumberOfItems method instead.
+
+- (void)scrollToItemAtIndex:(NSUInteger)index duration:(NSTimeInterval)scrollDuration;
+
+This method allows you to control how long the carousel takes to scroll to the specified index.
+
+- (void)scrollByNumberOfItems:(NSInteger)itemCount duration:(NSTimeInterval)duration;
+
+This method allows you to scroll the carousel by a fixed distance, measured in carousel item widths. Positive or negative values may be specified for itemCount, depending on the direction you wish to scroll, and iCarousel gracefully handles bounds issues, so if you specify a distance greater than the number of items in the carousel, scrolling will either be clamped when it reaches the end of the carousel (if wrapping is disabled) or wrap around seamlessly.
 
 - (void)removeItemAtIndex:(NSUInteger)index animated:(BOOL)animated;
 

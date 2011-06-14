@@ -22,6 +22,7 @@
 @property (nonatomic, assign) float scrollOffset;
 @property (nonatomic, assign) float startOffset;
 @property (nonatomic, assign) float endOffset;
+@property (nonatomic, assign) NSTimeInterval scrollDuration;
 @property (nonatomic, assign) BOOL scrolling;
 @property (nonatomic, assign) NSTimeInterval startTime;
 @property (nonatomic, assign) float currentVelocity;
@@ -63,6 +64,7 @@
 @synthesize viewpointOffset;
 @synthesize startOffset;
 @synthesize endOffset;
+@synthesize scrollDuration;
 @synthesize startTime;
 @synthesize scrolling;
 @synthesize previousTranslation;
@@ -85,8 +87,6 @@
 	panGesture.delegate = self;
     [contentView addGestureRecognizer:panGesture];
     [panGesture release];
-    
-    timer = [NSTimer scheduledTimerWithTimeInterval:1.0/60.0 target:self selector:@selector(step) userInfo:nil repeats:YES];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder
@@ -261,12 +261,6 @@
         view.userInteractionEnabled = (i == self.currentItemIndex);
 	}
     
-    //bring current view to front
-    if ([itemViews count])
-    {
-        [contentView addSubview:[[itemViews objectAtIndex:self.currentItemIndex] superview]];
-    }
-    
     //lay out placeholders
     for (NSInteger i = 0; i < numberOfPlaceholders; i++)
     {
@@ -370,6 +364,23 @@
     }
 }
 
+- (float)clampedOffset:(float)offset
+{
+    if (numberOfItems == 0)
+    {
+        return 0;
+    }
+    else if ([self shouldWrap])
+    {
+		float contentWidth = numberOfItems * itemWidth;
+        return offset - floor(offset / contentWidth) * contentWidth;
+    }
+    else
+    {
+        return fmin(fmax(0.0, scrollOffset), numberOfItems * itemWidth - itemWidth);
+    }
+}
+
 - (NSInteger)currentItemIndex
 {	
     return [self clampedIndex:round(scrollOffset / itemWidth)];
@@ -386,34 +397,44 @@
 	return (ABS(directDistance) < ABS(wrappedDistance))? directDistance: wrappedDistance;
 }
 
-- (void)scrollToItemAtIndex:(NSUInteger)index animated:(BOOL)animated
-{	
-	index = [self clampedIndex:index];
-    
-    if (animated)
+- (void)scrollByNumberOfItems:(NSInteger)itemCount duration:(NSTimeInterval)duration
+{
+	if (duration > 0)
     {
         scrolling = YES;
         startTime = CACurrentMediaTime();
         startOffset = scrollOffset;
+		scrollDuration = duration;
+		previousItemIndex = self.currentItemIndex;
 		if ([self shouldWrap])
 		{
-			previousItemIndex = self.currentItemIndex;
-			endOffset = (previousItemIndex + [self minScrollDistanceFromIndex:previousItemIndex toIndex:index]) * itemWidth;
+			endOffset = itemWidth * (previousItemIndex + itemCount);
 		}
         else
 		{
-			endOffset = itemWidth * index;
+			endOffset = itemWidth * [self clampedIndex:previousItemIndex + itemCount];
 		}
     }
     else
     {
-        scrollOffset = itemWidth * index;
+        scrollOffset = itemWidth * [self clampedIndex:previousItemIndex + itemCount];
         [self didScroll];
     }
 }
 
-- (void)removeItemAtIndex:(NSUInteger)index animated:(BOOL)animated
+- (void)scrollToItemAtIndex:(NSInteger)index duration:(NSTimeInterval)duration
 {
+	[self scrollByNumberOfItems:[self minScrollDistanceFromIndex:self.currentItemIndex toIndex:index] duration:duration];
+}
+
+- (void)scrollToItemAtIndex:(NSInteger)index animated:(BOOL)animated
+{	
+	[self scrollToItemAtIndex:index duration:SCROLL_DURATION];
+}
+
+- (void)removeItemAtIndex:(NSInteger)index animated:(BOOL)animated
+{
+	index = [self clampedIndex:index];
     UIView *itemView = [itemViews objectAtIndex:index];
     
     if (animated)
@@ -445,8 +466,9 @@
     }
 }
 
-- (void)insertItemAtIndex:(NSUInteger)index animated:(BOOL)animated
+- (void)insertItemAtIndex:(NSInteger)index animated:(BOOL)animated
 {
+	index = [self clampedIndex:index];
     numberOfItems ++;
 
     UIView *itemView = [dataSource carousel:self viewForItemAtIndex:index];
@@ -477,6 +499,19 @@
     }
 }
 
+- (void)willMoveToSuperview:(UIView *)newSuperview
+{
+	if (newSuperview)
+	{
+		self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0/60.0 target:self selector:@selector(step) userInfo:nil repeats:YES];
+	}
+	else
+	{
+		[timer invalidate];
+		timer = nil;
+	}
+}
+
 - (void)didMoveToSuperview
 {
     [self reloadData];
@@ -484,21 +519,9 @@
 
 - (void)didScroll
 {	
-    if ([self shouldWrap])
+    if ([self shouldWrap] || !bounces)
     {
-        float contentWidth = numberOfItems * itemWidth;
-        if (scrollOffset < -itemWidth/2)
-        {
-            scrollOffset += contentWidth;
-        }
-        else if (scrollOffset >= contentWidth - itemWidth/2)
-        {
-            scrollOffset -= contentWidth;
-        }
-    }
-    else if (!bounces)
-    {
-        scrollOffset = fmin(fmax(0.0, scrollOffset), numberOfItems * itemWidth - itemWidth);
+        scrollOffset = [self clampedOffset:scrollOffset];
     }
     [self transformItemViews];
     if ([delegate respondsToSelector:@selector(carouselDidScroll:)])
@@ -524,7 +547,7 @@
     
     if (scrolling)
     {
-        NSTimeInterval time = (currentTime - startTime ) / SCROLL_DURATION;
+        NSTimeInterval time = (currentTime - startTime ) / scrollDuration;
         if (time >= 1.0)
         {
             time = 1.0;

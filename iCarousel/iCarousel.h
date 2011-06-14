@@ -43,9 +43,11 @@ iCarouselType;
 @property (nonatomic, readonly) float itemWidth;
 @property (nonatomic, retain, readonly) UIView *contentView;
 
-- (void)scrollToItemAtIndex:(NSUInteger)index animated:(BOOL)animated;
-- (void)removeItemAtIndex:(NSUInteger)index animated:(BOOL)animated;
-- (void)insertItemAtIndex:(NSUInteger)index animated:(BOOL)animated;
+- (void)scrollByNumberOfItems:(NSInteger)itemCount duration:(NSTimeInterval)duration;
+- (void)scrollToItemAtIndex:(NSInteger)index duration:(NSTimeInterval)duration;
+- (void)scrollToItemAtIndex:(NSInteger)index animated:(BOOL)animated;
+- (void)removeItemAtIndex:(NSInteger)index animated:(BOOL)animated;
+- (void)insertItemAtIndex:(NSInteger)index animated:(BOOL)animated;
 - (void)reloadData;
 
 @end

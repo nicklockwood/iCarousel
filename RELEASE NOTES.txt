@@ -1,3 +1,9 @@
+Version 1.2.4
+
+- Added ability to specify scroll animation duration
+- Added scrollByNumberOfItems method to programmatically scroll the carousel by a specified distance in either direction
+- Fixed retain cycle that prevented carousel from being deallocated properly
+
 Version 1.2.3
 
 - Added contentOffset and viewpointOffset properties for adjusting layout and perspective
