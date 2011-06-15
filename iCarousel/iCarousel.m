@@ -521,6 +521,13 @@
 	}
 }
 
+NSInteger compareViewDepth(id obj1, id obj2, void *context)
+{
+	UIView *view1 = obj1;
+	UIView *view2 = obj2;
+	return view1.layer.transform.m43 - view2.layer.transform.m43;
+}
+
 - (void)didScroll
 {	
     if ([self shouldWrap] || !bounces)
@@ -537,8 +544,11 @@
 	{
 		previousItemIndex = currentItemIndex;
 		
-		//bring current item to front
-		[contentView addSubview:[[itemViews objectAtIndex:currentItemIndex] superview]];
+		//depth-sort the views
+		for (UIView *view in [contentView.subviews sortedArrayUsingFunction:compareViewDepth context:nil])
+		{
+			[contentView addSubview:view];
+		}
 		
 		//call delegate
 		if ([delegate respondsToSelector:@selector(carouselCurrentItemIndexUpdated:)])
