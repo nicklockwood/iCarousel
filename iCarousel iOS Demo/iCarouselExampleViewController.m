@@ -11,6 +11,7 @@
 
 #define NUMBER_OF_ITEMS 20
 #define ITEM_SPACING 210
+#define USE_BUTTONS YES
 
 
 @interface iCarouselExampleViewController () <UIActionSheetDelegate>
@@ -131,15 +132,30 @@
 
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index
 {
-    //create a numbered view
-    UIView *view = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]] autorelease];
-    UILabel *label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
-    label.text = [NSString stringWithFormat:@"%i", [[items objectAtIndex:index] intValue]];
-    label.backgroundColor = [UIColor clearColor];
-    label.textAlignment = UITextAlignmentCenter;
-    label.font = [label.font fontWithSize:50];
-    [view addSubview:label];
-    return view;
+    if (USE_BUTTONS)
+    {
+        //create a numbered button
+        UIImage *image = [UIImage imageNamed:@"page.png"];
+        UIButton *button = [[[UIButton alloc] initWithFrame:CGRectMake(0, 0, image.size.width, image.size.height)] autorelease];
+        [button setBackgroundImage:image forState:UIControlStateNormal];
+        [button setTitle:[[items objectAtIndex:index] stringValue] forState:UIControlStateNormal];
+        [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        button.titleLabel.font = [button.titleLabel.font fontWithSize:50];
+        [button addTarget:self action:@selector(buttonTapped:) forControlEvents:UIControlEventTouchUpInside];
+        return button;
+    }
+    else
+    {
+        //create a numbered view
+        UIView *view = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]] autorelease];
+        UILabel *label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
+        label.text = [[items objectAtIndex:index] stringValue];
+        label.backgroundColor = [UIColor clearColor];
+        label.textAlignment = UITextAlignmentCenter;
+        label.font = [label.font fontWithSize:50];
+        [view addSubview:label];
+        return view;
+    }
 }
 
 - (float)carouselItemWidth:(iCarousel *)carousel
@@ -166,6 +182,19 @@
 {
     //wrap all carousels
     return wrap;
+}
+
+#pragma mark -
+#pragma mark Button tap event
+
+- (void)buttonTapped:(UIButton *)sender
+{
+    NSInteger index = [carousel.itemViews indexOfObject:sender];
+    [[[[UIAlertView alloc] initWithTitle:@"Button Tapped"
+                                 message:[NSString stringWithFormat:@"You tapped button number %i", index]
+                                delegate:nil
+                       cancelButtonTitle:@"OK"
+                       otherButtonTitles:nil] autorelease] show];
 }
 
 @end

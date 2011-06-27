@@ -5,8 +5,21 @@
 //  Copyright 2010 Charcoal Design. All rights reserved.
 //
 
+#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
+
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
+
+typedef UIView View;
+
+#else
+
+#import <Cocoa/Cocoa.h>
+#import <QuartzCore/QuartzCore.h>
+
+typedef NSView View;
+
+#endif
 
 
 typedef enum
@@ -24,7 +37,38 @@ iCarouselType;
 
 @protocol iCarouselDataSource, iCarouselDelegate;
 
-@interface iCarousel : UIView
+@interface iCarousel : View
+#ifdef __i386__
+{
+    id<iCarouselDelegate> delegate;
+    id<iCarouselDataSource> dataSource;
+    iCarouselType type;
+    float perspective;
+    NSInteger numberOfItems;
+    NSInteger numberOfPlaceholders;
+    View* contentView;
+    NSArray* itemViews;
+    NSArray* placeholderViews;
+    NSInteger previousItemIndex;
+    float itemWidth;
+    float scrollOffset;
+    float currentVelocity;
+    NSTimer* timer;
+    NSTimeInterval previousTime;
+    BOOL decelerating;
+    BOOL scrollEnabled;
+    float decelerationRate;
+    BOOL bounces;
+    CGSize contentOffset;
+    CGSize viewpointOffset;
+    float startOffset;
+    float endOffset;
+    NSTimeInterval scrollDuration;
+    NSTimeInterval startTime;
+    BOOL scrolling;
+    float previousTranslation;
+}
+#endif
 
 @property (nonatomic, assign) IBOutlet id<iCarouselDataSource> dataSource;
 @property (nonatomic, assign) IBOutlet id<iCarouselDelegate> delegate;
@@ -33,16 +77,23 @@ iCarouselType;
 @property (nonatomic, assign) float decelerationRate;
 @property (nonatomic, assign) BOOL scrollEnabled;
 @property (nonatomic, assign) BOOL bounces;
+@property (nonatomic, assign) CGSize contentOffset;
+@property (nonatomic, assign) CGSize viewpointOffset;
 @property (nonatomic, readonly) NSInteger numberOfItems;
 @property (nonatomic, readonly) NSInteger numberOfPlaceholders;
 @property (nonatomic, readonly) NSInteger currentItemIndex;
 @property (nonatomic, retain, readonly) NSArray *itemViews;
 @property (nonatomic, retain, readonly) NSArray *placeholderViews;
 @property (nonatomic, readonly) float itemWidth;
+@property (nonatomic, retain, readonly) View *contentView;
 
-- (void)scrollToItemAtIndex:(NSUInteger)index animated:(BOOL)animated;
-- (void)removeItemAtIndex:(NSUInteger)index animated:(BOOL)animated;
-- (void)insertItemAtIndex:(NSUInteger)index animated:(BOOL)animated;
+- (void)scrollByNumberOfItems:(NSInteger)itemCount duration:(NSTimeInterval)duration;
+- (void)scrollToItemAtIndex:(NSInteger)index duration:(NSTimeInterval)duration;
+- (void)scrollToItemAtIndex:(NSInteger)index animated:(BOOL)animated;
+#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
+- (void)removeItemAtIndex:(NSInteger)index animated:(BOOL)animated;
+- (void)insertItemAtIndex:(NSInteger)index animated:(BOOL)animated;
+#endif
 - (void)reloadData;
 
 @end
@@ -51,12 +102,12 @@ iCarouselType;
 @protocol iCarouselDataSource <NSObject>
 
 - (NSUInteger)numberOfItemsInCarousel:(iCarousel *)carousel;
-- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index;
+- (View *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index;
 
 @optional
 
 - (NSUInteger)numberOfPlaceholdersInCarousel:(iCarousel *)carousel;
-- (UIView *)carouselPlaceholderView:(iCarousel *)carousel;
+- (View *)carouselPlaceholderView:(iCarousel *)carousel;
 
 @end
 
@@ -69,6 +120,6 @@ iCarouselType;
 - (void)carouselCurrentItemIndexUpdated:(iCarousel *)carousel;
 - (float)carouselItemWidth:(iCarousel *)carousel;
 - (BOOL)carouselShouldWrap:(iCarousel *)carousel;
-- (CATransform3D)carousel:(iCarousel *)carousel transformForItemView:(UIView *)view withOffset:(float)offset;
+- (CATransform3D)carousel:(iCarousel *)carousel transformForItemView:(View *)view withOffset:(float)offset;
 
 @end

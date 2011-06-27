@@ -1,0 +1,328 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0134186213A4030B0030BB65 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0134186113A4030B0030BB65 /* QuartzCore.framework */; };
+		018BBC6913A37041005CA505 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 018BBC6813A37041005CA505 /* Cocoa.framework */; };
+		018BBC7313A37041005CA505 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 018BBC7113A37041005CA505 /* InfoPlist.strings */; };
+		018BBC7613A37041005CA505 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 018BBC7513A37041005CA505 /* main.m */; };
+		018BBC7913A37041005CA505 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 018BBC7713A37041005CA505 /* Credits.rtf */; };
+		018BBC7C13A37041005CA505 /* iCarouselMacAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 018BBC7B13A37041005CA505 /* iCarouselMacAppDelegate.m */; };
+		018BBC7F13A37041005CA505 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 018BBC7D13A37041005CA505 /* MainMenu.xib */; };
+		018BBC9E13A37314005CA505 /* iCarouselWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 018BBC9D13A37314005CA505 /* iCarouselWindowController.m */; };
+		018BBCA213A37482005CA505 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 018BBCA013A37482005CA505 /* background.png */; };
+		018BBCA313A37482005CA505 /* page.png in Resources */ = {isa = PBXBuildFile; fileRef = 018BBCA113A37482005CA505 /* page.png */; };
+		018BBCB913A3A78C005CA505 /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 018BBCB813A3A78C005CA505 /* iCarousel.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0134186113A4030B0030BB65 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		018BBC6413A37041005CA505 /* iCarouselMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iCarouselMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		018BBC6813A37041005CA505 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		018BBC6B13A37041005CA505 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		018BBC6C13A37041005CA505 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		018BBC6D13A37041005CA505 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		018BBC7013A37041005CA505 /* iCarouselMac-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "iCarouselMac-Info.plist"; sourceTree = "<group>"; };
+		018BBC7213A37041005CA505 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		018BBC7413A37041005CA505 /* iCarouselMac-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iCarouselMac-Prefix.pch"; sourceTree = "<group>"; };
+		018BBC7513A37041005CA505 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		018BBC7813A37041005CA505 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		018BBC7A13A37041005CA505 /* iCarouselMacAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = iCarouselMacAppDelegate.h; sourceTree = "<group>"; };
+		018BBC7B13A37041005CA505 /* iCarouselMacAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iCarouselMacAppDelegate.m; sourceTree = "<group>"; };
+		018BBC7E13A37041005CA505 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		018BBC9C13A37314005CA505 /* iCarouselWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarouselWindowController.h; sourceTree = "<group>"; };
+		018BBC9D13A37314005CA505 /* iCarouselWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarouselWindowController.m; sourceTree = "<group>"; };
+		018BBCA013A37482005CA505 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
+		018BBCA113A37482005CA505 /* page.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page.png; sourceTree = "<group>"; };
+		018BBCB713A3A78C005CA505 /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
+		018BBCB813A3A78C005CA505 /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		018BBC6113A37041005CA505 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0134186213A4030B0030BB65 /* QuartzCore.framework in Frameworks */,
+				018BBC6913A37041005CA505 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		018BBC5913A37041005CA505 = {
+			isa = PBXGroup;
+			children = (
+				018BBCB613A3A78C005CA505 /* iCarousel */,
+				018BBC6E13A37041005CA505 /* iCarouselMac */,
+				018BBC6713A37041005CA505 /* Frameworks */,
+				018BBC6513A37041005CA505 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		018BBC6513A37041005CA505 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				018BBC6413A37041005CA505 /* iCarouselMac.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		018BBC6713A37041005CA505 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0134186113A4030B0030BB65 /* QuartzCore.framework */,
+				018BBC6813A37041005CA505 /* Cocoa.framework */,
+				018BBC6A13A37041005CA505 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		018BBC6A13A37041005CA505 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				018BBC6B13A37041005CA505 /* AppKit.framework */,
+				018BBC6C13A37041005CA505 /* CoreData.framework */,
+				018BBC6D13A37041005CA505 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		018BBC6E13A37041005CA505 /* iCarouselMac */ = {
+			isa = PBXGroup;
+			children = (
+				018BBC7A13A37041005CA505 /* iCarouselMacAppDelegate.h */,
+				018BBC7B13A37041005CA505 /* iCarouselMacAppDelegate.m */,
+				018BBC9C13A37314005CA505 /* iCarouselWindowController.h */,
+				018BBC9D13A37314005CA505 /* iCarouselWindowController.m */,
+				018BBC7D13A37041005CA505 /* MainMenu.xib */,
+				018BBC9F13A37482005CA505 /* Images */,
+				018BBC6F13A37041005CA505 /* Supporting Files */,
+			);
+			path = iCarouselMac;
+			sourceTree = "<group>";
+		};
+		018BBC6F13A37041005CA505 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				018BBC7013A37041005CA505 /* iCarouselMac-Info.plist */,
+				018BBC7113A37041005CA505 /* InfoPlist.strings */,
+				018BBC7413A37041005CA505 /* iCarouselMac-Prefix.pch */,
+				018BBC7513A37041005CA505 /* main.m */,
+				018BBC7713A37041005CA505 /* Credits.rtf */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		018BBC9F13A37482005CA505 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				018BBCA013A37482005CA505 /* background.png */,
+				018BBCA113A37482005CA505 /* page.png */,
+			);
+			name = Images;
+			path = ../../Images;
+			sourceTree = "<group>";
+		};
+		018BBCB613A3A78C005CA505 /* iCarousel */ = {
+			isa = PBXGroup;
+			children = (
+				018BBCB713A3A78C005CA505 /* iCarousel.h */,
+				018BBCB813A3A78C005CA505 /* iCarousel.m */,
+			);
+			name = iCarousel;
+			path = ../iCarousel;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		018BBC6313A37041005CA505 /* iCarouselMac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 018BBC8213A37041005CA505 /* Build configuration list for PBXNativeTarget "iCarouselMac" */;
+			buildPhases = (
+				018BBC6013A37041005CA505 /* Sources */,
+				018BBC6113A37041005CA505 /* Frameworks */,
+				018BBC6213A37041005CA505 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = iCarouselMac;
+			productName = iCarouselMac;
+			productReference = 018BBC6413A37041005CA505 /* iCarouselMac.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		018BBC5B13A37041005CA505 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 018BBC5E13A37041005CA505 /* Build configuration list for PBXProject "iCarouselMac" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 018BBC5913A37041005CA505;
+			productRefGroup = 018BBC6513A37041005CA505 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				018BBC6313A37041005CA505 /* iCarouselMac */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		018BBC6213A37041005CA505 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				018BBC7313A37041005CA505 /* InfoPlist.strings in Resources */,
+				018BBC7913A37041005CA505 /* Credits.rtf in Resources */,
+				018BBC7F13A37041005CA505 /* MainMenu.xib in Resources */,
+				018BBCA213A37482005CA505 /* background.png in Resources */,
+				018BBCA313A37482005CA505 /* page.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		018BBC6013A37041005CA505 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				018BBC7613A37041005CA505 /* main.m in Sources */,
+				018BBC7C13A37041005CA505 /* iCarouselMacAppDelegate.m in Sources */,
+				018BBC9E13A37314005CA505 /* iCarouselWindowController.m in Sources */,
+				018BBCB913A3A78C005CA505 /* iCarousel.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		018BBC7113A37041005CA505 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				018BBC7213A37041005CA505 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		018BBC7713A37041005CA505 /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				018BBC7813A37041005CA505 /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		018BBC7D13A37041005CA505 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				018BBC7E13A37041005CA505 /* en */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		018BBC8013A37041005CA505 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		018BBC8113A37041005CA505 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		018BBC8313A37041005CA505 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "iCarouselMac/iCarouselMac-Prefix.pch";
+				INFOPLIST_FILE = "iCarouselMac/iCarouselMac-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		018BBC8413A37041005CA505 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "iCarouselMac/iCarouselMac-Prefix.pch";
+				INFOPLIST_FILE = "iCarouselMac/iCarouselMac-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		018BBC5E13A37041005CA505 /* Build configuration list for PBXProject "iCarouselMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				018BBC8013A37041005CA505 /* Debug */,
+				018BBC8113A37041005CA505 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		018BBC8213A37041005CA505 /* Build configuration list for PBXNativeTarget "iCarouselMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				018BBC8313A37041005CA505 /* Debug */,
+				018BBC8413A37041005CA505 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 018BBC5B13A37041005CA505 /* Project object */;
+}
