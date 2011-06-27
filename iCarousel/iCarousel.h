@@ -67,6 +67,8 @@ iCarouselType;
     NSTimeInterval startTime;
     BOOL scrolling;
     float previousTranslation;
+	BOOL centerItemWhenSelected;
+	BOOL shouldWrap;
 }
 #endif
 
@@ -90,11 +92,16 @@ iCarouselType;
 - (void)scrollByNumberOfItems:(NSInteger)itemCount duration:(NSTimeInterval)duration;
 - (void)scrollToItemAtIndex:(NSInteger)index duration:(NSTimeInterval)duration;
 - (void)scrollToItemAtIndex:(NSInteger)index animated:(BOOL)animated;
+- (void)reloadData;
+
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
+
+@property (nonatomic, assign) BOOL centerItemWhenSelected;
+
 - (void)removeItemAtIndex:(NSInteger)index animated:(BOOL)animated;
 - (void)insertItemAtIndex:(NSInteger)index animated:(BOOL)animated;
+
 #endif
-- (void)reloadData;
 
 @end
 
@@ -121,5 +128,11 @@ iCarouselType;
 - (float)carouselItemWidth:(iCarousel *)carousel;
 - (BOOL)carouselShouldWrap:(iCarousel *)carousel;
 - (CATransform3D)carousel:(iCarousel *)carousel transformForItemView:(View *)view withOffset:(float)offset;
+
+#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
+
+- (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index;
+
+#endif
 
 @end
