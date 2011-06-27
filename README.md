@@ -3,9 +3,7 @@ Purpose
 
 iCarousel is a class designed to simplify the implementation of various types of carousel (paged, scrolling views) on iPhone, iPad and Mac OS. iCarousel implements a number of common effects such as cylindrical, flat and "CoverFlow" style carousels, as well as providing hooks to implement your own bespoke effects. Unlike many other "CoverFlow" libraries, iCarousel can work with any kind of view, not just images, so it is ideal for presenting paged data in a fluid and impressive way in your app. It also makes it extremely easy to swap between different carousel effects with minimal code changes.
 
-*Special thanks go to Sushant Prakash (https://github.com/sushftw) for the Mac port.*
-
-Not all features of iCarousel are currently supported on Mac OS. I hope to address this in future. Please refer to the documentation below for details.
+Not all features of iCarousel are currently supported on Mac OS. We hope to address this in future. Please refer to the documentation below for details.
 
 
 Installation
@@ -26,7 +24,7 @@ iCarouselTypeCylinder
 iCarouselTypeInvertedCylinder
 iCarouselTypeCoverFlow
 
-You can also implement your own bespoke style using iCarouselTypeCustom and the `carousel:transformForItemView:withOffset:` delegate method.
+You can also implement your own bespoke style using iCarouselTypeCustom and the carousel:transformForItemView:withOffset: delegate method.
 
 
 Properties
@@ -138,17 +136,17 @@ Return the number of items (views) in the carousel.
 
 	- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index;
 
-Return a view to be displayed at the specified index in the carousel. Unlike UITableView, there is no dequeuing system for iCarousel item views, but you should ensure that each time the `carousel:viewForPageAtIndex:` method is called, it returns a new view instance, as returning multiple copies of the same view may cause display issues with the carousel.
+Return a view to be displayed at the specified index in the carousel. Unlike UITableView, there is no dequeuing system for iCarousel item views, but you should ensure that each time the carousel:viewForPageAtIndex: method is called, it returns a new view instance, as returning multiple copies of the same view may cause display issues with the carousel.
 
 The iCarouselDataSource protocol has the following optional methods:
 
 	- (NSUInteger)numberOfPlaceholdersInCarousel:(iCarousel *)carousel;
 
-Returns the number of placeholder views to display in the carousel. Placeholder views are intended to be used when the number of items in the carousel is too few to fill the carousel width, and you wish to display something in the empty space. They move with the carousel and behave just like any other carousel item, but they do not count towards the numberOfItems value, and cannot be set as the currently selected item. Placeholders are hidden when wrapping is enabled. Placeholders appear on either side of the carousel items. For n placeholder views, the first n/2 items will appear to the left of the item views and the next n/2 will appear to the right. You can have an odd number of placeholders, in which case the carousel will be asymmetrical. **Note: the behaviour for placeholders has changed since version 1.2.x - the number of placeholders value now refers to the total number, not the number on each side.**
+Returns the number of placeholder views to display in the carousel. Placeholder views are intended to be used when the number of items in the carousel is too few to fill the carousel width, and you wish to display something in the empty space. They move with the carousel and behave just like any other carousel item, but they do not count towards the numberOfItems value, and cannot be set as the currently selected item. Note that the placeholders are mirrored on either side of the carousel, so if you only need one placeholder on either side of the real items, return a value of 1, not 2. Also, note that placeholder views cannot be used with a wrapped carousel type. 
 
-	- (UIView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index;
+	- (UIView *)carouselPlaceholderView:(iCarousel *)carousel;
 
-Return a view to be displayed as the placeholder view. As with the regular item views, you must return a unique view instance for each call to `carouselPlaceholderView:` to avoid display issues. **Note: the protocol and behaviour for placeholders has changed since version 1.2.x - they are no longer mirrored, so it is possible to provide visually distinct views for each placeholder.**
+Return a view to be displayed as the placeholder view. Placeholder views should be identical as they may be displayed in any order, however, as with the regular item views, you must return a unique view instance for each call to carouselPlaceholderView: to avoid display issues.
 
 The iCarouselDelegate protocol has the following optional methods:
 
@@ -162,7 +160,7 @@ This method is called whenever the carousel scrolls far enough for the currentIt
 
 	- (float)carouselItemWidth:(iCarousel *)carousel;
 
-Returns the width of each item in the carousel - i.e. the spacing for each item view. If the method is not implemented, this defaults to the width of the first item view that is returned by the `carousel:viewForItemAtIndex:` method.
+Returns the width of each item in the carousel - i.e. the spacing for each item view. If the method is not implemented, this defaults to the width of the first item view that is returned by the carousel:viewForItemAtIndex: method.
 
 	- (BOOL)carouselShouldWrap:(iCarousel *)carousel;
 
@@ -180,7 +178,7 @@ This method will fire if the user taps any carousel item view (not including pla
 Detecting Taps on Item Views
 ----------------------------
 
-There are two basic approaches to detecting taps on views in iCarousel on iOS. The first approach is to simply use the `carousel:didSelectItemAtIndex:` delegate method, which fires every time an item is tapped.
+There are two basic approaches to detecting taps on views in iCarousel on iOS. The first approach is to simply use the carousel:didSelectItemAtIndex: delegate method, which fires every time an item is tapped.
 
 Alternatively, if you want a little more control can use supply a UIButton as the item view and handle the touch interactions yourself. See the iOS example project for a demo of how this is done.
 

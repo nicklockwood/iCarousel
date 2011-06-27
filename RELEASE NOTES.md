@@ -1,9 +1,8 @@
 Version 1.3
 
-- Added Mac OS support. Most - but not all - features from the iOS version are supported (see readme.md for details. Thanks go to Sushant Prakash for proving the concept).
+- Added Mac OS support. Most, but not all features from the iOS version are supported.
 - Added centerItemWhenSelected property to disable the auto-centering behaviour when tapping on item views.
 - Added carousel:didSelectItemAtIndex: delegate method which is called when a user taps any item view in the carousel.
-- Changed placeholder view behaviour slightly to be more flexible and intuitive.
 - Bug and performance fixes to the depth sorting and positioning logic.
 - Extended the example project to demonstrate the use of placeholder views and the new delegate method.
 - Converted documentation and license files to markdown format.
