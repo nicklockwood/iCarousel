@@ -158,26 +158,6 @@
     }
 }
 
-- (NSUInteger)numberOfPlaceholdersInCarousel:(iCarousel *)carousel
-{
-	//note: placeholder views are only displayed if wrapping is disabled
-	return 1;
-}
-
-- (UIView *)carouselPlaceholderView:(iCarousel *)carousel
-{
-	//create a placeholder view
-	UIView *view = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]] autorelease];
-	view.alpha = 0.5;
-	UILabel *label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
-	label.text = @"[fin]";
-	label.backgroundColor = [UIColor clearColor];
-	label.textAlignment = UITextAlignmentCenter;
-	label.font = [label.font fontWithSize:50];
-	[view addSubview:label];
-	return view;
-}
-
 - (float)carouselItemWidth:(iCarousel *)carousel
 {
     //slightly wider than item view
@@ -202,20 +182,6 @@
 {
     //wrap all carousels
     return wrap;
-}
-
-- (void)carousel:(iCarousel *)_carousel didSelectItemAtIndex:(NSInteger)index
-{
-	if (index == carousel.currentItemIndex)
-	{
-		//note, this will only ever happen if USE_BUTTONS == NO
-		//otherwise the button intercepts the tap event
-		NSLog(@"Selected current item");
-	}
-	else
-	{
-		NSLog(@"Selected item number %i", index);
-	}
 }
 
 #pragma mark -
