@@ -155,4 +155,10 @@ iCarouselType;
 
 #endif
 
+#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
+
+- (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index;
+
+#endif
+
 @end
