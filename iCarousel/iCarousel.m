@@ -4,6 +4,29 @@
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2010 Charcoal Design. All rights reserved.
 //
+//  Get the latest version of iCarousel from either of these locations:
+//
+//  http://charcoaldesign.co.uk/source/cocoa#icarousel
+//  https://github.com/demosthenese/icarousel
+//
+//  This software is provided 'as-is', without any express or implied
+//  warranty.  In no event will the authors be held liable for any damages
+//  arising from the use of this software.
+//
+//  Permission is granted to anyone to use this software for any purpose,
+//  including commercial applications, and to alter it and redistribute it
+//  freely, subject to the following restrictions:
+//
+//  1. The origin of this software must not be misrepresented; you must not
+//  claim that you wrote the original software. If you use this software
+//  in a product, an acknowledgment in the product documentation would be
+//  appreciated but is not required.
+//
+//  2. Altered source versions must be plainly marked as such, and must not be
+//  misrepresented as being the original software.
+//
+//  3. This notice may not be removed or altered from any source distribution.
+
 
 #import "iCarousel.h"
 
@@ -196,9 +219,11 @@
         case iCarouselTypeRotary:
         case iCarouselTypeInvertedRotary:
         {
+			NSInteger count = numberOfItems + (shouldWrap? 0: numberOfPlaceholders);
+
             float arc = M_PI * 2.0;
-            float radius = itemWidth / 2.0 / tan(arc/2.0/numberOfItems);
-            float angle = offset / numberOfItems * arc;
+            float radius = itemWidth / 2.0 / tan(arc/2.0/count);
+            float angle = offset / count * arc;
             
             if (type == iCarouselTypeInvertedRotary)
             {
@@ -212,9 +237,11 @@
         case iCarouselTypeCylinder:
         case iCarouselTypeInvertedCylinder:
         {
-            float arc = M_PI * 2.0;
-            float radius = itemWidth / 2.0 / tan(arc/2.0/numberOfItems);
-            float angle = offset / numberOfItems * arc;
+			NSInteger count = numberOfItems + (shouldWrap? 0: numberOfPlaceholders);
+            
+			float arc = M_PI * 2.0;
+            float radius = itemWidth / 2.0 / tan(arc/2.0/count);
+            float angle = offset / count * arc;
             
             if (type == iCarouselTypeInvertedCylinder)
             {
@@ -316,7 +343,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     //transform view
     view.superview.layer.transform = [self transformForItemView:view withOffset:offset];
     
-    // remove transform and transition animations
+    //remove transform and transition animations
     [view.superview.layer removeAllAnimations];
 	
 	//hide containers for invisible views
@@ -348,14 +375,17 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     //lay out placeholders
     for (NSInteger i = 0; i < numberOfPlaceholders; i++)
     {
-		//starting placeholders
 		View *view = [placeholderViews objectAtIndex:i];
-		[self transformItemView:view atIndex:-(i+1)];
-		[view.superview setHidden:shouldWrap];
-		
-		//ending placeholders
-		view = [placeholderViews objectAtIndex:i + numberOfPlaceholders];
-		[self transformItemView:view atIndex:i + numberOfItems];
+		if (i < floor(numberOfPlaceholders/2))
+		{
+			//left placeholder
+			[self transformItemView:view atIndex:-(i+1)];
+		}
+		else
+		{
+			//right placeholder
+			[self transformItemView:view atIndex:i - floor(numberOfPlaceholders/2) + numberOfItems];
+		}
 		[view.superview setHidden:shouldWrap];
 	}
 }
@@ -438,10 +468,10 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     if ([dataSource respondsToSelector:@selector(numberOfPlaceholdersInCarousel:)])
     {
         numberOfPlaceholders = [dataSource numberOfPlaceholdersInCarousel:self];
-        self.placeholderViews = [NSMutableArray arrayWithCapacity:numberOfPlaceholders * 2];
-        for (NSUInteger i = 0; i < numberOfPlaceholders * 2; i++)
+        self.placeholderViews = [NSMutableArray arrayWithCapacity:numberOfPlaceholders];
+        for (NSUInteger i = 0; i < numberOfPlaceholders; i++)
         {
-            View *view = [dataSource carouselPlaceholderView:self];
+            View *view = [dataSource carousel:self placeholderViewAtIndex:i];
             if (view == nil)
             {
                 view = [[[View alloc] init] autorelease];

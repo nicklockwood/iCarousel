@@ -113,7 +113,8 @@
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     //restore view opacities to normal
-    for (UIView *view in carousel.itemViews)
+	NSArray *allViews = [carousel.itemViews arrayByAddingObjectsFromArray:carousel.placeholderViews];
+    for (UIView *view in allViews)
     {
         view.alpha = 1.0;
     }
@@ -161,16 +162,15 @@
 - (NSUInteger)numberOfPlaceholdersInCarousel:(iCarousel *)carousel
 {
 	//note: placeholder views are only displayed if wrapping is disabled
-	return 1;
+	return 2;
 }
 
-- (UIView *)carouselPlaceholderView:(iCarousel *)carousel
+- (UIView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index
 {
 	//create a placeholder view
 	UIView *view = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]] autorelease];
-	view.alpha = 0.5;
 	UILabel *label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
-	label.text = @"[fin]";
+	label.text = (index == 0)? @"[": @"]";
 	label.backgroundColor = [UIColor clearColor];
 	label.textAlignment = UITextAlignmentCenter;
 	label.font = [label.font fontWithSize:50];

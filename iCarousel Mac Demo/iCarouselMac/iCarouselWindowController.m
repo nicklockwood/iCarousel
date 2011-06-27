@@ -57,6 +57,13 @@
 
 - (IBAction)switchCarouselType:(id)sender
 {
+	//restore view opacities to normal
+	NSArray *allViews = [carousel.itemViews arrayByAddingObjectsFromArray:carousel.placeholderViews];
+    for (NSView *view in allViews)
+    {
+        view.layer.opacity = 1.0;
+    }
+	
     carousel.type = [sender tag];
 }
 
@@ -101,10 +108,10 @@
 - (NSUInteger)numberOfPlaceholdersInCarousel:(iCarousel *)carousel
 {
 	//note: placeholder views are only displayed if wrapping is disabled
-	return 1;
+	return 2;
 }
 
-- (View *)carouselPlaceholderView:(iCarousel *)carousel
+- (NSView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index
 {
 	//create a placeholder view
 	NSImage *image = [NSImage imageNamed:@"page.png"];
@@ -112,10 +119,9 @@
 	[view setImage:image];
 	[view setImageScaling:NSImageScaleAxesIndependently];
 	[view setWantsLayer:YES];
-	view.layer.opacity = 0.5;
 	
 	NSTextField *label = [[[NSTextField alloc] init] autorelease];
-	[label setStringValue: @"[fin]"];
+	[label setStringValue:(index == 0)? @"[": @"]"];
 	[label setBackgroundColor:[NSColor clearColor]];
 	[label setBordered:NO];
 	[label setSelectable:NO];
