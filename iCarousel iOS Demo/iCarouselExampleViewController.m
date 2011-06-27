@@ -184,7 +184,7 @@
     return ITEM_SPACING;
 }
 
-- (CATransform3D)carousel:(iCarousel *)carousel transformForItemView:(UIView *)view withOffset:(float)offset
+- (CATransform3D)carousel:(iCarousel *)_carousel transformForItemView:(UIView *)view withOffset:(float)offset
 {
     //implement 'flip3D' style carousel
     
@@ -195,7 +195,7 @@
     CATransform3D transform = CATransform3DIdentity;
     transform.m34 = self.carousel.perspective;
     transform = CATransform3DRotate(transform, M_PI / 8.0, 0, 1.0, 0);
-    return CATransform3DTranslate(transform, 0.0, 0.0, offset * self.carousel.itemWidth);
+    return CATransform3DTranslate(transform, 0.0, 0.0, offset * carousel.itemWidth);
 }
 
 - (BOOL)carouselShouldWrap:(iCarousel *)carousel

@@ -28,19 +28,16 @@
 //  3. This notice may not be removed or altered from any source distribution.
 
 
+#import <QuartzCore/QuartzCore.h>
+
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
 
 #import <UIKit/UIKit.h>
-#import <QuartzCore/QuartzCore.h>
-
-typedef UIView View;
 
 #else
 
 #import <Cocoa/Cocoa.h>
-#import <QuartzCore/QuartzCore.h>
-
-typedef NSView View;
+typedef NSView UIView;
 
 #endif
 
@@ -60,7 +57,7 @@ iCarouselType;
 
 @protocol iCarouselDataSource, iCarouselDelegate;
 
-@interface iCarousel : View
+@interface iCarousel : UIView
 #ifdef __i386__
 {
     id<iCarouselDelegate> delegate;
@@ -69,14 +66,14 @@ iCarouselType;
     float perspective;
     NSInteger numberOfItems;
     NSInteger numberOfPlaceholders;
-    View* contentView;
-    NSArray* itemViews;
-    NSArray* placeholderViews;
+    UIView *contentView;
+    NSArray *itemViews;
+    NSArray *placeholderViews;
     NSInteger previousItemIndex;
     float itemWidth;
     float scrollOffset;
     float currentVelocity;
-    NSTimer* timer;
+    NSTimer *timer;
     NSTimeInterval previousTime;
     BOOL decelerating;
     BOOL scrollEnabled;
@@ -110,7 +107,7 @@ iCarouselType;
 @property (nonatomic, retain, readonly) NSArray *itemViews;
 @property (nonatomic, retain, readonly) NSArray *placeholderViews;
 @property (nonatomic, readonly) float itemWidth;
-@property (nonatomic, retain, readonly) View *contentView;
+@property (nonatomic, retain, readonly) UIView *contentView;
 
 - (void)scrollByNumberOfItems:(NSInteger)itemCount duration:(NSTimeInterval)duration;
 - (void)scrollToItemAtIndex:(NSInteger)index duration:(NSTimeInterval)duration;
@@ -132,12 +129,12 @@ iCarouselType;
 @protocol iCarouselDataSource <NSObject>
 
 - (NSUInteger)numberOfItemsInCarousel:(iCarousel *)carousel;
-- (View *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index;
+- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index;
 
 @optional
 
 - (NSUInteger)numberOfPlaceholdersInCarousel:(iCarousel *)carousel;
-- (View *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index;
+- (UIView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index;
 
 @end
 
@@ -150,7 +147,7 @@ iCarouselType;
 - (void)carouselCurrentItemIndexUpdated:(iCarousel *)carousel;
 - (float)carouselItemWidth:(iCarousel *)carousel;
 - (BOOL)carouselShouldWrap:(iCarousel *)carousel;
-- (CATransform3D)carousel:(iCarousel *)carousel transformForItemView:(View *)view withOffset:(float)offset;
+- (CATransform3D)carousel:(iCarousel *)carousel transformForItemView:(UIView *)view withOffset:(float)offset;
 
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
 

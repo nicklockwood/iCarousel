@@ -54,7 +54,7 @@
 @interface iCarousel ()
 #endif
 
-@property (nonatomic, retain) View *contentView;
+@property (nonatomic, retain) UIView *contentView;
 @property (nonatomic, retain) NSArray *itemViews;
 @property (nonatomic, retain) NSArray *placeholderViews;
 @property (nonatomic, assign) NSInteger previousItemIndex;
@@ -74,7 +74,7 @@
 
 - (void)layOutItemViews;
 - (NSInteger)clampedIndex:(NSInteger)index;
-- (void)transformItemView:(View *)view atIndex:(NSInteger)index;
+- (void)transformItemView:(UIView *)view atIndex:(NSInteger)index;
 - (void)didScroll;
 
 @end
@@ -130,7 +130,7 @@
     
 	self.itemViews = [NSMutableArray array];
     
-    contentView = [[View alloc] initWithFrame:self.bounds];
+    contentView = [[UIView alloc] initWithFrame:self.bounds];
     
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
     
@@ -209,7 +209,7 @@
     }
 }
 
-- (CATransform3D)transformForItemView:(View *)view withOffset:(float)offset
+- (CATransform3D)transformForItemView:(UIView *)view withOffset:(float)offset
 {    
     //set up base transform
     CATransform3D transform = CATransform3DIdentity;
@@ -282,20 +282,34 @@
 
 NSInteger compareViewDepth(id obj1, id obj2, void *context)
 {
-	View *view1 = obj1;
-	View *view2 = obj2;
-	return view1.layer.transform.m43 - view2.layer.transform.m43;
+    iCarousel *carousel = context;
+	CATransform3D t1 = ((UIView *)obj1).superview.layer.transform;
+	CATransform3D t2 = ((UIView *)obj2).superview.layer.transform;
+    float z1 = t1.m13 + t1.m23 + t1.m33 + t1.m43;
+    float z2 = t2.m13 + t2.m23 + t2.m33 + t2.m43;
+    float difference = z1 - z2;
+    if (difference == 0)
+    {
+        CATransform3D t3 = ((UIView *)[carousel.itemViews
+            objectAtIndex:carousel.currentItemIndex]).superview.layer.transform;
+        float x1 = t1.m11 + t1.m21 + t1.m31 + t1.m41;
+        float x2 = t2.m11 + t2.m21 + t2.m31 + t2.m41;
+        float x3 = t3.m11 + t3.m21 + t3.m31 + t3.m41;
+        difference = fabs(x2 - x3) - fabs(x1 - x3);
+    }
+    return (difference < 0)? NSOrderedAscending: NSOrderedDescending;
 }
 
 - (void)depthSortViews
 {
-    for (View *view in [contentView.subviews sortedArrayUsingFunction:compareViewDepth context:nil])
+    NSArray *allViews = [itemViews arrayByAddingObjectsFromArray:placeholderViews];
+    for (UIView *view in [allViews sortedArrayUsingFunction:compareViewDepth context:self])
     {
-        [contentView addSubview:view];
+        [contentView addSubview:view.superview];
     }
 }
 
-- (View *)containView:(View *)view
+- (UIView *)containView:(UIView *)view
 {
 	
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
@@ -315,7 +329,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     return container;
 }
 
-- (void)transformItemView:(View *)view atIndex:(NSInteger)index
+- (void)transformItemView:(UIView *)view atIndex:(NSInteger)index
 {
     view.superview.bounds = view.bounds;
     
@@ -352,10 +366,14 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     //transform view
     CATransform3D transform = [self transformForItemView:view withOffset:offset];
     view.superview.layer.transform = CATransform3DTranslate(transform, -viewpointOffset.width, -viewpointOffset.height, 0);
+
+#ifndef __IPHONE_OS_VERSION_MAX_ALLOWED
     
     //remove transform and transition animations
     [view.superview.layer removeAllAnimations];
-	
+    
+#endif
+    
 	//hide containers for invisible views
     [view.superview setHidden:([view isHidden] || view.layer.opacity < 0.001)];
 }
@@ -375,7 +393,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     //lay out items
 	for (NSUInteger i = 0; i < numberOfItems; i++)
     {
-		View *view = [itemViews objectAtIndex:i];
+		UIView *view = [itemViews objectAtIndex:i];
 		[self transformItemView:view atIndex:i];
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
         view.userInteractionEnabled = (i == self.currentItemIndex);
@@ -385,7 +403,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     //lay out placeholders
     for (NSInteger i = 0; i < numberOfPlaceholders; i++)
     {
-		View *view = [placeholderViews objectAtIndex:i];
+		UIView *view = [placeholderViews objectAtIndex:i];
 		if (i < floor(numberOfPlaceholders/2))
 		{
 			//left placeholder
@@ -455,7 +473,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 	previousItemIndex = self.currentItemIndex;
 	
 	//remove old views
-	for (View *view in [itemViews arrayByAddingObjectsFromArray:placeholderViews])
+	for (UIView *view in [itemViews arrayByAddingObjectsFromArray:placeholderViews])
     {
 		[view.superview removeFromSuperview];
 	}
@@ -465,10 +483,10 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 	self.itemViews = [NSMutableArray arrayWithCapacity:numberOfItems];
 	for (NSUInteger i = 0; i < numberOfItems; i++)
     {
-        View *view = [dataSource carousel:self viewForItemAtIndex:i];
+        UIView *view = [dataSource carousel:self viewForItemAtIndex:i];
         if (view == nil)
         {
-			view = [[[View alloc] init] autorelease];
+			view = [[[UIView alloc] init] autorelease];
         }
 		[(NSMutableArray *)itemViews addObject:view];
         [contentView addSubview:[self containView:view]];
@@ -481,10 +499,10 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
         self.placeholderViews = [NSMutableArray arrayWithCapacity:numberOfPlaceholders];
         for (NSUInteger i = 0; i < numberOfPlaceholders; i++)
         {
-            View *view = [dataSource carousel:self placeholderViewAtIndex:i];
+            UIView *view = [dataSource carousel:self placeholderViewAtIndex:i];
             if (view == nil)
             {
-                view = [[[View alloc] init] autorelease];
+                view = [[[UIView alloc] init] autorelease];
             }
             [(NSMutableArray *)placeholderViews addObject:view];
             [contentView addSubview:[self containView:view]];
@@ -591,17 +609,17 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 - (void)removeItemAtIndex:(NSInteger)index animated:(BOOL)animated
 {
     index = [self clampedIndex:index];
-    View *itemView = [itemViews objectAtIndex:index];
+    UIView *itemView = [itemViews objectAtIndex:index];
     
     if (animated)
     {
-        [View beginAnimations:nil context:nil];
-        [View setAnimationDuration:0.1];
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:0.1];
         itemView.superview.layer.opacity = 0.0;
         [itemView.superview performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.1];
-        [View commitAnimations];
-        [View beginAnimations:nil context:nil];
-        [View setAnimationDuration:INSERT_DURATION];
+        [UIView commitAnimations];
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:INSERT_DURATION];
     }
     else
     {
@@ -615,7 +633,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
      
     if (animated)
     {
-        [View commitAnimations];
+        [UIView commitAnimations];
     }
 }
 
@@ -624,7 +642,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     index = [self clampedIndex:index];
     numberOfItems ++;
 
-    View *itemView = [dataSource carousel:self viewForItemAtIndex:index];
+    UIView *itemView = [dataSource carousel:self viewForItemAtIndex:index];
     [(NSMutableArray *)itemViews insertObject:itemView atIndex:index];
     [contentView addSubview:[self containView:itemView]];
     [self transformItemView:itemView atIndex:index];
@@ -632,18 +650,18 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
  
     if (animated)
     {
-        [View beginAnimations:nil context:nil];
-        [View setAnimationCurve:UIViewAnimationCurveEaseInOut];
-        [View setAnimationDuration:INSERT_DURATION];
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+        [UIView setAnimationDuration:INSERT_DURATION];
         [self transformItemViews];
-        [View commitAnimations];
+        [UIView commitAnimations];
         
-        [View beginAnimations:nil context:nil];
-        [View setAnimationCurve:UIViewAnimationCurveEaseInOut];
-        [View setAnimationDelay:INSERT_DURATION - 0.1];
-        [View setAnimationDuration:0.1];
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+        [UIView setAnimationDelay:INSERT_DURATION - 0.1];
+        [UIView setAnimationDuration:0.1];
         itemView.superview.layer.opacity = 1.0;
-        [View commitAnimations];
+        [UIView commitAnimations];
     }
     else
     { 
@@ -746,9 +764,9 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 #pragma mark -
 #pragma mark Gestures and taps
 
-- (void)didTap:(View *)container
+- (void)didTap:(UIView *)container
 {
-    View *itemView = [container.subviews objectAtIndex:0];
+    UIView *itemView = [container.subviews objectAtIndex:0];
     NSInteger index = [itemViews indexOfObject:itemView];
 	if (index != NSNotFound)
 	{
