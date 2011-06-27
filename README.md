@@ -3,7 +3,9 @@ Purpose
 
 iCarousel is a class designed to simplify the implementation of various types of carousel (paged, scrolling views) on iPhone, iPad and Mac OS. iCarousel implements a number of common effects such as cylindrical, flat and "CoverFlow" style carousels, as well as providing hooks to implement your own bespoke effects. Unlike many other "CoverFlow" libraries, iCarousel can work with any kind of view, not just images, so it is ideal for presenting paged data in a fluid and impressive way in your app. It also makes it extremely easy to swap between different carousel effects with minimal code changes.
 
-Not all features of iCarousel are currently supported on Mac OS. We hope to address this in future. Please refer to the documentation below for details.
+*Special thanks go to Sushant Prakash (https://github.com/sushftw) for the Mac port.*
+
+Not all features of iCarousel are currently supported on Mac OS. I hope to address this in future. Please refer to the documentation below for details.
 
 
 Installation

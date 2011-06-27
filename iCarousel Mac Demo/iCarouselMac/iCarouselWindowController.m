@@ -141,7 +141,7 @@
     return ITEM_SPACING;
 }
 
-- (CATransform3D)carousel:(iCarousel *)carousel transformForItemView:(View *)view withOffset:(float)offset
+- (CATransform3D)carousel:(iCarousel *)carousel transformForItemView:(NSView *)view withOffset:(float)offset
 {
     //implement 'flip3D' style carousel
     
