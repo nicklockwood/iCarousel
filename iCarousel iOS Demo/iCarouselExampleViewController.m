@@ -113,7 +113,8 @@
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     //restore view opacities to normal
-    for (UIView *view in carousel.itemViews)
+	NSArray *allViews = [carousel.itemViews arrayByAddingObjectsFromArray:carousel.placeholderViews];
+    for (UIView *view in allViews)
     {
         view.alpha = 1.0;
     }
@@ -158,13 +159,32 @@
     }
 }
 
+- (NSUInteger)numberOfPlaceholdersInCarousel:(iCarousel *)carousel
+{
+	//note: placeholder views are only displayed if wrapping is disabled
+	return 2;
+}
+
+- (UIView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index
+{
+	//create a placeholder view
+	UIView *view = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]] autorelease];
+	UILabel *label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
+	label.text = (index == 0)? @"[": @"]";
+	label.backgroundColor = [UIColor clearColor];
+	label.textAlignment = UITextAlignmentCenter;
+	label.font = [label.font fontWithSize:50];
+	[view addSubview:label];
+	return view;
+}
+
 - (float)carouselItemWidth:(iCarousel *)carousel
 {
     //slightly wider than item view
     return ITEM_SPACING;
 }
 
-- (CATransform3D)carousel:(iCarousel *)carousel transformForItemView:(UIView *)view withOffset:(float)offset
+- (CATransform3D)carousel:(iCarousel *)_carousel transformForItemView:(UIView *)view withOffset:(float)offset
 {
     //implement 'flip3D' style carousel
     
@@ -175,13 +195,27 @@
     CATransform3D transform = CATransform3DIdentity;
     transform.m34 = self.carousel.perspective;
     transform = CATransform3DRotate(transform, M_PI / 8.0, 0, 1.0, 0);
-    return CATransform3DTranslate(transform, 0.0, 0.0, offset * self.carousel.itemWidth);
+    return CATransform3DTranslate(transform, 0.0, 0.0, offset * carousel.itemWidth);
 }
 
 - (BOOL)carouselShouldWrap:(iCarousel *)carousel
 {
     //wrap all carousels
     return wrap;
+}
+
+- (void)carousel:(iCarousel *)_carousel didSelectItemAtIndex:(NSInteger)index
+{
+	if (index == carousel.currentItemIndex)
+	{
+		//note, this will only ever happen if USE_BUTTONS == NO
+		//otherwise the button intercepts the tap event
+		NSLog(@"Selected current item");
+	}
+	else
+	{
+		NSLog(@"Selected item number %i", index);
+	}
 }
 
 #pragma mark -

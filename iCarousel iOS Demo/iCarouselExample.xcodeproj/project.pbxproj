@@ -17,12 +17,11 @@
 		0148359413A36C3700E687AC /* iCarouselExampleAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0148358D13A36C3700E687AC /* iCarouselExampleAppDelegate.m */; };
 		0148359513A36C3700E687AC /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0148358F13A36C3700E687AC /* MainWindow.xib */; };
 		0148359613A36C3700E687AC /* iCarouselExampleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0148359113A36C3700E687AC /* iCarouselExampleViewController.xib */; };
-		0148359913A36C5D00E687AC /* page.png in Resources */ = {isa = PBXBuildFile; fileRef = 0148359713A36C5D00E687AC /* page.png */; };
-		0148359A13A36C5D00E687AC /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 0148359813A36C5D00E687AC /* background.png */; };
+		018BBCB213A375AE005CA505 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 018BBCB013A375AE005CA505 /* background.png */; };
+		018BBCB313A375AE005CA505 /* page.png in Resources */ = {isa = PBXBuildFile; fileRef = 018BBCB113A375AE005CA505 /* page.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		01308D8E13491C3500453707 /* iCarouselExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iCarouselExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		01308D9213491C3500453707 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		01308D9413491C3500453707 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		01308D9613491C3500453707 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -39,8 +38,9 @@
 		0148358E13A36C3700E687AC /* iCarouselExampleAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarouselExampleAppDelegate.h; sourceTree = SOURCE_ROOT; };
 		0148359013A36C3700E687AC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = SOURCE_ROOT; };
 		0148359213A36C3700E687AC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/iCarouselExampleViewController.xib; sourceTree = SOURCE_ROOT; };
-		0148359713A36C5D00E687AC /* page.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page.png; sourceTree = SOURCE_ROOT; };
-		0148359813A36C5D00E687AC /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = SOURCE_ROOT; };
+		018BBCB013A375AE005CA505 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background.png; path = ../Images/background.png; sourceTree = SOURCE_ROOT; };
+		018BBCB113A375AE005CA505 /* page.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = page.png; path = ../Images/page.png; sourceTree = SOURCE_ROOT; };
+		018BBCB413A375AF005CA505 /* iCarouselExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iCarouselExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,7 +71,7 @@
 		01308D8F13491C3500453707 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				01308D8E13491C3500453707 /* iCarouselExample.app */,
+				018BBCB413A375AF005CA505 /* iCarouselExample.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -96,7 +96,7 @@
 				0148358E13A36C3700E687AC /* iCarouselExampleAppDelegate.h */,
 				0148358F13A36C3700E687AC /* MainWindow.xib */,
 				0148359113A36C3700E687AC /* iCarouselExampleViewController.xib */,
-				01308DC5134930FA00453707 /* Images */,
+				018BBCAF13A375AE005CA505 /* Images */,
 				01308D9913491C3500453707 /* Supporting Files */,
 			);
 			path = iCarouselExample;
@@ -113,15 +113,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		01308DC5134930FA00453707 /* Images */ = {
-			isa = PBXGroup;
-			children = (
-				0148359713A36C5D00E687AC /* page.png */,
-				0148359813A36C5D00E687AC /* background.png */,
-			);
-			name = Images;
-			sourceTree = "<group>";
-		};
 		0148357F13A36B9700E687AC /* iCarousel */ = {
 			isa = PBXGroup;
 			children = (
@@ -130,6 +121,16 @@
 			);
 			name = iCarousel;
 			path = ../iCarousel;
+			sourceTree = "<group>";
+		};
+		018BBCAF13A375AE005CA505 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				018BBCB013A375AE005CA505 /* background.png */,
+				018BBCB113A375AE005CA505 /* page.png */,
+			);
+			name = Images;
+			path = ../../Images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -149,7 +150,7 @@
 			);
 			name = iCarouselExample;
 			productName = iCarouselExample;
-			productReference = 01308D8E13491C3500453707 /* iCarouselExample.app */;
+			productReference = 018BBCB413A375AF005CA505 /* iCarouselExample.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -181,8 +182,8 @@
 			files = (
 				0148359513A36C3700E687AC /* MainWindow.xib in Resources */,
 				0148359613A36C3700E687AC /* iCarouselExampleViewController.xib in Resources */,
-				0148359913A36C5D00E687AC /* page.png in Resources */,
-				0148359A13A36C5D00E687AC /* background.png in Resources */,
+				018BBCB213A375AE005CA505 /* background.png in Resources */,
+				018BBCB313A375AE005CA505 /* page.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
