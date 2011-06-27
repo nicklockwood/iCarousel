@@ -181,7 +181,10 @@
     if (dataSource != _dataSource)
     {
         dataSource = _dataSource;
-        [self reloadData];
+		if (dataSource)
+		{
+			[self reloadData];
+		}
     }
 }
 
@@ -190,7 +193,10 @@
     if (delegate != _delegate)
     {
         delegate = _delegate;
-        [self reloadData];
+		if (delegate)
+		{
+			[self reloadData];
+		}
     }
 }
 
@@ -312,15 +318,18 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 - (void)transformItemView:(View *)view atIndex:(NSInteger)index
 {
     view.superview.bounds = view.bounds;
-    view.frame = view.superview.bounds;
     
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
     
-    view.superview.center = CGPointMake(self.bounds.size.width/2.0, self.bounds.size.height/2.0);
+	view.center = CGPointMake(view.bounds.size.width/2.0, view.bounds.size.height/2.0);
+    view.superview.center = CGPointMake(self.bounds.size.width/2.0 + contentOffset.width,
+										self.bounds.size.height/2.0 + contentOffset.height);
     
 #else
     
-    [view.superview setFrameOrigin:NSMakePoint(self.bounds.size.width/2.0, self.bounds.size.height/2.0)];
+	[view setFrameOrigin:NSMakePoint(0, 0)];
+    [view.superview setFrameOrigin:NSMakePoint(self.bounds.size.width/2.0 + contentOffset.width,
+											   self.bounds.size.height/2.0 + contentOffset.height)];
     view.superview.layer.anchorPoint = CGPointMake(0.5, 0.5);
     
 #endif
@@ -341,7 +350,8 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     }
     
     //transform view
-    view.superview.layer.transform = [self transformForItemView:view withOffset:offset];
+    CATransform3D transform = [self transformForItemView:view withOffset:offset];
+    view.superview.layer.transform = CATransform3DTranslate(transform, -viewpointOffset.width, -viewpointOffset.height, 0);
     
     //remove transform and transition animations
     [view.superview.layer removeAllAnimations];
