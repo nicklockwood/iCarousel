@@ -11,6 +11,7 @@
 
 #define NUMBER_OF_ITEMS 20
 #define ITEM_SPACING 210
+#define USE_BUTTONS YES
 
 
 @interface iCarouselWindowController ()
@@ -57,13 +58,6 @@
 
 - (IBAction)switchCarouselType:(id)sender
 {
-	//restore view opacities to normal
-	NSArray *allViews = [carousel.itemViews arrayByAddingObjectsFromArray:carousel.placeholderViews];
-    for (NSView *view in allViews)
-    {
-        view.layer.opacity = 1.0;
-    }
-	
     carousel.type = [sender tag];
 }
 
@@ -84,55 +78,55 @@
 
 - (NSView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index
 {
-	//create a numbered view
-	NSImage *image = [NSImage imageNamed:@"page.png"];
-	NSImageView *view = [[[NSImageView alloc] initWithFrame:NSMakeRect(0,0,image.size.width,image.size.height)] autorelease];
-	[view setImage:image];
-	[view setImageScaling:NSImageScaleAxesIndependently];
-	
-	NSTextField *label = [[[NSTextField alloc] init] autorelease];
-	[label setStringValue:[NSString stringWithFormat:@"%i", index]];
-	[label setBackgroundColor:[NSColor clearColor]];
-	[label setBordered:NO];
-	[label setSelectable:NO];
-	[label setAlignment:NSCenterTextAlignment];
-	[label setFont:[NSFont fontWithName:[[label font] fontName] size:50]];
-	[label sizeToFit];
-	[label setFrameOrigin:NSMakePoint((view.bounds.size.width - label.frame.size.width)/2.0,
-									  (view.bounds.size.height - label.frame.size.height)/2.0)];
-	[view addSubview:label];
-	
-	return view;
-}
-
-- (NSUInteger)numberOfPlaceholdersInCarousel:(iCarousel *)carousel
-{
-	//note: placeholder views are only displayed if wrapping is disabled
-	return 2;
-}
-
-- (NSView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index
-{
-	//create a placeholder view
-	NSImage *image = [NSImage imageNamed:@"page.png"];
-	NSImageView *view = [[[NSImageView alloc] initWithFrame:NSMakeRect(0,0,image.size.width,image.size.height)] autorelease];
-	[view setImage:image];
-	[view setImageScaling:NSImageScaleAxesIndependently];
-	[view setWantsLayer:YES];
-	
-	NSTextField *label = [[[NSTextField alloc] init] autorelease];
-	[label setStringValue:(index == 0)? @"[": @"]"];
-	[label setBackgroundColor:[NSColor clearColor]];
-	[label setBordered:NO];
-	[label setSelectable:NO];
-	[label setAlignment:NSCenterTextAlignment];
-	[label setFont:[NSFont fontWithName:[[label font] fontName] size:50]];
-	[label sizeToFit];
-	[label setFrameOrigin:NSMakePoint((view.bounds.size.width - label.frame.size.width)/2.0,
-									  (view.bounds.size.height - label.frame.size.height)/2.0)];
-	[view addSubview:label];
-	
-	return view;
+    if (USE_BUTTONS)
+    {
+        //create a numbered button
+        NSImage *image = [NSImage imageNamed:@"page.png"];
+        NSButton *button = [[[NSButton alloc] initWithFrame:NSMakeRect(0,0,image.size.width,image.size.height)] autorelease];
+        [button setTarget:self];
+        [button setAction:@selector(buttonTapped:)];
+        
+        NSImageView *imageView = [[[NSImageView alloc] initWithFrame:button.frame] autorelease];
+        [imageView setImage:image];
+        [imageView setImageScaling:NSImageScaleAxesIndependently];
+        [button addSubview:imageView];
+        
+        NSTextField *label = [[[NSTextField alloc] init] autorelease];
+        [label setStringValue:[NSString stringWithFormat:@"%i", index]];
+        [label setBackgroundColor:[NSColor clearColor]];
+        [label setBordered:NO];
+        [label setSelectable:NO];
+        [label setAlignment:NSCenterTextAlignment];
+        [label setFont:[NSFont fontWithName:[[label font] fontName] size:50]];
+        [label sizeToFit];
+        [label setFrameOrigin:NSMakePoint((button.bounds.size.width - label.frame.size.width)/2.0,
+                                          (button.bounds.size.height - label.frame.size.height)/2.0)];
+        [button addSubview:label];
+        
+        return button;
+    }
+    else
+    {
+        //create a numbered view
+        NSImage *image = [NSImage imageNamed:@"page.png"];
+        NSImageView *view = [[[NSImageView alloc] initWithFrame:NSMakeRect(0,0,image.size.width,image.size.height)] autorelease];
+        [view setImage:image];
+        [view setImageScaling:NSImageScaleAxesIndependently];
+        
+        NSTextField *label = [[[NSTextField alloc] init] autorelease];
+        [label setStringValue:[NSString stringWithFormat:@"%i", index]];
+        [label setBackgroundColor:[NSColor clearColor]];
+        [label setBordered:NO];
+        [label setSelectable:NO];
+        [label setAlignment:NSCenterTextAlignment];
+        [label setFont:[NSFont fontWithName:[[label font] fontName] size:50]];
+        [label sizeToFit];
+        [label setFrameOrigin:NSMakePoint((view.bounds.size.width - label.frame.size.width)/2.0,
+                                          (view.bounds.size.height - label.frame.size.height)/2.0)];
+        [view addSubview:label];
+        
+        return view;
+    }
 }
 
 - (float)carouselItemWidth:(iCarousel *)carousel
@@ -141,7 +135,7 @@
     return ITEM_SPACING;
 }
 
-- (CATransform3D)carousel:(iCarousel *)carousel transformForItemView:(NSView *)view withOffset:(float)offset
+- (CATransform3D)carousel:(iCarousel *)carousel transformForItemView:(View *)view withOffset:(float)offset
 {
     //implement 'flip3D' style carousel
     
@@ -158,6 +152,20 @@
 - (BOOL)carouselShouldWrap:(iCarousel *)carousel
 {
     return wrap;
+}
+
+#pragma mark -
+#pragma mark Button tap event
+
+- (void)buttonTapped:(NSButton *)sender
+{
+    NSInteger index = [carousel.itemViews indexOfObject:sender];
+    NSLog(@"index: %i", index);
+    /*[[[[NSAlert alloc] initWithTitle:@"Button Tapped"
+                                 message:[NSString stringWithFormat:@"You tapped button number %i", index]
+                                delegate:nil
+                       cancelButtonTitle:@"OK"
+                       otherButtonTitles:nil] autorelease] show];*/
 }
 
 @end
