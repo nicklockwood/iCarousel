@@ -1,3 +1,7 @@
+Version 1.3.1
+
+- Fixed scrolling bug on wrapped carousels when scrolling from item at index zero back to the last item.
+
 Version 1.3
 
 - Added Mac OS support. Most - but not all - features from the iOS version are supported (see readme.md for details. Thanks go to Sushant Prakash for proving the concept).

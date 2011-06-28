@@ -544,7 +544,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     else if (shouldWrap)
     {
 		float contentWidth = numberOfItems * itemWidth;
-        return offset - floor(offset / contentWidth) * contentWidth;
+		return offset - floor(offset / contentWidth) * contentWidth;
     }
     else
     {
@@ -568,6 +568,17 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 	return (ABS(directDistance) <= ABS(wrappedDistance))? directDistance: wrappedDistance;
 }
 
+- (float)minScrollDistanceFromOffset:(float)fromOffset toOffset:(float)toOffset
+{
+	float directDistance = toOffset - fromOffset;
+	float wrappedDistance = fmin(toOffset, fromOffset) + numberOfItems*itemWidth - fmax(toOffset, fromOffset);
+	if (fromOffset < toOffset)
+	{
+		wrappedDistance = -wrappedDistance;
+	}
+	return (fabs(directDistance) <= fabs(wrappedDistance))? directDistance: wrappedDistance;
+}
+
 - (void)scrollByNumberOfItems:(NSInteger)itemCount duration:(NSTimeInterval)duration
 {
 	if (duration > 0)
@@ -579,7 +590,8 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 		previousItemIndex = self.currentItemIndex;
 		if (shouldWrap)
 		{
-			endOffset = itemWidth * (previousItemIndex + itemCount);
+			endOffset = startOffset + [self minScrollDistanceFromOffset:startOffset
+															   toOffset:itemWidth * (previousItemIndex + itemCount)];
 		}
         else
 		{
@@ -739,15 +751,8 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     else if (decelerating)
     {
         float index = self.currentItemIndex;
-        float offset = index - scrollOffset/itemWidth;
-        float force = pow(offset, 2.0);
-        force = fmin(force, 2.5);
-        if (offset < 0)
-        {
-            force = - force;
-        }
-        
-        currentVelocity -= force*itemWidth/2;
+        float offset = [self minScrollDistanceFromOffset:index*itemWidth toOffset:[self clampedOffset:scrollOffset]];
+
         currentVelocity *= decelerationRate;
         scrollOffset -= currentVelocity * deltaTime;
         if (fabs(currentVelocity) < itemWidth*0.5 && fabs(offset) < itemWidth*0.5)
@@ -804,7 +809,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
                 float translation = [panGesture translationInView:self].x - previousTranslation;
                 previousTranslation = [panGesture translationInView:self].x;
                 NSInteger index = round(scrollOffset / itemWidth);
-                float factor = (shouldWrap || (index >= 0 && index < numberOfItems))? 1.0: 0.5;
+				float factor = (shouldWrap || (index >= 0 && index < numberOfItems))? 1.0: 0.5;
                 currentVelocity = [panGesture velocityInView:self].x * factor;
                 scrollOffset -= translation * factor;
                 [self didScroll];
