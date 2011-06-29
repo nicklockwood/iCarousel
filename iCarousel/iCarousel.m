@@ -1,6 +1,8 @@
 //
 //  iCarousel.m
 //
+//  Version 1.3.2
+//
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2010 Charcoal Design. All rights reserved.
 //
@@ -548,7 +550,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     }
     else
     {
-        return fmin(fmax(0.0, scrollOffset), numberOfItems * itemWidth - itemWidth);
+        return fmin(fmax(0.0, offset), numberOfItems * itemWidth - itemWidth);
     }
 }
 
@@ -588,14 +590,10 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
         startOffset = scrollOffset;
 		scrollDuration = duration;
 		previousItemIndex = self.currentItemIndex;
-		if (shouldWrap)
+		endOffset = round(startOffset / itemWidth + itemCount) * itemWidth;
+		if (!shouldWrap)
 		{
-			endOffset = startOffset + [self minScrollDistanceFromOffset:startOffset
-															   toOffset:itemWidth * (previousItemIndex + itemCount)];
-		}
-        else
-		{
-			endOffset = itemWidth * [self clampedIndex:previousItemIndex + itemCount];
+			endOffset = [self clampedOffset:endOffset];
 		}
     }
     else
@@ -754,6 +752,11 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
         float offset = [self minScrollDistanceFromOffset:index*itemWidth toOffset:[self clampedOffset:scrollOffset]];
 
         currentVelocity *= decelerationRate;
+		if (!shouldWrap && (scrollOffset < 0 || scrollOffset > (numberOfItems - 1) * itemWidth))
+		{
+			//decelerate faster if out of bounds
+			currentVelocity *= decelerationRate * decelerationRate;
+		}
         scrollOffset -= currentVelocity * deltaTime;
         if (fabs(currentVelocity) < itemWidth*0.5 && fabs(offset) < itemWidth*0.5)
         {

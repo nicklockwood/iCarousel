@@ -1,3 +1,8 @@
+Version 1.3.2
+
+- Fixed additional scrolling bug introduced by 1.3.1 fix.
+- Improved deceleration logic on non-wrapped carousels.
+
 Version 1.3.1
 
 - Fixed scrolling bug on wrapped carousels when scrolling from item at index zero back to the last item.
