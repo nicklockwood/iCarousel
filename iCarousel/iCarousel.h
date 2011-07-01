@@ -152,7 +152,7 @@ iCarouselType;
 - (CATransform3D)carousel:(iCarousel *)carousel transformForItemView:(UIView *)view withOffset:(float)offset;
 
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
-
+- (void)carouselDidEndDecelerating:(NSUInteger)index;
 - (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index;
 
 #endif
