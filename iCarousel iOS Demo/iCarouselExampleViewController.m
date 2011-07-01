@@ -218,6 +218,11 @@
 	}
 }
 
+- (void)carouselDidEndDecelerating:(NSUInteger)index{
+    NSLog(@"Selected item number: %i", index);
+}
+
+
 #pragma mark -
 #pragma mark Button tap event
 
@@ -230,5 +235,8 @@
                        cancelButtonTitle:@"OK"
                        otherButtonTitles:nil] autorelease] show];
 }
+
+
+
 
 @end
