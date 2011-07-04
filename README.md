@@ -19,12 +19,12 @@ Carousel Types
 
 iCarousel supports the following built-in display types:
 
-iCarouselTypeLinear
-iCarouselTypeRotary
-iCarouselTypeInvertedRotary
-iCarouselTypeCylinder
-iCarouselTypeInvertedCylinder
-iCarouselTypeCoverFlow
+- iCarouselTypeLinear
+- iCarouselTypeRotary
+- iCarouselTypeInvertedRotary
+- iCarouselTypeCylinder
+- iCarouselTypeInvertedCylinder
+- iCarouselTypeCoverFlow
 
 You can also implement your own bespoke style using iCarouselTypeCustom and the `carousel:transformForItemView:withOffset:` delegate method.
 
@@ -152,6 +152,14 @@ Return a view to be displayed as the placeholder view. As with the regular item 
 
 The iCarouselDelegate protocol has the following optional methods:
 
+	- (void)carouselWillBeginScrollingAnimation:(iCarousel *)carousel;
+	
+This method is called whenever the carousel will begin an animated scroll. This can be triggered programatically or automatically after the user finishes scrolling the carousel, as the carousel re-aligns itself.
+	
+	- (void)carouselDidEndScrollingAnimation:(iCarousel *)carousel;
+	
+This method is called when the carousel ends an animated scroll.
+	
 	- (void)carouselDidScroll:(iCarousel *)carousel;
 
 This method is called whenever the carousel is scrolled. It is called regardless of whether the carousel was scrolled programatically or through user interaction.
@@ -159,6 +167,22 @@ This method is called whenever the carousel is scrolled. It is called regardless
 	- (void)carouselCurrentItemIndexUpdated:(iCarousel *)carousel;
 
 This method is called whenever the carousel scrolls far enough for the currentItemIndex property to change. It is called regardless of whether the item index was updated programatically or through user interaction.
+
+	- (void)carouselWillBeginDragging:(iCarousel *)carousel;
+	
+This method is called when the user begins dragging the carousel. It will not fire if the user taps/clicks the carousel, or if the carousel is scrolled programmatically.
+	
+	- (void)carouselDidEndDragging:(iCarousel *)carousel willDecelerate:(BOOL)decelerate;
+	
+This method is called when the user stops dragging the carousel. The willDecelerate parameter indicates whether the carousel is travelling fast enough that it needs to decelerate before it stops (i.e. the current index is not necessarily the one it will stop at) or if it will stop where it is. Note that even if willDecelerate is NO, the carousel will still scroll automatically until it aligns exactly on the current index. If you need to know when it has stopped moving completely, use the carouselDidEndScrollingAnimation delegate method. On Mac OS, willDecelerate is always NO when using the scrollwheel because Mac OS implements its own inertia mechanism for scrolling.
+	
+	- (void)carouselWillBeginDecelerating:(iCarousel *)carousel;
+	
+This method is called when the carousel starts decelerating. it will typically be called immediately after the carouselDidEndDragging:willDecelerate: method, assuming willDecelerate was YES. On Mac OS, this method never fires when using the scrollwheel because Mac OS implements its own inertia mechanism for scrolling.
+	
+	- (void)carouselDidEndDecelerating:(iCarousel *)carousel;
+
+This method is called when the carousel finishes decelerating and you can assume that the currentItemIndex at this point is the final stopping value. Note however that even though it has stopped decelerating, the carousel will still scroll automatically until it aligns exactly on the current index. If you need to know when it has stopped moving completely, use the carouselDidEndScrollingAnimation delegate method.
 
 	- (float)carouselItemWidth:(iCarousel *)carousel;
 
