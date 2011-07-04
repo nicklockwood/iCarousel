@@ -1,7 +1,7 @@
 //
 //  iCarousel.m
 //
-//  Version 1.3.2
+//  Version 1.3.3
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2010 Charcoal Design. All rights reserved.
@@ -73,6 +73,7 @@
 @property (nonatomic, assign) BOOL decelerating;
 @property (nonatomic, assign) float previousTranslation;
 @property (nonatomic, assign) BOOL shouldWrap;
+@property (nonatomic, assign) BOOL dragging;
 
 - (void)layOutItemViews;
 - (NSInteger)clampedIndex:(NSInteger)index;
@@ -112,6 +113,7 @@
 @synthesize scrolling;
 @synthesize previousTranslation;
 @synthesize shouldWrap;
+@synthesize dragging;
 
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
 
@@ -595,6 +597,10 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 		{
 			endOffset = [self clampedOffset:endOffset];
 		}
+		if ([delegate respondsToSelector:@selector(carouselWillBeginScrollingAnimation:)])
+		{
+			[delegate carouselWillBeginScrollingAnimation:self];
+		}
     }
     else
     {
@@ -727,6 +733,18 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 	}
 }
 
+- (BOOL)decelerationEnded
+{
+	if (fabs(currentVelocity) >= itemWidth*0.5)
+	{
+		return NO;
+	}
+	
+	float offset = [self minScrollDistanceFromOffset:self.currentItemIndex*itemWidth
+											toOffset:[self clampedOffset:scrollOffset]];
+	return fabs(offset) <= itemWidth*0.5;
+}
+
 - (void)step
 {
     NSTimeInterval currentTime = CACurrentMediaTime();
@@ -741,6 +759,10 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
             time = 1.0;
             scrolling = NO;
             [self depthSortViews];
+			if ([delegate respondsToSelector:@selector(carouselDidEndScrollingAnimation:)])
+			{
+				[delegate carouselDidEndScrollingAnimation:self];
+			}
         }
         float delta = (time < 0.5f)? 0.5f * pow(time * 2.0, 3.0): 0.5f * pow(time * 2.0 - 2.0, 3.0) + 1.0; //ease in/out
         scrollOffset = startOffset + (endOffset - startOffset) * delta;
@@ -748,9 +770,6 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     }
     else if (decelerating)
     {
-        float index = self.currentItemIndex;
-        float offset = [self minScrollDistanceFromOffset:index*itemWidth toOffset:[self clampedOffset:scrollOffset]];
-
         currentVelocity *= decelerationRate;
 		if (!shouldWrap && (scrollOffset < 0 || scrollOffset > (numberOfItems - 1) * itemWidth))
 		{
@@ -758,10 +777,14 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 			currentVelocity *= decelerationRate * decelerationRate;
 		}
         scrollOffset -= currentVelocity * deltaTime;
-        if (fabs(currentVelocity) < itemWidth*0.5 && fabs(offset) < itemWidth*0.5)
+        if ([self decelerationEnded])
         {
             decelerating = NO;
-            [self scrollToItemAtIndex:index animated:YES];
+			if ([delegate respondsToSelector:@selector(carouselDidEndDecelerating:)])
+			{
+				[delegate carouselDidEndDecelerating:self];
+			}
+            [self scrollToItemAtIndex:self.currentItemIndex animated:YES];
         }
         [self didScroll];
     }
@@ -797,15 +820,34 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
         {
             case UIGestureRecognizerStateBegan:
             {
+				dragging = YES;
                 scrolling = NO;
                 decelerating = NO;
                 previousTranslation = [panGesture translationInView:self].x;
+				if ([delegate respondsToSelector:@selector(carouselWillBeginDragging:)])
+				{
+					[delegate carouselWillBeginDragging:self];
+				}
                 break;
             }
             case UIGestureRecognizerStateEnded:
             case UIGestureRecognizerStateCancelled:
             {
-                decelerating = YES;
+				dragging = NO;
+				decelerating = ![self decelerationEnded];
+				if ([delegate respondsToSelector:@selector(carouselDidEndDragging:willDecelerate:)])
+				{
+					[delegate carouselDidEndDragging:self willDecelerate:decelerating];
+				}
+				if (!decelerating)
+				{
+					[self scrollToItemAtIndex:self.currentItemIndex animated:YES];
+				}
+				else if ([delegate respondsToSelector:@selector(carouselWillBeginDecelerating:)])
+				{
+					[delegate carouselWillBeginDecelerating:self];
+				}
+				break;
             }
             default:
             {
@@ -842,6 +884,14 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 {
     if (scrollEnabled)
     {
+		if (!dragging)
+		{
+			dragging = YES;
+			if ([delegate respondsToSelector:@selector(carouselWillBeginDragging:)])
+			{
+				[delegate carouselWillBeginDragging:self];
+			}
+		}
         scrolling = NO;
         decelerating = NO;
         
@@ -854,9 +904,28 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
         startTime = thisTime;
         scrollOffset -= translation * factor;
         [self didScroll];
-        
-        decelerating = YES;
     }
+}
+
+- (void)mouseUp:(NSEvent *)theEvent
+{
+	if (scrollEnabled)
+    {
+		dragging = NO;
+		decelerating = ![self decelerationEnded];
+		if ([delegate respondsToSelector:@selector(carouselDidEndDragging:willDecelerate:)])
+		{
+			[delegate carouselDidEndDragging:self willDecelerate:decelerating];
+		}
+		if (!decelerating)
+		{
+			[self scrollToItemAtIndex:self.currentItemIndex animated:YES];
+		}
+		else if ([delegate respondsToSelector:@selector(carouselWillBeginDecelerating:)])
+		{
+			[delegate carouselWillBeginDecelerating:self];
+		}
+	}
 }
 
 #pragma mark -
@@ -865,6 +934,17 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 - (void)scrollWheel:(NSEvent *)theEvent
 {
     [self mouseDragged:theEvent];
+	
+	//the iCarousel deceleration system conflicts with the built-in momentum
+	//scrolling for scrollwheel events. need to find a way to trigger the appropriate
+	//events, and also detect when user has disabled momentum scrolling in system prefs
+	dragging = NO;
+	decelerating = NO;
+	if ([delegate respondsToSelector:@selector(carouselDidEndDragging:willDecelerate:)])
+	{
+		[delegate carouselDidEndDragging:self willDecelerate:decelerating];
+	}
+	[self scrollToItemAtIndex:self.currentItemIndex animated:YES];
 }
 
 #pragma mark -
