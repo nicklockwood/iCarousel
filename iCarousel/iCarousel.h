@@ -1,7 +1,7 @@
 //
 //  iCarousel.h
 //
-//  Version 1.3.2
+//  Version 1.3.3
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2010 Charcoal Design. All rights reserved.
@@ -91,6 +91,7 @@ iCarouselType;
     float previousTranslation;
 	BOOL centerItemWhenSelected;
 	BOOL shouldWrap;
+	BOOL dragging;
 }
 #endif
 
@@ -145,8 +146,14 @@ iCarouselType;
 
 @optional
 
+- (void)carouselWillBeginScrollingAnimation:(iCarousel *)carousel;
+- (void)carouselDidEndScrollingAnimation:(iCarousel *)carousel;
 - (void)carouselDidScroll:(iCarousel *)carousel;
 - (void)carouselCurrentItemIndexUpdated:(iCarousel *)carousel;
+- (void)carouselWillBeginDragging:(iCarousel *)carousel;
+- (void)carouselDidEndDragging:(iCarousel *)carousel willDecelerate:(BOOL)decelerate;
+- (void)carouselWillBeginDecelerating:(iCarousel *)carousel;
+- (void)carouselDidEndDecelerating:(iCarousel *)carousel;
 - (float)carouselItemWidth:(iCarousel *)carousel;
 - (BOOL)carouselShouldWrap:(iCarousel *)carousel;
 - (CATransform3D)carousel:(iCarousel *)carousel transformForItemView:(UIView *)view withOffset:(float)offset;

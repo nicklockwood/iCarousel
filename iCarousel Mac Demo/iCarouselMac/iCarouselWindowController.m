@@ -160,4 +160,34 @@
     return wrap;
 }
 
+- (void)carouselWillBeginDragging:(iCarousel *)carousel
+{
+	NSLog(@"Carousel will begin dragging");
+}
+
+- (void)carouselDidEndDragging:(iCarousel *)carousel willDecelerate:(BOOL)decelerate
+{
+	NSLog(@"Carousel did end dragging and %@ decelerate", decelerate? @"will": @"won't");
+}
+
+- (void)carouselWillBeginDecelerating:(iCarousel *)carousel
+{
+	NSLog(@"Carousel will begin decelerating");
+}
+
+- (void)carouselDidEndDecelerating:(iCarousel *)carousel
+{
+	NSLog(@"Carousel did end decelerating");
+}
+
+- (void)carouselWillBeginScrollingAnimation:(iCarousel *)carousel
+{
+	NSLog(@"Carousel will begin scrolling");
+}
+
+- (void)carouselDidEndScrollingAnimation:(iCarousel *)carousel
+{
+	NSLog(@"Carousel did end scrolling");
+}
+
 @end

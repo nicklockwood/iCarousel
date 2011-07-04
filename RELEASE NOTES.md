@@ -1,3 +1,8 @@
+Version 1.3.3
+
+- Added several additional delegate methods for tracking when the carousel scrolls and decelerates
+- Fixed some glitches when using the scrollwheel/trackpad on a Mac.
+
 Version 1.3.2
 
 - Fixed additional scrolling bug introduced by 1.3.1 fix.
