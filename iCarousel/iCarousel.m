@@ -318,10 +318,12 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 	
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
 
-    UIControl *container = [[[UIControl alloc] initWithFrame:view.frame] autorelease];
-    [container addTarget:self action:@selector(didTap:) forControlEvents:UIControlEventTouchUpInside];
-    [container addSubview:view];
-    return container;
+    UIView *container = [[[UIView alloc] initWithFrame:view.frame] autorelease];
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                                 action:@selector(didTap:)];
+    tapGesture.delegate = self;
+    [container addGestureRecognizer:tapGesture];
+    [tapGesture release];
     
 #else
     
@@ -400,7 +402,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 		UIView *view = [itemViews objectAtIndex:i];
 		[self transformItemView:view atIndex:i];
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
-        view.userInteractionEnabled = (i == self.currentItemIndex);
+        view.userInteractionEnabled = (!centerItemWhenSelected || i == self.currentItemIndex);
 #endif
 	}
     
@@ -520,7 +522,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 	previousItemIndex = [self clampedIndex:previousItemIndex];
 	scrollOffset = itemWidth * previousItemIndex;
     [self layOutItemViews];
-	[self depthSortViews];
+	[self performSelector:@selector(depthSortViews) withObject:nil afterDelay:0];
 }
 
 - (NSInteger)clampedIndex:(NSInteger)index
@@ -794,21 +796,65 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 #pragma mark -
 #pragma mark Gestures and taps
 
-- (void)didTap:(UIView *)container
+- (NSInteger)viewIndex:(UIView *)view
 {
-    UIView *itemView = [container.subviews objectAtIndex:0];
-    NSInteger index = [itemViews indexOfObject:itemView];
-	if (index != NSNotFound)
+    if (view == nil)
+    {
+        return NSNotFound;
+    }
+    for (NSInteger i = 0; i < [itemViews count]; i++)
+    {
+        if ([[itemViews objectAtIndex:i] superview] == view)
+        {
+            return i;
+        }
+    }
+    return [self viewIndex:view.superview];
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gesture shouldReceiveTouch:(UITouch *)touch
+{
+    if ([gesture isKindOfClass:[UITapGestureRecognizer class]])
+    {
+        //handle tap
+        NSInteger index = [self viewIndex:touch.view];
+        if (index != NSNotFound)
+        {
+            if (!centerItemWhenSelected || index == self.currentItemIndex)
+            {
+                if ([touch.view isKindOfClass:[UIControl class]])
+                {
+                    return NO;
+                }
+            }
+        }
+    }
+    return YES;
+}
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gesture
+{
+	if ([gesture isKindOfClass:[UIPanGestureRecognizer class]])
 	{
-		if (centerItemWhenSelected && index != self.currentItemIndex)
-		{
-			[self scrollToItemAtIndex:index animated:YES];
-		}
-		if ([delegate respondsToSelector:@selector(carousel:didSelectItemAtIndex:)])
-		{
-			[delegate carousel:self didSelectItemAtIndex:index];
-		}
+		//ignore vertical swipes
+		UIPanGestureRecognizer *panGesture = (UIPanGestureRecognizer *)gesture;
+		CGPoint translation = [panGesture translationInView:self];
+		return fabs(translation.x) >= fabs(translation.y);
 	}
+	return YES;
+}
+
+- (void)didTap:(UITapGestureRecognizer *)tapGesture
+{
+    NSInteger index = [itemViews indexOfObject:[tapGesture.view.subviews objectAtIndex:0]];
+    if (centerItemWhenSelected && index != self.currentItemIndex)
+    {
+        [self scrollToItemAtIndex:index animated:YES];
+    }
+    if ([delegate respondsToSelector:@selector(carousel:didSelectItemAtIndex:)])
+    {
+        [delegate carousel:self didSelectItemAtIndex:index];
+    }
 }
 
 - (void)didPan:(UIPanGestureRecognizer *)panGesture
@@ -860,18 +906,6 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
             }
         }
     }
-}
-
-- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gesture
-{
-	if ([gesture isKindOfClass:[UIPanGestureRecognizer class]])
-	{
-		//ignore vertical swipes
-		UIPanGestureRecognizer *panGesture = (UIPanGestureRecognizer *)gesture;
-		CGPoint translation = [panGesture translationInView:self];
-		return fabs(translation.x) >= fabs(translation.y);
-	}
-	return YES;
 }
 
 #else

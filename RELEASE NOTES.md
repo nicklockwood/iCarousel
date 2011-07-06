@@ -1,6 +1,7 @@
 Version 1.3.4
 
 - Changed order of execution for when carouselDidEndScrollingAnimation is called to prevent animation glitches when making changes to carousel in the callback.
+- Fixed glitch where didSelectItemAtIndex method would never fire for the currently centered view.
 
 Version 1.3.3
 
