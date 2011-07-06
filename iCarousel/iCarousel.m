@@ -1,7 +1,7 @@
 //
 //  iCarousel.m
 //
-//  Version 1.3.3
+//  Version 1.3.4
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2010 Charcoal Design. All rights reserved.
@@ -753,10 +753,12 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     
     if (scrolling)
     {
-        NSTimeInterval time = (currentTime - startTime ) / scrollDuration;
-        if (time >= 1.0)
+        NSTimeInterval time = fmin(1.0, (currentTime - startTime ) / scrollDuration);
+        float delta = (time < 0.5f)? 0.5f * pow(time * 2.0, 3.0): 0.5f * pow(time * 2.0 - 2.0, 3.0) + 1.0; //ease in/out
+        scrollOffset = startOffset + (endOffset - startOffset) * delta;
+        [self didScroll];
+		if (time == 1.0)
         {
-            time = 1.0;
             scrolling = NO;
             [self depthSortViews];
 			if ([delegate respondsToSelector:@selector(carouselDidEndScrollingAnimation:)])
@@ -764,9 +766,6 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 				[delegate carouselDidEndScrollingAnimation:self];
 			}
         }
-        float delta = (time < 0.5f)? 0.5f * pow(time * 2.0, 3.0): 0.5f * pow(time * 2.0 - 2.0, 3.0) + 1.0; //ease in/out
-        scrollOffset = startOffset + (endOffset - startOffset) * delta;
-        [self didScroll];
     }
     else if (decelerating)
     {
@@ -777,6 +776,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 			currentVelocity *= decelerationRate * decelerationRate;
 		}
         scrollOffset -= currentVelocity * deltaTime;
+		[self didScroll];
         if ([self decelerationEnded])
         {
             decelerating = NO;
@@ -786,7 +786,6 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 			}
             [self scrollToItemAtIndex:self.currentItemIndex animated:YES];
         }
-        [self didScroll];
     }
 }
 

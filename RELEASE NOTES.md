@@ -1,3 +1,7 @@
+Version 1.3.4
+
+- Changed order of execution for when carouselDidEndScrollingAnimation is called to prevent animation glitches when making changes to carousel in the callback.
+
 Version 1.3.3
 
 - Added several additional delegate methods for tracking when the carousel scrolls and decelerates
