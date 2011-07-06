@@ -198,7 +198,7 @@ This method can be used to provide a custom transform for each carousel view. Th
 
 	- (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index;
 
-This method will fire if the user taps any carousel item view (not including placeholder views), including the currently selected view. **This method is currently only supported on the iOS version of iCarousel.**
+This method will fire if the user taps any carousel item view (not including placeholder views), including the currently selected view. This method will not fire if the user taps a control within the currently selected view (i.e. any view that is a subclass of UIControl). **This method is currently only supported on the iOS version of iCarousel.**
 
 
 Detecting Taps on Item Views
@@ -206,9 +206,11 @@ Detecting Taps on Item Views
 
 There are two basic approaches to detecting taps on views in iCarousel on iOS. The first approach is to simply use the `carousel:didSelectItemAtIndex:` delegate method, which fires every time an item is tapped.
 
-Alternatively, if you want a little more control can use supply a UIButton as the item view and handle the touch interactions yourself. See the iOS example project for a demo of how this is done.
+Alternatively, if you want a little more control can use supply a UIButton or UIControl as the item view and handle the touch interactions yourself. See the iOS example project for a demo of how this is done.
 
-If you wish to detect other types of interaction such as swipes, double taps or long presses, the simplest way is to attach a UIGestureRecognizer to your item view before passing it to the carousel.
+You can also nest UIControls within your item views and these will receive touches as expected.
+
+If you wish to detect other types of interaction such as swipes, double taps or long presses, the simplest way is to attach a UIGestureRecognizer to your item view or its subviews before passing it to the carousel.
 
 Note that taps and gestures will be ignored on any item view except the currently selected one, unless you set the centerItemWhenSelected property to NO.
 
