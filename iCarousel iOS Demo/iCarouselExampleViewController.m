@@ -113,7 +113,8 @@
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     //restore view opacities to normal
-    for (UIView *view in carousel.itemViews)
+	NSArray *allViews = [carousel.itemViews arrayByAddingObjectsFromArray:carousel.placeholderViews];
+    for (UIView *view in allViews)
     {
         view.alpha = 1.0;
     }
@@ -161,16 +162,15 @@
 - (NSUInteger)numberOfPlaceholdersInCarousel:(iCarousel *)carousel
 {
 	//note: placeholder views are only displayed if wrapping is disabled
-	return 1;
+	return 2;
 }
 
-- (UIView *)carouselPlaceholderView:(iCarousel *)carousel
+- (UIView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index
 {
 	//create a placeholder view
 	UIView *view = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]] autorelease];
-	view.alpha = 0.5;
 	UILabel *label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
-	label.text = @"[fin]";
+	label.text = (index == 0)? @"[": @"]";
 	label.backgroundColor = [UIColor clearColor];
 	label.textAlignment = UITextAlignmentCenter;
 	label.font = [label.font fontWithSize:50];
@@ -184,7 +184,7 @@
     return ITEM_SPACING;
 }
 
-- (CATransform3D)carousel:(iCarousel *)carousel transformForItemView:(UIView *)view withOffset:(float)offset
+- (CATransform3D)carousel:(iCarousel *)_carousel transformForItemView:(UIView *)view withOffset:(float)offset
 {
     //implement 'flip3D' style carousel
     
@@ -195,13 +195,43 @@
     CATransform3D transform = CATransform3DIdentity;
     transform.m34 = self.carousel.perspective;
     transform = CATransform3DRotate(transform, M_PI / 8.0, 0, 1.0, 0);
-    return CATransform3DTranslate(transform, 0.0, 0.0, offset * self.carousel.itemWidth);
+    return CATransform3DTranslate(transform, 0.0, 0.0, offset * carousel.itemWidth);
 }
 
 - (BOOL)carouselShouldWrap:(iCarousel *)carousel
 {
     //wrap all carousels
     return wrap;
+}
+
+- (void)carouselWillBeginDragging:(iCarousel *)carousel
+{
+	NSLog(@"Carousel will begin dragging");
+}
+
+- (void)carouselDidEndDragging:(iCarousel *)carousel willDecelerate:(BOOL)decelerate
+{
+	NSLog(@"Carousel did end dragging and %@ decelerate", decelerate? @"will": @"won't");
+}
+
+- (void)carouselWillBeginDecelerating:(iCarousel *)carousel
+{
+	NSLog(@"Carousel will begin decelerating");
+}
+
+- (void)carouselDidEndDecelerating:(iCarousel *)carousel
+{
+	NSLog(@"Carousel did end decelerating");
+}
+
+- (void)carouselWillBeginScrollingAnimation:(iCarousel *)carousel
+{
+	NSLog(@"Carousel will begin scrolling");
+}
+
+- (void)carouselDidEndScrollingAnimation:(iCarousel *)carousel
+{
+	NSLog(@"Carousel did end scrolling");
 }
 
 - (void)carousel:(iCarousel *)_carousel didSelectItemAtIndex:(NSInteger)index
