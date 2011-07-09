@@ -58,8 +58,7 @@
 - (IBAction)switchCarouselType:(id)sender
 {
 	//restore view opacities to normal
-	NSArray *allViews = [carousel.itemViews arrayByAddingObjectsFromArray:carousel.placeholderViews];
-    for (NSView *view in allViews)
+    for (NSView *view in carousel.visibleViews)
     {
         view.layer.opacity = 1.0;
     }

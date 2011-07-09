@@ -76,9 +76,9 @@ Enables and disables user scrolling of the carousel. The carousel can still be s
 
 The number of items currently displayed in the carousel (read only).
 
-	@property (nonatomic, readonly) NSArray *itemViews;
+	@property (nonatomic, readonly) NSSet *visibleViews;
 
-An array of the item views currently displayed in the carousel (read only).
+A set of all the item views currently displayed in the carousel (read only). The order of these views is arbitrary, and does not relate to the item indices.
 
 	@property (nonatomic, readonly) UIView *contentView;
 
@@ -95,6 +95,10 @@ The display width of items in the carousel (read only).
 	@property (nonatomic, assign) BOOL centerItemWhenSelected;
 
 When set to YES, tapping any item in the carousel other than the one matching the currentItemIndex will cause it to smoothly animate to the center. Tapping the currently selected item will have no effect. **This property is currently only supported on the iOS version of iCarousel.**
+
+	@property (nonatomic, assign) NSInteger numberOfVisibleItems;
+	
+This is the maximum number of item views that should be visible in the carousel at once. Half of this number of views will be displayed to either side of the currently selected item index. Views beyond that will not be loaded until they are scrolled into view. This allows for the carousel to contain a very large number of items without adversely affecting performance. The numberOfVisibleItems should be a positive odd number, and defaults to 21.
 
 
 Methods

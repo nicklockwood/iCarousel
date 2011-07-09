@@ -9,7 +9,7 @@
 #import "iCarouselExampleViewController.h"
 
 
-#define NUMBER_OF_ITEMS 20
+#define NUMBER_OF_ITEMS 100000
 #define ITEM_SPACING 210
 #define USE_BUTTONS YES
 
@@ -47,6 +47,7 @@
 {
     [carousel release];
     [navItem release];
+    [items release];
     [super dealloc];
 }
 
@@ -113,8 +114,7 @@
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     //restore view opacities to normal
-	NSArray *allViews = [carousel.itemViews arrayByAddingObjectsFromArray:carousel.placeholderViews];
-    for (UIView *view in allViews)
+    for (UIView *view in carousel.visibleViews)
     {
         view.alpha = 1.0;
     }
@@ -143,6 +143,7 @@
         [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         button.titleLabel.font = [button.titleLabel.font fontWithSize:50];
         [button addTarget:self action:@selector(buttonTapped:) forControlEvents:UIControlEventTouchUpInside];
+        button.tag = index;
         return button;
     }
     else
@@ -253,9 +254,8 @@
 
 - (void)buttonTapped:(UIButton *)sender
 {
-    NSInteger index = [carousel.itemViews indexOfObject:sender];
     [[[[UIAlertView alloc] initWithTitle:@"Button Tapped"
-                                 message:[NSString stringWithFormat:@"You tapped button number %i", index]
+                                 message:[NSString stringWithFormat:@"You tapped button number %i", sender.tag]
                                 delegate:nil
                        cancelButtonTitle:@"OK"
                        otherButtonTitles:nil] autorelease] show];

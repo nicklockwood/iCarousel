@@ -1,7 +1,7 @@
 //
 //  iCarousel.h
 //
-//  Version 1.3.4
+//  Version 1.4
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2010 Charcoal Design. All rights reserved.
@@ -68,8 +68,9 @@ iCarouselType;
     float perspective;
     NSInteger numberOfItems;
     NSInteger numberOfPlaceholders;
+    NSInteger numberOfVisibleItems;
     UIView *contentView;
-    NSArray *itemViews;
+    NSDictionary *itemViews;
     NSArray *placeholderViews;
     NSInteger previousItemIndex;
     float itemWidth;
@@ -107,8 +108,8 @@ iCarouselType;
 @property (nonatomic, readonly) NSInteger numberOfItems;
 @property (nonatomic, readonly) NSInteger numberOfPlaceholders;
 @property (nonatomic, readonly) NSInteger currentItemIndex;
-@property (nonatomic, retain, readonly) NSArray *itemViews;
-@property (nonatomic, retain, readonly) NSArray *placeholderViews;
+@property (nonatomic, assign) NSInteger numberOfVisibleItems;
+@property (nonatomic, retain, readonly) NSSet *visibleViews;
 @property (nonatomic, readonly) float itemWidth;
 @property (nonatomic, retain, readonly) UIView *contentView;
 

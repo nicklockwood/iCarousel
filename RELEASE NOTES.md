@@ -1,3 +1,10 @@
+Version 1.4
+
+- Added a new dynamic loading system to load and release views as needed. The carousel can now contain hundreds of thousands of items but only display a subset of them.
+- Added numberOfVisibleItems property to control the number of views to be loaded concurrently.
+- Added visibleViews property, containing a set of all visible item views.
+- Removed the itemViews and placeholderViews properties, as these no longer work with the new loading system.
+
 Version 1.3.4
 
 - Changed order of execution for when carouselDidEndScrollingAnimation is called to prevent animation glitches when making changes to carousel in the callback.
