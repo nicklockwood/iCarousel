@@ -642,7 +642,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 	
 	//load new views
 	numberOfItems = [dataSource numberOfItemsInCarousel:self];
-	self.itemViews = [NSMutableDictionary dictionaryWithCapacity:numberOfItems];
+	self.itemViews = [NSMutableDictionary dictionaryWithCapacity:numberOfVisibleItems];
 	[self loadUnloadViews];
     
     //load placeholders
