@@ -565,24 +565,32 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 
 - (NSInteger)minScrollDistanceFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex
 {
-	NSInteger directDistance = toIndex - fromIndex;
-	NSInteger wrappedDistance = MIN(toIndex, fromIndex) + numberOfItems - MAX(toIndex, fromIndex);
-	if (fromIndex < toIndex)
-	{
-		wrappedDistance = -wrappedDistance;
-	}
-	return (ABS(directDistance) <= ABS(wrappedDistance))? directDistance: wrappedDistance;
+    NSInteger directDistance = toIndex - fromIndex;
+    if (self.shouldWrap) {
+        NSInteger wrappedDistance = MIN(toIndex, fromIndex) + numberOfItems - MAX(toIndex, fromIndex);
+        if (fromIndex < toIndex)
+        {
+            wrappedDistance = -wrappedDistance;
+        }
+        return (ABS(directDistance) <= ABS(wrappedDistance))? directDistance: wrappedDistance;
+    } else {
+        return directDistance;
+    }
 }
 
 - (float)minScrollDistanceFromOffset:(float)fromOffset toOffset:(float)toOffset
 {
-	float directDistance = toOffset - fromOffset;
-	float wrappedDistance = fmin(toOffset, fromOffset) + numberOfItems*itemWidth - fmax(toOffset, fromOffset);
-	if (fromOffset < toOffset)
-	{
-		wrappedDistance = -wrappedDistance;
-	}
-	return (fabs(directDistance) <= fabs(wrappedDistance))? directDistance: wrappedDistance;
+    float directDistance = toOffset - fromOffset;
+    if (self.shouldWrap) {
+        float wrappedDistance = fmin(toOffset, fromOffset) + numberOfItems*itemWidth - fmax(toOffset, fromOffset);
+        if (fromOffset < toOffset)
+        {
+            wrappedDistance = -wrappedDistance;
+        }
+        return (fabs(directDistance) <= fabs(wrappedDistance))? directDistance: wrappedDistance;
+    } else {
+        return directDistance;
+    }
 }
 
 - (void)scrollByNumberOfItems:(NSInteger)itemCount duration:(NSTimeInterval)duration
