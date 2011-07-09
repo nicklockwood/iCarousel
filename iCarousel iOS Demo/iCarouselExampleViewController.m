@@ -9,7 +9,7 @@
 #import "iCarouselExampleViewController.h"
 
 
-#define NUMBER_OF_ITEMS 100000
+#define NUMBER_OF_ITEMS 20
 #define ITEM_SPACING 210
 #define USE_BUTTONS YES
 
