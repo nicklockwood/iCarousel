@@ -52,6 +52,7 @@ typedef enum
     iCarouselTypeCylinder,
     iCarouselTypeInvertedCylinder,
     iCarouselTypeCoverFlow,
+    iCarouselTypeCoverFlow2,
     iCarouselTypeCustom
 }
 iCarouselType;
@@ -93,6 +94,8 @@ iCarouselType;
 	BOOL centerItemWhenSelected;
 	BOOL shouldWrap;
 	BOOL dragging;
+    float toggleTarget;
+    float toggle;
 }
 #endif
 

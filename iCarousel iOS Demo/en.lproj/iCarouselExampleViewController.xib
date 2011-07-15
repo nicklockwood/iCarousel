@@ -2,9 +2,9 @@
 <archive type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1056</int>
-		<string key="IBDocument.SystemVersion">10J869</string>
+		<string key="IBDocument.SystemVersion">10K540</string>
 		<string key="IBDocument.InterfaceBuilderVersion">1306</string>
-		<string key="IBDocument.AppKitVersion">1038.35</string>
+		<string key="IBDocument.AppKitVersion">1038.36</string>
 		<string key="IBDocument.HIToolboxVersion">461.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -84,7 +84,6 @@
 						<string key="NSFrame">{{0, 416}, {320, 44}}</string>
 						<reference key="NSSuperview" ref="774585933"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -121,7 +120,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="IBUINavigationItem" id="238949200">
 								<reference key="IBUINavigationBar" ref="882147969"/>
-								<string key="IBUITitle">CoverFlow</string>
+								<string key="IBUITitle"/>
 								<object class="IBUIBarButtonItem" key="IBUILeftBarButtonItem" id="52276345">
 									<string key="IBUITitle">Switch Type</string>
 									<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>

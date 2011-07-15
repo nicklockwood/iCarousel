@@ -45,7 +45,7 @@
 {
     //configure carousel
     wrap = YES;
-    carousel.type = iCarouselTypeCoverFlow;
+    carousel.type = iCarouselTypeCoverFlow2;
     [self.window makeFirstResponder:carousel];
 }
 
@@ -63,7 +63,7 @@
         view.layer.opacity = 1.0;
     }
 	
-    carousel.type = [sender tag];
+    carousel.type = (iCarouselType)[sender tag];
 }
 
 - (IBAction)toggleWrap:(id)sender;

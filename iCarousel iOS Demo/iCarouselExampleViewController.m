@@ -57,7 +57,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    carousel.type = iCarouselTypeCoverFlow;
+    carousel.type = iCarouselTypeCoverFlow2;
+    navItem.title = @"CoverFlow2";
     wrap = YES;
 }
 
@@ -79,7 +80,7 @@
                                                        delegate:self
                                               cancelButtonTitle:nil
                                          destructiveButtonTitle:nil
-                                              otherButtonTitles:@"Linear", @"Rotary", @"Inverted Rotary", @"Cylinder", @"Inverted Cylinder", @"CoverFlow", @"Custom", nil];
+                                              otherButtonTitles:@"Linear", @"Rotary", @"Inverted Rotary", @"Cylinder", @"Inverted Cylinder", @"CoverFlow", @"CoverFlow2", @"Custom", nil];
     [sheet showInView:self.view];
     [sheet release];
 }

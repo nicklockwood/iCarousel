@@ -74,6 +74,9 @@
 @property (nonatomic, assign) float previousTranslation;
 @property (nonatomic, assign) BOOL shouldWrap;
 @property (nonatomic, assign) BOOL dragging;
+@property (nonatomic, assign) NSTimeInterval toggleTime;
+@property (nonatomic, assign) float toggleTarget;
+@property (nonatomic, assign) float toggle;
 
 - (void)layOutItemViews;
 - (NSInteger)clampedIndex:(NSInteger)index;
@@ -115,6 +118,9 @@
 @synthesize previousTranslation;
 @synthesize shouldWrap;
 @synthesize dragging;
+@synthesize toggleTime;
+@synthesize toggleTarget;
+@synthesize toggle;
 
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
 
@@ -314,7 +320,7 @@
 #pragma mark View layout
 
 - (CATransform3D)transformForItemView:(UIView *)view withOffset:(float)offset
-{    
+{
     //set up base transform
     CATransform3D transform = CATransform3DIdentity;
     transform.m34 = perspective;
@@ -370,6 +376,55 @@
             float spacing = 0.25;
             
             float clampedOffset = fmax(-1.0, fmin(1.0, offset));
+            float x = (clampedOffset * 0.5 * tilt + offset * spacing) * itemWidth;
+            float z = fabs(clampedOffset) * -itemWidth * 0.5;
+            transform = CATransform3DTranslate(transform, x, 0, z);
+            return CATransform3DRotate(transform, -clampedOffset * M_PI_2 * tilt, 0, 1, 0);
+        }
+        case iCarouselTypeCoverFlow2:
+        {
+            float tilt = 0.9;
+            float spacing = 0.25;
+            
+            float clampedOffset = 0.0;
+            if (toggleTarget <= 0)
+            {
+                if (offset < -0.5)
+                {
+                    clampedOffset = -1.0;
+                }
+                else if (offset < 0.5)
+                {
+                    clampedOffset = -toggle;
+                }
+                else if (offset < 1.5)
+                {
+                    clampedOffset = 1.0 - toggle;
+                }
+                else
+                {
+                    clampedOffset = 1.0;
+                }
+            }
+            else
+            {
+                if (offset > 0.5)
+                {
+                    clampedOffset = 1.0;
+                }
+                else if (offset > -0.5)
+                {
+                    clampedOffset = 1.0 - toggle;
+                }
+                else if (offset > -1.5)
+                {
+                    clampedOffset = -toggle;
+                }
+                else
+                {
+                    clampedOffset = -1.0;
+                }
+            }
             float x = (clampedOffset * 0.5 * tilt + offset * spacing) * itemWidth;
             float z = fabs(clampedOffset) * -itemWidth * 0.5;
             transform = CATransform3DTranslate(transform, x, 0, z);
@@ -875,16 +930,26 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
         scrollOffset = [self clampedOffset:scrollOffset];
     }
     
+    //check if index has changed
+    NSInteger currentItemIndex = self.currentItemIndex;
+    NSInteger difference = [self minScrollDistanceFromIndex:previousItemIndex toIndex:currentItemIndex];
+    if (difference)
+    {
+        toggleTime = CACurrentMediaTime();
+        toggleTarget = fmax(-1.0, fmin(1.0, (float)difference));
+        toggle = (toggleTarget > 0)? 0.0: 1.0;
+    }
+
     [self loadUnloadViews];    
     [self transformItemViews];
+
     if ([delegate respondsToSelector:@selector(carouselDidScroll:)])
     {
 		[delegate carouselDidScroll:self];
 	}
     
     //update index
-    NSInteger currentItemIndex = self.currentItemIndex;
-    if (previousItemIndex != currentItemIndex)
+    if (difference)
 	{
 		previousItemIndex = currentItemIndex;
 		
@@ -908,19 +973,32 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 	return fabs(offset) <= itemWidth*0.5;
 }
 
+- (float)easeInOut:(float)time
+{
+    return (time < 0.5f)? 0.5f * pow(time * 2.0, 3.0): 0.5f * pow(time * 2.0 - 2.0, 3.0) + 1.0;
+}
+
 - (void)step
 {
     NSTimeInterval currentTime = CACurrentMediaTime();
     NSTimeInterval deltaTime = currentTime - previousTime;
     previousTime = currentTime;
     
+    if (toggle != toggleTarget)
+    {
+        NSTimeInterval time = fmin(1.0, (currentTime - toggleTime) / SCROLL_DURATION);
+        float delta = [self easeInOut:time];
+        toggle = (toggleTarget > 0.0)? delta: (1.0 - delta);
+        [self didScroll];
+    }
+    
     if (scrolling)
     {
-        NSTimeInterval time = fmin(1.0, (currentTime - startTime ) / scrollDuration);
-        float delta = (time < 0.5f)? 0.5f * pow(time * 2.0, 3.0): 0.5f * pow(time * 2.0 - 2.0, 3.0) + 1.0; //ease in/out
+        NSTimeInterval time = fmin(1.0, (currentTime - startTime) / scrollDuration);
+        float delta = [self easeInOut:time];
         scrollOffset = startOffset + (endOffset - startOffset) * delta;
-        [self didScroll];
-		if (time == 1.0)
+		[self didScroll];
+        if (time == 1.0)
         {
             scrolling = NO;
             [self depthSortViews];
