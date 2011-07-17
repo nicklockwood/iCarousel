@@ -75,7 +75,6 @@
 @property (nonatomic, assign) BOOL dragging;
 @property (nonatomic, assign) float scrollSpeed;
 @property (nonatomic, assign) NSTimeInterval toggleTime;
-@property (nonatomic, assign) float toggleTarget;
 @property (nonatomic, assign) float toggle;
 
 - (void)layOutItemViews;
@@ -119,7 +118,6 @@
 @synthesize dragging;
 @synthesize scrollSpeed;
 @synthesize toggleTime;
-@synthesize toggleTarget;
 @synthesize toggle;
 
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
@@ -145,7 +143,6 @@
 	shouldWrap = NO;
     scrollSpeed = 1.0;
     toggle = 0.0;
-    toggleTarget = 0.0;
     
 	self.itemViews = [NSMutableDictionary dictionary];
     
@@ -382,7 +379,7 @@
             
             if (type == iCarouselTypeCoverFlow2)
             {
-                if (toggleTarget <= 0)
+                if (toggle >= 0)
                 {
                     if (offset < -0.5)
                     {
@@ -409,11 +406,11 @@
                     }
                     else if (offset > -0.5)
                     {
-                        clampedOffset = 1.0 - toggle;
+                        clampedOffset = - toggle;
                     }
                     else if (offset > -1.5)
                     {
-                        clampedOffset = -toggle;
+                        clampedOffset = - (1.0 + toggle);
                     }
                     else
                     {
@@ -940,8 +937,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     if (difference)
     {
         toggleTime = CACurrentMediaTime();
-        toggleTarget = fmax(-1.0, fmin(1.0, (float)difference));
-        toggle = (toggleTarget > 0)? 0.0: 1.0;
+        toggle = fmax(-1.0, fmin(1.0, -(float)difference));
     }
 
     [self loadUnloadViews];    
@@ -988,11 +984,11 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     NSTimeInterval deltaTime = currentTime - previousTime;
     previousTime = currentTime;
     
-    if (toggle != toggleTarget)
+    if (toggle != 0.0)
     {
         NSTimeInterval time = fmin(1.0, (currentTime - toggleTime) / SCROLL_DURATION);
         float delta = [self easeInOut:time];
-        toggle = (toggleTarget > 0.0)? delta: (1.0 - delta);
+        toggle = (toggle < 0.0)? (delta - 1.0): (1.0 - delta);
         [self didScroll];
     }
     
