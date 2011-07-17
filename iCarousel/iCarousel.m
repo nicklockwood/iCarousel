@@ -736,12 +736,12 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 
 - (NSInteger)clampedIndex:(NSInteger)index
 {
-    if (numberOfItems == 0)
+    if (shouldWrap)
     {
-        return 0;
-    }
-    else if (shouldWrap)
-    {
+        if (numberOfItems == 0)
+        {
+            return 0;
+        }
         return index - floor((float)index / (float)numberOfItems) * numberOfItems;
     }
     else
@@ -752,12 +752,12 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 
 - (float)clampedOffset:(float)offset
 {
-    if (numberOfItems == 0)
+    if (shouldWrap)
     {
-        return 0;
-    }
-    else if (shouldWrap)
-    {
+        if (numberOfItems == 0)
+        {
+            return 0;
+        }
 		float contentWidth = numberOfItems * itemWidth;
 		return offset - floor(offset / contentWidth) * contentWidth;
     }
@@ -810,7 +810,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
         startTime = CACurrentMediaTime();
         startOffset = scrollOffset;
 		scrollDuration = duration;
-		previousItemIndex = self.currentItemIndex;
+		previousItemIndex = round(scrollOffset/itemWidth);
 		endOffset = round(startOffset / itemWidth + itemCount) * itemWidth;
 		if (!shouldWrap)
 		{
@@ -832,7 +832,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 
 - (void)scrollToItemAtIndex:(NSInteger)index duration:(NSTimeInterval)duration
 {
-	[self scrollByNumberOfItems:[self minScrollDistanceFromIndex:self.currentItemIndex toIndex:index] duration:duration];
+	[self scrollByNumberOfItems:[self minScrollDistanceFromIndex:round(scrollOffset/itemWidth) toIndex:index] duration:duration];
 }
 
 - (void)scrollToItemAtIndex:(NSInteger)index animated:(BOOL)animated
@@ -1039,8 +1039,8 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     }
     
     //check if index has changed
-    NSInteger currentItemIndex = self.currentItemIndex;
-    NSInteger difference = [self minScrollDistanceFromIndex:previousItemIndex toIndex:currentItemIndex];
+    NSInteger currentIndex = round(scrollOffset/itemWidth);
+    NSInteger difference = [self minScrollDistanceFromIndex:previousItemIndex toIndex:currentIndex];
     if (difference)
     {
         toggleTime = CACurrentMediaTime();
@@ -1056,17 +1056,15 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 		[delegate carouselDidScroll:self];
 	}
     
-    //update index
-    if (difference)
-	{
-		previousItemIndex = currentItemIndex;
-		
-		//call delegate
-		if ([delegate respondsToSelector:@selector(carouselCurrentItemIndexUpdated:)])
-		{
-			[delegate carouselCurrentItemIndexUpdated:self];
-		}
-	}
+    //notify delegate of change index
+    if ([self clampedIndex:previousItemIndex] != self.currentItemIndex &&
+        [delegate respondsToSelector:@selector(carouselCurrentItemIndexUpdated:)])
+    {
+        [delegate carouselCurrentItemIndexUpdated:self];
+    }
+    
+    //update previous index
+    previousItemIndex = currentIndex;
 }
 
 
