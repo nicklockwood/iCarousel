@@ -67,7 +67,7 @@
 @property (nonatomic, assign) BOOL scrolling;
 @property (nonatomic, assign) NSTimeInterval startTime;
 @property (nonatomic, assign) float currentVelocity;
-@property (nonatomic, assign) NSTimer *timer;
+@property (nonatomic, assign) id timer;
 @property (nonatomic, assign) NSTimeInterval previousTime;
 @property (nonatomic, assign) BOOL decelerating;
 @property (nonatomic, assign) float previousTranslation;
@@ -80,6 +80,8 @@
 - (void)layOutItemViews;
 - (NSInteger)clampedIndex:(NSInteger)index;
 - (void)transformItemView:(UIView *)view atIndex:(NSInteger)index;
+- (void)startAnimation;
+- (void)stopAnimation;
 - (void)didScroll;
 
 @end
@@ -410,7 +412,7 @@
                     }
                     else if (offset > -1.5)
                     {
-                        clampedOffset = - (1.0 + toggle);
+                        clampedOffset = - 1.0 - toggle;
                     }
                     else
                     {
@@ -818,6 +820,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 		{
 			[delegate carouselWillBeginScrollingAnimation:self];
 		}
+        [self startAnimation];
     }
     else
     {
@@ -836,6 +839,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 {	
 	[self scrollToItemAtIndex:index duration:animated? SCROLL_DURATION: 0];
 }
+
 
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
 
@@ -905,60 +909,36 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 
 #endif
 
-#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
-- (void)didMoveToSuperview
-#else
-- (void)viewDidMoveToSuperview
-#endif
+
+#pragma mark -
+#pragma mark Animation
+
+- (void)startAnimation
 {
-    if (self.superview)
-	{
-		[self reloadData];
-		[timer invalidate];
-		self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0/60.0 target:self selector:@selector(step) userInfo:nil repeats:YES];
-	}
-	else
-	{
-		[timer invalidate];
-		timer = nil;
-	}
+    if (!timer)
+    {
+    
+#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
+    
+        timer = [CADisplayLink displayLinkWithTarget:self selector:@selector(step)];
+        [timer addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
+    
+#else
+    
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0/60.0
+                                                      target:self
+                                                    selector:@selector(step)
+                                                    userInfo:nil
+                                                     repeats:YES];
+#endif
+     
+    }
 }
 
-- (void)didScroll
-{	
-    if (shouldWrap || !bounces)
-    {
-        scrollOffset = [self clampedOffset:scrollOffset];
-    }
-    
-    //check if index has changed
-    NSInteger currentItemIndex = self.currentItemIndex;
-    NSInteger difference = [self minScrollDistanceFromIndex:previousItemIndex toIndex:currentItemIndex];
-    if (difference)
-    {
-        toggleTime = CACurrentMediaTime();
-        toggle = fmax(-1.0, fmin(1.0, -(float)difference));
-    }
-
-    [self loadUnloadViews];    
-    [self transformItemViews];
-
-    if ([delegate respondsToSelector:@selector(carouselDidScroll:)])
-    {
-		[delegate carouselDidScroll:self];
-	}
-    
-    //update index
-    if (difference)
-	{
-		previousItemIndex = currentItemIndex;
-		
-		//call delegate
-		if ([delegate respondsToSelector:@selector(carouselCurrentItemIndexUpdated:)])
-		{
-			[delegate carouselCurrentItemIndexUpdated:self];
-		}
-	}
+- (void)stopAnimation
+{
+    [timer invalidate];
+    timer = nil;
 }
 
 - (BOOL)decelerationEnded
@@ -1028,7 +1008,67 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
             [self scrollToItemAtIndex:self.currentItemIndex animated:YES];
         }
     }
+    else if (toggle == 0.0)
+    {
+        [self stopAnimation];
+    }
 }
+
+#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
+- (void)didMoveToSuperview
+#else
+- (void)viewDidMoveToSuperview
+#endif
+{
+    if (self.superview)
+	{
+		[self reloadData];
+        [self startAnimation];
+	}
+	else
+	{
+        [self stopAnimation];
+	}
+}
+
+- (void)didScroll
+{	
+    if (shouldWrap || !bounces)
+    {
+        scrollOffset = [self clampedOffset:scrollOffset];
+    }
+    
+    //check if index has changed
+    NSInteger currentItemIndex = self.currentItemIndex;
+    NSInteger difference = [self minScrollDistanceFromIndex:previousItemIndex toIndex:currentItemIndex];
+    if (difference)
+    {
+        toggleTime = CACurrentMediaTime();
+        toggle = fmax(-1.0, fmin(1.0, -(float)difference));
+        [self startAnimation];
+    }
+    
+    [self loadUnloadViews];    
+    [self transformItemViews];
+    
+    if ([delegate respondsToSelector:@selector(carouselDidScroll:)])
+    {
+		[delegate carouselDidScroll:self];
+	}
+    
+    //update index
+    if (difference)
+	{
+		previousItemIndex = currentItemIndex;
+		
+		//call delegate
+		if ([delegate respondsToSelector:@selector(carouselCurrentItemIndexUpdated:)])
+		{
+			[delegate carouselCurrentItemIndexUpdated:self];
+		}
+	}
+}
+
 
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
 
@@ -1129,6 +1169,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 				else if ([delegate respondsToSelector:@selector(carouselWillBeginDecelerating:)])
 				{
 					[delegate carouselWillBeginDecelerating:self];
+                    [self startAnimation];
 				}
 				break;
             }
@@ -1196,6 +1237,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 		else if ([delegate respondsToSelector:@selector(carouselWillBeginDecelerating:)])
 		{
 			[delegate carouselWillBeginDecelerating:self];
+            [self startAnimation];
 		}
 	}
 }
@@ -1258,7 +1300,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 
 - (void)dealloc
 {	
-    [timer invalidate];
+    [self stopAnimation];
     [contentView release];
 	[itemViews release];
 	[super dealloc];

@@ -76,7 +76,7 @@ iCarouselType;
     float itemWidth;
     float scrollOffset;
     float currentVelocity;
-    NSTimer *timer;
+    id timer;
     NSTimeInterval previousTime;
     BOOL decelerating;
     BOOL scrollEnabled;
