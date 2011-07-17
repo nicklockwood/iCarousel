@@ -1,7 +1,7 @@
 //
 //  iCarousel.m
 //
-//  Version 1.4
+//  Version 1.5 beta
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2010 Charcoal Design. All rights reserved.
@@ -58,7 +58,6 @@
 
 @property (nonatomic, retain) UIView *contentView;
 @property (nonatomic, retain) NSDictionary *itemViews;
-@property (nonatomic, retain) NSArray *placeholderViews;
 @property (nonatomic, assign) NSInteger previousItemIndex;
 @property (nonatomic, assign) float itemWidth;
 @property (nonatomic, assign) float scrollOffset;
@@ -74,6 +73,7 @@
 @property (nonatomic, assign) float previousTranslation;
 @property (nonatomic, assign) BOOL shouldWrap;
 @property (nonatomic, assign) BOOL dragging;
+@property (nonatomic, assign) float scrollSpeed;
 @property (nonatomic, assign) NSTimeInterval toggleTime;
 @property (nonatomic, assign) float toggleTarget;
 @property (nonatomic, assign) float toggle;
@@ -97,7 +97,6 @@
 @synthesize numberOfVisibleItems;
 @synthesize contentView;
 @synthesize itemViews;
-@synthesize placeholderViews;
 @synthesize previousItemIndex;
 @synthesize itemWidth;
 @synthesize scrollOffset;
@@ -118,6 +117,7 @@
 @synthesize previousTranslation;
 @synthesize shouldWrap;
 @synthesize dragging;
+@synthesize scrollSpeed;
 @synthesize toggleTime;
 @synthesize toggleTarget;
 @synthesize toggle;
@@ -135,7 +135,7 @@
 - (void)setup
 {
     perspective = -1.0/500.0;
-    decelerationRate = 0.9;
+    decelerationRate = 0.95;
     scrollEnabled = YES;
     bounces = YES;
     scrollOffset = 0;
@@ -143,6 +143,9 @@
 	viewpointOffset = CGSizeZero;
     numberOfVisibleItems = 21;
 	shouldWrap = NO;
+    scrollSpeed = 1.0;
+    toggle = 0.0;
+    toggleTarget = 0.0;
     
 	self.itemViews = [NSMutableDictionary dictionary];
     
@@ -221,7 +224,7 @@
     if (type != _type)
     {
         type = _type;
-        [self layOutItemViews];
+        [self reloadData];
     }
 }
 
@@ -371,60 +374,54 @@
             return CATransform3DTranslate(transform, 0, 0, radius);
         }
         case iCarouselTypeCoverFlow:
-        {
-            float tilt = 0.9;
-            float spacing = 0.25;
-            
-            float clampedOffset = fmax(-1.0, fmin(1.0, offset));
-            float x = (clampedOffset * 0.5 * tilt + offset * spacing) * itemWidth;
-            float z = fabs(clampedOffset) * -itemWidth * 0.5;
-            transform = CATransform3DTranslate(transform, x, 0, z);
-            return CATransform3DRotate(transform, -clampedOffset * M_PI_2 * tilt, 0, 1, 0);
-        }
         case iCarouselTypeCoverFlow2:
         {
             float tilt = 0.9;
-            float spacing = 0.25;
+            float spacing = 0.25; // should be ~ 1/scrollSpeed;
+            float clampedOffset = fmax(-1.0, fmin(1.0, offset));
             
-            float clampedOffset = 0.0;
-            if (toggleTarget <= 0)
+            if (type == iCarouselTypeCoverFlow2)
             {
-                if (offset < -0.5)
+                if (toggleTarget <= 0)
                 {
-                    clampedOffset = -1.0;
-                }
-                else if (offset < 0.5)
-                {
-                    clampedOffset = -toggle;
-                }
-                else if (offset < 1.5)
-                {
-                    clampedOffset = 1.0 - toggle;
+                    if (offset < -0.5)
+                    {
+                        clampedOffset = -1.0;
+                    }
+                    else if (offset < 0.5)
+                    {
+                        clampedOffset = -toggle;
+                    }
+                    else if (offset < 1.5)
+                    {
+                        clampedOffset = 1.0 - toggle;
+                    }
+                    else
+                    {
+                        clampedOffset = 1.0;
+                    }
                 }
                 else
                 {
-                    clampedOffset = 1.0;
+                    if (offset > 0.5)
+                    {
+                        clampedOffset = 1.0;
+                    }
+                    else if (offset > -0.5)
+                    {
+                        clampedOffset = 1.0 - toggle;
+                    }
+                    else if (offset > -1.5)
+                    {
+                        clampedOffset = -toggle;
+                    }
+                    else
+                    {
+                        clampedOffset = -1.0;
+                    }
                 }
             }
-            else
-            {
-                if (offset > 0.5)
-                {
-                    clampedOffset = 1.0;
-                }
-                else if (offset > -0.5)
-                {
-                    clampedOffset = 1.0 - toggle;
-                }
-                else if (offset > -1.5)
-                {
-                    clampedOffset = -toggle;
-                }
-                else
-                {
-                    clampedOffset = -1.0;
-                }
-            }
+            
             float x = (clampedOffset * 0.5 * tilt + offset * spacing) * itemWidth;
             float z = fabs(clampedOffset) * -itemWidth * 0.5;
             transform = CATransform3DTranslate(transform, x, 0, z);
@@ -552,7 +549,6 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 
 - (void)transformItemViews
 {
-    //lay out items
 	for (NSNumber *number in itemViews)
     {
         NSInteger index = [number integerValue];
@@ -561,23 +557,6 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
         view.userInteractionEnabled = (!centerItemWhenSelected || index == self.currentItemIndex);
 #endif
-	}
-    
-    //lay out placeholders
-    for (NSInteger i = 0; i < numberOfPlaceholders; i++)
-    {
-		UIView *view = [placeholderViews objectAtIndex:i];
-		if (i < floor(numberOfPlaceholders/2))
-		{
-			//left placeholder
-			[self transformItemView:view atIndex:-(i+1)];
-		}
-		else
-		{
-			//right placeholder
-			[self transformItemView:view atIndex:i - floor(numberOfPlaceholders/2) + numberOfItems];
-		}
-		[view.superview setHidden:shouldWrap];
 	}
 }
 
@@ -591,34 +570,33 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     {
 		itemWidth = [delegate carouselItemWidth:self];
 	}
-
-    //adjust scroll offset
-    scrollOffset = scrollOffset / prevItemWidth * itemWidth;
-	
-	//update wrap
-	if ([delegate respondsToSelector:@selector(carouselShouldWrap:)])
+    
+    
+    //update scroll speed
+    if ([delegate respondsToSelector:@selector(carouselScrollSpeed:)])
     {
-        shouldWrap = [delegate carouselShouldWrap:self];
+        scrollSpeed = [delegate carouselScrollSpeed:self];
     }
-	else
-	{
-		switch (type)
+    else
+    {
+        switch (type)
 		{
-			case iCarouselTypeRotary:
-			case iCarouselTypeInvertedRotary:
-			case iCarouselTypeCylinder:
-			case iCarouselTypeInvertedCylinder:
+            case iCarouselTypeCoverFlow:
+			case iCarouselTypeCoverFlow2:
 			{
-				shouldWrap = YES;
+				scrollSpeed = 4.0;
 				break;
 			}
 			default:
 			{
-				shouldWrap = NO;
+				scrollSpeed = 1.0;
 				break;
 			}
 		}
-	}
+    }
+
+    //adjust scroll offset
+    scrollOffset = scrollOffset / prevItemWidth * itemWidth;
         
     //update views
     [self didScroll];
@@ -633,7 +611,19 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
     [UIView setAnimationsEnabled:NO];
 #endif
-    UIView *view = [dataSource carousel:self viewForItemAtIndex:index];
+    UIView *view = nil;
+    if (index < 0)
+    {
+        view = [dataSource carousel:self placeholderViewAtIndex:(int)ceil((float)numberOfPlaceholders/2.0) + index];
+    }
+    else if (index >= numberOfItems)
+    {
+        view = [dataSource carousel:self placeholderViewAtIndex:numberOfPlaceholders/2 + index - numberOfItems];
+    }
+    else
+    {
+        view = [dataSource carousel:self viewForItemAtIndex:index];
+    }
     if (view == nil)
     {
         view = [[[UIView alloc] init] autorelease];
@@ -651,11 +641,14 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 {
     //calculate visible view indices
     NSMutableSet *visibleIndices = [NSMutableSet setWithCapacity:numberOfVisibleItems];
-    NSInteger start = self.currentItemIndex;
-    for (NSInteger i = 0; i < ceil((float)numberOfVisibleItems/2); i++)
+    NSInteger min = -(int)ceil((float)numberOfPlaceholders/2);
+    NSInteger max = numberOfItems - 1 + numberOfPlaceholders/2;
+    NSInteger count = MIN(numberOfVisibleItems, numberOfItems + numberOfPlaceholders);
+    NSInteger offset = self.currentItemIndex - ceil((float)numberOfVisibleItems/2);
+    offset = MAX(min, MIN(max - count + 1, offset));
+    for (NSInteger i = 0; i < count; i++)
     {
-        [visibleIndices addObject:[NSNumber numberWithInteger:[self clampedIndex:start - i]]];
-        [visibleIndices addObject:[NSNumber numberWithInteger:[self clampedIndex:start + i]]];
+        [visibleIndices addObject:[NSNumber numberWithInteger:i + offset]];
     }
     
     //remove offscreen views
@@ -690,32 +683,43 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     {
 		[view.superview removeFromSuperview];
 	}
-	for (UIView *view in placeholderViews)
-    {
-		[view.superview removeFromSuperview];
-	}
-	
-	//load new views
-	numberOfItems = [dataSource numberOfItemsInCarousel:self];
-	self.itemViews = [NSMutableDictionary dictionaryWithCapacity:numberOfVisibleItems];
-	[self loadUnloadViews];
     
-    //load placeholders
-    if ([dataSource respondsToSelector:@selector(numberOfPlaceholdersInCarousel:)])
+	//update wrap
+	if ([delegate respondsToSelector:@selector(carouselShouldWrap:)])
+    {
+        shouldWrap = [delegate carouselShouldWrap:self];
+    }
+	else
+	{
+		switch (type)
+		{
+			case iCarouselTypeRotary:
+			case iCarouselTypeInvertedRotary:
+			case iCarouselTypeCylinder:
+			case iCarouselTypeInvertedCylinder:
+			{
+				shouldWrap = YES;
+				break;
+			}
+			default:
+			{
+				shouldWrap = NO;
+				break;
+			}
+		}
+	}
+    
+    //get number of items
+    numberOfItems = [dataSource numberOfItemsInCarousel:self];
+    numberOfPlaceholders = 0;
+    if (!shouldWrap && [dataSource respondsToSelector:@selector(numberOfPlaceholdersInCarousel:)])
     {
         numberOfPlaceholders = [dataSource numberOfPlaceholdersInCarousel:self];
-        self.placeholderViews = [NSMutableArray arrayWithCapacity:numberOfPlaceholders];
-        for (NSUInteger i = 0; i < numberOfPlaceholders; i++)
-        {
-            UIView *view = [dataSource carousel:self placeholderViewAtIndex:i];
-            if (view == nil)
-            {
-                view = [[[UIView alloc] init] autorelease];
-            }
-            [(NSMutableArray *)placeholderViews addObject:view];
-            [contentView addSubview:[self containView:view]];
-        }
     }
+	
+	//load new views
+	self.itemViews = [NSMutableDictionary dictionaryWithCapacity:numberOfVisibleItems];
+	[self loadUnloadViews];
     
     //set item width (may be overidden by delegate)
     itemWidth = [([itemViews count]? [self viewAtIndex:0] : self) bounds].size.width;
@@ -1139,7 +1143,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
                 NSInteger index = round(scrollOffset / itemWidth);
 				float factor = (shouldWrap || (index >= 0 && index < numberOfItems))? 1.0: 0.5;
                 currentVelocity = [panGesture velocityInView:self].x * factor;
-                scrollOffset -= translation * factor;
+                scrollOffset -= translation * factor * scrollSpeed;
                 [self didScroll];
             }
         }
@@ -1174,7 +1178,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
         NSTimeInterval thisTime = [theEvent timestamp];
         currentVelocity = (translation / (thisTime - startTime)) * factor;
         startTime = thisTime;
-        scrollOffset -= translation * factor;
+        scrollOffset -= translation * factor * scrollSpeed;
         [self didScroll];
     }
 }
@@ -1261,7 +1265,6 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     [timer invalidate];
     [contentView release];
 	[itemViews release];
-    [placeholderViews release];
 	[super dealloc];
 }
 

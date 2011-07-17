@@ -1,7 +1,7 @@
 //
 //  iCarousel.h
 //
-//  Version 1.4
+//  Version 1.5 beta
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2010 Charcoal Design. All rights reserved.
@@ -72,7 +72,6 @@ iCarouselType;
     NSInteger numberOfVisibleItems;
     UIView *contentView;
     NSDictionary *itemViews;
-    NSArray *placeholderViews;
     NSInteger previousItemIndex;
     float itemWidth;
     float scrollOffset;
@@ -94,6 +93,8 @@ iCarouselType;
 	BOOL centerItemWhenSelected;
 	BOOL shouldWrap;
 	BOOL dragging;
+    float scrollSpeed;
+    NSTimeInterval toggleTime;
     float toggleTarget;
     float toggle;
 }
@@ -115,6 +116,7 @@ iCarouselType;
 @property (nonatomic, retain, readonly) NSSet *visibleViews;
 @property (nonatomic, readonly) float itemWidth;
 @property (nonatomic, retain, readonly) UIView *contentView;
+@property (nonatomic, readonly) float scrollSpeed;
 
 - (void)scrollByNumberOfItems:(NSInteger)itemCount duration:(NSTimeInterval)duration;
 - (void)scrollToItemAtIndex:(NSInteger)index duration:(NSTimeInterval)duration;
@@ -159,6 +161,7 @@ iCarouselType;
 - (void)carouselWillBeginDecelerating:(iCarousel *)carousel;
 - (void)carouselDidEndDecelerating:(iCarousel *)carousel;
 - (float)carouselItemWidth:(iCarousel *)carousel;
+- (float)carouselScrollSpeed:(iCarousel *)carousel;
 - (BOOL)carouselShouldWrap:(iCarousel *)carousel;
 - (CATransform3D)carousel:(iCarousel *)carousel transformForItemView:(UIView *)view withOffset:(float)offset;
 

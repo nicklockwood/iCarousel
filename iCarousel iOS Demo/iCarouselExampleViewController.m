@@ -9,7 +9,7 @@
 #import "iCarouselExampleViewController.h"
 
 
-#define NUMBER_OF_ITEMS 20
+#define NUMBER_OF_ITEMS ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)? 19: 12)
 #define ITEM_SPACING 210
 #define USE_BUTTONS YES
 
@@ -34,6 +34,7 @@
     if ((self = [super initWithCoder:aDecoder]))
     {
         //set up data
+        wrap = YES;
         self.items = [NSMutableArray array];
         for (int i = 0; i < NUMBER_OF_ITEMS; i++)
         {
@@ -57,9 +58,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    //configure carousel
     carousel.type = iCarouselTypeCoverFlow2;
     navItem.title = @"CoverFlow2";
-    wrap = YES;
 }
 
 - (void)viewDidUnload

@@ -9,7 +9,7 @@
 #import "iCarouselWindowController.h"
 
 
-#define NUMBER_OF_ITEMS 20
+#define NUMBER_OF_ITEMS 19
 #define ITEM_SPACING 210
 
 
@@ -32,6 +32,7 @@
     if ((self = [super initWithWindow:window]))
     {
         //set up data
+        wrap = YES;
         self.items = [NSMutableArray array];
         for (int i = 0; i < NUMBER_OF_ITEMS; i++)
         {
@@ -44,7 +45,6 @@
 - (void)awakeFromNib
 {
     //configure carousel
-    wrap = YES;
     carousel.type = iCarouselTypeCoverFlow2;
     [self.window makeFirstResponder:carousel];
 }
