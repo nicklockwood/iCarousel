@@ -73,6 +73,16 @@
     [carousel reloadData];
 }
 
+- (IBAction)insertItem:(id)sender
+{
+    [carousel insertItemAtIndex:carousel.currentItemIndex animated:YES];
+}
+
+- (IBAction)removeItem:(id)sender
+{
+    [carousel removeItemAtIndex:carousel.currentItemIndex animated:YES];
+}
+
 #pragma mark -
 #pragma mark iCarousel methods
 

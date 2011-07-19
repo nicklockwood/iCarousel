@@ -1,7 +1,7 @@
 //
 //  iCarousel.h
 //
-//  Version 1.5 beta
+//  Version 1.5
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2010 Charcoal Design. All rights reserved.
@@ -75,9 +75,8 @@ iCarouselType;
     NSInteger previousItemIndex;
     float itemWidth;
     float scrollOffset;
-    float currentVelocity;
+    float startVelocity;
     id timer;
-    NSTimeInterval previousTime;
     BOOL decelerating;
     BOOL scrollEnabled;
     float decelerationRate;
@@ -95,7 +94,6 @@ iCarouselType;
 	BOOL dragging;
     float scrollSpeed;
     NSTimeInterval toggleTime;
-    float toggleTarget;
     float toggle;
 }
 #endif
@@ -121,14 +119,13 @@ iCarouselType;
 - (void)scrollByNumberOfItems:(NSInteger)itemCount duration:(NSTimeInterval)duration;
 - (void)scrollToItemAtIndex:(NSInteger)index duration:(NSTimeInterval)duration;
 - (void)scrollToItemAtIndex:(NSInteger)index animated:(BOOL)animated;
+- (void)removeItemAtIndex:(NSInteger)index animated:(BOOL)animated;
+- (void)insertItemAtIndex:(NSInteger)index animated:(BOOL)animated;
 - (void)reloadData;
 
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
 
 @property (nonatomic, assign) BOOL centerItemWhenSelected;
-
-- (void)removeItemAtIndex:(NSInteger)index animated:(BOOL)animated;
-- (void)insertItemAtIndex:(NSInteger)index animated:(BOOL)animated;
 
 #endif
 

@@ -21,5 +21,7 @@
 
 - (IBAction)switchCarouselType:(id)sender;
 - (IBAction)toggleWrap:(id)sender;
+- (IBAction)insertItem:(id)sender;
+- (IBAction)removeItem:(id)sender;
 
 @end

@@ -63,7 +63,7 @@ Note that the viewpointOffset transform is concatenated with the carousel item t
 
 	@property (nonatomic, assign) float decelerationRate;
 
-The rate at which the carousel decelerates when flicked. The default value is 0.95, values should be in the range 0.0 (carousel stops instantly when released) to 1 .0 (carousel continues indefinitely without slowing).
+The rate at which the carousel decelerates when flicked. The value equates to the velocity after 1/60th of a second relative to the starting velocity when the carousel first begins to decelerate. The default value is 0.95. Values should be in the range 0.0 (carousel stops immediately when released) to 1.0 (carousel continues indefinitely without slowing down, unless it reaches the end).
 
 	@property (nonatomic, assign) BOOL bounces;
 
@@ -129,11 +129,11 @@ This reloads all carousel views from the dataSource and refreshes the carousel d
 
 	- (void)removeItemAtIndex:(NSUInteger)index animated:(BOOL)animated;
 
-This removes an item from the carousel. The remaining items will slide across to fill the gap. Note that the data source is not updated when this method is called, so a subsequent call to reloadData will restore the removed item. **This method is currently only supported on the iOS version of iCarousel.**
+This removes an item from the carousel. The remaining items will slide across to fill the gap. Note that the data source is not updated when this method is called, so a subsequent call to reloadData will restore the removed item.
 
 	- (void)insertItemAtIndex:(NSUInteger)index animated:(BOOL)animated;
 
-This inserts an item into the carousel. The new item will be requested from the dataSource, so make sure that the new item has been added to the data source data before calling this method, or you will get duplicate items in the carousel, or other weirdness. **This method is currently only supported on the iOS version of iCarousel.**
+This inserts an item into the carousel. The new item will be requested from the dataSource, so make sure that the new item has been added to the data source data before calling this method, or you will get duplicate items in the carousel, or other weirdness.
 
 
 Protocols
@@ -191,7 +191,7 @@ This method is called when the carousel starts decelerating. it will typically b
 	
 	- (void)carouselDidEndDecelerating:(iCarousel *)carousel;
 
-This method is called when the carousel finishes decelerating and you can assume that the currentItemIndex at this point is the final stopping value. Note however that even though it has stopped decelerating, the carousel will still scroll automatically until it aligns exactly on the current index. If you need to know when it has stopped moving completely, use the carouselDidEndScrollingAnimation delegate method.
+This method is called when the carousel finishes decelerating and you can assume that the currentItemIndex at this point is the final stopping value. Unlike previous versions, the carousel will now stop exactly on the final index position in most cases. The only exception is on non-wrapped carousels with bounce enabled, where, if the final stopping position is beyond the end of the carousel, the carousel will then scroll automatically until it aligns exactly on the end index. For backwards compatibility, the carousel will always call `scrollToItemAtIndex:animated:` after it finishes decelerating. If you need to know for certain when the carousel has stopped moving completely, use the `carouselDidEndScrollingAnimation` delegate method.
 
 	- (float)carouselItemWidth:(iCarousel *)carousel;
 

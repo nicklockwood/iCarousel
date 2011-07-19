@@ -1,7 +1,7 @@
 //
 //  iCarousel.m
 //
-//  Version 1.5 beta
+//  Version 1.5
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2010 Charcoal Design. All rights reserved.
@@ -33,21 +33,10 @@
 #import "iCarousel.h"
 
 
-#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
-
-#define PointMake CGPointMake
-#define RectMake CGRectMake
-
-#else
-
-#define PointMake NSMakePoint
-#define RectMake NSMakeRect
-
-#endif
-
-
 #define SCROLL_DURATION 0.4
 #define INSERT_DURATION 0.4
+#define BOUNCE_DISTANCE 2.5
+#define DECELLERATION_MULTIPLIER 30
 
 
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
@@ -66,9 +55,8 @@
 @property (nonatomic, assign) NSTimeInterval scrollDuration;
 @property (nonatomic, assign) BOOL scrolling;
 @property (nonatomic, assign) NSTimeInterval startTime;
-@property (nonatomic, assign) float currentVelocity;
+@property (nonatomic, assign) float startVelocity;
 @property (nonatomic, assign) id timer;
-@property (nonatomic, assign) NSTimeInterval previousTime;
 @property (nonatomic, assign) BOOL decelerating;
 @property (nonatomic, assign) float previousTranslation;
 @property (nonatomic, assign) BOOL shouldWrap;
@@ -79,6 +67,7 @@
 
 - (void)layOutItemViews;
 - (NSInteger)clampedIndex:(NSInteger)index;
+- (float)clampedOffset:(float)offset;
 - (void)transformItemView:(UIView *)view atIndex:(NSInteger)index;
 - (void)startAnimation;
 - (void)stopAnimation;
@@ -101,9 +90,8 @@
 @synthesize previousItemIndex;
 @synthesize itemWidth;
 @synthesize scrollOffset;
-@synthesize currentVelocity;
+@synthesize startVelocity;
 @synthesize timer;
-@synthesize previousTime;
 @synthesize decelerating;
 @synthesize scrollEnabled;
 @synthesize decelerationRate;
@@ -232,7 +220,9 @@
     if (numberOfVisibleItems != _numberOfVisibleItems)
     {
         numberOfVisibleItems = _numberOfVisibleItems;
+        [CATransaction setDisableActions:YES];
 		[self layOutItemViews];
+        [CATransaction setDisableActions:NO];
     }
 }
 
@@ -455,10 +445,16 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 
 - (void)depthSortViews
 {
+    
+#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
+    
     for (UIView *view in [[itemViews allValues] sortedArrayUsingFunction:compareViewDepth context:self])
     {
         [contentView addSubview:view.superview];
     }
+    
+#endif
+    
 }
 
 - (float)offsetForIndex:(NSInteger)index
@@ -482,20 +478,17 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 
 - (UIView *)containView:(UIView *)view
 {
+    UIView *container = [[[UIView alloc] initWithFrame:view.frame] autorelease];
 	
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
 
-    UIView *container = [[[UIView alloc] initWithFrame:view.frame] autorelease];
+    //add tap gesture recogniser
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                                  action:@selector(didTap:)];
     tapGesture.delegate = self;
     [container addGestureRecognizer:tapGesture];
     [tapGesture release];
     
-#else
-    
-    NSView *container = [[[NSView alloc] initWithFrame:view.frame] autorelease];
-
 #endif
     
     [container addSubview:view];
@@ -524,13 +517,6 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     //transform view
     CATransform3D transform = [self transformForItemView:view withOffset:[self offsetForIndex:index]];
     view.superview.layer.transform = CATransform3DTranslate(transform, -viewpointOffset.width, -viewpointOffset.height, 0);
-
-#ifndef __IPHONE_OS_VERSION_MAX_ALLOWED
-    
-    //remove transform and transition animations
-    [view.superview.layer removeAllAnimations];
-    
-#endif
     
 	//hide containers for invisible views
     [view.superview setHidden:([view isHidden] || view.layer.opacity < 0.001)];
@@ -542,8 +528,10 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 - (void)resizeSubviewsWithOldSize:(NSSize)oldSize
 #endif
 {
+    [CATransaction setDisableActions:YES];
     contentView.frame = self.bounds;
     [self layOutItemViews];
+    [CATransaction setDisableActions:NO];
 }
 
 - (void)transformItemViews
@@ -569,7 +557,6 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     {
 		itemWidth = [delegate carouselItemWidth:self];
 	}
-    
     
     //update scroll speed
     if ([delegate respondsToSelector:@selector(carouselScrollSpeed:)])
@@ -674,9 +661,9 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 
 - (void)reloadData
 {
-	//make a note of current index
-	previousItemIndex = self.currentItemIndex;
-	
+    //record current index
+    previousItemIndex = self.currentItemIndex;
+    
 	//remove old views
     for (UIView *view in self.visibleViews)
     {
@@ -724,10 +711,15 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     itemWidth = [([itemViews count]? [self viewAtIndex:0] : self) bounds].size.width;
 	
     //layout views
-	previousItemIndex = [self clampedIndex:previousItemIndex];
-	scrollOffset = itemWidth * previousItemIndex;
+    [CATransaction setDisableActions:YES];
+    decelerating = NO;
+    scrolling = NO;
+    dragging = NO;
+    previousItemIndex = [self clampedIndex:previousItemIndex];
+	scrollOffset = previousItemIndex * itemWidth;
     [self layOutItemViews];
 	[self performSelector:@selector(depthSortViews) withObject:nil afterDelay:0];
+    [CATransaction setDisableActions:NO];
 }
 
 
@@ -824,9 +816,11 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     }
     else
     {
+        [CATransaction setDisableActions:YES];
         scrollOffset = itemWidth * [self clampedIndex:previousItemIndex + itemCount];
         [self didScroll];
-		[self depthSortViews];
+        [self depthSortViews];
+        [CATransaction setDisableActions:NO];
     }
 }
 
@@ -840,38 +834,89 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 	[self scrollToItemAtIndex:index duration:animated? SCROLL_DURATION: 0];
 }
 
-
-#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
-
 - (void)removeItemAtIndex:(NSInteger)index animated:(BOOL)animated
 {
     index = [self clampedIndex:index];
     UIView *itemView = [self viewAtIndex:index];
-    
+      
     if (animated)
     {
+        
+#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
+        
         [UIView beginAnimations:nil context:nil];
         [UIView setAnimationDuration:0.1];
+        [UIView setAnimationDelegate:itemView.superview];
+        [UIView setAnimationDidStopSelector:@selector(removeFromSuperview)];
         itemView.superview.layer.opacity = 0.0;
-        [itemView.superview performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.1];
         [UIView commitAnimations];
+        
         [UIView beginAnimations:nil context:nil];
         [UIView setAnimationDuration:INSERT_DURATION];
+        [UIView setAnimationDelegate:self];
+        [UIView setAnimationDidStopSelector:@selector(depthSortViews)];
+        [self removeViewAtIndex:index];
+        numberOfItems --;
+        scrollOffset = itemWidth * self.currentItemIndex;
+        [self didScroll];
+        [UIView commitAnimations];
+      
+#else
+        
+        [CATransaction begin];
+        [CATransaction setAnimationDuration:0.1];
+        [CATransaction setCompletionBlock:^{
+            [itemView.superview removeFromSuperview]; 
+        }];
+        itemView.superview.layer.opacity = 0.0;
+        [CATransaction commit];
+         
+        [CATransaction begin];
+        [CATransaction setAnimationDuration:INSERT_DURATION];
+        [CATransaction setCompletionBlock:^{
+            [self depthSortViews]; 
+        }];
+        [self removeViewAtIndex:index];
+        numberOfItems --;
+        scrollOffset = itemWidth * self.currentItemIndex;
+        [self didScroll];
+        [CATransaction commit];
+        
+#endif
+        
     }
     else
     {
+        [CATransaction setDisableActions:YES];
         [itemView.superview removeFromSuperview];
+        [self removeViewAtIndex:index];
+        numberOfItems --;
+        scrollOffset = itemWidth * self.currentItemIndex;
+        [self didScroll];
+        [self depthSortViews];
+        [CATransaction setDisableActions:NO];
     }
+}
+
+- (void)fadeInItemView:(UIView *)itemView
+{
     
-    [self removeViewAtIndex:index];
-    numberOfItems --;
-    [self scrollToItemAtIndex:self.currentItemIndex animated:NO];
-	[self transformItemViews];
-     
-    if (animated)
-    {
-        [UIView commitAnimations];
-    }
+#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
+    
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:0.1];
+    itemView.superview.layer.opacity = 1.0;
+    [UIView commitAnimations];
+    
+#else
+    
+    [CATransaction begin];
+    [CATransaction setAnimationDuration:0.1];
+    itemView.superview.layer.opacity = 1.0;
+    [CATransaction commit];
+    
+#endif
+    
 }
 
 - (void)insertItemAtIndex:(NSInteger)index animated:(BOOL)animated
@@ -882,33 +927,41 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     [self insertView:nil atIndex:index];
     UIView *itemView = [self loadViewAtIndex:index];
     itemView.superview.layer.opacity = 0.0;
- 
+  
     if (animated)
     {
+
+#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
+        
         [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
         [UIView setAnimationDuration:INSERT_DURATION];
         [UIView setAnimationDelegate:self];
         [UIView setAnimationDidStopSelector:@selector(loadUnloadViews)];
         [self transformItemViews];
         [UIView commitAnimations];
         
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-        [UIView setAnimationDelay:INSERT_DURATION - 0.1];
-        [UIView setAnimationDuration:0.1];
-        itemView.superview.layer.opacity = 1.0;
-        [UIView commitAnimations];
+#else
+        
+        [CATransaction begin];
+        [CATransaction setAnimationDuration:INSERT_DURATION];
+        [CATransaction setCompletionBlock:^{
+            [self loadUnloadViews]; 
+        }];
+        [self transformItemViews];
+        [CATransaction commit];
+        
+#endif
+         
+         [self performSelector:@selector(fadeInItemView:) withObject:itemView afterDelay:INSERT_DURATION - 0.1];
     }
     else
-    { 
+    {
+        [CATransaction setDisableActions:YES];
         [self transformItemViews]; 
-        itemView.superview.layer.opacity = 1.0;
-    } 
+        [CATransaction setDisableActions:NO];
+        itemView.superview.layer.opacity = 1.0; 
+    }
 }
-
-#endif
-
 
 #pragma mark -
 #pragma mark Animation
@@ -941,16 +994,42 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     timer = nil;
 }
 
-- (BOOL)decelerationEnded
+- (float)decelerationDistance
 {
-	if (fabs(currentVelocity) >= itemWidth*0.5)
-	{
-		return NO;
-	}
-	
-	float offset = [self minScrollDistanceFromOffset:self.currentItemIndex*itemWidth
-											toOffset:[self clampedOffset:scrollOffset]];
-	return fabs(offset) <= itemWidth*0.5;
+    float acceleration = -startVelocity * DECELLERATION_MULTIPLIER * (1.0 - decelerationRate);
+    return -powf(startVelocity, 2.0) / (2.0 * acceleration);
+}
+
+- (BOOL)shouldDecelerate
+{
+    return fabs([self decelerationDistance]) > itemWidth;
+}
+
+- (void)startDecelerating
+{
+    decelerating = YES;
+
+    float distance = [self decelerationDistance];
+    startOffset = scrollOffset;
+    endOffset = roundf((startOffset + distance) / itemWidth) * itemWidth;
+    if (!shouldWrap)
+    {
+        if (bounces)
+        {
+            endOffset = fmax(itemWidth * -ceil((float)numberOfPlaceholders/2.0 + BOUNCE_DISTANCE),
+                             fmin((numberOfItems - 1 + numberOfPlaceholders/2.0 + BOUNCE_DISTANCE) * itemWidth, endOffset));
+        }
+        else
+        {
+            endOffset = [self clampedOffset:endOffset];
+        }
+    }
+    distance = endOffset - startOffset;
+    
+    startTime = CACurrentMediaTime();
+    scrollDuration = fabs(distance) / fabs(0.5 * startVelocity);   
+    
+    [self startAnimation];
 }
 
 - (float)easeInOut:(float)time
@@ -960,10 +1039,9 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 
 - (void)step
 {
+    [CATransaction setDisableActions:YES];
     NSTimeInterval currentTime = CACurrentMediaTime();
-    NSTimeInterval deltaTime = currentTime - previousTime;
-    previousTime = currentTime;
-    
+
     if (toggle != 0.0)
     {
         NSTimeInterval time = fmin(1.0, (currentTime - toggleTime) / SCROLL_DURATION);
@@ -990,15 +1068,13 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     }
     else if (decelerating)
     {
-        currentVelocity *= decelerationRate;
-		if (!shouldWrap && (scrollOffset < 0 || scrollOffset > (numberOfItems - 1) * itemWidth))
-		{
-			//decelerate faster if out of bounds
-			currentVelocity *= decelerationRate * decelerationRate;
-		}
-        scrollOffset -= currentVelocity * deltaTime;
+        float time = fmin(scrollDuration, currentTime - startTime);
+        float acceleration = -startVelocity/scrollDuration;
+        float distance = startVelocity * time + 0.5 * acceleration * powf(time, 2.0);
+        scrollOffset = startOffset + distance;
+        
 		[self didScroll];
-        if ([self decelerationEnded])
+        if (time == (float)scrollDuration)
         {
             decelerating = NO;
 			if ([delegate respondsToSelector:@selector(carouselDidEndDecelerating:)])
@@ -1012,6 +1088,8 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     {
         [self stopAnimation];
     }
+    
+    [CATransaction setDisableActions:NO];
 }
 
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
@@ -1155,7 +1233,10 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
             case UIGestureRecognizerStateCancelled:
             {
 				dragging = NO;
-				decelerating = ![self decelerationEnded];
+                if ([self shouldDecelerate])
+                {
+                    [self startDecelerating];
+                }
 				if ([delegate respondsToSelector:@selector(carouselDidEndDragging:willDecelerate:)])
 				{
 					[delegate carouselDidEndDragging:self willDecelerate:decelerating];
@@ -1167,7 +1248,6 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 				else if ([delegate respondsToSelector:@selector(carouselWillBeginDecelerating:)])
 				{
 					[delegate carouselWillBeginDecelerating:self];
-                    [self startAnimation];
 				}
 				break;
             }
@@ -1177,7 +1257,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
                 previousTranslation = [panGesture translationInView:self].x;
                 NSInteger index = round(scrollOffset / itemWidth);
 				float factor = (shouldWrap || (index >= 0 && index < numberOfItems))? 1.0: 0.5;
-                currentVelocity = [panGesture velocityInView:self].x * factor;
+                startVelocity = -[panGesture velocityInView:self].x * factor;
                 scrollOffset -= translation * factor * scrollSpeed;
                 [self didScroll];
             }
@@ -1211,10 +1291,13 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
         float factor = (shouldWrap || (index >= 0 && index < numberOfItems))? 1.0: 0.5;
         
         NSTimeInterval thisTime = [theEvent timestamp];
-        currentVelocity = (translation / (thisTime - startTime)) * factor;
+        startVelocity = -(translation / (thisTime - startTime)) * factor;
         startTime = thisTime;
+        
+        [CATransaction setDisableActions:YES];
         scrollOffset -= translation * factor * scrollSpeed;
         [self didScroll];
+        [CATransaction setDisableActions:NO];
     }
 }
 
@@ -1223,7 +1306,10 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 	if (scrollEnabled)
     {
 		dragging = NO;
-		decelerating = ![self decelerationEnded];
+		if ([self shouldDecelerate])
+        {
+            [self startDecelerating];
+        }
 		if ([delegate respondsToSelector:@selector(carouselDidEndDragging:willDecelerate:)])
 		{
 			[delegate carouselDidEndDragging:self willDecelerate:decelerating];
@@ -1235,7 +1321,6 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 		else if ([delegate respondsToSelector:@selector(carouselWillBeginDecelerating:)])
 		{
 			[delegate carouselWillBeginDecelerating:self];
-            [self startAnimation];
 		}
 	}
 }

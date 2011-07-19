@@ -1,10 +1,12 @@
 Version 1.5
 
 - Added a new carousel type, iCarouselTypeCoverflow2, which more closely matches the appearance of the standard Apple CoverFlow implementation.
+- iCarousel now always stops exactly on an item boundary when decelerating, instead of over or under-shooting and scrolling to the correct position.
 - Added carouselScrollSpeed delegate method and increased default scrolling speed for CoverFlow carousel types.
 - Animation now uses CADisplayLink on iOS for better performance.
 - Animation is now paused when carousel is not moving.
 - Reduced default deceleration rate so carousel can be 'flicked' further.
+- Added insert/remove carousel item support for Mac OS.
 
 Version 1.4
 

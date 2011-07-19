@@ -1,5 +1,5 @@
 iCarousel
-version 1.5, July 15th, 2011
+version 1.5, July 19th, 2011
 
 Copyright (C) 2011 Charcoal Design
 
