@@ -63,7 +63,7 @@ Note that the viewpointOffset transform is concatenated with the carousel item t
 
 	@property (nonatomic, assign) float decelerationRate;
 
-The rate at which the carousel decelerates when flicked. The value equates to the velocity after 1/60th of a second relative to the starting velocity when the carousel first begins to decelerate. The default value is 0.95. Values should be in the range 0.0 (carousel stops immediately when released) to 1.0 (carousel continues indefinitely without slowing down, unless it reaches the end).
+The rate at which the carousel decelerates when flicked. Higher values mean slower deceleration. The default value is 0.95. Values should be in the range 0.0 (carousel stops immediately when released) to 1.0 (carousel continues indefinitely without slowing down, unless it reaches the end).
 
 	@property (nonatomic, assign) BOOL bounces;
 

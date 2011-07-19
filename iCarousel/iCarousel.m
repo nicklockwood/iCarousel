@@ -36,7 +36,7 @@
 #define SCROLL_DURATION 0.4
 #define INSERT_DURATION 0.4
 #define BOUNCE_DISTANCE 2.5
-#define DECELLERATION_MULTIPLIER 30
+#define DECELERATION_MULTIPLIER 30
 
 
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
@@ -996,7 +996,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 
 - (float)decelerationDistance
 {
-    float acceleration = -startVelocity * DECELLERATION_MULTIPLIER * (1.0 - decelerationRate);
+    float acceleration = -startVelocity * DECELERATION_MULTIPLIER * (1.0 - decelerationRate);
     return -powf(startVelocity, 2.0) / (2.0 * acceleration);
 }
 
