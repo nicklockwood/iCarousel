@@ -1007,8 +1007,6 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 
 - (void)startDecelerating
 {
-    decelerating = YES;
-
     float distance = [self decelerationDistance];
     startOffset = scrollOffset;
     endOffset = roundf((startOffset + distance) / itemWidth) * itemWidth;
@@ -1029,7 +1027,11 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     startTime = CACurrentMediaTime();
     scrollDuration = fabs(distance) / fabs(0.5 * startVelocity);   
     
-    [self startAnimation];
+	if (distance != 0)
+	{
+		decelerating = YES;
+		[self startAnimation];
+	}
 }
 
 - (float)easeInOut:(float)time
