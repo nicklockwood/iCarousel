@@ -1,7 +1,7 @@
 //
 //  iCarousel.m
 //
-//  Version 1.5
+//  Version 1.5.1
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2010 Charcoal Design. All rights reserved.
@@ -28,14 +28,14 @@
 //  misrepresented as being the original software.
 //
 //  3. This notice may not be removed or altered from any source distribution.
-
+//
 
 #import "iCarousel.h"
 
 
 #define SCROLL_DURATION 0.4
 #define INSERT_DURATION 0.4
-#define BOUNCE_DISTANCE 2.5
+#define BOUNCE_DISTANCE 1.0
 #define DECELERATION_MULTIPLIER 30
 
 
@@ -63,7 +63,6 @@
 @property (nonatomic, assign) BOOL dragging;
 @property (nonatomic, assign) float scrollSpeed;
 @property (nonatomic, assign) NSTimeInterval toggleTime;
-@property (nonatomic, assign) float toggle;
 
 - (void)layOutItemViews;
 - (NSInteger)clampedIndex:(NSInteger)index;
@@ -708,7 +707,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 	[self loadUnloadViews];
     
     //set item width (may be overidden by delegate)
-    itemWidth = [([itemViews count]? [self viewAtIndex:0] : self) bounds].size.width;
+    itemWidth = [([itemViews count]? [[self visibleViews] anyObject] : self) bounds].size.width;
 	
     //layout views
     [CATransaction setDisableActions:YES];
@@ -1016,8 +1015,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     {
         if (bounces)
         {
-            endOffset = fmax(itemWidth * -ceil((float)numberOfPlaceholders/2.0 + BOUNCE_DISTANCE),
-                             fmin((numberOfItems - 1 + numberOfPlaceholders/2.0 + BOUNCE_DISTANCE) * itemWidth, endOffset));
+            endOffset = fmax(itemWidth * -BOUNCE_DISTANCE, fmin((numberOfItems - 1 + BOUNCE_DISTANCE) * itemWidth, endOffset));
         }
         else
         {
@@ -1152,16 +1150,16 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 #pragma mark -
 #pragma mark Gestures and taps
 
-- (NSInteger)superviewIndex:(UIView *)view
+- (NSInteger)viewOrSuperviewIndex:(UIView *)view
 {
     if (view == nil)
     {
         return NSNotFound;
     }
-    NSInteger index = [self indexOfView:view.superview];
+    NSInteger index = [self indexOfView:view];
     if (index == NSNotFound)
     {
-        return [self superviewIndex:view.superview];
+        return [self viewOrSuperviewIndex:view.superview];
     }
     return index;
 }
@@ -1171,7 +1169,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     if ([gesture isKindOfClass:[UITapGestureRecognizer class]])
     {
         //handle tap
-        NSInteger index = [self superviewIndex:touch.view];
+        NSInteger index = [self viewOrSuperviewIndex:touch.view];
         if (index != NSNotFound)
         {
             if (!centerItemWhenSelected || index == self.currentItemIndex)

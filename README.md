@@ -105,6 +105,10 @@ This is the maximum number of item views that should be visible in the carousel 
 	
 This is the scroll speed multiplier when the user drags the carousel with their finger (read only). By default this is 1.0 for most carousel types, but defaults to 4.0 for the CoverFlow-style carousels to compensate for the fact that their items are more closely spaced. To change the default scrollSpeed, implement the `carouselScrollSpeed:` delegate method.
 
+	@property (nonatomic, readonly) float toggle;
+	
+This property is used for the `iCarouselTypeCoverFlow2` carousel transform. It is exposed so that you can implement your own variants of the CoverFlow2 style using the `carousel:transformForItemView:withOffset` delegate method.
+
 
 Methods
 --------------
