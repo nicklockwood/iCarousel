@@ -1,7 +1,7 @@
 //
 //  iCarousel.h
 //
-//  Version 1.5
+//  Version 1.5.1
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2010 Charcoal Design. All rights reserved.
@@ -28,19 +28,14 @@
 //  misrepresented as being the original software.
 //
 //  3. This notice may not be removed or altered from any source distribution.
-
+//
 
 #import <QuartzCore/QuartzCore.h>
-
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
-
 #import <UIKit/UIKit.h>
-
 #else
-
 #import <Cocoa/Cocoa.h>
 typedef NSView UIView;
-
 #endif
 
 
@@ -115,6 +110,7 @@ iCarouselType;
 @property (nonatomic, readonly) float itemWidth;
 @property (nonatomic, retain, readonly) UIView *contentView;
 @property (nonatomic, readonly) float scrollSpeed;
+@property (nonatomic, readonly) float toggle;
 
 - (void)scrollByNumberOfItems:(NSInteger)itemCount duration:(NSTimeInterval)duration;
 - (void)scrollToItemAtIndex:(NSInteger)index duration:(NSTimeInterval)duration;

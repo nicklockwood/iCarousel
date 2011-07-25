@@ -1,3 +1,9 @@
+Version 1.5.1
+
+- Fixed issue with item button events being blocked by gesture recogniser
+- Tweaked bounce and acceleration parameters for smoother scrolling
+- Made `toggle` property public (used to implement CoverFlow2 carousel style)
+
 Version 1.5
 
 - Added a new carousel type, iCarouselTypeCoverflow2, which more closely matches the appearance of the standard Apple CoverFlow implementation.

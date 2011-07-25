@@ -137,7 +137,7 @@
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index
 {
     if (USE_BUTTONS)
-    {
+    {  
         //create a numbered button
         UIImage *image = [UIImage imageNamed:@"page.png"];
         UIButton *button = [[[UIButton alloc] initWithFrame:CGRectMake(0, 0, image.size.width, image.size.height)] autorelease];
@@ -165,7 +165,7 @@
 
 - (NSUInteger)numberOfPlaceholdersInCarousel:(iCarousel *)carousel
 {
-	//note: placeholder views are only displayed if wrapping is disabled
+	//note: placeholder views are only displayed on some carousels if wrapping is disabled
 	return 2;
 }
 
