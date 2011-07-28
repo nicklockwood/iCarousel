@@ -669,6 +669,9 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 		[view.superview removeFromSuperview];
 	}
     
+    //get number of items
+    numberOfItems = [dataSource numberOfItemsInCarousel:self];
+    
 	//update wrap
 	if ([delegate respondsToSelector:@selector(carouselShouldWrap:)])
     {
@@ -694,8 +697,6 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 		}
 	}
     
-    //get number of items
-    numberOfItems = [dataSource numberOfItemsInCarousel:self];
     numberOfPlaceholders = 0;
     if (!shouldWrap && [dataSource respondsToSelector:@selector(numberOfPlaceholdersInCarousel:)])
     {
