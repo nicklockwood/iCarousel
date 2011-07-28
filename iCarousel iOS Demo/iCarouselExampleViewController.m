@@ -19,6 +19,8 @@
 @property (nonatomic, assign) BOOL wrap;
 @property (nonatomic, retain) NSMutableArray *items;
 
+- (void)buttonTapped:(id)sender;
+
 @end
 
 

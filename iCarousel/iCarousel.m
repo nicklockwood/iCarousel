@@ -71,6 +71,9 @@
 - (void)startAnimation;
 - (void)stopAnimation;
 - (void)didScroll;
+- (void)didTap:(UITapGestureRecognizer *)tapGesture;
+- (void)didPan:(UIPanGestureRecognizer *)panGesture;
+- (void)step;
 
 @end
 
