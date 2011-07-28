@@ -39,6 +39,9 @@
 #define DECELERATION_MULTIPLIER 30
 
 
+NSInteger compareViewDepth(id obj1, id obj2, void *context);
+
+
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
 @interface iCarousel () <UIGestureRecognizerDelegate>
 #else
