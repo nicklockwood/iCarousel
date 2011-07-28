@@ -122,6 +122,7 @@ iCarouselType;
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
 
 @property (nonatomic, assign) BOOL centerItemWhenSelected;
+@property (nonatomic, readonly) UIView *currentView;
 
 #endif
 
