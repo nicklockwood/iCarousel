@@ -19,6 +19,8 @@
 @property (nonatomic, assign) BOOL wrap;
 @property (nonatomic, retain) NSMutableArray *items;
 
+- (void)buttonTapped:(id)sender;
+
 @end
 
 
@@ -238,7 +240,7 @@
 	NSLog(@"Carousel did end scrolling");
 }
 
-- (void)carousel:(iCarousel *)_carousel didSelectItemAtIndex:(NSInteger)index
+- (void)carousel:(iCarousel *)_carousel didSelectItem:(UIView *)selectedItem atIndex:(NSInteger)index
 {
 	if (index == carousel.currentItemIndex)
 	{

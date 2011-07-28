@@ -39,6 +39,9 @@
 #define DECELERATION_MULTIPLIER 30
 
 
+NSInteger compareViewDepth(id obj1, id obj2, void *context);
+
+
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
 @interface iCarousel () <UIGestureRecognizerDelegate>
 #else
@@ -71,6 +74,9 @@
 - (void)startAnimation;
 - (void)stopAnimation;
 - (void)didScroll;
+- (void)didTap:(UITapGestureRecognizer *)tapGesture;
+- (void)didPan:(UIPanGestureRecognizer *)panGesture;
+- (void)step;
 
 @end
 
@@ -541,7 +547,15 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 		UIView *view = [itemViews objectForKey:number];
 		[self transformItemView:view atIndex:index];
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
-        view.userInteractionEnabled = (!centerItemWhenSelected || index == self.currentItemIndex);
+        
+        BOOL enableUserInteraction = (!centerItemWhenSelected || index == self.currentItemIndex);
+        
+        if ([delegate respondsToSelector:@selector(carouselShouldDisableUserInteractionOnNonCenteredItems:)])
+        {
+            enableUserInteraction = ![delegate carouselShouldDisableUserInteractionOnNonCenteredItems:self];
+        }
+        
+        view.userInteractionEnabled = enableUserInteraction;
 #endif
 	}
 }
@@ -669,6 +683,9 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 		[view.superview removeFromSuperview];
 	}
     
+    //get number of items
+    numberOfItems = [dataSource numberOfItemsInCarousel:self];
+    
 	//update wrap
 	if ([delegate respondsToSelector:@selector(carouselShouldWrap:)])
     {
@@ -694,8 +711,6 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 		}
 	}
     
-    //get number of items
-    numberOfItems = [dataSource numberOfItemsInCarousel:self];
     numberOfPlaceholders = 0;
     if (!shouldWrap && [dataSource respondsToSelector:@selector(numberOfPlaceholdersInCarousel:)])
     {
@@ -1198,12 +1213,18 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 
 - (void)didTap:(UITapGestureRecognizer *)tapGesture
 {
-    NSInteger index = [self indexOfView:[tapGesture.view.subviews objectAtIndex:0]];
+    UIView *selectedItem = [tapGesture.view.subviews objectAtIndex:0];
+    NSInteger index = [self indexOfView:selectedItem];
     if (centerItemWhenSelected && index != self.currentItemIndex)
     {
         [self scrollToItemAtIndex:index animated:YES];
     }
-    if ([delegate respondsToSelector:@selector(carousel:didSelectItemAtIndex:)])
+    
+    if ([delegate respondsToSelector:@selector(carousel:didSelectItem:atIndex:)])
+    {
+        [delegate carousel:self didSelectItem:selectedItem atIndex:index];
+    }
+    else if ([delegate respondsToSelector:@selector(carousel:didSelectItemAtIndex:)])
     {
         [delegate carousel:self didSelectItemAtIndex:index];
     }

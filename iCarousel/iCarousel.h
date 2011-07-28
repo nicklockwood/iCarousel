@@ -122,6 +122,7 @@ iCarouselType;
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
 
 @property (nonatomic, assign) BOOL centerItemWhenSelected;
+@property (nonatomic, readonly) UIView *currentView;
 
 #endif
 
@@ -160,7 +161,12 @@ iCarouselType;
 
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
 
-- (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index;
+- (BOOL)carouselShouldDisableUserInteractionOnNonCenteredItems:(iCarousel *)carousel;
+
+// if this is implemented, didSelectItemAtIndex: doesn't get called
+- (void)carousel:(iCarousel *)carousel didSelectItem:(UIView *)selectedItem atIndex:(NSInteger)index;
+// deprecated
+- (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index  __attribute__((deprecated));
 
 #endif
 
