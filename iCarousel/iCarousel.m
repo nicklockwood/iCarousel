@@ -547,7 +547,15 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 		UIView *view = [itemViews objectForKey:number];
 		[self transformItemView:view atIndex:index];
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
-        view.userInteractionEnabled = (!centerItemWhenSelected || index == self.currentItemIndex);
+        
+        BOOL disableUserInteraction = (!centerItemWhenSelected || index == self.currentItemIndex);
+        
+        if ([delegate respondsToSelector:@selector(carouselShouldDisableUserInteractionOnNonCenteredItems:)])
+        {
+            disableUserInteraction = [delegate carouselShouldDisableUserInteractionOnNonCenteredItems:self];
+        }
+        
+        view.userInteractionEnabled = disableUserInteraction;
 #endif
 	}
 }
