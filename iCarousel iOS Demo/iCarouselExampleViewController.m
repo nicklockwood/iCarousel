@@ -240,7 +240,7 @@
 	NSLog(@"Carousel did end scrolling");
 }
 
-- (void)carousel:(iCarousel *)_carousel didSelectItemAtIndex:(NSInteger)index
+- (void)carousel:(iCarousel *)_carousel didSelectItem:(UIView *)selectedItem atIndex:(NSInteger)index
 {
 	if (index == carousel.currentItemIndex)
 	{
