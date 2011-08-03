@@ -27,6 +27,8 @@ iCarousel supports the following built-in display types:
 - iCarouselTypeCoverFlow
 - iCarouselTypeCoverflow2
 
+The difference between `iCarouselTypeCoverFlow` and `iCarouselTypeCoverFlow2` is quite subtle, however the logic for `iCarouselTypeCoverFlow2` is substantially more complex. If you drag the flick the carousel they are basically identical, but if you drag the carousel slowly with your finger the difference should be apparent.
+
 You can also implement your own bespoke style using `iCarouselTypeCustom` and the `carousel:transformForItemView:withOffset:` delegate method.
 
 
@@ -69,6 +71,10 @@ The rate at which the carousel decelerates when flicked. Higher values mean slow
 
 Sets whether the carousel should bounce past the end and return, or stop dead. Note that this has no effect on carousel types that are designed to wrap, or where the carouselShouldWrap delegate method returns YES.
 
+	@property (nonatomic, assign) float bounceDistance;
+
+The maximum distance that a non-wrapped carousel will bounce when it overshoots the end. This is measured in multiples of the itemWidth, so a value of 1.0 would means the carousel will bounce by one whole item width, a value of 0.5 would be half an item's width, and so on. The default value is 0.5;
+
 	@property (nonatomic, assign) BOOL scrollEnabled;
 
 Enables and disables user scrolling of the carousel. The carousel can still be scrolled programmatically if this property is set to NO.
@@ -108,6 +114,14 @@ This is the scroll speed multiplier when the user drags the carousel with their 
 	@property (nonatomic, readonly) float toggle;
 	
 This property is used for the `iCarouselTypeCoverFlow2` carousel transform. It is exposed so that you can implement your own variants of the CoverFlow2 style using the `carousel:transformForItemView:withOffset` delegate method.
+
+	@property (nonatomic, assign) BOOL stopAtItemBoundary;
+	
+By default, the carousel will come to rest at an exact item boundary when it is flicked. If you set this property to NO, it will stop naturally and then - if scrollToItemBoundary is set to YES - scroll back or forwards to the nearest boundary.
+	
+	@property (nonatomic, assign) BOOL scrollToItemBoundary;
+
+By default whenever the carousel stops moving it will automatically scroll to the nearest item boundary. If you set this property to NO, the carousel will not scroll after stopping and will stay wherever it is, even if it's not perfectly aligned on the current index. The exception to this is that if wrapping is disabled and bounces is set to YES then the carousel will still scroll back to the first or last item index if it comes to rest beyond the end of the carousel. 
 
 
 Methods
@@ -216,6 +230,10 @@ This method can be used to provide a custom transform for each carousel view. Th
 	- (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index;
 
 This method will fire if the user taps any carousel item view (not including placeholder views), including the currently selected view. This method will not fire if the user taps a control within the currently selected view (i.e. any view that is a subclass of UIControl). **This method is currently only supported on the iOS version of iCarousel.**
+
+	- (BOOL)carousel:(iCarousel *)carousel shouldSelectItemAtIndex:(NSInteger)index;
+	
+This method will fire if the user taps any carousel item view (not including placeholder views), including the currently selected view. The purpose of a method is to give you the opportunity to ignore a tap on the carousel. If you return YES from the method, or don't implement it, the tap will be processed as normal and the `carousel:didSelectItemAtIndex:` method will be called. If you return NO, the carousel will ignore the tap and it will continue to propagate up the view hierarchy. This is a good way to prevent the carousel intercepting tap events intended for processing by another view. **This method is currently only supported on the iOS version of iCarousel.**
 
 
 Detecting Taps on Item Views

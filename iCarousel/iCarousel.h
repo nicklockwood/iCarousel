@@ -1,7 +1,7 @@
 //
 //  iCarousel.h
 //
-//  Version 1.5.1
+//  Version 1.5.2
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2010 Charcoal Design. All rights reserved.
@@ -64,6 +64,7 @@ iCarouselType;
     float perspective;
     NSInteger numberOfItems;
     NSInteger numberOfPlaceholders;
+	NSInteger numberOfPlaceholdersToShow;
     NSInteger numberOfVisibleItems;
     UIView *contentView;
     NSDictionary *itemViews;
@@ -88,8 +89,11 @@ iCarouselType;
 	BOOL shouldWrap;
 	BOOL dragging;
     float scrollSpeed;
+    float bounceDistance;
     NSTimeInterval toggleTime;
     float toggle;
+    BOOL stopAtItemBoundary;
+    BOOL scrollToItemBoundary;
 }
 #endif
 
@@ -98,6 +102,7 @@ iCarouselType;
 @property (nonatomic, assign) iCarouselType type;
 @property (nonatomic, assign) float perspective;
 @property (nonatomic, assign) float decelerationRate;
+@property (nonatomic, assign) float bounceDistance;
 @property (nonatomic, assign) BOOL scrollEnabled;
 @property (nonatomic, assign) BOOL bounces;
 @property (nonatomic, assign) CGSize contentOffset;
@@ -111,6 +116,8 @@ iCarouselType;
 @property (nonatomic, retain, readonly) UIView *contentView;
 @property (nonatomic, readonly) float scrollSpeed;
 @property (nonatomic, readonly) float toggle;
+@property (nonatomic, assign) BOOL stopAtItemBoundary;
+@property (nonatomic, assign) BOOL scrollToItemBoundary;
 
 - (void)scrollByNumberOfItems:(NSInteger)itemCount duration:(NSTimeInterval)duration;
 - (void)scrollToItemAtIndex:(NSInteger)index duration:(NSTimeInterval)duration;
@@ -160,6 +167,7 @@ iCarouselType;
 
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
 
+- (BOOL)carousel:(iCarousel *)carousel shouldSelectItemAtIndex:(NSInteger)index;
 - (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index;
 
 #endif

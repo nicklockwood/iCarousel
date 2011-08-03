@@ -1,8 +1,20 @@
+Version 1.5.2
+
+- Added bounceDistance property for finer control over bounce behaviour.
+- Added `carousel:shouldSelectItemAtIndex:` delegate method to allow carousel to selectively ignore taps.
+- Added `stopAtItemBoundary` and `scrollToItemBoundary` properties.
+- Fixed issue with carousel wrapping unexpectedly when wrapping and bouncing are disabled.
+- Fixed issue with rightmost visible view sometimes not loading.
+- Improved the `iCarouselTypeCoverFlow2` implementation.
+- Tweaked acceleration parameters for smoother scrolling behaviour.
+- Improved loading sequence to reduce repeated calls to dataSource methods during startup.
+- Added No-nib example for iPhone to demonstrate setting up the carousel in code.
+
 Version 1.5.1
 
-- Fixed issue with item button events being blocked by gesture recogniser
-- Tweaked bounce and acceleration parameters for smoother scrolling
-- Made `toggle` property public (used to implement CoverFlow2 carousel style)
+- Fixed issue with item button events being blocked by gesture recogniser.
+- Tweaked bounce and acceleration parameters for smoother scrolling.
+- Made `toggle` property public (used to implement CoverFlow2 carousel style).
 
 Version 1.5
 
