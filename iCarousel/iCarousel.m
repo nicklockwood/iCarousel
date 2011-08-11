@@ -773,6 +773,11 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     [self layOutItemViews];
 	[self performSelector:@selector(depthSortViews) withObject:nil afterDelay:0.0f];
     [CATransaction setDisableActions:NO];
+
+    if ([delegate respondsToSelector:@selector(carouselDidFinishReloading:)])
+    {
+        [delegate carouselDidFinishReloading:self];
+    }
 }
 
 
