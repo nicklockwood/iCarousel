@@ -1,0 +1,7 @@
+# xcode noise
+*.mode1v3
+*.mode2v3
+build/ 
+.xcodeproj/
+!*.xcodeproj/project.pbxproj
+xcuserdata
