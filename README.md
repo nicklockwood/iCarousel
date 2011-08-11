@@ -48,7 +48,7 @@ An object that supports the iCarouselDelegate protocol and can respond to carous
 
 Used to switch the carousel display type (see above for details).
 
-	@property (nonatomic, assign) float perspective;
+	@property (nonatomic, assign) CGFloat perspective;
 
 Used to tweak the perspective foreshortening effect for the various 3D carousel views. Should be a negative value, less than 0 and greater than -0.01. Values outside of this range will yield very strange results. The default is -1/500, or -0.005;
 
@@ -62,7 +62,7 @@ This property is used to adjust the user viewpoint relative to the carousel item
 
 Note that the viewpointOffset transform is concatenated with the carousel item transform used by the carousel (or the custom transform you have supplied using the transformForItemView delegate method), so if the carousel items are rotated or scaled then this may not have the desired effect.
 
-	@property (nonatomic, assign) float decelerationRate;
+	@property (nonatomic, assign) CGFloat decelerationRate;
 
 The rate at which the carousel decelerates when flicked. Higher values mean slower deceleration. The default value is 0.95. Values should be in the range 0.0 (carousel stops immediately when released) to 1.0 (carousel continues indefinitely without slowing down, unless it reaches the end).
 
@@ -70,7 +70,7 @@ The rate at which the carousel decelerates when flicked. Higher values mean slow
 
 Sets whether the carousel should bounce past the end and return, or stop dead. Note that this has no effect on carousel types that are designed to wrap, or where the carouselShouldWrap delegate method returns YES.
 
-	@property (nonatomic, assign) float bounceDistance;
+	@property (nonatomic, assign) CGFloat bounceDistance;
 
 The maximum distance that a non-wrapped carousel will bounce when it overshoots the end. This is measured in multiples of the itemWidth, so a value of 1.0 would means the carousel will bounce by one whole item width, a value of 0.5 would be half an item's width, and so on. The default value is 1.0;
 
@@ -82,6 +82,14 @@ Enables and disables user scrolling of the carousel. The carousel can still be s
 
 The number of items currently displayed in the carousel (read only). To set this, implement the `numberOfItemsInCarousel:` dataSource method.
 
+	@property (nonatomic, readonly) NSInteger numberOfPlaceholders;
+
+The number of placeholder views to display in the carousel (read only). To set this, implement the `numberOfPlaceholdersInCarousel:` dataSource method.
+
+	@property (nonatomic, readonly) NSInteger numberOfVisibleItems;
+	
+The maximum number of carousel item views to be displayed concurrently on screen (read only). To set this, implement the `numberOfVisibleItemsInCarousel:` dataSource method. If the dataSource method is not implemented, this will be equal to the numberOfItems + numberOfPlaceholders;
+
 	@property (nonatomic, readonly) NSSet *visibleViews;
 
 A set of all the item views currently displayed in the carousel (read only). The order of these views is arbitrary, and does not relate to the item indices.
@@ -90,11 +98,19 @@ A set of all the item views currently displayed in the carousel (read only). The
 
 The view containing the carousel item views. You can add subviews to this view if you want to intersperse them with the carousel items. If you want a view to appear in front or behind all of the carousel items, you should add it directly to the iCarousel view itself instead. Note that the order of views inside the contentView is subject to frequent and undocumented change while the app is running. Any views added to the contentView should have their userInteractionEnabled property set to NO to prevent conflicts with iCarousel's touch event handling.
 
+	@property (nonatomic, readonly) CGFloat scrollOffset;
+	
+This is the current offset in pixels of the carousel. This value, divided by the itemWidth is the currentItemIndex value. You can use this value to position other screen elements while the carousel is in motion.
+
+	@property (nonatomic, readonly) CGFloat offsetMultiplier;
+
+This is the offset multiplier used when the user drags the carousel with their finger. It does not affect programmatic scrolling or deceleration speed. This defaults to 1.0 for most carousel types, but defaults to 2.0 for the CoverFlow-style carousels to compensate for the fact that their items are more closely spaced and so must be dragged further to move the same distance. You cannot set this property directly, but you can override the default value by implementing the `carouselOffsetMultiplier:` delegate method.
+
 	@property (nonatomic, readonly) NSInteger currentItemIndex;
 
 The currently centered item in the carousel (read only). To change this, use the `scrollToItemAtIndex:` methods. 
 
-	@property (nonatomic, readonly) float itemWidth;
+	@property (nonatomic, readonly) CGFloat itemWidth;
 
 The display width of items in the carousel (read only). This is derived automatically from the first view passed in to the carousel using the `carousel:viewForItemAtIndex:` dataSource method. You can also override this value using the `carouselItemWidth:` delegate method, which will alter the spacing between carousel items (but won't resize or scale the item views).
 
@@ -102,15 +118,11 @@ The display width of items in the carousel (read only). This is derived automati
 
 When set to YES, tapping any item in the carousel other than the one matching the currentItemIndex will cause it to smoothly animate to the center. Tapping the currently selected item will have no effect. Defaults to YES. **This property is currently only supported on the iOS version of iCarousel.**
 
-	@property (nonatomic, assign) NSInteger numberOfVisibleItems;
+	@property (nonatomic, assign) CGFloat scrollSpeed;
 	
-This is the maximum number of item views that should be visible in the carousel at once. Half of this number of views will be displayed to either side of the currently selected item index. Views beyond that will not be loaded until they are scrolled into view. This allows for the carousel to contain a very large number of items without adversely affecting performance. The numberOfVisibleItems should be a positive, odd number, and defaults to 21.
+This is the scroll speed multiplier when the user flicks the carousel with their finger. Defaults to 1.0.
 
-	@property (nonatomic, readonly) float scrollSpeed;
-	
-This is the scroll speed multiplier when the user drags the carousel with their finger (read only). By default this is 1.0 for most carousel types, but defaults to 4.0 for the CoverFlow-style carousels to compensate for the fact that their items are more closely spaced. To change the default scrollSpeed, implement the `carouselScrollSpeed:` delegate method.
-
-	@property (nonatomic, readonly) float toggle;
+	@property (nonatomic, readonly) CGFloat toggle;
 	
 This property is used for the `iCarouselTypeCoverFlow2` carousel transform. It is exposed so that you can implement your own variants of the CoverFlow2 style using the `carousel:transformForItemView:withOffset` delegate method.
 
@@ -176,6 +188,10 @@ Returns the number of placeholder views to display in the carousel. Placeholder 
 
 Return a view to be displayed as the placeholder view. As with the regular item views, you must return a unique view instance for each call to `carouselPlaceholderView:` to avoid display issues. **Note: the protocol and behaviour for placeholders has changed since version 1.2.x - they are no longer mirrored, so it is possible to provide visually distinct views for each placeholder.**
 
+	- (NSUInteger)numberOfVisibleItemsInCarousel:(iCarousel *)carousel;
+	
+This is the maximum number of item views (including placeholders) that should be visible in the carousel at once. Half of this number of views will be displayed to either side of the currently selected item index. Views beyond that will not be loaded until they are scrolled into view. This allows for the carousel to contain a very large number of items without adversely affecting performance. The numberOfVisibleItems should be a positive, odd number. If this method is not implemented, all item views and placeholder views will be drawn every frame, which will result in significant degrading in performance and increased memory usage for large numbers of items (e.g more than 50).
+
 The iCarouselDelegate protocol has the following optional methods:
 
 	- (void)carouselWillBeginScrollingAnimation:(iCarousel *)carousel;
@@ -210,19 +226,19 @@ This method is called when the carousel starts decelerating. it will typically b
 
 This method is called when the carousel finishes decelerating and you can assume that the currentItemIndex at this point is the final stopping value. Unlike previous versions, the carousel will now stop exactly on the final index position in most cases. The only exception is on non-wrapped carousels with bounce enabled, where, if the final stopping position is beyond the end of the carousel, the carousel will then scroll automatically until it aligns exactly on the end index. For backwards compatibility, the carousel will always call `scrollToItemAtIndex:animated:` after it finishes decelerating. If you need to know for certain when the carousel has stopped moving completely, use the `carouselDidEndScrollingAnimation` delegate method.
 
-	- (float)carouselItemWidth:(iCarousel *)carousel;
+	- (CGFloat)carouselItemWidth:(iCarousel *)carousel;
 
 Returns the width of each item in the carousel - i.e. the spacing for each item view. If the method is not implemented, this defaults to the width of the first item view that is returned by the `carousel:viewForItemAtIndex:` dataSource method.
 
-	- (float)carouseScrollSpeed:(iCarousel *)carousel;
+	- (CGFloat)carouseOffsetMultiplier:(iCarousel *)carousel;
 	
-Returns the scroll speed multiplier when the user drags the carousel with their finger. It does not affect programmatic scrolling or deceleration speed. If the method is not implemented, this defaults to 1.0 for most carousel types, but defaults to 4.0 for the CoverFlow-style carousels to compensate for the fact that their items are more closely spaced.
+Returns the offset multiplier to use when the user drags the carousel with their finger. It does not affect programmatic scrolling or deceleration speed. If the method is not implemented, this defaults to 1.0 for most carousel types, but defaults to 2.0 for the CoverFlow-style carousels to compensate for the fact that their items are more closely spaced and so must be dragged further to move the same distance.
 
 	- (BOOL)carouselShouldWrap:(iCarousel *)carousel;
 
 Return YES if you want the carousel to wrap around when it reaches the end, and no if you want it to stop. If you do not implement this method, wrapping will be enabled or disabled depending on the carousel type. Generally, circular carousel types will wrap by default and linear ones won't.
 
-	- (CATransform3D)carousel:(iCarousel *)carousel transformForItemView:(UIView *)view withOffset:(float)offset;
+	- (CATransform3D)carousel:(iCarousel *)carousel transformForItemView:(UIView *)view withOffset:(CGFloat)offset;
 
 This method can be used to provide a custom transform for each carousel view. The offset argument is the distance of the view from the middle of the carousel. The  currently centered item view would have an offset of 0, the one to the right would have an offset value of 1.0, the one to the left an offset value of -1.0, and so on. To implement the linear carousel style, you would therefore simply multiply the offset value by the item width and use it as the x value of the transform. If you need to manipulate the view in other ways as it scrolls, such as settings its alpha opacity, you can manipulate the view property directly. Manipulating the view frame, center or bounds is not recommended as the effect may be unpredictable and subject to undocumented change in future releases.
 

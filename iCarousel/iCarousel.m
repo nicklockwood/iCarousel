@@ -1,7 +1,7 @@
 //
 //  iCarousel.m
 //
-//  Version 1.5.2
+//  Version 1.5.3
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2010 Charcoal Design. All rights reserved.
@@ -33,6 +33,8 @@
 #import "iCarousel.h"
 
 
+#define MIN_TOGGLE_DURATION 0.2f
+#define MAX_TOGGLE_DURATION 0.4f
 #define SCROLL_DURATION 0.4f
 #define INSERT_DURATION 0.4f
 #define DECELERATE_THRESHOLD 0.1f
@@ -51,26 +53,27 @@
 @property (nonatomic, retain) NSDictionary *itemViews;
 @property (nonatomic, assign) NSInteger previousItemIndex;
 @property (nonatomic, assign) NSInteger numberOfPlaceholdersToShow;
-@property (nonatomic, assign) float itemWidth;
-@property (nonatomic, assign) float scrollOffset;
-@property (nonatomic, assign) float startOffset;
-@property (nonatomic, assign) float endOffset;
+@property (nonatomic, assign) NSInteger numberOfVisibleItems;
+@property (nonatomic, assign) CGFloat itemWidth;
+@property (nonatomic, assign) CGFloat scrollOffset;
+@property (nonatomic, assign) CGFloat offsetMultiplier;
+@property (nonatomic, assign) CGFloat startOffset;
+@property (nonatomic, assign) CGFloat endOffset;
 @property (nonatomic, assign) NSTimeInterval scrollDuration;
 @property (nonatomic, assign) BOOL scrolling;
 @property (nonatomic, assign) NSTimeInterval startTime;
-@property (nonatomic, assign) float startVelocity;
+@property (nonatomic, assign) CGFloat startVelocity;
 @property (nonatomic, assign) id timer;
 @property (nonatomic, assign) BOOL decelerating;
-@property (nonatomic, assign) float previousTranslation;
+@property (nonatomic, assign) CGFloat previousTranslation;
 @property (nonatomic, assign) BOOL shouldWrap;
 @property (nonatomic, assign) BOOL dragging;
-@property (nonatomic, assign) float scrollSpeed;
 @property (nonatomic, assign) NSTimeInterval toggleTime;
 
 - (void)layOutItemViews;
 - (UIView *)loadViewAtIndex:(NSInteger)index;
 - (NSInteger)clampedIndex:(NSInteger)index;
-- (float)clampedOffset:(float)offset;
+- (CGFloat)clampedOffset:(CGFloat)offset;
 - (void)transformItemView:(UIView *)view atIndex:(NSInteger)index;
 - (void)startAnimation;
 - (void)stopAnimation;
@@ -94,6 +97,7 @@
 @synthesize previousItemIndex;
 @synthesize itemWidth;
 @synthesize scrollOffset;
+@synthesize offsetMultiplier;
 @synthesize startVelocity;
 @synthesize timer;
 @synthesize decelerating;
@@ -134,9 +138,9 @@
     scrollEnabled = YES;
     bounces = YES;
     scrollOffset = 0.0f;
+    offsetMultiplier = 1.0f;
     contentOffset = CGSizeZero;
 	viewpointOffset = CGSizeZero;
-    numberOfVisibleItems = 21;
 	shouldWrap = NO;
     scrollSpeed = 1.0f;
     bounceDistance = 1.0f;
@@ -311,7 +315,7 @@
 #pragma mark -
 #pragma mark View layout
 
-- (CATransform3D)transformForItemView:(UIView *)view withOffset:(float)offset
+- (CATransform3D)transformForItemView:(UIView *)view withOffset:(CGFloat)offset
 {
     //set up base transform
     CATransform3D transform = CATransform3DIdentity;
@@ -329,9 +333,9 @@
         {
 			NSInteger count = numberOfItems + (shouldWrap? 0: numberOfPlaceholdersToShow);
             
-            float arc = M_PI * 2.0f;
-            float radius = itemWidth / 2.0f / tanf(arc/2.0f/count);
-            float angle = offset / count * arc;
+            CGFloat arc = M_PI * 2.0f;
+            CGFloat radius = itemWidth / 2.0f / tanf(arc/2.0f/count);
+            CGFloat angle = offset / count * arc;
             
             if (type == iCarouselTypeInvertedRotary)
             {
@@ -347,9 +351,9 @@
         {
 			NSInteger count = numberOfItems + (shouldWrap? 0: numberOfPlaceholdersToShow);
             
-			float arc = M_PI * 2.0f;
-            float radius = itemWidth / 2.0f / tanf(arc/2.0f/count);
-            float angle = offset / count * arc;
+			CGFloat arc = M_PI * 2.0f;
+            CGFloat radius = itemWidth / 2.0f / tanf(arc/2.0f/count);
+            CGFloat angle = offset / count * arc;
             
             if (type == iCarouselTypeInvertedCylinder)
             {
@@ -365,23 +369,23 @@
         case iCarouselTypeCoverFlow:
         case iCarouselTypeCoverFlow2:
         {
-            float tilt = 0.9f;
-            float spacing = 0.25f; // should be ~ 1/scrollSpeed;
-            float clampedOffset = fmaxf(-1.0f, fminf(1.0f, offset));
+            CGFloat tilt = 0.9f;
+            CGFloat spacing = 0.25f; // should be ~ 1/scrollSpeed;
+            CGFloat clampedOffset = fmaxf(-1.0f, fminf(1.0f, offset));
             
             if (type == iCarouselTypeCoverFlow2)
             {
                 if (toggle >= 0.0f)
                 {
-                    if (offset < -0.5f)
+                    if (offset <= -0.5f)
                     {
                         clampedOffset = -1.0f;
                     }
-                    else if (offset < 0.5f)
+                    else if (offset <= 0.5f)
                     {
                         clampedOffset = -toggle;
                     }
-                    else if (offset < 1.5f)
+                    else if (offset <= 1.5f)
                     {
                         clampedOffset = 1.0f - toggle;
                     }
@@ -403,8 +407,8 @@
                 }
             }
             
-            float x = (clampedOffset * 0.5f * tilt + offset * spacing) * itemWidth;
-            float z = fabsf(clampedOffset) * -itemWidth * 0.5f;
+            CGFloat x = (clampedOffset * 0.5f * tilt + offset * spacing) * itemWidth;
+            CGFloat z = fabsf(clampedOffset) * -itemWidth * 0.5f;
             transform = CATransform3DTranslate(transform, x, 0.0f, z);
             return CATransform3DRotate(transform, -clampedOffset * M_PI_2 * tilt, 0.0f, 1.0f, 0.0f);
         }
@@ -421,15 +425,15 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     iCarousel *carousel = context;
 	CATransform3D t1 = ((UIView *)obj1).superview.layer.transform;
 	CATransform3D t2 = ((UIView *)obj2).superview.layer.transform;
-    float z1 = t1.m13 + t1.m23 + t1.m33 + t1.m43;
-    float z2 = t2.m13 + t2.m23 + t2.m33 + t2.m43;
-    float difference = z1 - z2;
+    CGFloat z1 = t1.m13 + t1.m23 + t1.m33 + t1.m43;
+    CGFloat z2 = t2.m13 + t2.m23 + t2.m33 + t2.m43;
+    CGFloat difference = z1 - z2;
     if (difference == 0.0f)
     {
         CATransform3D t3 = [carousel currentView].superview.layer.transform;
-        float x1 = t1.m11 + t1.m21 + t1.m31 + t1.m41;
-        float x2 = t2.m11 + t2.m21 + t2.m31 + t2.m41;
-        float x3 = t3.m11 + t3.m21 + t3.m31 + t3.m41;
+        CGFloat x1 = t1.m11 + t1.m21 + t1.m31 + t1.m41;
+        CGFloat x2 = t2.m11 + t2.m21 + t2.m31 + t2.m41;
+        CGFloat x3 = t3.m11 + t3.m21 + t3.m31 + t3.m41;
         difference = fabsf(x2 - x3) - fabsf(x1 - x3);
     }
     return (difference < 0.0f)? NSOrderedAscending: NSOrderedDescending;
@@ -449,11 +453,11 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     
 }
 
-- (float)offsetForIndex:(NSInteger)index
+- (CGFloat)offsetForIndex:(NSInteger)index
 {
     //calculate relative position
-    float itemOffset = scrollOffset / itemWidth;
-    float offset = index - itemOffset;
+    CGFloat itemOffset = scrollOffset / itemWidth;
+    CGFloat offset = index - itemOffset;
     if (shouldWrap)
     {
         if (offset > numberOfItems/2)
@@ -507,8 +511,8 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 #endif
     
     //special-case logic for iCarouselTypeCoverFlow2
-    float offset = [self offsetForIndex:index];
-    float clampedOffset = fmaxf(-1.0f, fminf(1.0f, offset));
+    CGFloat offset = [self offsetForIndex:index];
+    CGFloat clampedOffset = fmaxf(-1.0f, fminf(1.0f, offset));
     if (decelerating || (scrollOffset - [self clampedOffset:scrollOffset]) != 0.0f)
     {
         if (offset > 0)
@@ -571,7 +575,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 	}
 	
     //record current item width
-    float prevItemWidth = itemWidth;
+    CGFloat prevItemWidth = itemWidth;
 	
 	//update wrap
 	if ([delegate respondsToSelector:@selector(carouselShouldWrap:)])
@@ -615,10 +619,10 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 		itemWidth = [[[itemViews allValues] lastObject] bounds].size.width;
 	}
     
-    //update scroll speed
-    if ([delegate respondsToSelector:@selector(carouselScrollSpeed:)])
+    //update offset multiplier
+    if ([delegate respondsToSelector:@selector(carouselOffsetMultiplier:)])
     {
-        scrollSpeed = [delegate carouselScrollSpeed:self];
+        offsetMultiplier = [delegate carouselOffsetMultiplier:self];
     }
     else
     {
@@ -627,12 +631,12 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
             case iCarouselTypeCoverFlow:
 			case iCarouselTypeCoverFlow2:
 			{
-				scrollSpeed = 4.0f;
+				offsetMultiplier = 2.0f;
 				break;
 			}
 			default:
 			{
-				scrollSpeed = 1.0f;
+				offsetMultiplier = 1.0f;
 				break;
 			}
 		}
@@ -665,7 +669,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     UIView *view = nil;
     if (index < 0)
     {
-        view = [dataSource carousel:self placeholderViewAtIndex:(int)ceilf((float)numberOfPlaceholdersToShow/2.0f) + index];
+        view = [dataSource carousel:self placeholderViewAtIndex:(int)ceilf((CGFloat)numberOfPlaceholdersToShow/2.0f) + index];
     }
     else if (index >= numberOfItems)
     {
@@ -692,14 +696,22 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 {
     //calculate visible view indices
     NSMutableSet *visibleIndices = [NSMutableSet setWithCapacity:numberOfVisibleItems];
-    NSInteger min = -(int)ceilf((float)numberOfPlaceholdersToShow/2.0f);
+    NSInteger min = -(int)ceilf((CGFloat)numberOfPlaceholdersToShow/2.0f);
     NSInteger max = numberOfItems - 1 + numberOfPlaceholdersToShow/2;
     NSInteger count = MIN(numberOfVisibleItems, numberOfItems + numberOfPlaceholdersToShow);
     NSInteger offset = self.currentItemIndex - numberOfVisibleItems/2;
-    offset = MAX(min, MIN(max - count + 1, offset));
+    if (!shouldWrap)
+    {
+        offset = MAX(min, MIN(max - count + 1, offset));
+    }
     for (NSInteger i = 0; i < count; i++)
     {
-        [visibleIndices addObject:[NSNumber numberWithInteger:i + offset]];
+        NSInteger index = i + offset;
+        if (shouldWrap)
+        {
+            index = [self clampedIndex:index];
+        }
+        [visibleIndices addObject:[NSNumber numberWithInteger:index]];
     }
     
     //remove offscreen views
@@ -745,6 +757,13 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     {
         numberOfPlaceholders = [dataSource numberOfPlaceholdersInCarousel:self];
     }
+    
+    //get number of visible items
+    numberOfVisibleItems = numberOfItems + numberOfPlaceholders;
+    if ([dataSource respondsToSelector:@selector(numberOfVisibleItemsInCarousel:)])
+    {
+        numberOfVisibleItems = [dataSource numberOfVisibleItemsInCarousel:self];
+    }
 	
     //layout views
     [CATransaction setDisableActions:YES];
@@ -768,7 +787,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
         {
             return 0;
         }
-        return index - floorf((float)index / (float)numberOfItems) * numberOfItems;
+        return index - floorf((CGFloat)index / (CGFloat)numberOfItems) * numberOfItems;
     }
     else
     {
@@ -776,7 +795,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     }
 }
 
-- (float)clampedOffset:(float)offset
+- (CGFloat)clampedOffset:(CGFloat)offset
 {
     if (shouldWrap)
     {
@@ -784,7 +803,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
         {
             return 0;
         }
-		float contentWidth = numberOfItems * itemWidth;
+		CGFloat contentWidth = numberOfItems * itemWidth;
 		return offset - floorf(offset / contentWidth) * contentWidth;
     }
     else
@@ -813,12 +832,12 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     return directDistance;
 }
 
-- (float)minScrollDistanceFromOffset:(float)fromOffset toOffset:(float)toOffset
+- (CGFloat)minScrollDistanceFromOffset:(CGFloat)fromOffset toOffset:(CGFloat)toOffset
 {
-	float directDistance = toOffset - fromOffset;
+	CGFloat directDistance = toOffset - fromOffset;
     if (shouldWrap)
     {
-        float wrappedDistance = fminf(toOffset, fromOffset) + numberOfItems*itemWidth - fmaxf(toOffset, fromOffset);
+        CGFloat wrappedDistance = fminf(toOffset, fromOffset) + numberOfItems*itemWidth - fmaxf(toOffset, fromOffset);
         if (fromOffset < toOffset)
         {
             wrappedDistance = -wrappedDistance;
@@ -902,6 +921,10 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
         [UIView setAnimationDidStopSelector:@selector(depthSortViews)];
         [self removeViewAtIndex:index];
         numberOfItems --;
+        if (![dataSource respondsToSelector:@selector(numberOfVisibleItemsInCarousel:)])
+        {
+            numberOfVisibleItems --;
+        }
         scrollOffset = itemWidth * self.currentItemIndex;
         [self didScroll];
         [UIView commitAnimations];
@@ -968,6 +991,10 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 {
     index = [self clampedIndex:index];
     numberOfItems ++;
+    if (![dataSource respondsToSelector:@selector(numberOfVisibleItemsInCarousel:)])
+    {
+        numberOfVisibleItems ++;
+    }
     
     [self insertView:nil atIndex:index];
     UIView *itemView = [self loadViewAtIndex:index];
@@ -1039,9 +1066,9 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     timer = nil;
 }
 
-- (float)decelerationDistance
+- (CGFloat)decelerationDistance
 {
-    float acceleration = -startVelocity * DECELERATION_MULTIPLIER * (1.0f - decelerationRate);
+    CGFloat acceleration = -startVelocity * DECELERATION_MULTIPLIER * (1.0f - decelerationRate);
     return -powf(startVelocity, 2.0f) / (2.0f * acceleration);
 }
 
@@ -1059,7 +1086,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 
 - (void)startDecelerating
 {
-    float distance = [self decelerationDistance];
+    CGFloat distance = [self decelerationDistance];
     startOffset = scrollOffset;
     endOffset = startOffset + distance;
     if (stopAtItemBoundary)
@@ -1097,7 +1124,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     }
 }
 
-- (float)easeInOut:(float)time
+- (CGFloat)easeInOut:(CGFloat)time
 {
     return (time < 0.5f)? 0.5f * powf(time * 2.0f, 3.0f): 0.5f * powf(time * 2.0f - 2.0f, 3.0f) + 1.0f;
 }
@@ -1109,9 +1136,10 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     
     if (toggle != 0.0f)
     {
-        float toggleDuration = SCROLL_DURATION * fminf(1.0f, fmaxf(0.0f, itemWidth / fabsf(startVelocity)));
+        CGFloat toggleDuration = fminf(1.0f, fmaxf(0.0f, itemWidth / fabsf(startVelocity)));
+        toggleDuration = MIN_TOGGLE_DURATION + (MAX_TOGGLE_DURATION - MIN_TOGGLE_DURATION) * toggleDuration;
         NSTimeInterval time = fminf(1.0f, (currentTime - toggleTime) / toggleDuration);
-        float delta = [self easeInOut:time];
+        CGFloat delta = [self easeInOut:time];
         toggle = (toggle < 0.0f)? (delta - 1.0f): (1.0f - delta);
         [self didScroll];
     }
@@ -1119,7 +1147,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     if (scrolling)
     {
         NSTimeInterval time = fminf(1.0f, (currentTime - startTime) / scrollDuration);
-        float delta = [self easeInOut:time];
+        CGFloat delta = [self easeInOut:time];
         scrollOffset = startOffset + (endOffset - startOffset) * delta;
 		[self didScroll];
         if (time == 1.0f)
@@ -1134,13 +1162,13 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     }
     else if (decelerating)
     {
-        float time = fminf(scrollDuration, currentTime - startTime);
-        float acceleration = -startVelocity/scrollDuration;
-        float distance = startVelocity * time + 0.5f * acceleration * powf(time, 2.0f);
+        CGFloat time = fminf(scrollDuration, currentTime - startTime);
+        CGFloat acceleration = -startVelocity/scrollDuration;
+        CGFloat distance = startVelocity * time + 0.5f * acceleration * powf(time, 2.0f);
         scrollOffset = startOffset + distance;
         
 		[self didScroll];
-        if (time == (float)scrollDuration)
+        if (time == (CGFloat)scrollDuration)
         {
             decelerating = NO;
 			if ([delegate respondsToSelector:@selector(carouselDidEndDecelerating:)])
@@ -1186,8 +1214,8 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     }
 	else
 	{
-		float min = -bounceDistance * itemWidth;
-		float max = ((float)numberOfItems - 1.0f + bounceDistance) * itemWidth;
+		CGFloat min = -bounceDistance * itemWidth;
+		CGFloat max = ((CGFloat)numberOfItems - 1.0f + bounceDistance) * itemWidth;
 		if (scrollOffset < min)
 		{
 			scrollOffset = min;
@@ -1206,7 +1234,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     if (difference)
     {
         toggleTime = CACurrentMediaTime();
-        toggle = fmaxf(-1.0f, fminf(1.0f, -(float)difference));
+        toggle = fmaxf(-1.0f, fminf(1.0f, -(CGFloat)difference));
         [self startAnimation];
     }
     
@@ -1352,16 +1380,16 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
             }
             default:
             {
-                float translation = [panGesture translationInView:self].x - previousTranslation;
-				float factor = 1.0f;
+                CGFloat translation = [panGesture translationInView:self].x - previousTranslation;
+				CGFloat factor = 1.0f;
 				if (!shouldWrap && bounces)
 				{
 					factor = 1.0f - fminf(fabsf(scrollOffset - [self clampedOffset:scrollOffset]) / itemWidth, bounceDistance) / bounceDistance;
 				}
 				
                 previousTranslation = [panGesture translationInView:self].x;
-                startVelocity = -[panGesture velocityInView:self].x * factor;
-                scrollOffset -= translation * factor * scrollSpeed;
+                startVelocity = -[panGesture velocityInView:self].x * factor * scrollSpeed;
+                scrollOffset -= translation * factor * offsetMultiplier;
                 [self didScroll];
             }
         }
@@ -1373,6 +1401,11 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 
 #pragma mark -
 #pragma mark Mouse control
+
+- (void)mouseDown:(NSEvent *)theEvent
+{
+    startVelocity = 0.0f;
+}
 
 - (void)mouseDragged:(NSEvent *)theEvent
 {
@@ -1389,18 +1422,18 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
         scrolling = NO;
         decelerating = NO;
         
-        float translation = [theEvent deltaX];
-		float factor = 1.0f;
+        CGFloat translation = [theEvent deltaX];
+		CGFloat factor = 1.0f;
 		if (!shouldWrap && bounces)
 		{
 			factor = 1.0f - fminf(fabsf(scrollOffset - [self clampedOffset:scrollOffset]) / itemWidth, bounceDistance) / bounceDistance;
 		}
      
         NSTimeInterval thisTime = [theEvent timestamp];
-        startVelocity = -(translation / (thisTime - startTime)) * factor;
+        startVelocity = -(translation / (thisTime - startTime)) * factor * scrollSpeed;
         startTime = thisTime;
         
-        scrollOffset -= translation * factor * scrollSpeed;
+        scrollOffset -= translation * factor * offsetMultiplier;
         [CATransaction setDisableActions:YES];
         [self didScroll];
         [CATransaction setDisableActions:NO];

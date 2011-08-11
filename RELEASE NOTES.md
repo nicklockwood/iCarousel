@@ -1,3 +1,14 @@
+Version 1.5.3
+
+- Fixed a bug on wrapped carousels when the total number of carousel items exceeds the number of visible items.
+- Changed numberOfVisibleItems property to be a dataSource method, removing the arbitrary default limit of 21.
+- Fixed a flickering issue on CoverFlow2 carousel type.
+- Fixed bug on Mac where clicking would spin the carousel a random distance.
+- scrollSpeed is now a read/write property, and only affects speed when carousel is flicked.
+- Removed `carouselScrollSpeed` delegate method and replaced it with new `offsetMultiplier` property and `carouselOffsetMultiplier` delegate method to control the offset when dragging.
+- scrollOffset property is now public (readonly).
+- Floating point arguments and properties are now CGFloats instead of floats.
+
 Version 1.5.2
 
 - Added bounceDistance property for finer control over bounce behaviour.

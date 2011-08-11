@@ -182,6 +182,12 @@
 	return view;
 }
 
+- (NSUInteger)numberOfVisibleItemsInCarousel:(iCarousel *)carousel
+{
+    //limit the number of items views loaded concurrently (for performance reasons)
+    return 21;
+}
+
 - (float)carouselItemWidth:(iCarousel *)carousel
 {
     //slightly wider than item view
