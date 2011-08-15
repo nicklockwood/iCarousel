@@ -420,31 +420,27 @@
     }
 }
 
-NSInteger compareViewDepth(id obj1, id obj2, void *context)
-{
-    iCarousel *carousel = context;
-	CATransform3D t1 = ((UIView *)obj1).superview.layer.transform;
-	CATransform3D t2 = ((UIView *)obj2).superview.layer.transform;
-    CGFloat z1 = t1.m13 + t1.m23 + t1.m33 + t1.m43;
-    CGFloat z2 = t2.m13 + t2.m23 + t2.m33 + t2.m43;
-    CGFloat difference = z1 - z2;
-    if (difference == 0.0f)
-    {
-        CATransform3D t3 = [carousel currentView].superview.layer.transform;
-        CGFloat x1 = t1.m11 + t1.m21 + t1.m31 + t1.m41;
-        CGFloat x2 = t2.m11 + t2.m21 + t2.m31 + t2.m41;
-        CGFloat x3 = t3.m11 + t3.m21 + t3.m31 + t3.m41;
-        difference = fabsf(x2 - x3) - fabsf(x1 - x3);
-    }
-    return (difference < 0.0f)? NSOrderedAscending: NSOrderedDescending;
-}
-
 - (void)depthSortViews
 {
     
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
     
-    for (UIView *view in [[itemViews allValues] sortedArrayUsingFunction:compareViewDepth context:self])
+    for (UIView *view in [[itemViews allValues] sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            CATransform3D t1 = ((UIView *)obj1).superview.layer.transform;
+            CATransform3D t2 = ((UIView *)obj2).superview.layer.transform;
+            CGFloat z1 = t1.m13 + t1.m23 + t1.m33 + t1.m43;
+            CGFloat z2 = t2.m13 + t2.m23 + t2.m33 + t2.m43;
+            CGFloat difference = z1 - z2;
+            if (difference == 0.0f)
+            {
+                CATransform3D t3 = [self currentView].superview.layer.transform;
+                CGFloat x1 = t1.m11 + t1.m21 + t1.m31 + t1.m41;
+                CGFloat x2 = t2.m11 + t2.m21 + t2.m31 + t2.m41;
+                CGFloat x3 = t3.m11 + t3.m21 + t3.m31 + t3.m41;
+                difference = fabsf(x2 - x3) - fabsf(x1 - x3);
+            }
+            return (difference < 0.0f)? NSOrderedAscending: NSOrderedDescending;
+        }])
     {
         [contentView addSubview:view.superview];
     }
