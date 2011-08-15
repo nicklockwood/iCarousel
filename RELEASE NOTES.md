@@ -1,3 +1,7 @@
+Version 1.5.4
+
+- Fixed a bug where insertItemAtIndex method would not allow items to be inserted at the rightmost end of the carousel.
+
 Version 1.5.3
 
 - Fixed a bug on wrapped carousels when the total number of carousel items exceeds the number of visible items.

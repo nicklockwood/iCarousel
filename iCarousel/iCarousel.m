@@ -1,7 +1,7 @@
 //
 //  iCarousel.m
 //
-//  Version 1.5.3
+//  Version 1.5.4
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2010 Charcoal Design. All rights reserved.
@@ -989,13 +989,13 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 
 - (void)insertItemAtIndex:(NSInteger)index animated:(BOOL)animated
 {
-    index = [self clampedIndex:index];
     numberOfItems ++;
     if (![dataSource respondsToSelector:@selector(numberOfVisibleItemsInCarousel:)])
     {
         numberOfVisibleItems ++;
     }
     
+    index = [self clampedIndex:index];
     [self insertView:nil atIndex:index];
     UIView *itemView = [self loadViewAtIndex:index];
     itemView.superview.layer.opacity = 0.0f;
