@@ -1,7 +1,7 @@
 //
 //  iCarousel.m
 //
-//  Version 1.5.4
+//  Version 1.5.5
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2010 Charcoal Design. All rights reserved.
@@ -68,6 +68,7 @@
 @property (nonatomic, assign) CGFloat previousTranslation;
 @property (nonatomic, assign) BOOL shouldWrap;
 @property (nonatomic, assign) BOOL dragging;
+@property (nonatomic, assign) BOOL didDecelerate;
 @property (nonatomic, assign) NSTimeInterval toggleTime;
 
 - (void)layOutItemViews;
@@ -115,6 +116,7 @@
 @synthesize previousTranslation;
 @synthesize shouldWrap;
 @synthesize dragging;
+@synthesize didDecelerate;
 @synthesize scrollSpeed;
 @synthesize toggleTime;
 @synthesize toggle;
@@ -234,7 +236,7 @@
 #pragma mark -
 #pragma mark View management
 
-- (NSArray *)visibleIndices
+- (NSArray *)indexesForVisibleItems
 {
     return [[itemViews allKeys] sortedArrayUsingSelector:@selector(compare:)];
 }
@@ -244,17 +246,33 @@
     return [NSSet setWithArray:[itemViews allValues]];
 }
 
-- (UIView *)viewAtIndex:(NSInteger)index
+- (NSArray *)visibleItemViews
+{
+    NSArray *indexes = [self indexesForVisibleItems];
+    return [itemViews objectsForKeys:indexes notFoundMarker:[NSNull null]];
+}
+
+- (UIView *)itemViewAtIndex:(NSInteger)index
 {
     return [itemViews objectForKey:[NSNumber numberWithInteger:index]];
 }
 
-- (UIView *)currentView
+- (UIView *)currentItemView
 {
-    return [self viewAtIndex:self.currentItemIndex];
+    return [self itemViewAtIndex:self.currentItemIndex];
 }
 
-- (void)setView:(UIView *)view forIndex:(NSInteger)index
+- (NSInteger)indexOfItemView:(UIView *)view
+{
+    NSInteger index = [[itemViews allValues] indexOfObject:view];
+    if (index != NSNotFound)
+    {
+        return [[[itemViews allKeys] objectAtIndex:index] integerValue];
+    }
+    return NSNotFound;
+}
+
+- (void)setItemView:(UIView *)view forIndex:(NSInteger)index
 {
     [(NSMutableDictionary *)itemViews setObject:view forKey:[NSNumber numberWithInteger:index]];
 }
@@ -262,7 +280,7 @@
 - (void)removeViewAtIndex:(NSInteger)index
 {
     NSMutableDictionary *newItemViews = [NSMutableDictionary dictionaryWithCapacity:[itemViews count] - 1];
-    for (NSNumber *number in [self visibleIndices])
+    for (NSNumber *number in [self indexesForVisibleItems])
     {
         NSInteger i = [number integerValue];
         if (i < index)
@@ -280,7 +298,7 @@
 - (void)insertView:(UIView *)view atIndex:(NSInteger)index
 {
     NSMutableDictionary *newItemViews = [NSMutableDictionary dictionaryWithCapacity:[itemViews count] - 1];
-    for (NSNumber *number in [self visibleIndices])
+    for (NSNumber *number in [self indexesForVisibleItems])
     {
         NSInteger i = [number integerValue];
         if (i < index)
@@ -294,7 +312,7 @@
     }
     if (view)
     {
-        [self setView:view forIndex:index];
+        [self setItemView:view forIndex:index];
     }
     self.itemViews = newItemViews;
 }
@@ -430,7 +448,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     CGFloat difference = z1 - z2;
     if (difference == 0.0f)
     {
-        CATransform3D t3 = [carousel currentView].superview.layer.transform;
+        CATransform3D t3 = [carousel currentItemView].superview.layer.transform;
         CGFloat x1 = t1.m11 + t1.m21 + t1.m31 + t1.m41;
         CGFloat x2 = t2.m11 + t2.m21 + t2.m31 + t2.m41;
         CGFloat x3 = t3.m11 + t3.m21 + t3.m31 + t3.m41;
@@ -513,7 +531,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     //special-case logic for iCarouselTypeCoverFlow2
     CGFloat offset = [self offsetForIndex:index];
     CGFloat clampedOffset = fmaxf(-1.0f, fminf(1.0f, offset));
-    if (decelerating || (scrollOffset - [self clampedOffset:scrollOffset]) != 0.0f)
+    if (decelerating || (scrolling && didDecelerate) || (scrollOffset - [self clampedOffset:scrollOffset]) != 0.0f)
     {
         if (offset > 0)
         {
@@ -521,7 +539,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
         }
         else
         {
-            toggle = (offset >= -0.5f)? -clampedOffset: (- 1.0f - clampedOffset);
+            toggle = (offset > -0.5f)? -clampedOffset: (- 1.0f - clampedOffset);
         }
     }
     
@@ -683,7 +701,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     {
         view = [[[UIView alloc] init] autorelease];
     }
-    [self setView:view forIndex:index];
+    [self setItemView:view forIndex:index];
     [contentView addSubview:[self containView:view]];
     [self transformItemView:view atIndex:index];
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
@@ -745,7 +763,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 	}
 
 	//remove old views
-    for (UIView *view in self.visibleViews)
+    for (UIView *view in self.visibleItemViews)
     {
 		[view.superview removeFromSuperview];
 	}
@@ -770,6 +788,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     decelerating = NO;
     scrolling = NO;
     dragging = NO;
+    didDecelerate = NO;
     [self layOutItemViews];
 	[self performSelector:@selector(depthSortViews) withObject:nil afterDelay:0.0f];
     [CATransaction setDisableActions:NO];
@@ -866,7 +885,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
         }
         else
         {
-            endOffset = (roundf(startOffset / itemWidth) + itemCount) * itemWidth;
+            endOffset = roundf(startOffset / itemWidth) * itemWidth;
         }
 		if (!shouldWrap)
 		{
@@ -901,7 +920,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 - (void)removeItemAtIndex:(NSInteger)index animated:(BOOL)animated
 {
     index = [self clampedIndex:index];
-    UIView *itemView = [self viewAtIndex:index];
+    UIView *itemView = [self itemViewAtIndex:index];
     
     if (animated)
     {
@@ -1177,7 +1196,30 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 			}
             if (scrollToItemBoundary || (scrollOffset - [self clampedOffset:scrollOffset]) != 0.0f)
             {
-                [self scrollToItemAtIndex:self.currentItemIndex animated:YES];
+                if (fabsf(scrollOffset - self.currentItemIndex/itemWidth) < 0.01f)
+                {
+                    //call scroll to trigger events for legacy support reasons
+                    //even though technically we don't need to scroll at all
+                    [self scrollToItemAtIndex:self.currentItemIndex duration:0.01f];
+                }
+                else
+                {
+                    [self scrollToItemAtIndex:self.currentItemIndex animated:YES];
+                }
+            }
+            else
+            {
+                CGFloat difference = (CGFloat)self.currentItemIndex - scrollOffset/itemWidth;
+                if (difference > 0.5)
+                {
+                    difference = difference - 1.0f;
+                }
+                else if (difference < -0.5)
+                {
+                    difference = 1.0 + difference;
+                }
+                toggleTime = currentTime - MAX_TOGGLE_DURATION * fabsf(difference);
+                toggle = fmaxf(-1.0f, fminf(1.0f, -difference));
             }
         }
     }
@@ -1352,8 +1394,10 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
             case UIGestureRecognizerStateCancelled:
             {
 				dragging = NO;
+                didDecelerate = NO;
                 if ([self shouldDecelerate])
                 {
+                    didDecelerate = YES;
                     [self startDecelerating];
                 }
 				if ([delegate respondsToSelector:@selector(carouselDidEndDragging:willDecelerate:)])
@@ -1362,7 +1406,13 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 				}
 				if (!decelerating && (scrollToItemBoundary || (scrollOffset - [self clampedOffset:scrollOffset]) != 0.0f))
 				{
-                    if ([self shouldScroll])
+                    if (fabsf(scrollOffset - self.currentItemIndex/itemWidth) < 0.01f)
+                    {
+                        //call scroll to trigger events for legacy support reasons
+                        //even though technically we don't need to scroll at all
+                        [self scrollToItemAtIndex:self.currentItemIndex duration:0.01f];
+                    }
+                    else if ([self shouldScroll])
                     {
                         NSInteger direction = (int)(startVelocity / fabsf(startVelocity));
                         [self scrollToItemAtIndex:self.currentItemIndex + direction animated:YES];
@@ -1445,8 +1495,10 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 	if (scrollEnabled)
     {
 		dragging = NO;
+        didDecelerate = NO;
 		if ([self shouldDecelerate])
         {
+            didDecelerate = YES;
             [self startDecelerating];
         }
 		if ([delegate respondsToSelector:@selector(carouselDidEndDragging:willDecelerate:)])

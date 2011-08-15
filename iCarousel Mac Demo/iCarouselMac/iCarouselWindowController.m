@@ -58,7 +58,7 @@
 - (IBAction)switchCarouselType:(id)sender
 {
 	//restore view opacities to normal
-    for (NSView *view in carousel.visibleViews)
+    for (NSView *view in carousel.visibleItemViews)
     {
         view.layer.opacity = 1.0;
     }
@@ -150,13 +150,13 @@
     return 21;
 }
 
-- (float)carouselItemWidth:(iCarousel *)carousel
+- (CGFloat)carouselItemWidth:(iCarousel *)carousel
 {
     //slightly wider than item view
     return ITEM_SPACING;
 }
 
-- (CATransform3D)carousel:(iCarousel *)carousel transformForItemView:(NSView *)view withOffset:(float)offset
+- (CATransform3D)carousel:(iCarousel *)carousel transformForItemView:(NSView *)view withOffset:(CGFloat)offset
 {
     //implement 'flip3D' style carousel
     

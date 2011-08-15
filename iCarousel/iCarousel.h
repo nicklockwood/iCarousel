@@ -1,7 +1,7 @@
 //
 //  iCarousel.h
 //
-//  Version 1.5.4
+//  Version 1.5.5
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2010 Charcoal Design. All rights reserved.
@@ -89,6 +89,7 @@ iCarouselType;
 	BOOL centerItemWhenSelected;
 	BOOL shouldWrap;
 	BOOL dragging;
+    BOOL didDecelerate;
     CGFloat scrollSpeed;
     CGFloat bounceDistance;
     NSTimeInterval toggleTime;
@@ -114,8 +115,11 @@ iCarouselType;
 @property (nonatomic, readonly) NSInteger numberOfItems;
 @property (nonatomic, readonly) NSInteger numberOfPlaceholders;
 @property (nonatomic, readonly) NSInteger currentItemIndex;
+@property (nonatomic, retain, readonly) UIView *currentItemView;
+@property (nonatomic, retain, readonly) NSArray *indexesForVisibleItems;
 @property (nonatomic, readonly) NSInteger numberOfVisibleItems;
-@property (nonatomic, retain, readonly) NSSet *visibleViews;
+@property (nonatomic, retain, readonly) NSSet *visibleViews __deprecated; // use visibleItemViews instead
+@property (nonatomic, retain, readonly) NSArray *visibleItemViews;
 @property (nonatomic, readonly) CGFloat itemWidth;
 @property (nonatomic, retain, readonly) UIView *contentView;
 @property (nonatomic, readonly) CGFloat toggle;
@@ -127,6 +131,8 @@ iCarouselType;
 - (void)scrollToItemAtIndex:(NSInteger)index animated:(BOOL)animated;
 - (void)removeItemAtIndex:(NSInteger)index animated:(BOOL)animated;
 - (void)insertItemAtIndex:(NSInteger)index animated:(BOOL)animated;
+- (UIView *)itemViewAtIndex:(NSInteger)index;
+- (NSInteger)indexOfItemView:(UIView *)view;
 - (void)reloadData;
 
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED

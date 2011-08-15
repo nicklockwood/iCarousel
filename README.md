@@ -90,11 +90,15 @@ The number of placeholder views to display in the carousel (read only). To set t
 	
 The maximum number of carousel item views to be displayed concurrently on screen (read only). To set this, implement the `numberOfVisibleItemsInCarousel:` dataSource method. If the dataSource method is not implemented, this will be equal to the numberOfItems + numberOfPlaceholders;
 
-	@property (nonatomic, readonly) NSSet *visibleViews;
+	@property (nonatomic, retain, readonly) NSArray *indexesForVisibleItems;
+	
+An array containing the indexes of all item views currently visible in the carousel, including placeholder views. The array contains NSNumber objects whose integer values match the indexes of the views. The indexes for item views start at zero and match the indexes passed to the dataSource to load the view, however the indexes for any visible placeholder views will either be negative (less than zero) or greater than or equal to `numberOfItems`. Indexes for placeholder views in this array do not equate to the placeholder view index used with the dataSource.
 
-A set of all the item views currently displayed in the carousel (read only). The order of these views is arbitrary, and does not relate to the item indices.
+	@property (nonatomic, retain, readonly) NSArray *visibleItemViews;
 
-	@property (nonatomic, readonly) UIView *contentView;
+An array of all the item views currently displayed in the carousel (read only). This includes any visible placeholder views. The indexes of views in this array do not match the item indexes, however the order of these views matches the order of the visibleItemIndexes array property, i.e. you can get the item index of a given view in this array by retrieving the equivalent object from the visibleItemIndexes array (or, you can just use the `indexOfItemView:` method, which is much easier).
+
+	@property (nonatomic, retain, readonly) UIView *contentView;
 
 The view containing the carousel item views. You can add subviews to this view if you want to intersperse them with the carousel items. If you want a view to appear in front or behind all of the carousel items, you should add it directly to the iCarousel view itself instead. Note that the order of views inside the contentView is subject to frequent and undocumented change while the app is running. Any views added to the contentView should have their userInteractionEnabled property set to NO to prevent conflicts with iCarousel's touch event handling.
 
@@ -108,7 +112,11 @@ This is the offset multiplier used when the user drags the carousel with their f
 
 	@property (nonatomic, readonly) NSInteger currentItemIndex;
 
-The currently centered item in the carousel (read only). To change this, use the `scrollToItemAtIndex:` methods. 
+The index of the currently centered item in the carousel (read only). To change this, use the `scrollToItemAtIndex:` methods. 
+
+	@property (nonatomic, retain, readonly) UIView *currentItemView;
+	
+The currently centered item view in the carousel. The index of this view matches `currentItemIndex`. 
 
 	@property (nonatomic, readonly) CGFloat itemWidth;
 
@@ -140,11 +148,11 @@ Methods
 
 The iCarousel class has the following methods (note: for Mac OS, substitute NSView for UIView in method arguments):
 
-	- (void)scrollToItemAtIndex:(NSUInteger)index animated:(BOOL)animated;
+	- (void)scrollToItemAtIndex:(NSInteger)index animated:(BOOL)animated;
 
 This will center the carousel on the specified item, either immediately or with a smooth animation. For wrapped carousels, the carousel will automatically determine the shortest (direct, or wraparound) distance to scroll. If you need to control the scroll direction, or want to scroll by more than one revolution, use the scrollByNumberOfItems method instead.
 
-	- (void)scrollToItemAtIndex:(NSUInteger)index duration:(NSTimeInterval)scrollDuration;
+	- (void)scrollToItemAtIndex:(NSInteger)index duration:(NSTimeInterval)scrollDuration;
 
 This method allows you to control how long the carousel takes to scroll to the specified index.
 
@@ -156,11 +164,19 @@ This method allows you to scroll the carousel by a fixed distance, measured in c
 
 This reloads all carousel views from the dataSource and refreshes the carousel display.
 
-	- (void)removeItemAtIndex:(NSUInteger)index animated:(BOOL)animated;
+	- (UIView *)itemViewAtIndex:(NSInteger)index;
+	
+Returns the visible item view with the specified index. Note that the index relates to the position in the carousel, and not the position in the `visibleItemViews` array, which may be different. Pass a negative index or one greater than or equal to `numberOfItems` to retrieve placeholder views. The method only works for visible item views and will return nil if the view at the specified index has not been loaded, or if the index is out of bounds.
+
+	- (NSInteger)indexOfItemView:(UIView *)view;
+	
+The index for a given item view in the carousel. Works for item views and placeholder views, however placeholder view indexes do not match the ones used by the dataSource and may be negative (see `indexesForVisibleItems` property above for more details). This method only works for visible item views and will return NSNotFound for views that are not currently loaded. For a list of all currently loaded views, use the `visibleItemViews` property.
+
+	- (void)removeItemAtIndex:(NSInteger)index animated:(BOOL)animated;
 
 This removes an item from the carousel. The remaining items will slide across to fill the gap. Note that the data source is not automatically updated when this method is called, so a subsequent call to reloadData will restore the removed item.
 
-	- (void)insertItemAtIndex:(NSUInteger)index animated:(BOOL)animated;
+	- (void)insertItemAtIndex:(NSInteger)index animated:(BOOL)animated;
 
 This inserts an item into the carousel. The new item will be requested from the dataSource, so make sure that the new item has been added to the data source data before calling this method, or you will get duplicate items in the carousel, or other weirdness.
 

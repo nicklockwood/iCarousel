@@ -117,7 +117,7 @@
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     //restore view opacities to normal
-    for (UIView *view in carousel.visibleViews)
+    for (UIView *view in carousel.visibleItemViews)
     {
         view.alpha = 1.0;
     }
@@ -188,13 +188,13 @@
     return 21;
 }
 
-- (float)carouselItemWidth:(iCarousel *)carousel
+- (CGFloat)carouselItemWidth:(iCarousel *)carousel
 {
     //slightly wider than item view
     return ITEM_SPACING;
 }
 
-- (CATransform3D)carousel:(iCarousel *)_carousel transformForItemView:(UIView *)view withOffset:(float)offset
+- (CATransform3D)carousel:(iCarousel *)_carousel transformForItemView:(UIView *)view withOffset:(CGFloat)offset
 {
     //implement 'flip3D' style carousel
     

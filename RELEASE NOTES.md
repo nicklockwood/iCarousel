@@ -1,3 +1,15 @@
+Version 1.5.5
+
+- Deprecated visibleViews property
+- Added visibleItemViews property, which is an array
+- Added indexesForVisibleItems property
+- Added itemViewAtIndex: method
+- Added currentItemView property
+- Added indexOfItemView: method
+- Fixed glitch when unwrapped CoverFlow2-type carousels reach the far right
+- Scroll animation events are now called immediately after scrolling ends if the carousel does not need to scroll a significant distance.
+- Fixed jerky bounce animation on CoverFlow2-type carousels when stopAtItemBoundary is set to NO.
+
 Version 1.5.4
 
 - Fixed a bug where insertItemAtIndex method would not allow items to be inserted at the rightmost end of the carousel.
