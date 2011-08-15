@@ -1146,11 +1146,12 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     
     if (scrolling)
     {
-        NSTimeInterval time = fminf(1.0f, (currentTime - startTime) / scrollDuration);
+        // I use round() because sometimes startOffset has some rounding issues...
+		NSTimeInterval time = (round(endOffset) == round(startOffset))? 1.0f : fminf(1.0f, (currentTime - startTime) / scrollDuration);
         CGFloat delta = [self easeInOut:time];
         scrollOffset = startOffset + (endOffset - startOffset) * delta;
 		[self didScroll];
-        if (time == 1.0f)
+		if (time == 1.0f)
         {
             scrolling = NO;
             [self depthSortViews];
