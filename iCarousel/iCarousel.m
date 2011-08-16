@@ -1196,7 +1196,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 			}
             if (scrollToItemBoundary || (scrollOffset - [self clampedOffset:scrollOffset]) != 0.0f)
             {
-                if (fabsf(scrollOffset - self.currentItemIndex/itemWidth) < 0.01f)
+                if (fabsf(scrollOffset/itemWidth - self.currentItemIndex) < 0.01f)
                 {
                     //call scroll to trigger events for legacy support reasons
                     //even though technically we don't need to scroll at all
@@ -1406,7 +1406,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 				}
 				if (!decelerating && (scrollToItemBoundary || (scrollOffset - [self clampedOffset:scrollOffset]) != 0.0f))
 				{
-                    if (fabsf(scrollOffset - self.currentItemIndex/itemWidth) < 0.01f)
+                    if (fabsf(scrollOffset/itemWidth - self.currentItemIndex) < 0.01f)
                     {
                         //call scroll to trigger events for legacy support reasons
                         //even though technically we don't need to scroll at all
