@@ -180,6 +180,10 @@ This removes an item from the carousel. The remaining items will slide across to
 
 This inserts an item into the carousel. The new item will be requested from the dataSource, so make sure that the new item has been added to the data source data before calling this method, or you will get duplicate items in the carousel, or other weirdness.
 
+	- (void)reloadItemAtIndex:(NSInteger)index animated:(BOOL)animated;
+	
+This method will reload the specified item view. The new item will be requested from the dataSource. If the animated argument is YES, it will cross-fade from the old to the new item view, otherwise it will swap instantly.
+
 
 Protocols
 ---------------

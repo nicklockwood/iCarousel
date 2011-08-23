@@ -1,3 +1,12 @@
+Version 1.5.6
+
+- Added reloadItemAtIndex:animated: method.
+- Fixed some issues when setting offset or carousel bounds on the fly.
+- Less aggressive use of [CATransaction setDisableActions:YES] means more properties of carousel are now animatable (including setting the type).
+- Fixed NaN bug when displaying an empty carousel
+- Fixed glitch when programatically scrolling CoverFlow2-type carousel.
+- Cylinder and rotary carousel are now sized to fit visible number of items.
+
 Version 1.5.5
 
 - Deprecated visibleViews property

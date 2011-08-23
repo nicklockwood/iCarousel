@@ -1,7 +1,7 @@
 //
 //  iCarousel.m
 //
-//  Version 1.5.5
+//  Version 1.5.6
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2010 Charcoal Design. All rights reserved.
@@ -43,11 +43,7 @@
 #define DECELERATION_MULTIPLIER 30.0f
 
 
-#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
-@interface iCarousel () <UIGestureRecognizerDelegate>
-#else
 @interface iCarousel ()
-#endif
 
 @property (nonatomic, retain) UIView *contentView;
 @property (nonatomic, retain) NSDictionary *itemViews;
@@ -68,9 +64,10 @@
 @property (nonatomic, assign) CGFloat previousTranslation;
 @property (nonatomic, assign) BOOL shouldWrap;
 @property (nonatomic, assign) BOOL dragging;
-@property (nonatomic, assign) BOOL didDecelerate;
+@property (nonatomic, assign) BOOL didDrag;
 @property (nonatomic, assign) NSTimeInterval toggleTime;
 
+- (void)didMoveToSuperview;
 - (void)layOutItemViews;
 - (UIView *)loadViewAtIndex:(NSInteger)index;
 - (NSInteger)clampedIndex:(NSInteger)index;
@@ -116,7 +113,7 @@
 @synthesize previousTranslation;
 @synthesize shouldWrap;
 @synthesize dragging;
-@synthesize didDecelerate;
+@synthesize didDrag;
 @synthesize scrollSpeed;
 @synthesize toggleTime;
 @synthesize toggle;
@@ -157,7 +154,7 @@
 	centerItemWhenSelected = YES;
 	
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPan:)];
-	panGesture.delegate = self;
+	panGesture.delegate = (id <UIGestureRecognizerDelegate>)self;
     [contentView addGestureRecognizer:panGesture];
     [panGesture release];
     
@@ -176,24 +173,26 @@
 	if ((self = [super initWithCoder:aDecoder]))
     {
 		[self setup];
-#ifndef __IPHONE_OS_VERSION_MAX_ALLOWED
-        [self viewDidMoveToSuperview]; 
-#endif
+        [self didMoveToSuperview]; 
 	}
 	return self;
 }
 
-#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
-- (id)initWithFrame:(CGRect)frame
-#else
 - (id)initWithFrame:(NSRect)frame
-#endif
 {
 	if ((self = [super initWithFrame:frame]))
     {
 		[self setup];
 	}
 	return self;
+}
+
+- (void)dealloc
+{	
+    [self stopAnimation];
+    [contentView release];
+	[itemViews release];
+	[super dealloc];
 }
 
 - (void)setDataSource:(id<iCarouselDataSource>)_dataSource
@@ -229,6 +228,24 @@
     {
         numberOfVisibleItems = _numberOfVisibleItems;
 		[self layOutItemViews];
+    }
+}
+
+- (void)setContentOffset:(CGSize)_contentOffset
+{
+    if (!CGSizeEqualToSize(contentOffset, _contentOffset))
+    {
+        contentOffset = _contentOffset;
+        [self layOutItemViews];
+    }
+}
+
+- (void)setViewpointOffset:(CGSize)_viewpointOffset
+{
+    if (!CGSizeEqualToSize(viewpointOffset, _viewpointOffset))
+    {
+        viewpointOffset = _viewpointOffset;
+        [self layOutItemViews];
     }
 }
 
@@ -349,7 +366,7 @@
         case iCarouselTypeRotary:
         case iCarouselTypeInvertedRotary:
         {
-			NSInteger count = numberOfItems + (shouldWrap? 0: numberOfPlaceholdersToShow);
+			NSInteger count = MIN(numberOfVisibleItems, numberOfItems + (shouldWrap? 0: numberOfPlaceholdersToShow));
             
             CGFloat arc = M_PI * 2.0f;
             CGFloat radius = itemWidth / 2.0f / tanf(arc/2.0f/count);
@@ -367,7 +384,7 @@
         case iCarouselTypeCylinder:
         case iCarouselTypeInvertedCylinder:
         {
-			NSInteger count = numberOfItems + (shouldWrap? 0: numberOfPlaceholdersToShow);
+			NSInteger count = MIN(numberOfVisibleItems, numberOfItems + (shouldWrap? 0: numberOfPlaceholdersToShow));
             
 			CGFloat arc = M_PI * 2.0f;
             CGFloat radius = itemWidth / 2.0f / tanf(arc/2.0f/count);
@@ -497,9 +514,8 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
     
     //add tap gesture recogniser
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self
-                                                                                 action:@selector(didTap:)];
-    tapGesture.delegate = self;
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTap:)];
+    tapGesture.delegate = (id <UIGestureRecognizerDelegate>)self;
     [container addGestureRecognizer:tapGesture];
     [tapGesture release];
     
@@ -531,7 +547,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     //special-case logic for iCarouselTypeCoverFlow2
     CGFloat offset = [self offsetForIndex:index];
     CGFloat clampedOffset = fmaxf(-1.0f, fminf(1.0f, offset));
-    if (decelerating || (scrolling && didDecelerate) || (scrollOffset - [self clampedOffset:scrollOffset]) != 0.0f)
+    if (decelerating || (scrolling && !didDrag) || (scrollOffset - [self clampedOffset:scrollOffset]) != 0.0f)
     {
         if (offset > 0)
         {
@@ -551,25 +567,24 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     [view.superview setHidden:([view isHidden] || view.layer.opacity < 0.001f)];
 }
 
-#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
-
+//for iOS
 - (void)layoutSubviews
 {
     contentView.frame = self.bounds;
     [self layOutItemViews];
+    if (scrollToItemBoundary)
+    {
+        [self scrollToItemAtIndex:self.currentItemIndex animated:YES];
+    }
 }
 
-#else
-
+//for Mac OS
 - (void)resizeSubviewsWithOldSize:(NSSize)oldSize
 {
 	[CATransaction setDisableActions:YES];
-    contentView.frame = self.bounds;
-    [self layOutItemViews];
+    [self layoutSubviews];
 	[CATransaction setDisableActions:NO];
 }
-
-#endif
 
 - (void)transformItemViews
 {
@@ -679,11 +694,10 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 #pragma mark -
 #pragma mark View loading
 
-- (UIView *)loadViewAtIndex:(NSInteger)index
+- (UIView *)loadViewAtIndex:(NSInteger)index withContainerView:(UIView *)containerView
 {
-#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
-    [UIView setAnimationsEnabled:NO];
-#endif
+    [CATransaction setDisableActions:YES];
+    
     UIView *view = nil;
     if (index < 0)
     {
@@ -702,12 +716,26 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
         view = [[[UIView alloc] init] autorelease];
     }
     [self setItemView:view forIndex:index];
-    [contentView addSubview:[self containView:view]];
+    if (containerView)
+    {
+        [[containerView.subviews lastObject] removeFromSuperview];
+        containerView.frame = view.frame;
+        [containerView addSubview:view];
+    }
+    else
+    {
+        [contentView addSubview:[self containView:view]];
+    }
     [self transformItemView:view atIndex:index];
-#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
-    [UIView setAnimationsEnabled:YES];
-#endif
+    
+    [CATransaction setDisableActions:NO];
+    
     return view;
+}
+
+- (UIView *)loadViewAtIndex:(NSInteger)index
+{
+    return [self loadViewAtIndex:index withContainerView:nil];
 }
 
 - (void)loadUnloadViews
@@ -788,7 +816,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     decelerating = NO;
     scrolling = NO;
     dragging = NO;
-    didDecelerate = NO;
+    didDrag = NO;
     [self layOutItemViews];
 	[self performSelector:@selector(depthSortViews) withObject:nil afterDelay:0.0f];
     [CATransaction setDisableActions:NO];
@@ -1054,6 +1082,25 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     }
 }
 
+- (void)reloadItemAtIndex:(NSInteger)index animated:(BOOL)animated
+{
+    //get container view
+    UIView *containerView = [[self itemViewAtIndex:index] superview];
+    
+    if (animated)
+    {
+        //fade transition
+        CATransition *transition = [CATransition animation];
+        transition.duration = INSERT_DURATION;
+        transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+        transition.type = kCATransitionFade;
+        [containerView.superview.layer addAnimation:transition forKey:nil];
+    }
+    
+    //reload view
+    [self loadViewAtIndex:index withContainerView:containerView];
+}
+
 #pragma mark -
 #pragma mark Animation
 
@@ -1231,11 +1278,8 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
     [CATransaction setDisableActions:NO];
 }
 
-#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
+//for iOS
 - (void)didMoveToSuperview
-#else
-- (void)viewDidMoveToSuperview
-#endif
 {
     if (self.superview)
 	{
@@ -1248,6 +1292,12 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 	}
 }
 
+//for Mac OS
+- (void)viewDidMoveToSuperview
+{
+    [self didMoveToSuperview];
+}
+
 - (void)didScroll
 {	
     if (shouldWrap || !bounces)
@@ -1257,7 +1307,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 	else
 	{
 		CGFloat min = -bounceDistance * itemWidth;
-		CGFloat max = ((CGFloat)numberOfItems - 1.0f + bounceDistance) * itemWidth;
+		CGFloat max = (fmaxf(numberOfItems - 1, 0.0f) + bounceDistance) * itemWidth;
 		if (scrollOffset < min)
 		{
 			scrollOffset = min;
@@ -1394,10 +1444,10 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
             case UIGestureRecognizerStateCancelled:
             {
 				dragging = NO;
-                didDecelerate = NO;
+                didDrag = YES;
                 if ([self shouldDecelerate])
                 {
-                    didDecelerate = YES;
+                    didDrag = NO;
                     [self startDecelerating];
                 }
 				if ([delegate respondsToSelector:@selector(carouselDidEndDragging:willDecelerate:)])
@@ -1495,10 +1545,10 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 	if (scrollEnabled)
     {
 		dragging = NO;
-        didDecelerate = NO;
+        didDrag = YES;
 		if ([self shouldDecelerate])
         {
-            didDecelerate = YES;
+            didDrag = NO;
             [self startDecelerating];
         }
 		if ([delegate respondsToSelector:@selector(carouselDidEndDragging:willDecelerate:)])
@@ -1556,7 +1606,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 - (void)keyDown:(NSEvent *)theEvent
 {
     NSString *characters = [theEvent charactersIgnoringModifiers];
-    if (scrollEnabled && [characters length])
+    if (scrollEnabled && !scrolling && [characters length])
     {
         switch ([characters characterAtIndex:0])
         {
@@ -1575,17 +1625,5 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 }
 
 #endif
-
-
-#pragma mark -
-#pragma mark Memory management
-
-- (void)dealloc
-{	
-    [self stopAnimation];
-    [contentView release];
-	[itemViews release];
-	[super dealloc];
-}
 
 @end

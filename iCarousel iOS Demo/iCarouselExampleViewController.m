@@ -121,8 +121,12 @@
     {
         view.alpha = 1.0;
     }
-        
+    
+    //carousel can smoothly animate between types
+    [UIView beginAnimations:nil context:nil];
     carousel.type = buttonIndex;
+    [UIView commitAnimations];
+    
     navItem.title = [actionSheet buttonTitleAtIndex:buttonIndex];
 }
 

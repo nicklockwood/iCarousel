@@ -1,7 +1,7 @@
 //
 //  iCarousel.h
 //
-//  Version 1.5.5
+//  Version 1.5.6
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2010 Charcoal Design. All rights reserved.
@@ -33,6 +33,9 @@
 #import <QuartzCore/QuartzCore.h>
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
 #import <UIKit/UIKit.h>
+typedef CGRect NSRect;
+typedef CGSize NSSize;
+typedef CGPoint NSPoint;
 #else
 #import <Cocoa/Cocoa.h>
 typedef NSView UIView;
@@ -89,7 +92,7 @@ iCarouselType;
 	BOOL centerItemWhenSelected;
 	BOOL shouldWrap;
 	BOOL dragging;
-    BOOL didDecelerate;
+    BOOL didDrag;
     CGFloat scrollSpeed;
     CGFloat bounceDistance;
     NSTimeInterval toggleTime;
@@ -131,6 +134,7 @@ iCarouselType;
 - (void)scrollToItemAtIndex:(NSInteger)index animated:(BOOL)animated;
 - (void)removeItemAtIndex:(NSInteger)index animated:(BOOL)animated;
 - (void)insertItemAtIndex:(NSInteger)index animated:(BOOL)animated;
+- (void)reloadItemAtIndex:(NSInteger)index animated:(BOOL)animated;
 - (UIView *)itemViewAtIndex:(NSInteger)index;
 - (NSInteger)indexOfItemView:(UIView *)view;
 - (void)reloadData;
