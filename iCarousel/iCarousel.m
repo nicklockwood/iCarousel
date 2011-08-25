@@ -1391,6 +1391,10 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
                 {
                     return NO;
                 }
+                else if ([touch.view.superview isKindOfClass:[UITableViewCell class]]) 
+                {
+                    return NO;
+                }
             }
         }
     }
