@@ -1394,6 +1394,12 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
             }
         }
     }
+    else if ([gesture isKindOfClass:[UIPanGestureRecognizer class]]) {
+      if ([touch.view isKindOfClass:[UISlider class]]) {
+        // prevent recognizing touches on the slider
+        return NO;
+      }
+    }
     return YES;
 }
 
