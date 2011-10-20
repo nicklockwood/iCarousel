@@ -79,6 +79,22 @@
 
 @end
 
+@interface iCarouselContainerView : UIView
+#ifdef __i386__
+{
+    UIView *containedView;
+}
+#endif
+
+@property (nonatomic, retain) UIView *containedView;
+
+@end
+
+@implementation iCarouselContainerView
+
+@synthesize containedView;
+
+@end
 
 @implementation iCarousel
 
@@ -336,6 +352,11 @@
 
 - (NSInteger)indexOfView:(UIView *)view
 {
+    if ([view isKindOfClass:[iCarouselContainerView class]])
+    {
+        view = [(iCarouselContainerView*)view containedView];
+    }
+    
     for (NSNumber *number in [itemViews allKeys])
     {
         if ([itemViews objectForKey:number] == view)
@@ -509,7 +530,8 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 
 - (UIView *)containView:(UIView *)view
 {
-    UIView *container = [[[UIView alloc] initWithFrame:view.frame] autorelease];
+    iCarouselContainerView *container = [[[iCarouselContainerView alloc] initWithFrame:view.frame] autorelease];
+    container.containedView = view;
 	
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
     
