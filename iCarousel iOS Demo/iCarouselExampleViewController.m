@@ -248,17 +248,30 @@
 	NSLog(@"Carousel did end scrolling");
 }
 
+- (BOOL)carousel:(iCarousel *)_carousel shouldSelectItemAtIndex:(NSInteger)index
+{
+	if (index == carousel.currentItemIndex)
+	{
+		NSLog(@"Should select current item");
+	}
+	else
+	{
+		NSLog(@"Should select item number %i", index);
+	}
+    return YES;
+}
+
 - (void)carousel:(iCarousel *)_carousel didSelectItemAtIndex:(NSInteger)index
 {
 	if (index == carousel.currentItemIndex)
 	{
 		//note, this will only ever happen if USE_BUTTONS == NO
 		//otherwise the button intercepts the tap event
-		NSLog(@"Selected current item");
+		NSLog(@"Did select current item");
 	}
 	else
 	{
-		NSLog(@"Selected item number %i", index);
+		NSLog(@"Did select item number %i", index);
 	}
 }
 

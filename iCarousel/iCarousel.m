@@ -1374,8 +1374,14 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 {
     if ([gesture isKindOfClass:[UITapGestureRecognizer class]])
     {
+        UIView *view = touch.view;
+        if (centerItemWhenSelected)
+        {
+            //view will be a container view
+            view = [view.subviews lastObject];
+        }
         //handle tap
-        NSInteger index = [self viewOrSuperviewIndex:touch.view];
+        NSInteger index = [self viewOrSuperviewIndex:view];
         if (index != NSNotFound)
         {
 			if ([delegate respondsToSelector:@selector(carousel:shouldSelectItemAtIndex:)])
@@ -1411,7 +1417,7 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 
 - (void)didTap:(UITapGestureRecognizer *)tapGesture
 {
-    NSInteger index = [self indexOfView:[tapGesture.view.subviews objectAtIndex:0]];
+    NSInteger index = [self indexOfView:[tapGesture.view.subviews lastObject]];
     if (centerItemWhenSelected && index != self.currentItemIndex)
     {
         [self scrollToItemAtIndex:index animated:YES];
