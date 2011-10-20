@@ -1400,8 +1400,18 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
                 {
                     return NO;
                 }
+                else if ([touch.view.superview isKindOfClass:[UITableViewCell class]]) 
+                {
+                    return NO;
+                }
             }
         }
+    }
+    else if ([gesture isKindOfClass:[UIPanGestureRecognizer class]]) {
+      if ([touch.view isKindOfClass:[UISlider class]]) {
+        // prevent recognizing touches on the slider
+        return NO;
+      }
     }
     return YES;
 }
