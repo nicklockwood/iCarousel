@@ -1,7 +1,7 @@
 //
 //  iCarousel.m
 //
-//  Version 1.5.6
+//  Version 1.5.7
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2010 Charcoal Design. All rights reserved.
@@ -1362,7 +1362,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (NSInteger)viewOrSuperviewIndex:(UIView *)view
 {
-    if (view == nil)
+    if (view == nil || view == contentView)
     {
         return NSNotFound;
     }
@@ -1372,6 +1372,19 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         return [self viewOrSuperviewIndex:view.superview];
     }
     return index;
+}
+
+- (BOOL)viewOrSuperview:(UIView *)view isKindOfClass:(Class)class
+{
+    if (view == nil || view == contentView)
+    {
+        return NO;
+    }
+    else if ([view isKindOfClass:class])
+    {
+        return YES;
+    }
+    return [self viewOrSuperview:view.superview isKindOfClass:class];
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gesture shouldReceiveTouch:(UITouch *)touch
@@ -1394,13 +1407,19 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 					return NO;
 				}
 			}
-            if (!centerItemWhenSelected || index == self.currentItemIndex)
+            if ([touch.view isKindOfClass:[UIControl class]] ||
+                [self viewOrSuperview:touch.view isKindOfClass:[UIControl class]])
             {
-                if ([touch.view isKindOfClass:[UIControl class]])
-                {
-                    return NO;
-                }
+                return NO;
             }
+        }
+    }
+    else if ([gesture isKindOfClass:[UIPanGestureRecognizer class]])
+    {
+        if ([self viewOrSuperview:touch.view isKindOfClass:[UISlider class]] ||
+            [self viewOrSuperview:touch.view isKindOfClass:[UISwitch class]])
+        {
+            return NO;
         }
     }
     return YES;
@@ -1409,8 +1428,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gesture
 {
 	if ([gesture isKindOfClass:[UIPanGestureRecognizer class]])
-	{
-		//ignore vertical swipes
+    {
+        //ignore vertical swipes
 		UIPanGestureRecognizer *panGesture = (UIPanGestureRecognizer *)gesture;
 		CGPoint translation = [panGesture translationInView:self];
 		return fabsf(translation.x) >= fabsf(translation.y);

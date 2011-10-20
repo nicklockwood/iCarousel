@@ -1,3 +1,9 @@
+Version 1.5.7
+
+- Fixed ARC compatibility issues with sorting logic
+- UISwitches, UISliders and UITableCells now work correctly with item views
+- Fixed bug in carousel:shouldSelectItemAtIndex: delegate logic
+
 Version 1.5.6
 
 - Added reloadItemAtIndex:animated: method.
