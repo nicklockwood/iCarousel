@@ -455,17 +455,18 @@
     }
 }
 
-NSInteger compareViewDepth(id obj1, id obj2, void *context)
+#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
+
+NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *self)
 {
-    iCarousel *carousel = context;
-	CATransform3D t1 = ((UIView *)obj1).superview.layer.transform;
-	CATransform3D t2 = ((UIView *)obj2).superview.layer.transform;
+	CATransform3D t1 = view1.superview.layer.transform;
+	CATransform3D t2 = view2.superview.layer.transform;
     CGFloat z1 = t1.m13 + t1.m23 + t1.m33 + t1.m43;
     CGFloat z2 = t2.m13 + t2.m23 + t2.m33 + t2.m43;
     CGFloat difference = z1 - z2;
     if (difference == 0.0f)
     {
-        CATransform3D t3 = [carousel currentItemView].superview.layer.transform;
+        CATransform3D t3 = [self currentItemView].superview.layer.transform;
         CGFloat x1 = t1.m11 + t1.m21 + t1.m31 + t1.m41;
         CGFloat x2 = t2.m11 + t2.m21 + t2.m31 + t2.m41;
         CGFloat x3 = t3.m11 + t3.m21 + t3.m31 + t3.m41;
@@ -476,17 +477,20 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
 
 - (void)depthSortViews
 {
-    
-#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
-    
-    for (UIView *view in [[itemViews allValues] sortedArrayUsingFunction:compareViewDepth context:self])
+    for (UIView *view in [[itemViews allValues] sortedArrayUsingFunction:(NSInteger (*)(id, id, void *))compareViewDepth context:self])
     {
         [contentView addSubview:view.superview];
     }
-    
-#endif
-    
 }
+
+#else
+
+- (void)depthSortViews
+{
+    //does nothing on Mac OS
+}
+
+#endif
 
 - (CGFloat)offsetForIndex:(NSInteger)index
 {
@@ -1116,11 +1120,11 @@ NSInteger compareViewDepth(id obj1, id obj2, void *context)
         
 #else
         
-        self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0f/60.0f
-                                                      target:self
-                                                    selector:@selector(step)
-                                                    userInfo:nil
-                                                     repeats:YES];
+        timer = [NSTimer scheduledTimerWithTimeInterval:1.0f/60.0f
+                                                 target:self
+                                               selector:@selector(step)
+                                               userInfo:nil
+                                                repeats:YES];
 #endif
         
     }
