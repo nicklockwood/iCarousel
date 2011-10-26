@@ -285,3 +285,11 @@ If you wish to detect other types of interaction such as swipes, double taps or 
 Note that taps and gestures will be ignored on any item view except the currently selected one, unless you set the `centerItemWhenSelected` property to NO.
 
 On Mac OS there is no easy way to do detect clicks on carousel items currently. You cannot just supply an NSButton as your item view because the transforms applied to the item views mean that hit detection doesn't work properly. I'm investigating possible solutions to this (if you know a good way to fix this, please get in touch, or fork the project on github).
+
+
+FAQ
+-------------------------
+
+Q. My carousel items are overflowing the bounds of the carousel view. How do I prevent this?
+
+A. Set clipToBounds = YES on the carousel.
