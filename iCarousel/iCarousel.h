@@ -1,7 +1,7 @@
 //
 //  iCarousel.h
 //
-//  Version 1.5.7
+//  Version 1.5.8
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2010 Charcoal Design. All rights reserved.

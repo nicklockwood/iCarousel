@@ -140,7 +140,11 @@ By default, the carousel will come to rest at an exact item boundary when it is 
 	
 	@property (nonatomic, assign) BOOL scrollToItemBoundary;
 
-By default whenever the carousel stops moving it will automatically scroll to the nearest item boundary. If you set this property to NO, the carousel will not scroll after stopping and will stay wherever it is, even if it's not perfectly aligned on the current index. The exception to this is that if wrapping is disabled and `bounces` is set to YES then regardless of this setting, the carousel will automatically scroll back to the first or last item index if it comes to rest beyond the end of the carousel. 
+By default whenever the carousel stops moving it will automatically scroll to the nearest item boundary. If you set this property to NO, the carousel will not scroll after stopping and will stay wherever it is, even if it's not perfectly aligned on the current index. The exception to this is that if wrapping is disabled and `bounces` is set to YES then regardless of this setting, the carousel will automatically scroll back to the first or last item index if it comes to rest beyond the end of the carousel.
+
+	@property (nonatomic, assign) BOOL clipToBounds;
+	
+This is actually not a property of iCarousel but is inherited from UIView. It's included here because it's a frequently missed feature. Set this to YES to prevent the carousel item views overflowing their bounds. You can set this property in Interface Builder by ticking the 'Clip Subviews' option. Defaults to NO.
 
 
 Methods
@@ -285,11 +289,3 @@ If you wish to detect other types of interaction such as swipes, double taps or 
 Note that taps and gestures will be ignored on any item view except the currently selected one, unless you set the `centerItemWhenSelected` property to NO.
 
 On Mac OS there is no easy way to do detect clicks on carousel items currently. You cannot just supply an NSButton as your item view because the transforms applied to the item views mean that hit detection doesn't work properly. I'm investigating possible solutions to this (if you know a good way to fix this, please get in touch, or fork the project on github).
-
-
-FAQ
--------------------------
-
-Q. My carousel items are overflowing the bounds of the carousel view. How do I prevent this?
-
-A. Set clipToBounds = YES on the carousel.

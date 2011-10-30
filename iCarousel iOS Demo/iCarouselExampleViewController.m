@@ -96,7 +96,7 @@
 
 - (IBAction)insertItem
 {
-    NSInteger index = carousel.currentItemIndex;
+    NSInteger index = MAX(0, carousel.currentItemIndex);
     [items insertObject:[NSNumber numberWithInt:carousel.numberOfItems] atIndex:index];
     [carousel insertItemAtIndex:index animated:YES];
 }
