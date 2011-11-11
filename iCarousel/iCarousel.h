@@ -1,7 +1,7 @@
 //
 //  iCarousel.h
 //
-//  Version 1.5.8
+//  Version 1.6 beta
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2010 Charcoal Design. All rights reserved.
@@ -99,6 +99,7 @@ iCarouselType;
     CGFloat toggle;
     BOOL stopAtItemBoundary;
     BOOL scrollToItemBoundary;
+    BOOL useDisplayLinkIfAvailable;
 }
 #endif
 
@@ -121,7 +122,6 @@ iCarouselType;
 @property (nonatomic, retain, readonly) UIView *currentItemView;
 @property (nonatomic, retain, readonly) NSArray *indexesForVisibleItems;
 @property (nonatomic, readonly) NSInteger numberOfVisibleItems;
-@property (nonatomic, retain, readonly) NSSet *visibleViews __deprecated; // use visibleItemViews instead
 @property (nonatomic, retain, readonly) NSArray *visibleItemViews;
 @property (nonatomic, readonly) CGFloat itemWidth;
 @property (nonatomic, retain, readonly) UIView *contentView;
@@ -142,6 +142,7 @@ iCarouselType;
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
 
 @property (nonatomic, assign) BOOL centerItemWhenSelected;
+@property (nonatomic, assign) BOOL useDisplayLinkIfAvailable;
 
 #endif
 

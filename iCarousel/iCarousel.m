@@ -1,7 +1,7 @@
 //
 //  iCarousel.m
 //
-//  Version 1.5.8
+//  Version 1.6 beta
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2010 Charcoal Design. All rights reserved.
@@ -125,6 +125,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
 
 @synthesize centerItemWhenSelected;
+@synthesize useDisplayLinkIfAvailable;
 
 #endif
 
@@ -154,6 +155,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
     
 	centerItemWhenSelected = YES;
+    useDisplayLinkIfAvailable = YES;
 	
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPan:)];
 	panGesture.delegate = (id <UIGestureRecognizerDelegate>)self;
@@ -257,6 +259,19 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     }
 }
 
+- (void)setUseDisplayLinkIfAvailable:(BOOL)_useDisplayLinkIfAvailable
+{
+    if (useDisplayLinkIfAvailable != _useDisplayLinkIfAvailable)
+    {
+        useDisplayLinkIfAvailable = _useDisplayLinkIfAvailable;
+        if (timer)
+        {
+            [self stopAnimation];
+            [self startAnimation];
+        }
+    }
+}
+
 
 #pragma mark -
 #pragma mark View management
@@ -264,11 +279,6 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 - (NSArray *)indexesForVisibleItems
 {
     return [[itemViews allKeys] sortedArrayUsingSelector:@selector(compare:)];
-}
-
-- (NSSet *)visibleViews
-{
-    return [NSSet setWithArray:[itemViews allValues]];
 }
 
 - (NSArray *)visibleItemViews
@@ -1154,18 +1164,22 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
         
-        timer = [CADisplayLink displayLinkWithTarget:self selector:@selector(step)];
-        [timer addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
+        if (useDisplayLinkIfAvailable && NSClassFromString(@"CADisplayLink"))
+        {
+        	timer = [CADisplayLink displayLinkWithTarget:self selector:@selector(step)];
+        	[timer addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
+            return;
+        }
         
-#else
-        
-        timer = [NSTimer scheduledTimerWithTimeInterval:1.0f/60.0f
-                                                 target:self
-                                               selector:@selector(step)
-                                               userInfo:nil
-                                                repeats:YES];
 #endif
         
+        timer = [NSTimer timerWithTimeInterval:1.0f/60.0f
+                                        target:self
+                                      selector:@selector(step)
+                                      userInfo:nil
+                                       repeats:YES];
+        
+    	[[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
     }
 }
 

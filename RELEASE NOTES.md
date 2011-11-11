@@ -1,3 +1,8 @@
+Version 1.6
+
+- Added useDisplayLinkIfAvailable property.
+- Removed the deprecated visibleViews property.
+
 Version 1.5.8
 
 - Fixed bug in previous UITableCell fix

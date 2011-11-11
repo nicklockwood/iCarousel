@@ -162,6 +162,10 @@ By default, the carousel will come to rest at an exact item boundary when it is 
 
 By default whenever the carousel stops moving it will automatically scroll to the nearest item boundary. If you set this property to NO, the carousel will not scroll after stopping and will stay wherever it is, even if it's not perfectly aligned on the current index. The exception to this is that if wrapping is disabled and `bounces` is set to YES then regardless of this setting, the carousel will automatically scroll back to the first or last item index if it comes to rest beyond the end of the carousel.
 
+	@property (nonatomic, assign) BOOL useDisplayLinkIfAvailable;
+	
+By default on iOS iCarousel will use CADisplayLink instead of NSTimer for animations if available. This provides better synchronisation with the screen refresh, but can occasionally prevent the animation working properly when the carousel is combined with other views or animations. If you find that the carousel is not continuing to move after being dragged, try setting this property to NO. CADisplayLink isn't currently available on Mac OS, so this option is iOS only.
+
 	@property (nonatomic, assign) BOOL clipToBounds;
 	
 This is actually not a property of iCarousel but is inherited from UIView. It's included here because it's a frequently missed feature. Set this to YES to prevent the carousel item views overflowing their bounds. You can set this property in Interface Builder by ticking the 'Clip Subviews' option. Defaults to NO.
