@@ -99,6 +99,7 @@ iCarouselType;
     CGFloat toggle;
     BOOL stopAtItemBoundary;
     BOOL scrollToItemBoundary;
+    BOOL includeReflections;
 }
 #endif
 
@@ -128,6 +129,7 @@ iCarouselType;
 @property (nonatomic, readonly) CGFloat toggle;
 @property (nonatomic, assign) BOOL stopAtItemBoundary;
 @property (nonatomic, assign) BOOL scrollToItemBoundary;
+@property (nonatomic, assign) BOOL includeReflections;
 
 - (void)scrollByNumberOfItems:(NSInteger)itemCount duration:(NSTimeInterval)duration;
 - (void)scrollToItemAtIndex:(NSInteger)index duration:(NSTimeInterval)duration;
