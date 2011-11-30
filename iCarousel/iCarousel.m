@@ -521,19 +521,33 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (UIView *)reflectionViewFromView:(UIView *)plainView {
     
+    UIView *reflectionView = nil;
+
     // Duplicate the view & stack it below the original
-    UIView *reflectionView = [plainView copy];
+    if ( [plainView conformsToProtocol:@protocol(NSCopying)] )
+    {
+        reflectionView = [plainView copy];
+    }
+    else if ( [plainView isKindOfClass:[UIImageView class]] )
+    {
+        UIImage *image = [(UIImageView *)plainView image];
+        reflectionView = [[UIImageView alloc] initWithImage:image];
+    }
+    else {
+        return nil;
+    }
+    
     CGRect pvf = plainView.frame;
     CGFloat newY = pvf.origin.y + pvf.size.height;
     CGRect reflectionFrame = CGRectMake(pvf.origin.x, newY, pvf.size.width, pvf.size.height);
-
+    
     reflectionView.frame = reflectionFrame;
-
+    
     // Flip the duplicate
     reflectionView.transform = CGAffineTransformIdentity;
     reflectionView.transform = CGAffineTransformMakeScale(1.0, -1.0);
-
-	// Finish it off with a gradient fading off roughly halfway down
+    
+    // Finish it off with a gradient fading off roughly halfway down
     CAGradientLayer *gradientLayer = [CAGradientLayer layer];
     CGFloat halfHeight = reflectionView.bounds.size.height / 2.0;
     CGRect gradientFrame = CGRectMake(0, halfHeight, reflectionView.bounds.size.width, halfHeight);
@@ -549,7 +563,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 {
     UIView *container = [[[UIView alloc] initWithFrame:view.frame] autorelease];
 	
-    if (includeReflections) {
+    if (includeReflections)
+    {
         [container addSubview:[self reflectionViewFromView:view]];
     }
     
