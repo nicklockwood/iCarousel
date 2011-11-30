@@ -523,6 +523,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     
     UIView *reflectionView = nil;
 
+#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
     // Duplicate the view & stack it below the original
     if ( [plainView conformsToProtocol:@protocol(NSCopying)] )
     {
@@ -555,6 +556,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     gradientLayer.colors = [NSArray arrayWithObjects:(id)[[UIColor clearColor] CGColor], (id)[[UIColor clearColor] CGColor], (id)[[UIColor colorWithWhite:0.0 alpha:.4] CGColor], nil];
     gradientLayer.locations = [NSArray arrayWithObjects:[NSNumber numberWithFloat:0.0], [NSNumber numberWithFloat:0.48], [NSNumber numberWithFloat:1.0], nil];
     reflectionView.layer.mask = gradientLayer;
+#endif
 
     return reflectionView;
 }
