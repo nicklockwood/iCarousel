@@ -121,6 +121,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 @synthesize toggle;
 @synthesize stopAtItemBoundary;
 @synthesize scrollToItemBoundary;
+@synthesize includeReflections;
 
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
 
@@ -148,6 +149,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     toggle = 0.0f;
     stopAtItemBoundary = YES;
     scrollToItemBoundary = YES;
+    includeReflections = YES;
     
     contentView = [[UIView alloc] initWithFrame:self.bounds];
     
@@ -517,10 +519,57 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     return offset;
 }
 
+- (UIView *)reflectionViewFromView:(UIView *)plainView {
+    
+    UIView *reflectionView = nil;
+
+#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
+    // Duplicate the view & stack it below the original
+    if ( [plainView conformsToProtocol:@protocol(NSCopying)] )
+    {
+        reflectionView = [plainView copy];
+    }
+    else if ( [plainView isKindOfClass:[UIImageView class]] )
+    {
+        UIImage *image = [(UIImageView *)plainView image];
+        reflectionView = [[UIImageView alloc] initWithImage:image];
+    }
+    else {
+        return nil;
+    }
+    
+    CGRect pvf = plainView.frame;
+    CGFloat newY = pvf.origin.y + pvf.size.height;
+    CGRect reflectionFrame = CGRectMake(pvf.origin.x, newY, pvf.size.width, pvf.size.height);
+    
+    reflectionView.frame = reflectionFrame;
+    
+    // Flip the duplicate
+    reflectionView.transform = CGAffineTransformIdentity;
+    reflectionView.transform = CGAffineTransformMakeScale(1.0, -1.0);
+    
+    // Finish it off with a gradient fading off roughly halfway down
+    CAGradientLayer *gradientLayer = [CAGradientLayer layer];
+    CGFloat halfHeight = reflectionView.bounds.size.height / 2.0;
+    CGRect gradientFrame = CGRectMake(0, halfHeight, reflectionView.bounds.size.width, halfHeight);
+    gradientLayer.frame = gradientFrame;
+    gradientLayer.colors = [NSArray arrayWithObjects:(id)[[UIColor clearColor] CGColor], (id)[[UIColor clearColor] CGColor], (id)[[UIColor colorWithWhite:0.0 alpha:.4] CGColor], nil];
+    gradientLayer.locations = [NSArray arrayWithObjects:[NSNumber numberWithFloat:0.0], [NSNumber numberWithFloat:0.48], [NSNumber numberWithFloat:1.0], nil];
+    reflectionView.layer.mask = gradientLayer;
+#endif
+
+    return reflectionView;
+}
+
 - (UIView *)containView:(UIView *)view
 {
     UIView *container = [[[UIView alloc] initWithFrame:view.frame] autorelease];
 	
+    if (includeReflections)
+    {
+        [container addSubview:[self reflectionViewFromView:view]];
+    }
+    
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
     
     //add tap gesture recogniser

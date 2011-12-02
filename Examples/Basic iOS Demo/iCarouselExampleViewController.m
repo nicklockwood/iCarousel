@@ -155,7 +155,7 @@
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index
 {
     //create a numbered view
-	UIView *view = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]] autorelease];
+	UIView *view = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page_ios.png"]] autorelease];
 	UILabel *label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
 	label.text = [[items objectAtIndex:index] stringValue];
 	label.backgroundColor = [UIColor clearColor];
@@ -174,7 +174,7 @@
 - (UIView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index
 {
 	//create a placeholder view
-	UIView *view = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]] autorelease];
+	UIView *view = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page_ios.png"]] autorelease];
 	UILabel *label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
 	label.text = (index == 0)? @"[": @"]";
 	label.backgroundColor = [UIColor clearColor];
