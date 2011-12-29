@@ -1,7 +1,7 @@
 //
 //  iCarousel.h
 //
-//  Version 1.6 beta
+//  Version 1.6
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2010 Charcoal Design. All rights reserved.
@@ -30,12 +30,21 @@
 //  3. This notice may not be removed or altered from any source distribution.
 //
 
-#import <QuartzCore/QuartzCore.h>
-#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
-#import <UIKit/UIKit.h>
+
+#ifdef USING_CHAMELEON
+#define ICAROUSEL_IOS
+#elif defined __IPHONE_OS_VERSION_MAX_ALLOWED
+#define ICAROUSEL_IOS
 typedef CGRect NSRect;
 typedef CGSize NSSize;
-typedef CGPoint NSPoint;
+#else
+#define ICAROUSEL_MACOS
+#endif
+
+
+#import <QuartzCore/QuartzCore.h>
+#ifdef ICAROUSEL_IOS
+#import <UIKit/UIKit.h>
 #else
 #import <Cocoa/Cocoa.h>
 typedef NSView UIView;
@@ -49,11 +58,26 @@ typedef enum
     iCarouselTypeInvertedRotary,
     iCarouselTypeCylinder,
     iCarouselTypeInvertedCylinder,
+    iCarouselTypeWheel,
+    iCarouselTypeInvertedWheel,
     iCarouselTypeCoverFlow,
     iCarouselTypeCoverFlow2,
+    iCarouselTypeTimeMachine,
     iCarouselTypeCustom
 }
 iCarouselType;
+
+
+typedef enum
+{
+    iCarouselTranformOptionCount = 0,
+    iCarouselTranformOptionArc,
+	iCarouselTranformOptionAngle,
+    iCarouselTranformOptionRadius,
+    iCarouselTranformOptionTilt,
+    iCarouselTranformOptionSpacing
+}
+iCarouselTranformOption;
 
 
 @protocol iCarouselDataSource, iCarouselDelegate;
@@ -61,6 +85,8 @@ iCarouselType;
 @interface iCarousel : UIView
 #ifdef __i386__
 {
+	//required for 32-bit Macs
+	@private
     id<iCarouselDelegate> delegate;
     id<iCarouselDataSource> dataSource;
     iCarouselType type;
@@ -71,6 +97,8 @@ iCarouselType;
     NSInteger numberOfVisibleItems;
     UIView *contentView;
     NSDictionary *itemViews;
+    NSMutableSet *itemViewPool;
+    NSMutableSet *placeholderViewPool;
     NSInteger previousItemIndex;
     CGFloat itemWidth;
     CGFloat scrollOffset;
@@ -99,7 +127,9 @@ iCarouselType;
     CGFloat toggle;
     BOOL stopAtItemBoundary;
     BOOL scrollToItemBoundary;
-    BOOL useDisplayLinkIfAvailable;
+    BOOL useDisplayLink;
+	BOOL vertical;
+    BOOL ignorePerpendicularSwipes;
 }
 #endif
 
@@ -119,15 +149,18 @@ iCarouselType;
 @property (nonatomic, readonly) NSInteger numberOfItems;
 @property (nonatomic, readonly) NSInteger numberOfPlaceholders;
 @property (nonatomic, readonly) NSInteger currentItemIndex;
-@property (nonatomic, retain, readonly) UIView *currentItemView;
-@property (nonatomic, retain, readonly) NSArray *indexesForVisibleItems;
+@property (nonatomic, strong, readonly) UIView *currentItemView;
+@property (nonatomic, strong, readonly) NSArray *indexesForVisibleItems;
 @property (nonatomic, readonly) NSInteger numberOfVisibleItems;
-@property (nonatomic, retain, readonly) NSArray *visibleItemViews;
+@property (nonatomic, strong, readonly) NSArray *visibleItemViews;
 @property (nonatomic, readonly) CGFloat itemWidth;
-@property (nonatomic, retain, readonly) UIView *contentView;
+@property (nonatomic, strong, readonly) UIView *contentView;
 @property (nonatomic, readonly) CGFloat toggle;
 @property (nonatomic, assign) BOOL stopAtItemBoundary;
 @property (nonatomic, assign) BOOL scrollToItemBoundary;
+@property (nonatomic, assign) BOOL useDisplayLink;
+@property (nonatomic, assign, getter = isVertical) BOOL vertical;
+@property (nonatomic, assign) BOOL ignorePerpendicularSwipes;
 
 - (void)scrollByNumberOfItems:(NSInteger)itemCount duration:(NSTimeInterval)duration;
 - (void)scrollToItemAtIndex:(NSInteger)index duration:(NSTimeInterval)duration;
@@ -137,12 +170,12 @@ iCarouselType;
 - (void)reloadItemAtIndex:(NSInteger)index animated:(BOOL)animated;
 - (UIView *)itemViewAtIndex:(NSInteger)index;
 - (NSInteger)indexOfItemView:(UIView *)view;
+- (NSInteger)indexOfItemViewOrSubview:(UIView *)view;
 - (void)reloadData;
 
-#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
+#ifdef ICAROUSEL_IOS
 
 @property (nonatomic, assign) BOOL centerItemWhenSelected;
-@property (nonatomic, assign) BOOL useDisplayLinkIfAvailable;
 
 #endif
 
@@ -152,19 +185,22 @@ iCarouselType;
 @protocol iCarouselDataSource <NSObject>
 
 - (NSUInteger)numberOfItemsInCarousel:(iCarousel *)carousel;
-- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index;
+- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view;
 
 @optional
 
 - (NSUInteger)numberOfPlaceholdersInCarousel:(iCarousel *)carousel;
-- (UIView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index;
+- (UIView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index reusingView:(UIView *)view;
 - (NSUInteger)numberOfVisibleItemsInCarousel:(iCarousel *)carousel;
+
+//deprecated, use carousel:viewForItemAtIndex:reusingView: and carousel:placeholderViewAtIndex:reusingView: instead
+- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index __deprecated;
+- (UIView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index __deprecated;
 
 @end
 
 
 @protocol iCarouselDelegate <NSObject>
-
 @optional
 
 - (void)carouselWillBeginScrollingAnimation:(iCarousel *)carousel;
@@ -178,9 +214,14 @@ iCarouselType;
 - (CGFloat)carouselItemWidth:(iCarousel *)carousel;
 - (CGFloat)carouselOffsetMultiplier:(iCarousel *)carousel;
 - (BOOL)carouselShouldWrap:(iCarousel *)carousel;
-- (CATransform3D)carousel:(iCarousel *)carousel transformForItemView:(UIView *)view withOffset:(CGFloat)offset;
+- (CGFloat)carousel:(iCarousel *)carousel itemAlphaForOffset:(CGFloat)offset;
+- (CATransform3D)carousel:(iCarousel *)carousel itemTransformForOffset:(CGFloat)offset baseTransform:(CATransform3D)transform;
+- (CGFloat)carousel:(iCarousel *)carousel valueForTransformOption:(iCarouselTranformOption)option withDefault:(CGFloat)value;
 
-#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
+//deprecated, use transformForItemAtIndex:withOffset:baseTransform: instead
+- (CATransform3D)carousel:(iCarousel *)carousel transformForItemView:(UIView *)view withOffset:(CGFloat)offset __deprecated;
+
+#ifdef ICAROUSEL_IOS
 
 - (BOOL)carousel:(iCarousel *)carousel shouldSelectItemAtIndex:(NSInteger)index;
 - (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index;

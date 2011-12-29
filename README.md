@@ -8,12 +8,12 @@ iCarousel is a class designed to simplify the implementation of various types of
 Not all features of iCarousel are currently supported on Mac OS. I hope to address this in future. Please refer to the documentation below for details.
 
 
-Supported iOS & SDK Versions
+Supported OS & SDK Versions
 -----------------------------
 
-* Supported build target - iOS 5.0 (Xcode 4.2)
-* Earliest supported deployment target - iOS 4.0 (Xcode 4.2)
-* Earliest compatible deployment target - iOS 3.2
+* Supported build target - iOS 5.0 / Mac OS 10.7 (Xcode 4.2)
+* Earliest supported deployment target - iOS 4.3 / Mac OS 10.7 (Xcode 4.2)
+* Earliest compatible deployment target - iOS 3.2 / Mac OS 10.6
 
 NOTE: 'Supported' means that the library has been tested with this version. 'Compatible' means that the library should work on this iOS version (i.e. it doesn't rely on any unavailable SDK features) but is no longer being tested for compatibility and may require tweaking or bug fixes to run correctly.
 
@@ -27,10 +27,18 @@ To use the iCarousel class in an app, just drag the iCarousel class files (demo 
 ARC Compatibility
 ------------------
 
-iCarousel does not use automatic reference counting, but will convert using the ARC migration tool without any issues. However, in the interests of avoiding modifying the iCarousel library, which may cause unknown bugs or problems later when upgrading to a new version, a better approach is to specify in your ARC project that iCarousel's files should be excluded from the ARC validation process. To do that:
+iCarousel does not use automatic reference counting, but can be converted using the ARC migration tool without any issues. The Tests folder contains examples of ARC-converted versions of iCarousel for iOS and Mac OS.
 
-1) Go to Project Settings, under Build Phases > Compile Sources
-2) Select the iCarousel.m file and add the -fno-objc-arc compiler flag
+However, in the interests of avoiding modifying the iCarousel library (which may cause unknown bugs or problems later when upgrading to a new version) a better approach is to specify in your ARC project that iCarousel's files should be excluded from the ARC validation process. To do that:
+
+1. Go to Project Settings, under Build Phases > Compile Sources
+2. Select the iCarousel.m file and add the -fno-objc-arc compiler flag
+
+
+Chameleon Support
+-------------------
+
+iCarousel is now compatible with the Chameleon iOS-to-Mac conversion library (https://github.com/BigZaphod/Chameleon). To use iCarousel with Chameleon, add `USE_CHAMELEON` to your project's preprocessor macros. Check out the *Chameleon Demo* example project for how to port your iOS iCarousel app to Mac OS using Chameleon - the example demonstrates how to run the No Nib iPhone example on Mac OS using Chameleon. Note that tap-to-center doesn't currently work, and scrolling must be done using a two-fingered scroll gesture, not click-and-drag (both of these are due to features/limitations of the Chameleon UIGestureRecognizer implementation).
 
 
 Carousel Types
@@ -45,8 +53,11 @@ iCarousel supports the following built-in display types:
 - iCarouselTypeInvertedCylinder
 - iCarouselTypeCoverFlow
 - iCarouselTypeCoverflow2
+- iCarouselTypeWheel
+- iCarouselTypeInvertedWheel
+- iCarouselTypeTimeMachine
 
-You can also implement your own bespoke carousel styles using `iCarouselTypeCustom` and the `carousel:transformForItemView:withOffset:` delegate method.
+You can also implement your own bespoke carousel styles using `iCarouselTypeCustom` and the `carousel:itemTransformForOffset:baseTransform:` delegate method.
 
 NOTE: The difference between `iCarouselTypeCoverFlow` and `iCarouselTypeCoverFlow2` types is quite subtle, however the logic for `iCarouselTypeCoverFlow2` is substantially more complex. If you flick the carousel they are basically identical, but if you drag the carousel slowly with your finger the difference should be apparent. `iCarouselTypeCoverFlow2` is designed to simulate the standard Apple CoverFlow effect as closely as possible and may change subtly in future in the interests of that goal.
 
@@ -152,7 +163,7 @@ This is the scroll speed multiplier when the user flicks the carousel with their
 
 	@property (nonatomic, readonly) CGFloat toggle;
 	
-This property is used for the `iCarouselTypeCoverFlow2` carousel transform. It is exposed so that you can implement your own variants of the CoverFlow2 style using the `carousel:transformForItemView:withOffset` delegate method.
+This property is used for the `iCarouselTypeCoverFlow2` carousel transform. It is exposed so that you can implement your own variants of the CoverFlow2 style using the `carousel:itemTransformForOffset:baseTransform:` delegate method.
 
 	@property (nonatomic, assign) BOOL stopAtItemBoundary;
 	
@@ -162,9 +173,17 @@ By default, the carousel will come to rest at an exact item boundary when it is 
 
 By default whenever the carousel stops moving it will automatically scroll to the nearest item boundary. If you set this property to NO, the carousel will not scroll after stopping and will stay wherever it is, even if it's not perfectly aligned on the current index. The exception to this is that if wrapping is disabled and `bounces` is set to YES then regardless of this setting, the carousel will automatically scroll back to the first or last item index if it comes to rest beyond the end of the carousel.
 
-	@property (nonatomic, assign) BOOL useDisplayLinkIfAvailable;
+	@property (nonatomic, assign) BOOL useDisplayLink;
 	
-By default on iOS iCarousel will use CADisplayLink instead of NSTimer for animations if available. This provides better synchronisation with the screen refresh, but can occasionally prevent the animation working properly when the carousel is combined with other views or animations. If you find that the carousel is not continuing to move after being dragged, try setting this property to NO. CADisplayLink isn't currently available on Mac OS, so this option is iOS only.
+By default on iOS iCarousel will use CADisplayLink instead of NSTimer for animations. On Mac OS, the CVDisplayLink API is used instead. This provides better synchronisation with the screen refresh, but can occasionally prevent the animation working properly when the carousel is combined with other views or animations. If you find that the carousel is not continuing to move after being dragged, try setting this property to NO.
+
+	@property (nonatomic, assign, getter = isVertical) BOOL vertical;
+
+This property toggles whether the carousel is displayed horizontally or vertically on screen. All the built-in carousel types work in both orientations. Switching to vertical changes both the layout of the carousel and also the direction of swipe detection on screen. Note that custom carousel transforms are not affected by this property, however the swipe gesture direction will still be affected.
+
+	@property (nonatomic, assign) BOOL ignorePerpendicularSwipes;
+
+If YES, the carousel will ignore swipe gestures that are perpendicular to the orientation of the carousel. So for a horizontal carousel, vertical swipes will not be intercepted. This means that you can have a vertically scrolling scrollView inside a carousel item view and it will still function correctly. Defaults to YES.
 
 	@property (nonatomic, assign) BOOL clipToBounds;
 	
@@ -200,6 +219,10 @@ Returns the visible item view with the specified index. Note that the index rela
 	
 The index for a given item view in the carousel. Works for item views and placeholder views, however placeholder view indexes do not match the ones used by the dataSource and may be negative (see `indexesForVisibleItems` property above for more details). This method only works for visible item views and will return NSNotFound for views that are not currently loaded. For a list of all currently loaded views, use the `visibleItemViews` property.
 
+	- (NSInteger)indexOfItemViewOrSubview:(UIView *)view
+
+This method gives you the item index of either the view passed or the view containing the view passed as a parameter. It works by walking up the view hierarchy starting with the view passed until it finds an item view and returns its index within the carousel. If no currently-loaded item view is found, it returns NSNotFound. This method is extremely useful for handling events on controls embedded within an item view. This allows you to bind all your item controls to a single action method on your view controller, and then work out which item the control that triggered the action was related to. You can see an example of this technique in the *Controls Demo* example project.
+
 	- (void)removeItemAtIndex:(NSInteger)index animated:(BOOL)animated;
 
 This removes an item from the carousel. The remaining items will slide across to fill the gap. Note that the data source is not automatically updated when this method is called, so a subsequent call to reloadData will restore the removed item.
@@ -222,19 +245,19 @@ The iCarousel follows the Apple convention for data-driven views by providing tw
 
 Return the number of items (views) in the carousel.
 
-	- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index;
+	- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view;
 
-Return a view to be displayed at the specified index in the carousel. Unlike UITableView, there is no dequeuing system for iCarousel item views, but you should ensure that each time the `carousel:viewForPageAtIndex:` method is called, it returns a new view instance, as returning multiple copies of the same view may cause display issues with the carousel.
+Return a view to be displayed at the specified index in the carousel. The `reusingView` argument works like a UIPickerView, where views that have previously been displayed in the carousel are passed back to the method to be recycled. If this argument is nil, you can set its properties and return it instead of creating a new view instance, which will slightly improve performance. Unlike UITableView, there is no reuseIdentifier for distinguishing between different carousel view types, so if your carousel contains multiple different view types then you should just ignore this parameter and return a new view each time the method is called. You should ensure that each time the `carousel:viewForPageAtIndex:` method is called, it either returns the reusingView or a brand new view instance rather than maintaining your own pool of recyclable views, as returning multiple copies of the same view for different carousel item indexes may cause display issues with the carousel.
 
 The iCarouselDataSource protocol has the following optional methods:
 
 	- (NSUInteger)numberOfPlaceholdersInCarousel:(iCarousel *)carousel;
 
-Returns the number of placeholder views to display in the carousel. Placeholder views are intended to be used when the number of items in the carousel is too few to fill the carousel width, and you wish to display something in the empty space. They move with the carousel and behave just like any other carousel item, but they do not count towards the numberOfItems value, and cannot be set as the currently selected item. Placeholders are hidden when wrapping is enabled. Placeholders appear on either side of the carousel items. For n placeholder views, the first n/2 items will appear to the left of the item views and the next n/2 will appear to the right. You can have an odd number of placeholders, in which case the carousel will be asymmetrical. **Note: the behaviour for placeholders has changed since version 1.2.x - the number of placeholders value now refers to the total number, not the number on each side.**
+Returns the number of placeholder views to display in the carousel. Placeholder views are intended to be used when the number of items in the carousel is too few to fill the carousel width, and you wish to display something in the empty space. They move with the carousel and behave just like any other carousel item, but they do not count towards the numberOfItems value, and cannot be set as the currently selected item. Placeholders are hidden when wrapping is enabled. Placeholders appear on either side of the carousel items. For n placeholder views, the first n/2 items will appear to the left of the item views and the next n/2 will appear to the right. You can have an odd number of placeholders, in which case the carousel will be asymmetrical.
 
-	- (UIView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index;
+	- (UIView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index reusingView:(UIView *)view;
 
-Return a view to be displayed as the placeholder view. As with the regular item views, you must return a unique view instance for each call to `carouselPlaceholderView:` to avoid display issues. **Note: the protocol and behaviour for placeholders has changed since version 1.2.x - they are no longer mirrored, so it is possible to provide visually distinct views for each placeholder.**
+Return a view to be displayed as the placeholder view. Works the same way as `carousel:viewForItemAtIndex:reusingView`. Placeholder reusingViews are stored in a separate pool to the reusingViews used for regular carousel, so it's not a problem if your placeholder views are different to the item views.
 
 	- (NSUInteger)numberOfVisibleItemsInCarousel:(iCarousel *)carousel;
 	
@@ -286,9 +309,17 @@ Returns the offset multiplier to use when the user drags the carousel with their
 
 Return YES if you want the carousel to wrap around when it reaches the end, and no if you want it to stop. If you do not implement this method, wrapping will be enabled or disabled depending on the carousel type. Generally, circular carousel types will wrap by default and linear ones won't.
 
-	- (CATransform3D)carousel:(iCarousel *)carousel transformForItemView:(UIView *)view withOffset:(CGFloat)offset;
+	- (CGFloat)carousel:(iCarousel *)carousel itemAlphaForOffset:(CGFloat)offset;
+	
+This method lets you control the opacity of views based on their position. This is useful for carousel types where certain views might otherwise obscure the centred view, such as the TimeMachine carousel type. This method is only called if the carousel type is iCarouselTypeCustom.
 
-This method can be used to provide a custom transform for each carousel view. The offset argument is the distance of the view from the middle of the carousel. The  currently centered item view would have an offset of 0, the one to the right would have an offset value of 1.0, the one to the left an offset value of -1.0, and so on. To implement the linear carousel style, you would therefore simply multiply the offset value by the item width and use it as the x value of the transform. If you need to manipulate the view in other ways as it scrolls, such as settings its alpha opacity, you can manipulate the view property directly. Manipulating the view frame, center or bounds is not recommended as the effect may be unpredictable and subject to undocumented change in future releases.
+	- (CATransform3D)carousel:(iCarousel *)carousel itemTransformForOffset:(CGFloat)offset baseTransform:(CATransform3D)transform;
+
+This method can be used to provide a custom transform for each carousel view. The offset argument is the distance of the view from the middle of the carousel. The currently centred item view would have an offset of 0.0, the one to the right would have an offset value of 1.0, the one to the left an offset value of -1.0, and so on. To implement the linear carousel style, you would therefore simply multiply the offset value by the item width and use it as the x value of the transform. This method is only called if the carousel type is iCarouselTypeCustom.
+
+	- (CGFloat)carousel:(iCarousel *)carousel valueForTransformOption:(iCarouselTranformOption)option withDefault:(CGFloat)value;
+
+This method is used to customise the parameters of the standard carousel types. By implementing this method, you can tweak options such as the number of items displayed in a circular carousel, or the amount of tilt in a coverflow carousel. For any option you are not interested in tweaking, just return the default value. The meaning of these options is listed below. Check the *Options Demo* for an example of using this method.
 
 	- (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index;
 
@@ -299,14 +330,44 @@ This method will fire if the user taps any carousel item view (not including pla
 This method will fire if the user taps any carousel item view (not including placeholder views), including the currently selected view. The purpose of a method is to give you the opportunity to ignore a tap on the carousel. If you return YES from the method, or don't implement it, the tap will be processed as normal and the `carousel:didSelectItemAtIndex:` method will be called. If you return NO, the carousel will ignore the tap and it will continue to propagate up the view hierarchy. This is a good way to prevent the carousel intercepting tap events intended for processing by another view. **This method is currently only supported on the iOS version of iCarousel.**
 
 
+Transform Options
+----------------------------
+
+These are the tweakable options for standard carousels, and how they are used. Check the *Options Demo* for an example of the effect that these parameters have.
+
+	iCarouselTranformOptionCount
+	
+The number of items to be displayed in the Rotary, Cylinder and Wheel transforms. Normally this is based on the numberOfVisibleItems value, but you can override this if you want to decouple the shape of the carousel from the number of visible items. This property is used to calculate the carousel radius, so another option is to manipulate the radius directly.
+	
+    iCarouselTranformOptionArc
+    
+The arc of the Rotary, Cylinder and Wheel transforms (in radians). Normally this defaults to 2*M_PI (a complete circle) but you can specify a smaller value, so for example a value of M_PI will create a half-circle or cylinder. This property is used to calculate the carousel radius and angle step, so another option is to manipulate those values directly.
+    
+    iCarouselTranformOptionRadius
+    
+The radius of the Rotary, Cylinder and Wheel transforms in pixels/points. This is usually calculated so that the number of items (count) exactly fits into the specified arc. You can manipulate this value to increase or reduce the item spacing (and the radius of the circle).
+    
+	iCarouselTranformOptionAngle
+	
+The angular step between each item in the Rotary, Cylinder and Wheel transforms (in radians). Manipulating this value without changing the radius will cause a gap at the end of the carousel or cause the items to overlap.
+	
+    iCarouselTranformOptionTilt
+
+The tilt applied to the non-centered items in the CoverFlow, CoverFlow2 and TimeMachine carousel types. This value should be in  the range 0.0 to 1.0.
+
+    iCarouselTranformOptionSpacing
+
+The spacing factor applied to the items in the CoverFlow, CoverFlow2 and TimeMachine carousel types. This value is multiplied by the item width.
+
+
 Detecting Taps on Item Views
 ----------------------------
 
 There are two basic approaches to detecting taps on views in iCarousel on iOS. The first approach is to simply use the `carousel:didSelectItemAtIndex:` delegate method, which fires every time an item is tapped. If you are only interested in taps on the currently centered item, you can compare the `currentItemIndex` property against the index parameter of this method.
 
-Alternatively, if you want a little more control you can supply a UIButton or UIControl as the item view and handle the touch interactions yourself. See the Events test projects for an example of how this is done (doesn't work on Mac OS; see below).
+Alternatively, if you want a little more control you can supply a UIButton or UIControl as the item view and handle the touch interactions yourself. See the *Buttons Demo* example project for an example of how this is done (doesn't work on Mac OS; see below).
 
-You can also nest UIControls within your item views and these will receive touches as expected (see the Controls test project for an example).
+You can also nest UIControls within your item views and these will receive touches as expected (see the *Controls Demo* example project for an example).
 
 If you wish to detect other types of interaction such as swipes, double taps or long presses, the simplest way is to attach a UIGestureRecognizer to your item view or its subviews before passing it to the carousel.
 

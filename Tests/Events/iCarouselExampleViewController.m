@@ -70,7 +70,7 @@
     return NUMBER_OF_ITEMS;
 }
 
-- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index
+- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
 {
     if (useButtons)
     {  
@@ -81,13 +81,12 @@
         [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         button.titleLabel.font = [button.titleLabel.font fontWithSize:50];
         [button addTarget:self action:@selector(buttonTapped:) forControlEvents:UIControlEventTouchUpInside];
-        button.tag = index;
         return button;
     }
     else
     {
         //create a numbered view
-        UIView *view = [[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200.0f, 200.0f)] autorelease];
+        view = [[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200.0f, 200.0f)] autorelease];
         view.backgroundColor = [UIColor lightGrayColor];
 		UILabel *label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
         label.text = [NSString stringWithFormat:@"%i", index];
@@ -151,7 +150,7 @@
 {
 	if (index == carousel.currentItemIndex)
 	{
-		//note, this will only ever happen if USE_BUTTONS == NO
+		//note, this will only ever happen if useButtons == NO
 		//otherwise the button intercepts the tap event
 		NSLog(@"Did select current item");
 	}
@@ -167,7 +166,7 @@
 - (void)buttonTapped:(UIButton *)sender
 {
     [[[[UIAlertView alloc] initWithTitle:@"Button Tapped"
-                                 message:[NSString stringWithFormat:@"You tapped button number %i", sender.tag]
+                                 message:[NSString stringWithFormat:@"You tapped button number %i", [carousel indexOfItemView:sender]]
                                 delegate:nil
                        cancelButtonTitle:@"OK"
                        otherButtonTitles:nil] autorelease] show];

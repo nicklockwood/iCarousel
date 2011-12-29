@@ -14,8 +14,11 @@
 
 @property (nonatomic, retain) IBOutlet iCarousel *carousel;
 @property (nonatomic, retain) IBOutlet UINavigationItem *navItem;
+@property (nonatomic, retain) IBOutlet UIBarItem *orientationBarItem;
+@property (nonatomic, retain) IBOutlet UIBarItem *wrapBarItem;
 
 - (IBAction)switchCarouselType;
+- (IBAction)toggleOrientation;
 - (IBAction)toggleWrap;
 - (IBAction)insertItem;
 - (IBAction)removeItem;

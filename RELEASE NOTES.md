@@ -1,7 +1,18 @@
 Version 1.6
 
-- Added useDisplayLinkIfAvailable property.
-- Removed the deprecated visibleViews property.
+- Added support for item view recycling
+- Carousels can now be either horizontal or vertical
+- Added Wheel and Time Machine carousel types
+- Added new iCarouselTransformOption system for tweaking the standard carousel transforms without having to provide a completely bespoke implementation
+- Added ignorePerpendicularSwipes property
+- Fixed issue with scrolling immediately after reloading
+- Added useDisplayLink toggle to manually force use of NSTimer
+- Added support for the Chameleon iOS-to-Mac porting library
+- Removed the deprecated visibleViews property
+- Added carousel:alphaForViewAtItemWithOffset: delegate method for controlling view opacity
+- Added indexOfItemViewOrSubview: method to simplify handling of controls within  carousel item views
+- Deprecated/renamed some dataSource and delegate methods - check your projects for compatibility
+- Expanded examples and tests
 
 Version 1.5.8
 

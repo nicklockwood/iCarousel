@@ -2,10 +2,10 @@
 <archive type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1280</int>
-		<string key="IBDocument.SystemVersion">10K549</string>
+		<string key="IBDocument.SystemVersion">11C74</string>
 		<string key="IBDocument.InterfaceBuilderVersion">1938</string>
-		<string key="IBDocument.AppKitVersion">1038.36</string>
-		<string key="IBDocument.HIToolboxVersion">461.00</string>
+		<string key="IBDocument.AppKitVersion">1138.23</string>
+		<string key="IBDocument.HIToolboxVersion">567.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 			<string key="NS.object.0">933</string>
@@ -13,8 +13,8 @@
 		<object class="NSArray" key="IBDocument.IntegratedClassDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<string>IBProxyObject</string>
-			<string>IBUIBarButtonItem</string>
 			<string>IBUIImageView</string>
+			<string>IBUIBarButtonItem</string>
 			<string>IBUIToolbar</string>
 			<string>IBUINavigationBar</string>
 			<string>IBUINavigationItem</string>
@@ -81,13 +81,14 @@
 						<string key="NSFrame">{{0, 416}, {320, 44}}</string>
 						<reference key="NSSuperview" ref="774585933"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<object class="NSMutableArray" key="IBUIItems">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<object class="IBUIBarButtonItem" id="329874513">
-								<string key="IBUITitle">Insert Item</string>
+							<object class="IBUIBarButtonItem" id="52276345">
+								<string key="IBUITitle">Switch Type</string>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<int key="IBUIStyle">1</int>
 								<reference key="IBUIToolbar" ref="838375038"/>
@@ -97,9 +98,17 @@
 								<reference key="IBUIToolbar" ref="838375038"/>
 								<int key="IBUISystemItemIdentifier">5</int>
 							</object>
-							<object class="IBUIBarButtonItem" id="39750125">
-								<string key="IBUITitle">Delete Item</string>
+							<object class="IBUIBarButtonItem" id="703423452">
+								<string key="IBUITitle">Horizontal</string>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+								<float key="IBUIWidth">80</float>
+								<int key="IBUIStyle">1</int>
+								<reference key="IBUIToolbar" ref="838375038"/>
+							</object>
+							<object class="IBUIBarButtonItem" id="373222152">
+								<string key="IBUITitle">Wrap: ON</string>
+								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+								<float key="IBUIWidth">80</float>
 								<int key="IBUIStyle">1</int>
 								<reference key="IBUIToolbar" ref="838375038"/>
 							</object>
@@ -118,14 +127,14 @@
 							<object class="IBUINavigationItem" id="238949200">
 								<reference key="IBUINavigationBar" ref="882147969"/>
 								<string key="IBUITitle"/>
-								<object class="IBUIBarButtonItem" key="IBUILeftBarButtonItem" id="52276345">
-									<string key="IBUITitle">Switch Type</string>
+								<object class="IBUIBarButtonItem" key="IBUILeftBarButtonItem" id="329874513">
+									<string key="IBUITitle">Insert Item</string>
 									<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 									<int key="IBUIStyle">1</int>
 									<reference key="IBUINavigationItem" ref="238949200"/>
 								</object>
-								<object class="IBUIBarButtonItem" key="IBUIRightBarButtonItem" id="373222152">
-									<string key="IBUITitle">Wrap: ON</string>
+								<object class="IBUIBarButtonItem" key="IBUIRightBarButtonItem" id="39750125">
+									<string key="IBUITitle">Delete Item</string>
 									<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 									<int key="IBUIStyle">1</int>
 									<reference key="IBUINavigationItem" ref="238949200"/>
@@ -178,6 +187,22 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">orientationBarItem</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="703423452"/>
+					</object>
+					<int key="connectionID">36</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">wrapBarItem</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="373222152"/>
+					</object>
+					<int key="connectionID">37</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">dataSource</string>
 						<reference key="source" ref="474539717"/>
 						<reference key="destination" ref="372490531"/>
@@ -223,6 +248,14 @@
 						<reference key="destination" ref="372490531"/>
 					</object>
 					<int key="connectionID">30</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">toggleOrientation</string>
+						<reference key="source" ref="703423452"/>
+						<reference key="destination" ref="372490531"/>
+					</object>
+					<int key="connectionID">34</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -282,15 +315,10 @@
 						<reference key="object" ref="238949200"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="52276345"/>
-							<reference ref="373222152"/>
+							<reference ref="329874513"/>
+							<reference ref="39750125"/>
 						</object>
 						<reference key="parent" ref="882147969"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">17</int>
-						<reference key="object" ref="52276345"/>
-						<reference key="parent" ref="238949200"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">21</int>
@@ -298,34 +326,45 @@
 						<reference key="parent" ref="774585933"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">22</int>
-						<reference key="object" ref="373222152"/>
-						<reference key="parent" ref="238949200"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">24</int>
 						<reference key="object" ref="838375038"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="957972384"/>
-							<reference ref="39750125"/>
-							<reference ref="329874513"/>
+							<reference ref="52276345"/>
+							<reference ref="373222152"/>
+							<reference ref="703423452"/>
 						</object>
 						<reference key="parent" ref="774585933"/>
 					</object>
 					<object class="IBObjectRecord">
+						<int key="objectID">27</int>
+						<reference key="object" ref="957972384"/>
+						<reference key="parent" ref="838375038"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">17</int>
+						<reference key="object" ref="52276345"/>
+						<reference key="parent" ref="838375038"/>
+					</object>
+					<object class="IBObjectRecord">
 						<int key="objectID">25</int>
 						<reference key="object" ref="329874513"/>
+						<reference key="parent" ref="238949200"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">22</int>
+						<reference key="object" ref="373222152"/>
 						<reference key="parent" ref="838375038"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">26</int>
 						<reference key="object" ref="39750125"/>
-						<reference key="parent" ref="838375038"/>
+						<reference key="parent" ref="238949200"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">27</int>
-						<reference key="object" ref="957972384"/>
+						<int key="objectID">31</int>
+						<reference key="object" ref="703423452"/>
 						<reference key="parent" ref="838375038"/>
 					</object>
 				</object>
@@ -347,6 +386,7 @@
 					<string>25.IBPluginDependency</string>
 					<string>26.IBPluginDependency</string>
 					<string>27.IBPluginDependency</string>
+					<string>31.IBPluginDependency</string>
 					<string>6.IBPluginDependency</string>
 					<string>8.CustomClassName</string>
 					<string>8.IBPluginDependency</string>
@@ -356,6 +396,7 @@
 					<string>iCarouselExampleViewController</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>UIResponder</string>
+					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -383,7 +424,7 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">30</int>
+			<int key="maxID">37</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -438,10 +479,12 @@
 							<string>insertItem</string>
 							<string>removeItem</string>
 							<string>switchCarouselType</string>
+							<string>toggleOrientation</string>
 							<string>toggleWrap</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -455,6 +498,7 @@
 							<string>insertItem</string>
 							<string>removeItem</string>
 							<string>switchCarouselType</string>
+							<string>toggleOrientation</string>
 							<string>toggleWrap</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
@@ -472,6 +516,10 @@
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
+								<string key="name">toggleOrientation</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
 								<string key="name">toggleWrap</string>
 								<string key="candidateClassName">id</string>
 							</object>
@@ -483,11 +531,15 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>carousel</string>
 							<string>navItem</string>
+							<string>orientationBarItem</string>
+							<string>wrapBarItem</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>iCarousel</string>
 							<string>UINavigationItem</string>
+							<string>UIBarItem</string>
+							<string>UIBarItem</string>
 						</object>
 					</object>
 					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
@@ -496,6 +548,8 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>carousel</string>
 							<string>navItem</string>
+							<string>orientationBarItem</string>
+							<string>wrapBarItem</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -506,6 +560,14 @@
 							<object class="IBToOneOutletInfo">
 								<string key="name">navItem</string>
 								<string key="candidateClassName">UINavigationItem</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">orientationBarItem</string>
+								<string key="candidateClassName">UIBarItem</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">wrapBarItem</string>
+								<string key="candidateClassName">UIBarItem</string>
 							</object>
 						</object>
 					</object>

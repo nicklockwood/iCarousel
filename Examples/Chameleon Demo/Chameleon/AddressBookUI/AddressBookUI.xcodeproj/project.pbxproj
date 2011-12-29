@@ -1,0 +1,328 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		143B578F1230357600F43562 /* ABUnknownPersonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14FB132C12302FD900B615ED /* ABUnknownPersonViewController.m */; };
+		143B57941230357C00F43562 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14FB133A1230307C00B615ED /* UIKit.framework */; };
+		14C25EF31211ED0400622309 /* AddressBookUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 14C25EF21211ED0400622309 /* AddressBookUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		14EFB1BB1211DB5300D19B0C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14EFB1BA1211DB5300D19B0C /* Cocoa.framework */; };
+		14FB132D12302FD900B615ED /* ABUnknownPersonViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 14FB132B12302FD900B615ED /* ABUnknownPersonViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		78CB48EA133ABCEB008636DA /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78CB48E9133ABCEB008636DA /* AddressBook.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		14FB13391230307C00B615ED /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 14FB13351230307C00B615ED /* UIKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8DC2EF5B0486A6940098B216;
+			remoteInfo = UIKit;
+		};
+		14FB133C1230308E00B615ED /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 14FB13351230307C00B615ED /* UIKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8DC2EF4F0486A6940098B216;
+			remoteInfo = UIKit;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0867D69BFE84028FC02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		0867D6A5FE840307C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		14C25EF21211ED0400622309 /* AddressBookUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddressBookUI.h; path = Classes/AddressBookUI.h; sourceTree = "<group>"; };
+		14EFB1BA1211DB5300D19B0C /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		14FB132512302F8700B615ED /* AddressBookUI_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressBookUI_Prefix.pch; sourceTree = "<group>"; };
+		14FB132B12302FD900B615ED /* ABUnknownPersonViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ABUnknownPersonViewController.h; path = Classes/ABUnknownPersonViewController.h; sourceTree = "<group>"; };
+		14FB132C12302FD900B615ED /* ABUnknownPersonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ABUnknownPersonViewController.m; path = Classes/ABUnknownPersonViewController.m; sourceTree = "<group>"; };
+		14FB13351230307C00B615ED /* UIKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = UIKit.xcodeproj; path = ../UIKit/UIKit.xcodeproj; sourceTree = SOURCE_ROOT; };
+		78CB48E9133ABCEB008636DA /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8DC2EF5B0486A6940098B216 /* AddressBookUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AddressBookUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8DC2EF560486A6940098B216 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				78CB48EA133ABCEB008636DA /* AddressBook.framework in Frameworks */,
+				143B57941230357C00F43562 /* UIKit.framework in Frameworks */,
+				14EFB1BB1211DB5300D19B0C /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		034768DFFF38A50411DB9C8B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8DC2EF5B0486A6940098B216 /* AddressBookUI.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0867D691FE84028FC02AAC07 /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				14FB13351230307C00B615ED /* UIKit.xcodeproj */,
+				08FB77AEFE84172EC02AAC07 /* Classes */,
+				089C1665FE841158C02AAC07 /* Resources */,
+				32C88DFF0371C24200C91783 /* Other Sources */,
+				0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */,
+				034768DFFF38A50411DB9C8B /* Products */,
+			);
+			name = UIKit;
+			sourceTree = "<group>";
+		};
+		0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				78CB48E9133ABCEB008636DA /* AddressBook.framework */,
+				0867D6A5FE840307C02AAC07 /* AppKit.framework */,
+				0867D69BFE84028FC02AAC07 /* Foundation.framework */,
+				14EFB1BA1211DB5300D19B0C /* Cocoa.framework */,
+			);
+			name = "External Frameworks and Libraries";
+			sourceTree = "<group>";
+		};
+		089C1665FE841158C02AAC07 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8DC2EF5A0486A6940098B216 /* Info.plist */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		08FB77AEFE84172EC02AAC07 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				14C25EF21211ED0400622309 /* AddressBookUI.h */,
+				14FB132B12302FD900B615ED /* ABUnknownPersonViewController.h */,
+				14FB132C12302FD900B615ED /* ABUnknownPersonViewController.m */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		14FB13361230307C00B615ED /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				14FB133A1230307C00B615ED /* UIKit.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		32C88DFF0371C24200C91783 /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				14FB132512302F8700B615ED /* AddressBookUI_Prefix.pch */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		8DC2EF500486A6940098B216 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				14C25EF31211ED0400622309 /* AddressBookUI.h in Headers */,
+				14FB132D12302FD900B615ED /* ABUnknownPersonViewController.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		8DC2EF4F0486A6940098B216 /* AddressBookUI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DEB91AD08733DA50010E9CD /* Build configuration list for PBXNativeTarget "AddressBookUI" */;
+			buildPhases = (
+				8DC2EF500486A6940098B216 /* Headers */,
+				8DC2EF520486A6940098B216 /* Resources */,
+				8DC2EF540486A6940098B216 /* Sources */,
+				8DC2EF560486A6940098B216 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				14FB133D1230308E00B615ED /* PBXTargetDependency */,
+			);
+			name = AddressBookUI;
+			productInstallPath = "$(HOME)/Library/Frameworks";
+			productName = UIKit;
+			productReference = 8DC2EF5B0486A6940098B216 /* AddressBookUI.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0867D690FE84028FC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "AddressBookUI" */;
+			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 0867D691FE84028FC02AAC07 /* UIKit */;
+			productRefGroup = 034768DFFF38A50411DB9C8B /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 14FB13361230307C00B615ED /* Products */;
+					ProjectRef = 14FB13351230307C00B615ED /* UIKit.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				8DC2EF4F0486A6940098B216 /* AddressBookUI */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		14FB133A1230307C00B615ED /* UIKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = UIKit.framework;
+			remoteRef = 14FB13391230307C00B615ED /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8DC2EF520486A6940098B216 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8DC2EF540486A6940098B216 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				143B578F1230357600F43562 /* ABUnknownPersonViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		14FB133D1230308E00B615ED /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = UIKit;
+			targetProxy = 14FB133C1230308E00B615ED /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB91AE08733DA50010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = AddressBookUI_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				PRODUCT_NAME = AddressBookUI;
+				SYMROOT = ../build;
+				VALID_ARCHS = "i386 x86_64";
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Debug;
+		};
+		1DEB91AF08733DA50010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = AddressBookUI_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				PRODUCT_NAME = AddressBookUI;
+				SYMROOT = ../build;
+				VALID_ARCHS = "i386 x86_64";
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Release;
+		};
+		1DEB91B208733DA50010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PREBINDING = NO;
+				SDKROOT = macosx10.6;
+			};
+			name = Debug;
+		};
+		1DEB91B308733DA50010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = macosx10.6;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB91AD08733DA50010E9CD /* Build configuration list for PBXNativeTarget "AddressBookUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB91AE08733DA50010E9CD /* Debug */,
+				1DEB91AF08733DA50010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "AddressBookUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB91B208733DA50010E9CD /* Debug */,
+				1DEB91B308733DA50010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0867D690FE84028FC02AAC07 /* Project object */;
+}

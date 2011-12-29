@@ -78,7 +78,7 @@
 	[self.view addSubview:backgroundView];
 	
 	//create carousel
-	self.carousel = [[iCarousel alloc] initWithFrame:self.view.bounds];
+	carousel = [[iCarousel alloc] initWithFrame:self.view.bounds];
 	carousel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     carousel.type = iCarouselTypeCoverFlow2;
 	carousel.delegate = self;
@@ -127,7 +127,7 @@
                                                        delegate:self
                                               cancelButtonTitle:nil
                                          destructiveButtonTitle:nil
-                                              otherButtonTitles:@"Linear", @"Rotary", @"Inverted Rotary", @"Cylinder", @"Inverted Cylinder", @"CoverFlow", @"CoverFlow2", @"Custom", nil];
+                                              otherButtonTitles:@"Linear", @"Rotary", @"Inverted Rotary", @"Cylinder", @"Inverted Cylinder", @"Wheel", @"Inverted Wheel",  @"CoverFlow", @"CoverFlow2", @"Time Machine", @"Custom", nil];
     [sheet showInView:self.view];
     [sheet release];
 }
@@ -185,16 +185,28 @@
     return NUMBER_OF_VISIBLE_ITEMS;
 }
 
-- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index
+- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
 {
-    //create a numbered view
-	UIView *view = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]] autorelease];
-	UILabel *label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
+    UILabel *label = nil;
+	
+	//create new view if no view is available for recycling
+	if (view == nil)
+	{
+		view = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]] autorelease];
+		label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
+		label.backgroundColor = [UIColor clearColor];
+		label.textAlignment = UITextAlignmentCenter;
+		label.font = [label.font fontWithSize:50];
+		[view addSubview:label];
+	}
+	else
+	{
+		label = [[view subviews] lastObject];
+	}
+	
+    //set label
 	label.text = [[items objectAtIndex:index] stringValue];
-	label.backgroundColor = [UIColor clearColor];
-	label.textAlignment = UITextAlignmentCenter;
-	label.font = [label.font fontWithSize:50];
-	[view addSubview:label];
+	
 	return view;
 }
 
@@ -204,16 +216,28 @@
 	return INCLUDE_PLACEHOLDERS? 2: 0;
 }
 
-- (UIView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index
+- (UIView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index reusingView:(UIView *)view
 {
-	//create a placeholder view
-	UIView *view = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]] autorelease];
-	UILabel *label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
+	UILabel *label = nil;
+	
+	//create new view if no view is available for recycling
+	if (view == nil)
+	{
+		view = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]] autorelease];
+		label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
+		label.backgroundColor = [UIColor clearColor];
+		label.textAlignment = UITextAlignmentCenter;
+		label.font = [label.font fontWithSize:50.0f];
+		[view addSubview:label];
+	}
+	else
+	{
+		label = [[view subviews] lastObject];
+	}
+	
+    //set label
 	label.text = (index == 0)? @"[": @"]";
-	label.backgroundColor = [UIColor clearColor];
-	label.textAlignment = UITextAlignmentCenter;
-	label.font = [label.font fontWithSize:50];
-	[view addSubview:label];
+	
 	return view;
 }
 
@@ -223,18 +247,17 @@
     return ITEM_SPACING;
 }
 
-- (CATransform3D)carousel:(iCarousel *)_carousel transformForItemView:(UIView *)view withOffset:(CGFloat)offset
+- (CGFloat)carousel:(iCarousel *)carousel itemAlphaForOffset:(CGFloat)offset
+{
+	//set opacity based on distance from camera
+    return 1.0f - fminf(fmaxf(offset, 0.0f), 1.0f);
+}
+
+- (CATransform3D)carousel:(iCarousel *)_carousel itemTransformForOffset:(CGFloat)offset baseTransform:(CATransform3D)transform
 {
     //implement 'flip3D' style carousel
-    
-    //set opacity based on distance from camera
-    view.alpha = 1.0 - fminf(fmaxf(offset, 0.0), 1.0);
-    
-    //do 3d transform
-    CATransform3D transform = CATransform3DIdentity;
-    transform.m34 = self.carousel.perspective;
-    transform = CATransform3DRotate(transform, M_PI / 8.0, 0, 1.0, 0);
-    return CATransform3DTranslate(transform, 0.0, 0.0, offset * carousel.itemWidth);
+    transform = CATransform3DRotate(transform, M_PI / 8.0f, 0.0f, 1.0f, 0.0f);
+    return CATransform3DTranslate(transform, 0.0f, 0.0f, offset * carousel.itemWidth);
 }
 
 - (BOOL)carouselShouldWrap:(iCarousel *)carousel

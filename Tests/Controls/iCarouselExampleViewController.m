@@ -55,7 +55,7 @@
     return NUMBER_OF_ITEMS;
 }
 
-- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index
+- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
 {
     //load from nib
     return [[[NSBundle mainBundle] loadNibNamed:@"ItemView" owner:self options:nil] lastObject];
@@ -71,17 +71,17 @@
 
 - (IBAction)pressedButton:(id)sender
 {
-    NSLog(@"button pressed");
+    NSLog(@"button %i pressed", [carousel indexOfItemViewOrSubview:sender]);
 }
 
 - (IBAction)toggledSwitch:(id)sender
 {
-    NSLog(@"switch toggled");
+    NSLog(@"switch %i toggled", [carousel indexOfItemViewOrSubview:sender]);
 }
 
 - (IBAction)changedSlider:(id)sender
 {
-    NSLog(@"slider changed");
+    NSLog(@"slider %i changed", [carousel indexOfItemViewOrSubview:sender]);
 }
 
 @end

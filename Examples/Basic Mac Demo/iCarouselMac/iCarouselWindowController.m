@@ -73,7 +73,13 @@
     carousel.type = (iCarouselType)[sender tag];
 }
 
-- (IBAction)toggleWrap:(id)sender;
+- (IBAction)toggleVertical:(id)sender
+{
+    carousel.vertical = !carousel.vertical;
+    [sender setState:carousel.vertical? NSOnState: NSOffState];
+}
+
+- (IBAction)toggleWrap:(id)sender
 {
     wrap = !wrap;
     [sender setState:wrap? NSOnState: NSOffState];
@@ -104,25 +110,36 @@
     return NUMBER_OF_VISIBLE_ITEMS;
 }
 
-- (NSView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index
+- (NSView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(NSView *)view
 {
-	//create a numbered view
-	NSImage *image = [NSImage imageNamed:@"page.png"];
-	NSImageView *view = [[[NSImageView alloc] initWithFrame:NSMakeRect(0,0,image.size.width,image.size.height)] autorelease];
-	[view setImage:image];
-	[view setImageScaling:NSImageScaleAxesIndependently];
-	
-	NSTextField *label = [[[NSTextField alloc] init] autorelease];
+    NSTextField *label = nil;
+    
+    //create new view if no view is available for recycling
+	if (view == nil)
+	{
+		NSImage *image = [NSImage imageNamed:@"page.png"];
+       	view = [[[NSImageView alloc] initWithFrame:NSMakeRect(0,0,image.size.width,image.size.height)] autorelease];
+        [(NSImageView *)view setImage:image];
+        [(NSImageView *)view setImageScaling:NSImageScaleAxesIndependently];
+        
+        label = [[[NSTextField alloc] init] autorelease];
+        [label setBackgroundColor:[NSColor clearColor]];
+        [label setBordered:NO];
+        [label setSelectable:NO];
+        [label setAlignment:NSCenterTextAlignment];
+        [label setFont:[NSFont fontWithName:[[label font] fontName] size:50]];
+        [view addSubview:label];
+	}
+	else
+	{
+		label = [[view subviews] lastObject];
+	}
+    
+	//set label
 	[label setStringValue:[NSString stringWithFormat:@"%i", index]];
-	[label setBackgroundColor:[NSColor clearColor]];
-	[label setBordered:NO];
-	[label setSelectable:NO];
-	[label setAlignment:NSCenterTextAlignment];
-	[label setFont:[NSFont fontWithName:[[label font] fontName] size:50]];
-	[label sizeToFit];
-	[label setFrameOrigin:NSMakePoint((view.bounds.size.width - label.frame.size.width)/2.0,
-									  (view.bounds.size.height - label.frame.size.height)/2.0)];
-	[view addSubview:label];
+    [label sizeToFit];
+    [label setFrameOrigin:NSMakePoint((view.bounds.size.width - label.frame.size.width)/2.0,
+                                      (view.bounds.size.height - label.frame.size.height)/2.0)];
 	
 	return view;
 }
@@ -133,28 +150,38 @@
 	return INCLUDE_PLACEHOLDERS? 2: 0;
 }
 
-- (NSView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index
+- (NSView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index reusingView:(NSView *)view
 {
-	//create a placeholder view
-	NSImage *image = [NSImage imageNamed:@"page.png"];
-	NSImageView *view = [[[NSImageView alloc] initWithFrame:NSMakeRect(0,0,image.size.width,image.size.height)] autorelease];
-	[view setImage:image];
-	[view setImageScaling:NSImageScaleAxesIndependently];
-	[view setWantsLayer:YES];
-	
-	NSTextField *label = [[[NSTextField alloc] init] autorelease];
+	NSTextField *label = nil;
+    
+    //create new view if no view is available for recycling
+	if (view == nil)
+	{
+		NSImage *image = [NSImage imageNamed:@"page.png"];
+       	view = [[[NSImageView alloc] initWithFrame:NSMakeRect(0,0,image.size.width,image.size.height)] autorelease];
+        [(NSImageView *)view setImage:image];
+        [(NSImageView *)view setImageScaling:NSImageScaleAxesIndependently];
+        
+        label = [[[NSTextField alloc] init] autorelease];
+        [label setBackgroundColor:[NSColor clearColor]];
+        [label setBordered:NO];
+        [label setSelectable:NO];
+        [label setAlignment:NSCenterTextAlignment];
+        [label setFont:[NSFont fontWithName:[[label font] fontName] size:50]];
+        [view addSubview:label];
+	}
+	else
+	{
+		label = [[view subviews] lastObject];
+	}
+    
+	//set label
 	[label setStringValue:(index == 0)? @"[": @"]"];
-	[label setBackgroundColor:[NSColor clearColor]];
-	[label setBordered:NO];
-	[label setSelectable:NO];
-	[label setAlignment:NSCenterTextAlignment];
-	[label setFont:[NSFont fontWithName:[[label font] fontName] size:50]];
-	[label sizeToFit];
-	[label setFrameOrigin:NSMakePoint((view.bounds.size.width - label.frame.size.width)/2.0,
-									  (view.bounds.size.height - label.frame.size.height)/2.0)];
-	[view addSubview:label];
-	
-	return view;
+    [label sizeToFit];
+    [label setFrameOrigin:NSMakePoint((view.bounds.size.width - label.frame.size.width)/2.0,
+                                      (view.bounds.size.height - label.frame.size.height)/2.0)];
+    
+    return view;
 }
 
 - (CGFloat)carouselItemWidth:(iCarousel *)carousel
@@ -163,18 +190,17 @@
     return ITEM_SPACING;
 }
 
-- (CATransform3D)carousel:(iCarousel *)carousel transformForItemView:(NSView *)view withOffset:(CGFloat)offset
+- (CGFloat)carousel:(iCarousel *)carousel itemAlphaForOffset:(CGFloat)offset
+{
+	//set opacity based on distance from camera
+    return 1.0f - fminf(fmaxf(offset, 0.0f), 1.0f);
+}
+
+- (CATransform3D)carousel:(iCarousel *)_carousel itemTransformForOffset:(CGFloat)offset baseTransform:(CATransform3D)transform
 {
     //implement 'flip3D' style carousel
-    
-    //set opacity based on distance from camera
-    view.layer.opacity = 1.0 - fminf(fmaxf(offset, 0.0), 1.0);
-    
-    //do 3d transform
-    CATransform3D transform = CATransform3DIdentity;
-    transform.m34 = self.carousel.perspective;
-    transform = CATransform3DRotate(transform, M_PI / 8.0, 0, 1.0, 0);
-    return CATransform3DTranslate(transform, 0.0, 0.0, offset * self.carousel.itemWidth);
+    transform = CATransform3DRotate(transform, M_PI / 8.0f, 0.0f, 1.0f, 0.0f);
+    return CATransform3DTranslate(transform, 0.0f, 0.0f, offset * carousel.itemWidth);
 }
 
 - (BOOL)carouselShouldWrap:(iCarousel *)carousel

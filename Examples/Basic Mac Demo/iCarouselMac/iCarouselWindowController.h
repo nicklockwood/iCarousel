@@ -20,6 +20,7 @@
 @property (nonatomic, retain) IBOutlet iCarousel *carousel;
 
 - (IBAction)switchCarouselType:(id)sender;
+- (IBAction)toggleVertical:(id)sender;
 - (IBAction)toggleWrap:(id)sender;
 - (IBAction)insertItem:(id)sender;
 - (IBAction)removeItem:(id)sender;

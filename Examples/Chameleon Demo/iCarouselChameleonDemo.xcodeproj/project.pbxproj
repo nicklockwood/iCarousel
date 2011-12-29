@@ -1,0 +1,420 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0153203C14A71F0000C4A088 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0153203B14A71F0000C4A088 /* Cocoa.framework */; };
+		0153204614A71F0100C4A088 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0153204414A71F0100C4A088 /* InfoPlist.strings */; };
+		0153204814A71F0100C4A088 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0153204714A71F0100C4A088 /* main.m */; };
+		0153204C14A71F0100C4A088 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 0153204A14A71F0100C4A088 /* Credits.rtf */; };
+		0153204F14A71F0100C4A088 /* MacAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0153204E14A71F0100C4A088 /* MacAppDelegate.m */; };
+		0153205214A71F0200C4A088 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0153205014A71F0200C4A088 /* MainMenu.xib */; };
+		015322E214A71FCA00C4A088 /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0153220614A71FC700C4A088 /* iCarousel.m */; };
+		0153230C14A7F50200C4A088 /* iCarouselExampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0153230814A7F50200C4A088 /* iCarouselExampleViewController.m */; };
+		0153230D14A7F50200C4A088 /* iCarouselExampleAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0153230914A7F50200C4A088 /* iCarouselExampleAppDelegate.m */; };
+		0153231114A7F5D800C4A088 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 0153230F14A7F5D800C4A088 /* background.png */; };
+		0153231214A7F5D800C4A088 /* page.png in Resources */ = {isa = PBXBuildFile; fileRef = 0153231014A7F5D800C4A088 /* page.png */; };
+		0153231414A7F78000C4A088 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0153231314A7F78000C4A088 /* Quartz.framework */; };
+		0153233214A7FB5D00C4A088 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0153233114A7FB5D00C4A088 /* QuartzCore.framework */; };
+		B2FC80CB14A94A050075C520 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0153232314A7F9FE00C4A088 /* UIKit.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		0153232214A7F9FE00C4A088 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0153231E14A7F9FD00C4A088 /* UIKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8DC2EF5B0486A6940098B216;
+			remoteInfo = UIKit;
+		};
+		0153232F14A7FB3C00C4A088 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0153231E14A7F9FD00C4A088 /* UIKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8DC2EF4F0486A6940098B216;
+			remoteInfo = UIKit;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0153203714A71F0000C4A088 /* iCarouselChameleonDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iCarouselChameleonDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0153203B14A71F0000C4A088 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		0153203E14A71F0000C4A088 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		0153203F14A71F0000C4A088 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		0153204014A71F0000C4A088 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		0153204314A71F0000C4A088 /* iCarouselChameleonDemo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "iCarouselChameleonDemo-Info.plist"; sourceTree = "<group>"; };
+		0153204514A71F0100C4A088 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		0153204714A71F0100C4A088 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		0153204914A71F0100C4A088 /* iCarouselChameleonDemo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iCarouselChameleonDemo-Prefix.pch"; sourceTree = "<group>"; };
+		0153204B14A71F0100C4A088 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		0153204D14A71F0100C4A088 /* MacAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MacAppDelegate.h; sourceTree = "<group>"; };
+		0153204E14A71F0100C4A088 /* MacAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MacAppDelegate.m; sourceTree = "<group>"; };
+		0153205114A71F0200C4A088 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		0153220514A71FC700C4A088 /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
+		0153220614A71FC700C4A088 /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
+		0153230814A7F50200C4A088 /* iCarouselExampleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarouselExampleViewController.m; sourceTree = "<group>"; };
+		0153230914A7F50200C4A088 /* iCarouselExampleAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarouselExampleAppDelegate.m; sourceTree = "<group>"; };
+		0153230A14A7F50200C4A088 /* iCarouselExampleAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarouselExampleAppDelegate.h; sourceTree = "<group>"; };
+		0153230B14A7F50200C4A088 /* iCarouselExampleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarouselExampleViewController.h; sourceTree = "<group>"; };
+		0153230F14A7F5D800C4A088 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
+		0153231014A7F5D800C4A088 /* page.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page.png; sourceTree = "<group>"; };
+		0153231314A7F78000C4A088 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
+		0153231E14A7F9FD00C4A088 /* UIKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = UIKit.xcodeproj; path = Chameleon/UIKit/UIKit.xcodeproj; sourceTree = "<group>"; };
+		0153233114A7FB5D00C4A088 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		0153203414A71F0000C4A088 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B2FC80CB14A94A050075C520 /* UIKit.framework in Frameworks */,
+				0153233214A7FB5D00C4A088 /* QuartzCore.framework in Frameworks */,
+				0153231414A7F78000C4A088 /* Quartz.framework in Frameworks */,
+				0153203C14A71F0000C4A088 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0153202C14A71EFF00C4A088 = {
+			isa = PBXGroup;
+			children = (
+				0153232414A7FA1500C4A088 /* Chameleon */,
+				0153220414A71FC700C4A088 /* iCarousel */,
+				0153204114A71F0000C4A088 /* iCarouselChameleonDemo */,
+				0153203A14A71F0000C4A088 /* Frameworks */,
+				0153203814A71F0000C4A088 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		0153203814A71F0000C4A088 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0153203714A71F0000C4A088 /* iCarouselChameleonDemo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0153203A14A71F0000C4A088 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0153233114A7FB5D00C4A088 /* QuartzCore.framework */,
+				0153231314A7F78000C4A088 /* Quartz.framework */,
+				0153203B14A71F0000C4A088 /* Cocoa.framework */,
+				0153203D14A71F0000C4A088 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		0153203D14A71F0000C4A088 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0153203E14A71F0000C4A088 /* AppKit.framework */,
+				0153203F14A71F0000C4A088 /* CoreData.framework */,
+				0153204014A71F0000C4A088 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		0153204114A71F0000C4A088 /* iCarouselChameleonDemo */ = {
+			isa = PBXGroup;
+			children = (
+				0153204D14A71F0100C4A088 /* MacAppDelegate.h */,
+				0153204E14A71F0100C4A088 /* MacAppDelegate.m */,
+				0153230A14A7F50200C4A088 /* iCarouselExampleAppDelegate.h */,
+				0153230914A7F50200C4A088 /* iCarouselExampleAppDelegate.m */,
+				0153230B14A7F50200C4A088 /* iCarouselExampleViewController.h */,
+				0153230814A7F50200C4A088 /* iCarouselExampleViewController.m */,
+				0153205014A71F0200C4A088 /* MainMenu.xib */,
+				0153230E14A7F5D800C4A088 /* Resources */,
+				0153204214A71F0000C4A088 /* Supporting Files */,
+			);
+			path = iCarouselChameleonDemo;
+			sourceTree = "<group>";
+		};
+		0153204214A71F0000C4A088 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				0153204314A71F0000C4A088 /* iCarouselChameleonDemo-Info.plist */,
+				0153204414A71F0100C4A088 /* InfoPlist.strings */,
+				0153204714A71F0100C4A088 /* main.m */,
+				0153204914A71F0100C4A088 /* iCarouselChameleonDemo-Prefix.pch */,
+				0153204A14A71F0100C4A088 /* Credits.rtf */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		0153220414A71FC700C4A088 /* iCarousel */ = {
+			isa = PBXGroup;
+			children = (
+				0153220514A71FC700C4A088 /* iCarousel.h */,
+				0153220614A71FC700C4A088 /* iCarousel.m */,
+			);
+			name = iCarousel;
+			path = ../../iCarousel;
+			sourceTree = "<group>";
+		};
+		0153230E14A7F5D800C4A088 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				0153230F14A7F5D800C4A088 /* background.png */,
+				0153231014A7F5D800C4A088 /* page.png */,
+			);
+			name = Resources;
+			path = ../../Resources;
+			sourceTree = "<group>";
+		};
+		0153231F14A7F9FD00C4A088 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0153232314A7F9FE00C4A088 /* UIKit.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0153232414A7FA1500C4A088 /* Chameleon */ = {
+			isa = PBXGroup;
+			children = (
+				0153231E14A7F9FD00C4A088 /* UIKit.xcodeproj */,
+			);
+			name = Chameleon;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		0153203614A71F0000C4A088 /* iCarouselChameleonDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0153205514A71F0200C4A088 /* Build configuration list for PBXNativeTarget "iCarouselChameleonDemo" */;
+			buildPhases = (
+				0153203314A71F0000C4A088 /* Sources */,
+				0153203414A71F0000C4A088 /* Frameworks */,
+				0153203514A71F0000C4A088 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				0153233014A7FB3C00C4A088 /* PBXTargetDependency */,
+			);
+			name = iCarouselChameleonDemo;
+			productName = iCarouselChameleonDemo;
+			productReference = 0153203714A71F0000C4A088 /* iCarouselChameleonDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0153202E14A71EFF00C4A088 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+			};
+			buildConfigurationList = 0153203114A71EFF00C4A088 /* Build configuration list for PBXProject "iCarouselChameleonDemo" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				English,
+			);
+			mainGroup = 0153202C14A71EFF00C4A088;
+			productRefGroup = 0153203814A71F0000C4A088 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 0153231F14A7F9FD00C4A088 /* Products */;
+					ProjectRef = 0153231E14A7F9FD00C4A088 /* UIKit.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				0153203614A71F0000C4A088 /* iCarouselChameleonDemo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		0153232314A7F9FE00C4A088 /* UIKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = UIKit.framework;
+			remoteRef = 0153232214A7F9FE00C4A088 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		0153203514A71F0000C4A088 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0153204614A71F0100C4A088 /* InfoPlist.strings in Resources */,
+				0153204C14A71F0100C4A088 /* Credits.rtf in Resources */,
+				0153205214A71F0200C4A088 /* MainMenu.xib in Resources */,
+				0153231114A7F5D800C4A088 /* background.png in Resources */,
+				0153231214A7F5D800C4A088 /* page.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		0153203314A71F0000C4A088 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0153204814A71F0100C4A088 /* main.m in Sources */,
+				0153204F14A71F0100C4A088 /* MacAppDelegate.m in Sources */,
+				015322E214A71FCA00C4A088 /* iCarousel.m in Sources */,
+				0153230C14A7F50200C4A088 /* iCarouselExampleViewController.m in Sources */,
+				0153230D14A7F50200C4A088 /* iCarouselExampleAppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		0153233014A7FB3C00C4A088 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = UIKit;
+			targetProxy = 0153232F14A7FB3C00C4A088 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		0153204414A71F0100C4A088 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0153204514A71F0100C4A088 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		0153204A14A71F0100C4A088 /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0153204B14A71F0100C4A088 /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		0153205014A71F0200C4A088 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0153205114A71F0200C4A088 /* en */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		0153205314A71F0200C4A088 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		0153205414A71F0200C4A088 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		0153205614A71F0200C4A088 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "iCarouselChameleonDemo/iCarouselChameleonDemo-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					USING_CHAMELEON,
+				);
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = "iCarouselChameleonDemo/iCarouselChameleonDemo-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		0153205714A71F0200C4A088 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "iCarouselChameleonDemo/iCarouselChameleonDemo-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = USING_CHAMELEON;
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = "iCarouselChameleonDemo/iCarouselChameleonDemo-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0153203114A71EFF00C4A088 /* Build configuration list for PBXProject "iCarouselChameleonDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0153205314A71F0200C4A088 /* Debug */,
+				0153205414A71F0200C4A088 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0153205514A71F0200C4A088 /* Build configuration list for PBXNativeTarget "iCarouselChameleonDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0153205614A71F0200C4A088 /* Debug */,
+				0153205714A71F0200C4A088 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0153202E14A71EFF00C4A088 /* Project object */;
+}

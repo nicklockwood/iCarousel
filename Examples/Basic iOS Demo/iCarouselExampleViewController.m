@@ -12,8 +12,8 @@
 #define IS_IPAD (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 
 #define NUMBER_OF_ITEMS (IS_IPAD? 19: 12)
-#define NUMBER_OF_VISIBLE_ITEMS (IS_IPAD? 19: 7)
-#define ITEM_SPACING 210
+#define NUMBER_OF_VISIBLE_ITEMS 25
+#define ITEM_SPACING 210.0f
 #define INCLUDE_PLACEHOLDERS YES
 
 
@@ -29,20 +29,36 @@
 
 @synthesize carousel;
 @synthesize navItem;
+@synthesize orientationBarItem;
+@synthesize wrapBarItem;
 @synthesize wrap;
 @synthesize items;
+
+- (void)setUp
+{
+	//set up data
+	wrap = YES;
+	self.items = [NSMutableArray array];
+	for (int i = 0; i < NUMBER_OF_ITEMS; i++)
+	{
+		[items addObject:[NSNumber numberWithInt:i]];
+	}
+}
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]))
+    {
+        [self setUp];
+    }
+    return self;
+}
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     if ((self = [super initWithCoder:aDecoder]))
     {
-        //set up data
-        wrap = YES;
-        self.items = [NSMutableArray array];
-        for (int i = 0; i < NUMBER_OF_ITEMS; i++)
-        {
-            [items addObject:[NSNumber numberWithInt:i]];
-        }
+        [self setUp];
     }
     return self;
 }
@@ -56,6 +72,8 @@
 	
     [carousel release];
     [navItem release];
+    [orientationBarItem release];
+    [wrapBarItem release];
     [items release];
     [super dealloc];
 }
@@ -77,6 +95,8 @@
     [super viewDidUnload];
     self.carousel = nil;
     self.navItem = nil;
+    self.orientationBarItem = nil;
+    self.wrapBarItem = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -90,15 +110,26 @@
                                                        delegate:self
                                               cancelButtonTitle:nil
                                          destructiveButtonTitle:nil
-                                              otherButtonTitles:@"Linear", @"Rotary", @"Inverted Rotary", @"Cylinder", @"Inverted Cylinder", @"CoverFlow", @"CoverFlow2", @"Custom", nil];
+                                              otherButtonTitles:@"Linear", @"Rotary", @"Inverted Rotary", @"Cylinder", @"Inverted Cylinder", @"Wheel", @"Inverted Wheel", @"CoverFlow", @"CoverFlow2", @"Time Machine", @"Custom", nil];
     [sheet showInView:self.view];
     [sheet release];
+}
+
+- (IBAction)toggleOrientation
+{
+    //carousel orientation can be animated
+    [UIView beginAnimations:nil context:nil];
+    carousel.vertical = !carousel.vertical;
+    [UIView commitAnimations];
+    
+    //update button
+    orientationBarItem.title = carousel.vertical? @"Vertical": @"Horizontal";
 }
 
 - (IBAction)toggleWrap
 {
     wrap = !wrap;
-    navItem.rightBarButtonItem.title = wrap? @"Wrap: ON": @"Wrap: OFF";
+    wrapBarItem.title = wrap? @"Wrap: ON": @"Wrap: OFF";
     [carousel reloadData];
 }
 
@@ -124,17 +155,15 @@
 
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-    //restore view opacities to normal
-    for (UIView *view in carousel.visibleItemViews)
-    {
-        view.alpha = 1.0;
-    }
+    //map button index to carousel type
+    iCarouselType type = buttonIndex;
     
     //carousel can smoothly animate between types
     [UIView beginAnimations:nil context:nil];
-    carousel.type = buttonIndex;
+    carousel.type = type;
     [UIView commitAnimations];
     
+    //update title
     navItem.title = [actionSheet buttonTitleAtIndex:buttonIndex];
 }
 
@@ -149,19 +178,32 @@
 - (NSUInteger)numberOfVisibleItemsInCarousel:(iCarousel *)carousel
 {
     //limit the number of items views loaded concurrently (for performance reasons)
+    //this also affects the appearance of circular-type carousels
     return NUMBER_OF_VISIBLE_ITEMS;
 }
 
-- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index
+- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
 {
-    //create a numbered view
-	UIView *view = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]] autorelease];
-	UILabel *label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
+	UILabel *label = nil;
+	
+	//create new view if no view is available for recycling
+	if (view == nil)
+	{
+		view = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]] autorelease];
+		label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
+		label.backgroundColor = [UIColor clearColor];
+		label.textAlignment = UITextAlignmentCenter;
+		label.font = [label.font fontWithSize:50];
+		[view addSubview:label];
+	}
+	else
+	{
+		label = [[view subviews] lastObject];
+	}
+	
+    //set label
 	label.text = [[items objectAtIndex:index] stringValue];
-	label.backgroundColor = [UIColor clearColor];
-	label.textAlignment = UITextAlignmentCenter;
-	label.font = [label.font fontWithSize:50];
-	[view addSubview:label];
+	
 	return view;
 }
 
@@ -171,16 +213,28 @@
 	return INCLUDE_PLACEHOLDERS? 2: 0;
 }
 
-- (UIView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index
+- (UIView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index reusingView:(UIView *)view
 {
-	//create a placeholder view
-	UIView *view = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]] autorelease];
-	UILabel *label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
+	UILabel *label = nil;
+	
+	//create new view if no view is available for recycling
+	if (view == nil)
+	{
+		view = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]] autorelease];
+		label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
+		label.backgroundColor = [UIColor clearColor];
+		label.textAlignment = UITextAlignmentCenter;
+		label.font = [label.font fontWithSize:50.0f];
+		[view addSubview:label];
+	}
+	else
+	{
+		label = [[view subviews] lastObject];
+	}
+	
+    //set label
 	label.text = (index == 0)? @"[": @"]";
-	label.backgroundColor = [UIColor clearColor];
-	label.textAlignment = UITextAlignmentCenter;
-	label.font = [label.font fontWithSize:50];
-	[view addSubview:label];
+	
 	return view;
 }
 
@@ -190,23 +244,21 @@
     return ITEM_SPACING;
 }
 
-- (CATransform3D)carousel:(iCarousel *)_carousel transformForItemView:(UIView *)view withOffset:(CGFloat)offset
+- (CGFloat)carousel:(iCarousel *)carousel itemAlphaForOffset:(CGFloat)offset
+{
+	//set opacity based on distance from camera
+    return 1.0f - fminf(fmaxf(offset, 0.0f), 1.0f);
+}
+
+- (CATransform3D)carousel:(iCarousel *)_carousel itemTransformForOffset:(CGFloat)offset baseTransform:(CATransform3D)transform
 {
     //implement 'flip3D' style carousel
-    
-    //set opacity based on distance from camera
-    view.alpha = 1.0 - fminf(fmaxf(offset, 0.0), 1.0);
-    
-    //do 3d transform
-    CATransform3D transform = CATransform3DIdentity;
-    transform.m34 = self.carousel.perspective;
-    transform = CATransform3DRotate(transform, M_PI / 8.0, 0, 1.0, 0);
-    return CATransform3DTranslate(transform, 0.0, 0.0, offset * carousel.itemWidth);
+    transform = CATransform3DRotate(transform, M_PI / 8.0f, 0.0f, 1.0f, 0.0f);
+    return CATransform3DTranslate(transform, 0.0f, 0.0f, offset * carousel.itemWidth);
 }
 
 - (BOOL)carouselShouldWrap:(iCarousel *)carousel
 {
-    //wrap all carousels
     return wrap;
 }
 
