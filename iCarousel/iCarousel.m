@@ -62,7 +62,11 @@
 @property (nonatomic, assign) BOOL scrolling;
 @property (nonatomic, assign) NSTimeInterval startTime;
 @property (nonatomic, assign) CGFloat startVelocity;
+#ifdef ICAROUSEL_ARC
+@property (nonatomic, unsafe_unretained) id timer;
+#else
 @property (nonatomic, assign) id timer;
+#endif
 @property (nonatomic, assign) BOOL decelerating;
 @property (nonatomic, assign) CGFloat previousTranslation;
 @property (nonatomic, assign) BOOL shouldWrap;
@@ -182,7 +186,10 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPan:)];
 	panGesture.delegate = (id <UIGestureRecognizerDelegate>)self;
     [contentView addGestureRecognizer:panGesture];
+    
+#ifndef ICAROUSEL_ARC
     [panGesture release];
+#endif
     
 #else
     
@@ -220,11 +227,15 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 - (void)dealloc
 {	
     [self stopAnimation];
+    
+#ifndef ICAROUSEL_ARC
     [contentView release];
 	[itemViews release];
     [itemViewPool release];
     [placeholderViewPool release];
+    
 	[super dealloc];
+#endif
 }
 
 - (void)setDataSource:(id<iCarouselDataSource>)_dataSource
@@ -649,7 +660,11 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (void)depthSortViews
 {
+#ifdef ICAROUSEL_ARC
+    for (UIView *view in [[itemViews allValues] sortedArrayUsingFunction:(NSInteger (*)(id, id, void *))compareViewDepth context:(__bridge void *)(self)])
+#else
     for (UIView *view in [[itemViews allValues] sortedArrayUsingFunction:(NSInteger (*)(id, id, void *))compareViewDepth context:self])
+#endif
     {
         [contentView addSubview:view.superview];
     }
@@ -696,7 +711,11 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (UIView *)containView:(UIView *)view
 {
+#ifdef ICAROUSEL_ARC
+    UIView *container = [[UIView alloc] initWithFrame:view.frame];
+#else
     UIView *container = [[[UIView alloc] initWithFrame:view.frame] autorelease];
+#endif
 	
 #ifdef ICAROUSEL_IOS
     
@@ -704,7 +723,10 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTap:)];
     tapGesture.delegate = (id <UIGestureRecognizerDelegate>)self;
     [container addGestureRecognizer:tapGesture];
+    
+#ifndef ICAROUSEL_ARC
     [tapGesture release];
+#endif
     
 #endif
     
@@ -935,7 +957,11 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (UIView *)dequeueItemView
 {
+#ifdef ICAROUSEL_ARC
+	UIView *view = [itemViewPool anyObject];
+#else
 	UIView *view = [[[itemViewPool anyObject] retain] autorelease];
+#endif
     if (view)
     {
         [itemViewPool removeObject:view];
@@ -945,7 +971,11 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (UIView *)dequeuePlaceholderView
 {
+#ifdef ICAROUSEL_ARC
+	UIView *view = [placeholderViewPool anyObject];
+#else
 	UIView *view = [[[placeholderViewPool anyObject] retain] autorelease];
+#endif
     if (view)
     {
         [placeholderViewPool removeObject:view];
@@ -1004,7 +1034,11 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     
     if (view == nil)
     {
+#ifdef ICAROUSEL_ARC
+        view = [[UIView alloc] init];
+#else
         view = [[[UIView alloc] init] autorelease];
+#endif
     }
     [self setItemView:view forIndex:index];
     if (containerView)
