@@ -30,6 +30,13 @@
 //  3. This notice may not be removed or altered from any source distribution.
 //
 
+#ifndef __has_feature
+#define __has_feature(x) 0
+#endif
+
+#if __has_feature(objc_arc)
+#define ICAROUSEL_ARC
+#endif
 
 #ifdef USING_CHAMELEON
 #define ICAROUSEL_IOS
@@ -86,9 +93,14 @@ iCarouselTranformOption;
 #ifdef __i386__
 {
 	//required for 32-bit Macs
-	@private
+    @private
+#ifdef ICAROUSEL_ARC
+    id<iCarouselDelegate> __unsafe_unretained delegate;
+    id<iCarouselDataSource> __unsafe_unretained dataSource;
+#else
     id<iCarouselDelegate> delegate;
     id<iCarouselDataSource> dataSource;
+#endif
     iCarouselType type;
     CGFloat perspective;
     NSInteger numberOfItems;
@@ -104,7 +116,11 @@ iCarouselTranformOption;
     CGFloat scrollOffset;
     CGFloat offsetMultiplier;
     CGFloat startVelocity;
+#ifdef ICAROUSEL_ARC
+    id __unsafe_unretained timer;
+#else
     id timer;
+#endif
     BOOL decelerating;
     BOOL scrollEnabled;
     CGFloat decelerationRate;
@@ -133,8 +149,13 @@ iCarouselTranformOption;
 }
 #endif
 
+#ifdef ICAROUSEL_ARC
+@property (nonatomic, unsafe_unretained) IBOutlet id<iCarouselDataSource> dataSource;
+@property (nonatomic, unsafe_unretained) IBOutlet id<iCarouselDelegate> delegate;
+#else
 @property (nonatomic, assign) IBOutlet id<iCarouselDataSource> dataSource;
 @property (nonatomic, assign) IBOutlet id<iCarouselDelegate> delegate;
+#endif
 @property (nonatomic, assign) iCarouselType type;
 @property (nonatomic, assign) CGFloat perspective;
 @property (nonatomic, assign) CGFloat decelerationRate;
