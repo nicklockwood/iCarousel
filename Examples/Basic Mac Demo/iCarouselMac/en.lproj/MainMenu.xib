@@ -1349,16 +1349,27 @@
 									<reference key="NSMixedImage" ref="502551668"/>
 									<int key="NSTag">9</int>
 								</object>
-								<object class="NSMenuItem" id="136859151">
+								<object class="NSMenuItem" id="687737696">
 									<reference key="NSMenu" ref="466310130"/>
 									<bool key="NSIsAlternate">YES</bool>
-									<string key="NSTitle">Custom</string>
-									<string key="NSKeyEquiv">-</string>
+									<string key="NSTitle">Inverted Time Machine</string>
+									<string key="NSKeyEquiv">r</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="35465992"/>
 									<reference key="NSMixedImage" ref="502551668"/>
 									<int key="NSTag">10</int>
+								</object>
+								<object class="NSMenuItem" id="136859151">
+									<reference key="NSMenu" ref="466310130"/>
+									<bool key="NSIsAlternate">YES</bool>
+									<string key="NSTitle">Custom</string>
+									<string key="NSKeyEquiv">t</string>
+									<int key="NSKeyEquivModMask">1048576</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="35465992"/>
+									<reference key="NSMixedImage" ref="502551668"/>
+									<int key="NSTag">11</int>
 								</object>
 								<object class="NSMenuItem" id="968421289">
 									<reference key="NSMenu" ref="466310130"/>
@@ -1510,7 +1521,7 @@
 				<nil key="NSViewClass"/>
 				<nil key="NSUserInterfaceItemIdentifier"/>
 				<object class="NSView" key="NSWindowView" id="439893737">
-					<reference key="NSNextResponder"/>
+					<nil key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1531,7 +1542,6 @@
 							</object>
 							<string key="NSFrameSize">{480, 360}</string>
 							<reference key="NSSuperview" ref="439893737"/>
-							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="825170074"/>
 							<int key="NSViewLayerContentsRedrawPolicy">2</int>
 							<bool key="NSEnabled">YES</bool>
@@ -1554,7 +1564,6 @@
 							<int key="NSvFlags">269</int>
 							<string key="NSFrame">{{130, 323}, {220, 17}}</string>
 							<reference key="NSSuperview" ref="439893737"/>
-							<reference key="NSWindow"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="471218672">
 								<int key="NSCellFlags">68288064</int>
@@ -1591,14 +1600,11 @@
 							<int key="NSvFlags">274</int>
 							<string key="NSFrameSize">{480, 360}</string>
 							<reference key="NSSuperview" ref="439893737"/>
-							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="418663942"/>
 							<int key="NSViewLayerContentsRedrawPolicy">2</int>
 						</object>
 					</object>
 					<string key="NSFrameSize">{480, 360}</string>
-					<reference key="NSSuperview"/>
-					<reference key="NSWindow"/>
 					<reference key="NSNextKeyView" ref="551559566"/>
 					<int key="NSViewLayerContentsRedrawPolicy">2</int>
 				</object>
@@ -2444,6 +2450,14 @@
 					<int key="connectionID">588</int>
 				</object>
 				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">switchCarouselType:</string>
+						<reference key="source" ref="811309296"/>
+						<reference key="destination" ref="687737696"/>
+					</object>
+					<int key="connectionID">590</int>
+				</object>
+				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">dataSource</string>
 						<reference key="source" ref="825170074"/>
@@ -2934,6 +2948,7 @@
 							<reference ref="33779500"/>
 							<reference ref="136859151"/>
 							<reference ref="477165383"/>
+							<reference ref="687737696"/>
 						</object>
 						<reference key="parent" ref="586577488"/>
 					</object>
@@ -3658,6 +3673,11 @@
 						<reference key="object" ref="471218672"/>
 						<reference key="parent" ref="418663942"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">589</int>
+						<reference key="object" ref="687737696"/>
+						<reference key="parent" ref="466310130"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -3831,6 +3851,7 @@
 					<string>580.IBPluginDependency</string>
 					<string>582.IBPluginDependency</string>
 					<string>587.IBPluginDependency</string>
+					<string>589.IBPluginDependency</string>
 					<string>72.IBPluginDependency</string>
 					<string>73.IBPluginDependency</string>
 					<string>74.IBPluginDependency</string>
@@ -4025,6 +4046,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="unlocalizedProperties">
@@ -4039,7 +4061,7 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">588</int>
+			<int key="maxID">590</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -4113,7 +4135,7 @@
 				</object>
 				<object class="IBPartialClassDescription">
 					<string key="className">iCarousel</string>
-					<string key="superclassName">NSView</string>
+					<string key="superclassName">UIView</string>
 					<object class="NSMutableDictionary" key="outlets">
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">

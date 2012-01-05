@@ -127,7 +127,7 @@
                                                        delegate:self
                                               cancelButtonTitle:nil
                                          destructiveButtonTitle:nil
-                                              otherButtonTitles:@"Linear", @"Rotary", @"Inverted Rotary", @"Cylinder", @"Inverted Cylinder", @"Wheel", @"Inverted Wheel",  @"CoverFlow", @"CoverFlow2", @"Time Machine", @"Custom", nil];
+                                              otherButtonTitles:@"Linear", @"Rotary", @"Inverted Rotary", @"Cylinder", @"Inverted Cylinder", @"Wheel", @"Inverted Wheel",  @"CoverFlow", @"CoverFlow2", @"Time Machine", @"Inverted Time Machine", @"Custom", nil];
     [sheet showInView:self.view];
     [sheet release];
 }
@@ -161,14 +161,19 @@
 
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-    //restore view opacities to normal
-    for (UIView *view in carousel.visibleItemViews)
+    if (buttonIndex >= 0)
     {
-        view.alpha = 1.0;
-    }
+        //map button index to carousel type
+        iCarouselType type = buttonIndex;
         
-    carousel.type = buttonIndex;
-    navItem.title = [actionSheet buttonTitleAtIndex:buttonIndex];
+        //carousel can smoothly animate between types
+        [UIView beginAnimations:nil context:nil];
+        carousel.type = type;
+        [UIView commitAnimations];
+        
+        //update title
+        navItem.title = [actionSheet buttonTitleAtIndex:buttonIndex];
+    }
 }
 
 #pragma mark -

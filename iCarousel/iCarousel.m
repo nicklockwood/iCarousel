@@ -1,7 +1,7 @@
 //
 //  iCarousel.m
 //
-//  Version 1.6
+//  Version 1.6.1
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2010 Charcoal Design. All rights reserved.
@@ -46,10 +46,10 @@
 
 @interface iCarousel ()
 
-@property (nonatomic, strong) UIView *contentView;
-@property (nonatomic, strong) NSDictionary *itemViews;
-@property (nonatomic, strong) NSMutableSet *itemViewPool;
-@property (nonatomic, strong) NSMutableSet *placeholderViewPool;
+@property (nonatomic, AH_STRONG) UIView *contentView;
+@property (nonatomic, AH_STRONG) NSDictionary *itemViews;
+@property (nonatomic, AH_STRONG) NSMutableSet *itemViewPool;
+@property (nonatomic, AH_STRONG) NSMutableSet *placeholderViewPool;
 @property (nonatomic, assign) NSInteger previousItemIndex;
 @property (nonatomic, assign) NSInteger numberOfPlaceholdersToShow;
 @property (nonatomic, assign) NSInteger numberOfVisibleItems;
@@ -62,7 +62,7 @@
 @property (nonatomic, assign) BOOL scrolling;
 @property (nonatomic, assign) NSTimeInterval startTime;
 @property (nonatomic, assign) CGFloat startVelocity;
-@property (nonatomic, assign) id timer;
+@property (nonatomic, AH_UNSAFE) id timer;
 @property (nonatomic, assign) BOOL decelerating;
 @property (nonatomic, assign) CGFloat previousTranslation;
 @property (nonatomic, assign) BOOL shouldWrap;
@@ -182,7 +182,7 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPan:)];
 	panGesture.delegate = (id <UIGestureRecognizerDelegate>)self;
     [contentView addGestureRecognizer:panGesture];
-    [panGesture release];
+    AH_RELEASE(panGesture);
     
 #else
     
@@ -220,11 +220,12 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 - (void)dealloc
 {	
     [self stopAnimation];
-    [contentView release];
-	[itemViews release];
-    [itemViewPool release];
-    [placeholderViewPool release];
-	[super dealloc];
+    
+    AH_RELEASE(contentView);
+	AH_RELEASE(itemViews);
+    AH_RELEASE(itemViewPool);
+    AH_RELEASE(placeholderViewPool);
+    AH_SUPER_DEALLOC;
 }
 
 - (void)setDataSource:(id<iCarouselDataSource>)_dataSource
@@ -408,8 +409,22 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	switch (type)
     {
 		case iCarouselTypeTimeMachine:
+        case iCarouselTypeInvertedTimeMachine:
 		{
-			return 1.0f - fminf(fmaxf(offset, 0.0f), 1.0f);
+        	if (type == iCarouselTypeInvertedTimeMachine)
+            {
+                offset = -offset;
+            }
+            
+#ifdef ICAROUSEL_MACOS
+            
+            if (vertical)
+            {
+            	//invert again
+            	offset = -offset;
+            }
+#endif
+            return 1.0f - fminf(fmaxf(offset, 0.0f), 1.0f);
 		}
         case iCarouselTypeCustom:
 		{
@@ -476,10 +491,10 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
         case iCarouselTypeInvertedRotary:
         {
 			NSInteger count = [self valueForTransformOption:iCarouselTranformOptionCount withDefault:
-                               MIN(numberOfVisibleItems, numberOfItems + (shouldWrap? 0: numberOfPlaceholdersToShow))];
+                               MIN(numberOfVisibleItems, numberOfItems + numberOfPlaceholdersToShow)];
             
             CGFloat arc = [self valueForTransformOption:iCarouselTranformOptionArc withDefault:M_PI * 2.0f];
-            CGFloat radius = [self valueForTransformOption:iCarouselTranformOptionRadius withDefault:itemWidth / 2.0f / tanf(arc/2.0f/count)];
+            CGFloat radius = [self valueForTransformOption:iCarouselTranformOptionRadius withDefault:fmaxf(itemWidth / 2.0f, itemWidth / 2.0f / tanf(arc/2.0f/count))];
             CGFloat angle = [self valueForTransformOption:iCarouselTranformOptionAngle withDefault:offset / count * arc];
             
             if (type == iCarouselTypeInvertedRotary)
@@ -501,10 +516,10 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
         case iCarouselTypeInvertedCylinder:
         {
 			NSInteger count = [self valueForTransformOption:iCarouselTranformOptionCount withDefault:
-                               MIN(numberOfVisibleItems, numberOfItems + (shouldWrap? 0: numberOfPlaceholdersToShow))];
+                               MIN(numberOfVisibleItems, numberOfItems + numberOfPlaceholdersToShow)];
             
             CGFloat arc = [self valueForTransformOption:iCarouselTranformOptionArc withDefault:M_PI * 2.0f];
-            CGFloat radius = [self valueForTransformOption:iCarouselTranformOptionRadius withDefault:itemWidth / 2.0f / tanf(arc/2.0f/count)];
+            CGFloat radius = [self valueForTransformOption:iCarouselTranformOptionRadius withDefault:fmaxf(0.01f, itemWidth / 2.0f / tanf(arc/2.0f/count))];
             CGFloat angle = [self valueForTransformOption:iCarouselTranformOptionAngle withDefault:offset / count * arc];
             
             if (type == iCarouselTypeInvertedCylinder)
@@ -530,7 +545,7 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
         case iCarouselTypeInvertedWheel:
         {
             NSInteger count = [self valueForTransformOption:iCarouselTranformOptionCount withDefault:
-                               MIN(numberOfVisibleItems, numberOfItems + (shouldWrap? 0: numberOfPlaceholdersToShow))];
+                               MIN(numberOfVisibleItems, numberOfItems + numberOfPlaceholdersToShow)];
             
             CGFloat arc = [self valueForTransformOption:iCarouselTranformOptionArc withDefault:M_PI * 2.0f];
             CGFloat radius = [self valueForTransformOption:iCarouselTranformOptionRadius withDefault:itemWidth * (CGFloat)count / arc];
@@ -611,12 +626,27 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
             }
         }
 		case iCarouselTypeTimeMachine:
+        case iCarouselTypeInvertedTimeMachine:
 		{
 			CGFloat tilt = [self valueForTransformOption:iCarouselTranformOptionTilt withDefault:0.3f];
 			CGFloat spacing = [self valueForTransformOption:iCarouselTranformOptionSpacing withDefault:1.0f];
             
+            if (type == iCarouselTypeInvertedTimeMachine)
+            {
+                tilt = -tilt;
+                offset = -offset;
+            }
+            
             if (vertical)
             {
+                
+#ifdef ICAROUSEL_MACOS
+                
+                //invert again
+                tilt = -tilt;
+                offset = -offset;
+                
+#endif
 				return CATransform3DTranslate(transform, 0.0f, offset * itemWidth * tilt, offset * itemWidth * spacing);
             }
             else
@@ -624,6 +654,11 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
                 return CATransform3DTranslate(transform, offset * itemWidth * tilt, 0.0f, offset * itemWidth * spacing);
             }
 		}
+        default:
+        {
+            //shouldn't ever happen
+            return CATransform3DIdentity;
+        }
     }
 }
 
@@ -649,7 +684,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (void)depthSortViews
 {
-    for (UIView *view in [[itemViews allValues] sortedArrayUsingFunction:(NSInteger (*)(id, id, void *))compareViewDepth context:self])
+    for (UIView *view in [[itemViews allValues] sortedArrayUsingFunction:(NSInteger (*)(id, id, void *))compareViewDepth context:(__AH_BRIDGE void *)self])
     {
         [contentView addSubview:view.superview];
     }
@@ -681,6 +716,12 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         }
     }
     
+    //handle special case for one item
+    if (numberOfItems + numberOfPlaceholdersToShow == 1)
+    {
+		offset = 0.0f;
+    }
+    
 #ifdef ICAROUSEL_MACOS
     
     if (vertical)
@@ -696,7 +737,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (UIView *)containView:(UIView *)view
 {
-    UIView *container = [[[UIView alloc] initWithFrame:view.frame] autorelease];
+    UIView *container = AH_AUTORELEASE([[UIView alloc] initWithFrame:view.frame]);
 	
 #ifdef ICAROUSEL_IOS
     
@@ -704,7 +745,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTap:)];
     tapGesture.delegate = (id <UIGestureRecognizerDelegate>)self;
     [container addGestureRecognizer:tapGesture];
-    [tapGesture release];
+    AH_RELEASE(tapGesture);
     
 #endif
     
@@ -935,22 +976,22 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (UIView *)dequeueItemView
 {
-	UIView *view = [[[itemViewPool anyObject] retain] autorelease];
+	UIView * __AH_STRONG view = AH_RETAIN([itemViewPool anyObject]);
     if (view)
     {
         [itemViewPool removeObject:view];
     }
-    return view;
+    return AH_AUTORELEASE(view);
 }
 
 - (UIView *)dequeuePlaceholderView
 {
-	UIView *view = [[[placeholderViewPool anyObject] retain] autorelease];
+	UIView * __AH_STRONG view = AH_RETAIN([placeholderViewPool anyObject]);
     if (view)
     {
         [placeholderViewPool removeObject:view];
     }
-    return view;
+    return AH_AUTORELEASE(view);
 }
 
 
@@ -1004,7 +1045,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     
     if (view == nil)
     {
-        view = [[[UIView alloc] init] autorelease];
+        view = AH_AUTORELEASE([[UIView alloc] init]);
     }
     [self setItemView:view forIndex:index];
     if (containerView)
@@ -1453,8 +1494,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 #endif
 #else
             CVDisplayLinkCreateWithActiveCGDisplays((void *)&timer); 
-        	CVDisplayLinkSetOutputCallback((__bridge CVDisplayLinkRef)timer, (CVDisplayLinkOutputCallback)&displayLinkCallback, self);
-            CVDisplayLinkStart((__bridge CVDisplayLinkRef)timer);
+        	CVDisplayLinkSetOutputCallback((__AH_BRIDGE CVDisplayLinkRef)timer, (CVDisplayLinkOutputCallback)&displayLinkCallback, (__AH_BRIDGE void *)self);
+            CVDisplayLinkStart((__AH_BRIDGE CVDisplayLinkRef)timer);
 #endif
         }
 		
@@ -1488,8 +1529,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     }
     else
     {
-    	CVDisplayLinkStop((__bridge CVDisplayLinkRef)timer);
-        CVDisplayLinkRelease((__bridge CVDisplayLinkRef)timer);
+    	CVDisplayLinkStop((__AH_BRIDGE CVDisplayLinkRef)timer);
+        CVDisplayLinkRelease((__AH_BRIDGE CVDisplayLinkRef)timer);
     }
     
 #endif

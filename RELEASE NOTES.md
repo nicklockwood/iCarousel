@@ -1,3 +1,13 @@
+Version 1.6.1
+
+- Added automatic support for ARC compile targets
+- Now compiles correctly again under LLVM GCC 4.2
+- Vertical Time Machine carousel is now right-way-up on Mac OS
+- Added Inverted Time Machine carousel type
+- Added dynamic reflections example
+- Fixed crashing bug in examples on iPad
+- Carousels now behave better with 1 or 2 items
+
 Version 1.6
 
 - Added support for item view recycling

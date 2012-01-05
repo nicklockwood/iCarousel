@@ -209,17 +209,20 @@
 
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-    //map button index to carousel type
-    iCarouselType type = buttonIndex;
-    
-    //carousel can smoothly animate between types
-    [UIView beginAnimations:nil context:nil];
-    carousel.type = type;
-    [self updateSliders];
-    [UIView commitAnimations];
-    
-    //update title
-    navItem.title = [actionSheet buttonTitleAtIndex:buttonIndex];
+    if (buttonIndex	>= 0)
+    {
+        //map button index to carousel type
+        iCarouselType type = buttonIndex;
+        
+        //carousel can smoothly animate between types
+        [UIView beginAnimations:nil context:nil];
+        carousel.type = type;
+        [self updateSliders];
+        [UIView commitAnimations];
+        
+        //update title
+        navItem.title = [actionSheet buttonTitleAtIndex:buttonIndex];
+    }
 }
 
 #pragma mark -

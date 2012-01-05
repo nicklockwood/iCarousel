@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0114F45A14ABEE8A00062203 /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0114F45914ABEE8A00062203 /* iCarousel.m */; };
 		0134186213A4030B0030BB65 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0134186113A4030B0030BB65 /* QuartzCore.framework */; };
+		017A47ED14B53D8D007BB372 /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 017A47EC14B53D8D007BB372 /* iCarousel.m */; };
 		018BBC6913A37041005CA505 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 018BBC6813A37041005CA505 /* Cocoa.framework */; };
 		018BBC7313A37041005CA505 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 018BBC7113A37041005CA505 /* InfoPlist.strings */; };
 		018BBC7613A37041005CA505 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 018BBC7513A37041005CA505 /* main.m */; };
@@ -19,9 +19,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0114F45814ABEE8A00062203 /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
-		0114F45914ABEE8A00062203 /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
 		0134186113A4030B0030BB65 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		017A47EB14B53D8D007BB372 /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
+		017A47EC14B53D8D007BB372 /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
 		018BBC6413A37041005CA505 /* iCarouselMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iCarouselMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		018BBC6813A37041005CA505 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		018BBC6B13A37041005CA505 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -52,19 +52,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0114F45714ABEE8A00062203 /* iCarousel */ = {
+		017A47EA14B53D8D007BB372 /* iCarousel */ = {
 			isa = PBXGroup;
 			children = (
-				0114F45814ABEE8A00062203 /* iCarousel.h */,
-				0114F45914ABEE8A00062203 /* iCarousel.m */,
+				017A47EB14B53D8D007BB372 /* iCarousel.h */,
+				017A47EC14B53D8D007BB372 /* iCarousel.m */,
 			);
-			path = iCarousel;
+			name = iCarousel;
+			path = ../../iCarousel;
 			sourceTree = "<group>";
 		};
 		018BBC5913A37041005CA505 = {
 			isa = PBXGroup;
 			children = (
-				0114F45714ABEE8A00062203 /* iCarousel */,
+				017A47EA14B53D8D007BB372 /* iCarousel */,
 				018BBC6E13A37041005CA505 /* iCarouselMac */,
 				018BBC6713A37041005CA505 /* Frameworks */,
 				018BBC6513A37041005CA505 /* Products */,
@@ -190,7 +191,7 @@
 				018BBC7613A37041005CA505 /* main.m in Sources */,
 				018BBC7C13A37041005CA505 /* iCarouselMacAppDelegate.m in Sources */,
 				018BBC9E13A37314005CA505 /* iCarouselWindowController.m in Sources */,
-				0114F45A14ABEE8A00062203 /* iCarousel.m in Sources */,
+				017A47ED14B53D8D007BB372 /* iCarousel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

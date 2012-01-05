@@ -124,7 +124,7 @@
 
 - (NSArray *)carouselTypes
 {
-	return [NSArray arrayWithObjects:@"Linear", @"Rotary", @"Inverted Rotary", @"Cylinder", @"Inverted Cylinder", @"Wheel", @"Inverted Wheel",  @"CoverFlow", @"CoverFlow2", @"Time Machine", @"Custom", nil];
+	return [NSArray arrayWithObjects:@"Linear", @"Rotary", @"Inverted Rotary", @"Cylinder", @"Inverted Cylinder", @"Wheel", @"Inverted Wheel",  @"CoverFlow", @"CoverFlow2", @"Time Machine", @"Inverted Time Machine", @"Custom", nil];
 }
 
 - (IBAction)switchCarouselType
@@ -171,14 +171,11 @@
 
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-    //restore view opacities to normal
-    for (UIView *view in carousel.visibleItemViews)
+    if (buttonIndex >= 0)
     {
-        view.alpha = 1.0;
+    	carousel.type = (iCarouselType)buttonIndex;
+    	navItem.title = [[self carouselTypes] objectAtIndex:buttonIndex];
     }
-        
-    carousel.type = (iCarouselType)buttonIndex;
-    navItem.title = [[self carouselTypes] objectAtIndex:buttonIndex];
 }
 
 #pragma mark -

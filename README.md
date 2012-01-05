@@ -18,27 +18,22 @@ Supported OS & SDK Versions
 NOTE: 'Supported' means that the library has been tested with this version. 'Compatible' means that the library should work on this iOS version (i.e. it doesn't rely on any unavailable SDK features) but is no longer being tested for compatibility and may require tweaking or bug fixes to run correctly.
 
 
+ARC Compatibility
+------------------
+
+As of version 1.6.1, iCarousel automatically works with both ARC and non-ARC projects through conditional compilation. There is no need to exclude iCarousel files from the ARC validation process, or to convert iCarousel using the ARC conversion tool.
+
+
 Installation
 --------------
 
 To use the iCarousel class in an app, just drag the iCarousel class files (demo files and assets are not needed) into your project and add the QuartzCore framework.
 
 
-ARC Compatibility
-------------------
-
-iCarousel does not use automatic reference counting, but can be converted using the ARC migration tool without any issues. The Tests folder contains examples of ARC-converted versions of iCarousel for iOS and Mac OS.
-
-However, in the interests of avoiding modifying the iCarousel library (which may cause unknown bugs or problems later when upgrading to a new version) a better approach is to specify in your ARC project that iCarousel's files should be excluded from the ARC validation process. To do that:
-
-1. Go to Project Settings, under Build Phases > Compile Sources
-2. Select the iCarousel.m file and add the -fno-objc-arc compiler flag
-
-
 Chameleon Support
 -------------------
 
-iCarousel is now compatible with the Chameleon iOS-to-Mac conversion library (https://github.com/BigZaphod/Chameleon). To use iCarousel with Chameleon, add `USE_CHAMELEON` to your project's preprocessor macros. Check out the *Chameleon Demo* example project for how to port your iOS iCarousel app to Mac OS using Chameleon - the example demonstrates how to run the No Nib iPhone example on Mac OS using Chameleon. Note that tap-to-center doesn't currently work, and scrolling must be done using a two-fingered scroll gesture, not click-and-drag (both of these are due to features/limitations of the Chameleon UIGestureRecognizer implementation).
+iCarousel is now compatible with the Chameleon iOS-to-Mac conversion library (https://github.com/BigZaphod/Chameleon). To use iCarousel with Chameleon, add `USING_CHAMELEON` to your project's preprocessor macros. Check out the *Chameleon Demo* example project for how to port your iOS iCarousel app to Mac OS using Chameleon - the example demonstrates how to run the No Nib iPhone example on Mac OS using Chameleon. Note that tap-to-center doesn't currently work, and scrolling must be done using a two-fingered scroll gesture, not click-and-drag (both of these are due to features/limitations of the Chameleon UIGestureRecognizer implementation).
 
 
 Carousel Types
@@ -151,7 +146,7 @@ The currently centered item view in the carousel. The index of this view matches
 
 	@property (nonatomic, readonly) CGFloat itemWidth;
 
-The display width of items in the carousel (read only). This is derived automatically from the first view passed in to the carousel using the `carousel:viewForItemAtIndex:` dataSource method. You can also override this value using the `carouselItemWidth:` delegate method, which will alter the spacing between carousel items (but won't resize or scale the item views).
+The display width of items in the carousel (read only). This is derived automatically from the first view passed in to the carousel using the `carousel:viewForItemAtIndex:reusingView:` dataSource method. You can also override this value using the `carouselItemWidth:` delegate method, which will alter the spacing between carousel items (but won't resize or scale the item views).
 
 	@property (nonatomic, assign) BOOL centerItemWhenSelected;
 
@@ -247,7 +242,7 @@ Return the number of items (views) in the carousel.
 
 	- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view;
 
-Return a view to be displayed at the specified index in the carousel. The `reusingView` argument works like a UIPickerView, where views that have previously been displayed in the carousel are passed back to the method to be recycled. If this argument is nil, you can set its properties and return it instead of creating a new view instance, which will slightly improve performance. Unlike UITableView, there is no reuseIdentifier for distinguishing between different carousel view types, so if your carousel contains multiple different view types then you should just ignore this parameter and return a new view each time the method is called. You should ensure that each time the `carousel:viewForPageAtIndex:` method is called, it either returns the reusingView or a brand new view instance rather than maintaining your own pool of recyclable views, as returning multiple copies of the same view for different carousel item indexes may cause display issues with the carousel.
+Return a view to be displayed at the specified index in the carousel. The `reusingView` argument works like a UIPickerView, where views that have previously been displayed in the carousel are passed back to the method to be recycled. If this argument is nil, you can set its properties and return it instead of creating a new view instance, which will slightly improve performance. Unlike UITableView, there is no reuseIdentifier for distinguishing between different carousel view types, so if your carousel contains multiple different view types then you should just ignore this parameter and return a new view each time the method is called. You should ensure that each time the `carousel:viewForItemAtIndex:reusingView:` method is called, it either returns the reusingView or a brand new view instance rather than maintaining your own pool of recyclable views, as returning multiple copies of the same view for different carousel item indexes may cause display issues with the carousel.
 
 The iCarouselDataSource protocol has the following optional methods:
 
@@ -257,7 +252,7 @@ Returns the number of placeholder views to display in the carousel. Placeholder 
 
 	- (UIView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index reusingView:(UIView *)view;
 
-Return a view to be displayed as the placeholder view. Works the same way as `carousel:viewForItemAtIndex:reusingView`. Placeholder reusingViews are stored in a separate pool to the reusingViews used for regular carousel, so it's not a problem if your placeholder views are different to the item views.
+Return a view to be displayed as the placeholder view. Works the same way as `carousel:viewForItemAtIndex:reusingView:`. Placeholder reusingViews are stored in a separate pool to the reusingViews used for regular carousel, so it's not a problem if your placeholder views are different to the item views.
 
 	- (NSUInteger)numberOfVisibleItemsInCarousel:(iCarousel *)carousel;
 	
@@ -299,7 +294,7 @@ This method is called when the carousel finishes decelerating and you can assume
 
 	- (CGFloat)carouselItemWidth:(iCarousel *)carousel;
 
-Returns the width of each item in the carousel - i.e. the spacing for each item view. If the method is not implemented, this defaults to the width of the first item view that is returned by the `carousel:viewForItemAtIndex:` dataSource method.
+Returns the width of each item in the carousel - i.e. the spacing for each item view. If the method is not implemented, this defaults to the width of the first item view that is returned by the `carousel:viewForItemAtIndex:reusingView:` dataSource method.
 
 	- (CGFloat)carouseOffsetMultiplier:(iCarousel *)carousel;
 	

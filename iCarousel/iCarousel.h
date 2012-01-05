@@ -1,7 +1,7 @@
 //
 //  iCarousel.h
 //
-//  Version 1.6
+//  Version 1.6.1
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2010 Charcoal Design. All rights reserved.
@@ -29,6 +29,92 @@
 //
 //  3. This notice may not be removed or altered from any source distribution.
 //
+
+//
+//  ARC Helper
+//
+//  Version 1.0
+//
+//  Created by Nick Lockwood on 05/01/2012.
+//  Copyright 2011 Charcoal Design. All rights reserved.
+//
+//  Get the latest version from here:
+//
+//  https://gist.github.com/1563325
+//
+//  Usage: add this header to an objective-C project and by using these
+//  macros instead of the usual retain/release/autorelease etc you can
+//  create code that will compile correctly either with or without ARC
+//
+
+#ifndef __has_feature
+#define __has_feature(x) 0
+#endif
+
+#ifndef AH_ARC_ENABLED
+#if __has_feature(objc_arc)
+
+#define AH_ARC_ENABLED 1
+
+#define __AH_BRIDGE __bridge
+#define __AH_BRIDGE_RETAINED __bridge_retained
+#define __AH_BRIDGE_TRANSFER __bridge_transfer
+#define __AH_UNSAFE __unsafe_unretained
+#define __AH_STRONG __strong
+
+#define AH_UNSAFE unsafe_unretained
+#define AH_STRONG strong
+
+#if defined __IPHONE_OS_VERSION_MIN_REQUIRED
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_5_0
+#define __AH_WEAK __weak
+#define AH_WEAK weak
+#else
+#define __AH_WEAK __unsafe_unretained
+#define AH_WEAK unsafe_unretained
+#endif
+#elif defined __MAC_OS_X_VERSION_MIN_REQUIRED
+#if __MAC_OS_X_VERSION_MIN_REQUIRED >= __MAC_10_7
+#define __AH_WEAK __weak
+#define AH_WEAK weak
+#else
+#define __AH_WEAK __unsafe_unretained
+#define AH_WEAK unsafe_unretained
+#endif
+#else
+#define __AH_WEAK __unsafe_unretained
+#define AH_WEAK unsafe_unretained
+#endif
+
+#define AH_RETAIN(x) x
+#define AH_RELEASE(x)
+#define AH_AUTORELEASE(x) x
+#define AH_SUPER_DEALLOC
+
+#else
+
+#define AH_ARC_ENABLED 0
+
+#define __AH_BRIDGE
+#define __AH_BRIDGE_RETAINED
+#define __AH_BRIDGE_TRANSFER
+#define __AH_UNSAFE
+#define __AH_WEAK
+#define __AH_STRONG
+
+#define AH_UNSAFE assign
+#define AH_WEAK assign
+#define AH_STRONG retain
+
+#define AH_RETAIN(x) [x retain]
+#define AH_RELEASE(x) [x release]
+#define AH_AUTORELEASE(x) [x autorelease]
+#define AH_SUPER_DEALLOC [super dealloc]
+
+#endif
+#endif
+
+//  ARC Helper ends
 
 
 #ifdef USING_CHAMELEON
@@ -63,6 +149,7 @@ typedef enum
     iCarouselTypeCoverFlow,
     iCarouselTypeCoverFlow2,
     iCarouselTypeTimeMachine,
+    iCarouselTypeInvertedTimeMachine,
     iCarouselTypeCustom
 }
 iCarouselType;
@@ -87,8 +174,8 @@ iCarouselTranformOption;
 {
 	//required for 32-bit Macs
 	@private
-    id<iCarouselDelegate> delegate;
-    id<iCarouselDataSource> dataSource;
+    id<iCarouselDelegate> __AH_WEAK delegate;
+    id<iCarouselDataSource> __AH_WEAK dataSource;
     iCarouselType type;
     CGFloat perspective;
     NSInteger numberOfItems;
@@ -104,7 +191,7 @@ iCarouselTranformOption;
     CGFloat scrollOffset;
     CGFloat offsetMultiplier;
     CGFloat startVelocity;
-    id timer;
+    id __AH_UNSAFE timer;
     BOOL decelerating;
     BOOL scrollEnabled;
     CGFloat decelerationRate;
@@ -133,8 +220,8 @@ iCarouselTranformOption;
 }
 #endif
 
-@property (nonatomic, assign) IBOutlet id<iCarouselDataSource> dataSource;
-@property (nonatomic, assign) IBOutlet id<iCarouselDelegate> delegate;
+@property (nonatomic, AH_WEAK) IBOutlet id<iCarouselDataSource> dataSource;
+@property (nonatomic, AH_WEAK) IBOutlet id<iCarouselDelegate> delegate;
 @property (nonatomic, assign) iCarouselType type;
 @property (nonatomic, assign) CGFloat perspective;
 @property (nonatomic, assign) CGFloat decelerationRate;
@@ -149,12 +236,12 @@ iCarouselTranformOption;
 @property (nonatomic, readonly) NSInteger numberOfItems;
 @property (nonatomic, readonly) NSInteger numberOfPlaceholders;
 @property (nonatomic, readonly) NSInteger currentItemIndex;
-@property (nonatomic, strong, readonly) UIView *currentItemView;
-@property (nonatomic, strong, readonly) NSArray *indexesForVisibleItems;
+@property (nonatomic, AH_STRONG, readonly) UIView *currentItemView;
+@property (nonatomic, AH_STRONG, readonly) NSArray *indexesForVisibleItems;
 @property (nonatomic, readonly) NSInteger numberOfVisibleItems;
-@property (nonatomic, strong, readonly) NSArray *visibleItemViews;
+@property (nonatomic, AH_STRONG, readonly) NSArray *visibleItemViews;
 @property (nonatomic, readonly) CGFloat itemWidth;
-@property (nonatomic, strong, readonly) UIView *contentView;
+@property (nonatomic, AH_STRONG, readonly) UIView *contentView;
 @property (nonatomic, readonly) CGFloat toggle;
 @property (nonatomic, assign) BOOL stopAtItemBoundary;
 @property (nonatomic, assign) BOOL scrollToItemBoundary;
