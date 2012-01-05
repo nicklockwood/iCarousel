@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDEWorkspaceUserSettings_BuildLocationStyle</key>
+	<integer>0</integer>
+	<key>IDEWorkspaceUserSettings_BuildSubfolderNameStyle</key>
+	<integer>0</integer>
+	<key>IDEWorkspaceUserSettings_DerivedDataLocationStyle</key>
+	<integer>0</integer>
+	<key>IDEWorkspaceUserSettings_HasAskedToTakeAutomaticSnapshotBeforeSignificantChanges</key>
+	<true/>
+	<key>IDEWorkspaceUserSettings_IssueFilterStyle</key>
+	<integer>0</integer>
+	<key>IDEWorkspaceUserSettings_LiveSourceIssuesEnabled</key>
+	<true/>
+	<key>IDEWorkspaceUserSettings_SnapshotAutomaticallyBeforeSignificantChanges</key>
+	<false/>
+	<key>IDEWorkspaceUserSettings_SnapshotLocationStyle</key>
+	<integer>0</integer>
+</dict>
+</plist>

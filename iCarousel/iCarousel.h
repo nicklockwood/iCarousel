@@ -33,18 +33,14 @@
 //
 //  ARC Helper
 //
-//  Version 1.0
+//  Version 1.1
 //
 //  Created by Nick Lockwood on 05/01/2012.
-//  Copyright 2011 Charcoal Design. All rights reserved.
+//  Copyright 2012 Charcoal Design. All rights reserved.
 //
 //  Get the latest version from here:
 //
 //  https://gist.github.com/1563325
-//
-//  Usage: add this header to an objective-C project and by using these
-//  macros instead of the usual retain/release/autorelease etc you can
-//  create code that will compile correctly either with or without ARC
 //
 
 #ifndef __has_feature
@@ -53,18 +49,37 @@
 
 #ifndef AH_ARC_ENABLED
 #if __has_feature(objc_arc)
-
 #define AH_ARC_ENABLED 1
-
 #define __AH_BRIDGE __bridge
 #define __AH_BRIDGE_RETAINED __bridge_retained
 #define __AH_BRIDGE_TRANSFER __bridge_transfer
 #define __AH_UNSAFE __unsafe_unretained
 #define __AH_STRONG __strong
-
 #define AH_UNSAFE unsafe_unretained
 #define AH_STRONG strong
+#define AH_RETAIN(x) x
+#define AH_RELEASE(x)
+#define AH_AUTORELEASE(x) x
+#define AH_SUPER_DEALLOC
+#else
+#define AH_ARC_ENABLED 0
+#define __AH_BRIDGE
+#define __AH_BRIDGE_RETAINED
+#define __AH_BRIDGE_TRANSFER
+#define __AH_UNSAFE
+#define __AH_WEAK
+#define __AH_STRONG
+#define AH_UNSAFE assign
+#define AH_WEAK assign
+#define AH_STRONG retain
+#define AH_RETAIN(x) [x retain]
+#define AH_RELEASE(x) [x release]
+#define AH_AUTORELEASE(x) [x autorelease]
+#define AH_SUPER_DEALLOC [super dealloc]
+#endif
+#endif
 
+#ifndef AH_WEAK
 #if defined __IPHONE_OS_VERSION_MIN_REQUIRED
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_5_0
 #define __AH_WEAK __weak
@@ -84,33 +99,6 @@
 #else
 #define __AH_WEAK __unsafe_unretained
 #define AH_WEAK unsafe_unretained
-#endif
-
-#define AH_RETAIN(x) x
-#define AH_RELEASE(x)
-#define AH_AUTORELEASE(x) x
-#define AH_SUPER_DEALLOC
-
-#else
-
-#define AH_ARC_ENABLED 0
-
-#define __AH_BRIDGE
-#define __AH_BRIDGE_RETAINED
-#define __AH_BRIDGE_TRANSFER
-#define __AH_UNSAFE
-#define __AH_WEAK
-#define __AH_STRONG
-
-#define AH_UNSAFE assign
-#define AH_WEAK assign
-#define AH_STRONG retain
-
-#define AH_RETAIN(x) [x retain]
-#define AH_RELEASE(x) [x release]
-#define AH_AUTORELEASE(x) [x autorelease]
-#define AH_SUPER_DEALLOC [super dealloc]
-
 #endif
 #endif
 
