@@ -11,7 +11,7 @@ Not all features of iCarousel are currently supported on Mac OS. I hope to addre
 Supported OS & SDK Versions
 -----------------------------
 
-* Supported build target - iOS 5.0 / Mac OS 10.7 (Xcode 4.2)
+* Supported build target - iOS 5.0 / Mac OS 10.7 (Xcode 4.2, Apple LLVM compiler 3.0)
 * Earliest supported deployment target - iOS 4.3 / Mac OS 10.7 (Xcode 4.2)
 * Earliest compatible deployment target - iOS 3.2 / Mac OS 10.6
 
@@ -46,11 +46,12 @@ iCarousel supports the following built-in display types:
 - iCarouselTypeInvertedRotary
 - iCarouselTypeCylinder
 - iCarouselTypeInvertedCylinder
-- iCarouselTypeCoverFlow
-- iCarouselTypeCoverflow2
 - iCarouselTypeWheel
 - iCarouselTypeInvertedWheel
+- iCarouselTypeCoverFlow
+- iCarouselTypeCoverflow2
 - iCarouselTypeTimeMachine
+- iCarouselTypeInvertedTimeMachine
 
 You can also implement your own bespoke carousel styles using `iCarouselTypeCustom` and the `carousel:itemTransformForOffset:baseTransform:` delegate method.
 
@@ -192,7 +193,7 @@ The iCarousel class has the following methods (note: for Mac OS, substitute NSVi
 
 	- (void)scrollToItemAtIndex:(NSInteger)index animated:(BOOL)animated;
 
-This will center the carousel on the specified item, either immediately or with a smooth animation. For wrapped carousels, the carousel will automatically determine the shortest (direct, or wraparound) distance to scroll. If you need to control the scroll direction, or want to scroll by more than one revolution, use the scrollByNumberOfItems method instead.
+This will center the carousel on the specified item, either immediately or with a smooth animation. For wrapped carousels, the carousel will automatically determine the shortest (direct or wraparound) distance to scroll. If you need to control the scroll direction, or want to scroll by more than one revolution, use the scrollByNumberOfItems method instead.
 
 	- (void)scrollToItemAtIndex:(NSInteger)index duration:(NSTimeInterval)scrollDuration;
 

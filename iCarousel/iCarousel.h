@@ -1,7 +1,7 @@
 //
 //  iCarousel.h
 //
-//  Version 1.6.1
+//  Version 1.6.2
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2010 Charcoal Design. All rights reserved.
@@ -33,7 +33,7 @@
 //
 //  ARC Helper
 //
-//  Version 1.1
+//  Version 1.2
 //
 //  Created by Nick Lockwood on 05/01/2012.
 //  Copyright 2012 Charcoal Design. All rights reserved.
@@ -43,35 +43,15 @@
 //  https://gist.github.com/1563325
 //
 
-#ifndef __has_feature
-#define __has_feature(x) 0
-#endif
-
-#ifndef AH_ARC_ENABLED
+#ifndef AH_RETAIN
 #if __has_feature(objc_arc)
-#define AH_ARC_ENABLED 1
-#define __AH_BRIDGE __bridge
-#define __AH_BRIDGE_RETAINED __bridge_retained
-#define __AH_BRIDGE_TRANSFER __bridge_transfer
-#define __AH_UNSAFE __unsafe_unretained
-#define __AH_STRONG __strong
-#define AH_UNSAFE unsafe_unretained
-#define AH_STRONG strong
 #define AH_RETAIN(x) x
 #define AH_RELEASE(x)
 #define AH_AUTORELEASE(x) x
 #define AH_SUPER_DEALLOC
 #else
-#define AH_ARC_ENABLED 0
-#define __AH_BRIDGE
-#define __AH_BRIDGE_RETAINED
-#define __AH_BRIDGE_TRANSFER
-#define __AH_UNSAFE
 #define __AH_WEAK
-#define __AH_STRONG
-#define AH_UNSAFE assign
 #define AH_WEAK assign
-#define AH_STRONG retain
 #define AH_RETAIN(x) [x retain]
 #define AH_RELEASE(x) [x release]
 #define AH_AUTORELEASE(x) [x autorelease]
@@ -81,7 +61,7 @@
 
 #ifndef AH_WEAK
 #if defined __IPHONE_OS_VERSION_MIN_REQUIRED
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_5_0
+#if __IPHONE_OS_VERSION_MIN_REQUIRED > __IPHONE_4_3
 #define __AH_WEAK __weak
 #define AH_WEAK weak
 #else
@@ -89,16 +69,13 @@
 #define AH_WEAK unsafe_unretained
 #endif
 #elif defined __MAC_OS_X_VERSION_MIN_REQUIRED
-#if __MAC_OS_X_VERSION_MIN_REQUIRED >= __MAC_10_7
+#if __MAC_OS_X_VERSION_MIN_REQUIRED > __MAC_10_6
 #define __AH_WEAK __weak
 #define AH_WEAK weak
 #else
 #define __AH_WEAK __unsafe_unretained
 #define AH_WEAK unsafe_unretained
 #endif
-#else
-#define __AH_WEAK __unsafe_unretained
-#define AH_WEAK unsafe_unretained
 #endif
 #endif
 
@@ -179,7 +156,7 @@ iCarouselTranformOption;
     CGFloat scrollOffset;
     CGFloat offsetMultiplier;
     CGFloat startVelocity;
-    id __AH_UNSAFE timer;
+    id __unsafe_unretained timer;
     BOOL decelerating;
     BOOL scrollEnabled;
     CGFloat decelerationRate;
@@ -224,12 +201,12 @@ iCarouselTranformOption;
 @property (nonatomic, readonly) NSInteger numberOfItems;
 @property (nonatomic, readonly) NSInteger numberOfPlaceholders;
 @property (nonatomic, readonly) NSInteger currentItemIndex;
-@property (nonatomic, AH_STRONG, readonly) UIView *currentItemView;
-@property (nonatomic, AH_STRONG, readonly) NSArray *indexesForVisibleItems;
+@property (nonatomic, strong, readonly) UIView *currentItemView;
+@property (nonatomic, strong, readonly) NSArray *indexesForVisibleItems;
 @property (nonatomic, readonly) NSInteger numberOfVisibleItems;
-@property (nonatomic, AH_STRONG, readonly) NSArray *visibleItemViews;
+@property (nonatomic, strong, readonly) NSArray *visibleItemViews;
 @property (nonatomic, readonly) CGFloat itemWidth;
-@property (nonatomic, AH_STRONG, readonly) UIView *contentView;
+@property (nonatomic, strong, readonly) UIView *contentView;
 @property (nonatomic, readonly) CGFloat toggle;
 @property (nonatomic, assign) BOOL stopAtItemBoundary;
 @property (nonatomic, assign) BOOL scrollToItemBoundary;

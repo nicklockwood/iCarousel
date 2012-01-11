@@ -69,7 +69,6 @@
 	//sending messages to a deallocated viewcontroller
 	carousel.delegate = nil;
 	carousel.dataSource = nil;
-	
 }
 
 #pragma mark -
@@ -177,16 +176,27 @@
 
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
 {
-	//create a numbered view
-    view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200.0f, 200.0f)];
-    view.backgroundColor = [UIColor lightGrayColor];
-    UILabel *label = [[UILabel alloc] initWithFrame:view.bounds];
-    label.text = [NSString stringWithFormat:@"%i", index];
-    label.backgroundColor = [UIColor clearColor];
-    label.textAlignment = UITextAlignmentCenter;
-    label.font = [label.font fontWithSize:50];
-    [view addSubview:label];
-    return view;
+	UILabel *label = nil;
+	
+	//create new view if no view is available for recycling
+	if (view == nil)
+	{
+		view = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]];
+		label = [[UILabel alloc] initWithFrame:view.bounds];
+		label.backgroundColor = [UIColor clearColor];
+		label.textAlignment = UITextAlignmentCenter;
+		label.font = [label.font fontWithSize:50.0f];
+		[view addSubview:label];
+	}
+	else
+	{
+		label = [[view subviews] lastObject];
+	}
+	
+    //set label
+	label.text = [NSString stringWithFormat:@"%i", index];
+	
+	return view;
 }
 
 - (NSUInteger)numberOfPlaceholdersInCarousel:(iCarousel *)carousel

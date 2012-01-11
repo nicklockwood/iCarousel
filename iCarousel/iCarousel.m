@@ -1,7 +1,7 @@
 //
 //  iCarousel.m
 //
-//  Version 1.6.1
+//  Version 1.6.2
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2010 Charcoal Design. All rights reserved.
@@ -46,10 +46,10 @@
 
 @interface iCarousel ()
 
-@property (nonatomic, AH_STRONG) UIView *contentView;
-@property (nonatomic, AH_STRONG) NSDictionary *itemViews;
-@property (nonatomic, AH_STRONG) NSMutableSet *itemViewPool;
-@property (nonatomic, AH_STRONG) NSMutableSet *placeholderViewPool;
+@property (nonatomic, strong) UIView *contentView;
+@property (nonatomic, strong) NSDictionary *itemViews;
+@property (nonatomic, strong) NSMutableSet *itemViewPool;
+@property (nonatomic, strong) NSMutableSet *placeholderViewPool;
 @property (nonatomic, assign) NSInteger previousItemIndex;
 @property (nonatomic, assign) NSInteger numberOfPlaceholdersToShow;
 @property (nonatomic, assign) NSInteger numberOfVisibleItems;
@@ -62,7 +62,7 @@
 @property (nonatomic, assign) BOOL scrolling;
 @property (nonatomic, assign) NSTimeInterval startTime;
 @property (nonatomic, assign) CGFloat startVelocity;
-@property (nonatomic, AH_UNSAFE) id timer;
+@property (nonatomic, unsafe_unretained) id timer;
 @property (nonatomic, assign) BOOL decelerating;
 @property (nonatomic, assign) CGFloat previousTranslation;
 @property (nonatomic, assign) BOOL shouldWrap;
@@ -156,6 +156,7 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)setUp
 {
+	type = iCarouselTypeLinear;
     perspective = -1.0f/500.0f;
     decelerationRate = 0.95f;
     scrollEnabled = YES;
@@ -684,7 +685,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (void)depthSortViews
 {
-    for (UIView *view in [[itemViews allValues] sortedArrayUsingFunction:(NSInteger (*)(id, id, void *))compareViewDepth context:(__AH_BRIDGE void *)self])
+    for (UIView *view in [[itemViews allValues] sortedArrayUsingFunction:(NSInteger (*)(id, id, void *))compareViewDepth context:(__bridge void *)self])
     {
         [contentView addSubview:view.superview];
     }
@@ -976,7 +977,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (UIView *)dequeueItemView
 {
-	UIView * __AH_STRONG view = AH_RETAIN([itemViewPool anyObject]);
+	UIView *view = AH_RETAIN([itemViewPool anyObject]);
     if (view)
     {
         [itemViewPool removeObject:view];
@@ -986,7 +987,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (UIView *)dequeuePlaceholderView
 {
-	UIView * __AH_STRONG view = AH_RETAIN([placeholderViewPool anyObject]);
+	UIView *view = AH_RETAIN([placeholderViewPool anyObject]);
     if (view)
     {
         [placeholderViewPool removeObject:view];
@@ -1494,8 +1495,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 #endif
 #else
             CVDisplayLinkCreateWithActiveCGDisplays((void *)&timer); 
-        	CVDisplayLinkSetOutputCallback((__AH_BRIDGE CVDisplayLinkRef)timer, (CVDisplayLinkOutputCallback)&displayLinkCallback, (__AH_BRIDGE void *)self);
-            CVDisplayLinkStart((__AH_BRIDGE CVDisplayLinkRef)timer);
+        	CVDisplayLinkSetOutputCallback((__bridge CVDisplayLinkRef)timer, (CVDisplayLinkOutputCallback)&displayLinkCallback, (__bridge void *)self);
+            CVDisplayLinkStart((__bridge CVDisplayLinkRef)timer);
 #endif
         }
 		
@@ -1529,8 +1530,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     }
     else
     {
-    	CVDisplayLinkStop((__AH_BRIDGE CVDisplayLinkRef)timer);
-        CVDisplayLinkRelease((__AH_BRIDGE CVDisplayLinkRef)timer);
+    	CVDisplayLinkStop((__bridge CVDisplayLinkRef)timer);
+        CVDisplayLinkRelease((__bridge CVDisplayLinkRef)timer);
     }
     
 #endif
