@@ -87,8 +87,6 @@ This property is used to adjust the offset of the carousel item views relative t
 
 This property is used to adjust the user viewpoint relative to the carousel items. It has the opposite effect to adjusting the contentOffset, i.e. if you move the viewpoint up then the carousel appears to move down. Unlike the contentOffset, moving the viewpoint also changes the perspective vanishing point relative to the carousel items, so if you move the viewpoint up, it will appear as if you are looking down on the carousel.
 
-Note that the viewpointOffset transform is concatenated with the carousel item transform used by the carousel (or the custom transform you have supplied using the transformForItemView delegate method), so if the carousel items are rotated or scaled then this may not have the desired effect.
-
 	@property (nonatomic, assign) CGFloat decelerationRate;
 
 The rate at which the carousel decelerates when flicked. Higher values mean slower deceleration. The default value is 0.95. Values should be in the range 0.0 (carousel stops immediately when released) to 1.0 (carousel continues indefinitely without slowing down, unless it reaches the end).

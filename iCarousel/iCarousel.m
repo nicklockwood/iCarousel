@@ -457,6 +457,7 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     //set up base transform
     CATransform3D transform = CATransform3DIdentity;
     transform.m34 = perspective;
+    transform = CATransform3DTranslate(transform, -viewpointOffset.width, -viewpointOffset.height, 0.0f);
     
     //perform transform
     switch (type)
@@ -800,7 +801,6 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     
     //calculate transform
     CATransform3D transform = [self transformForItemView:view withOffset:offset];
-    transform = CATransform3DTranslate(transform, -viewpointOffset.width, -viewpointOffset.height, 0.0f);
 	
     //transform view
     view.superview.layer.transform = transform;

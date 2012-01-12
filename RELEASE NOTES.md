@@ -1,8 +1,9 @@
 Version 1.6.2
 
+- Fixed long-standing viewpointOffset bug
 - Fixed potential bug around not setting default carousel type
 - LLVM GCC compiler is no longer supported, Now requires Apple LLVM compiler
-- Upgraded to latest Arc Helper code
+- Upgraded to latest ARC Helper code
 
 Version 1.6.1
 
