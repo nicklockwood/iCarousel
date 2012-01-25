@@ -4,12 +4,13 @@
 //  Version 1.6.2
 //
 //  Created by Nick Lockwood on 01/04/2011.
-//  Copyright 2010 Charcoal Design. All rights reserved.
+//  Copyright 2010 Charcoal Design
 //
-//  Get the latest version of iCarousel from either of these locations:
+//  Distributed under the permissive zlib License
+//  Get the latest version from either of these locations:
 //
 //  http://charcoaldesign.co.uk/source/cocoa#icarousel
-//  https://github.com/nicklockwood/icarousel
+//  https://github.com/nicklockwood/iCarousel
 //
 //  This software is provided 'as-is', without any express or implied
 //  warranty.  In no event will the authors be held liable for any damages
@@ -36,8 +37,9 @@
 //  Version 1.2
 //
 //  Created by Nick Lockwood on 05/01/2012.
-//  Copyright 2012 Charcoal Design. All rights reserved.
+//  Copyright 2012 Charcoal Design
 //
+//  Distributed under the permissive zlib License
 //  Get the latest version from here:
 //
 //  https://gist.github.com/1563325
@@ -58,6 +60,8 @@
 #define AH_SUPER_DEALLOC [super dealloc]
 #endif
 #endif
+
+//  Weak reference support
 
 #ifndef AH_WEAK
 #if defined __IPHONE_OS_VERSION_MIN_REQUIRED
@@ -135,10 +139,12 @@ iCarouselTranformOption;
 @protocol iCarouselDataSource, iCarouselDelegate;
 
 @interface iCarousel : UIView
+
+//required for 32-bit Macs
 #ifdef __i386__
 {
-	//required for 32-bit Macs
 	@private
+	
     id<iCarouselDelegate> __AH_WEAK delegate;
     id<iCarouselDataSource> __AH_WEAK dataSource;
     iCarouselType type;
