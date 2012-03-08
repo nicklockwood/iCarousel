@@ -706,6 +706,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 {
     //calculate relative position
     CGFloat itemOffset = scrollOffset / itemWidth;
+	if (isnan(itemOffset)) itemOffset = 0;
     CGFloat offset = index - itemOffset;
     if (shouldWrap)
     {
@@ -932,6 +933,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 	if (prevItemWidth)
 	{
 		scrollOffset = scrollOffset / prevItemWidth * itemWidth;
+		if (isnan(scrollOffset)) scrollOffset = 0;
 	}
 	else
 	{
@@ -1208,7 +1210,9 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
             return 0;
         }
 		CGFloat contentWidth = numberOfItems * itemWidth;
-		return offset - floorf(offset / contentWidth) * contentWidth;
+		CGFloat clampedOffset = offset - floorf(offset / contentWidth) * contentWidth;
+		if (isnan(clampedOffset)) clampedOffset = 0;
+		return clampedOffset;
     }
     else
     {
@@ -1263,14 +1267,17 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         if (itemCount > 0)
         {
             endOffset = (floorf(startOffset / itemWidth) + itemCount) * itemWidth;
+			if (isnan(endOffset)) endOffset = 0;
         }
         else if (itemCount < 0)
         {
             endOffset = (ceilf(startOffset / itemWidth) + itemCount) * itemWidth;
+			if (isnan(endOffset)) endOffset = 0;
         }
         else
         {
             endOffset = roundf(startOffset / itemWidth) * itemWidth;
+			if (isnan(endOffset)) endOffset = 0;
         }
 		if (!shouldWrap)
 		{
@@ -1568,10 +1575,12 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         if (distance > 0.0f)
         {
             endOffset = ceilf(endOffset / itemWidth) * itemWidth;
+			if (isnan(endOffset)) endOffset = 0;
         }
         else
         {
             endOffset = floorf(endOffset / itemWidth) * itemWidth;
+			if (isnan(endOffset)) endOffset = 0;
         }
     }
     if (!shouldWrap)
@@ -1832,7 +1841,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     else if ([gesture isKindOfClass:[UIPanGestureRecognizer class]])
     {
         if ([self viewOrSuperview:touch.view isKindOfClass:[UISlider class]] ||
-            [self viewOrSuperview:touch.view isKindOfClass:[UISwitch class]])
+            [self viewOrSuperview:touch.view isKindOfClass:[UISwitch class]] ||
+			!scrollEnabled)
         {
             return NO;
         }
