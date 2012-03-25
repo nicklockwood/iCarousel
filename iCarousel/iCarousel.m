@@ -727,8 +727,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 - (CGFloat)offsetForItemAtIndex:(NSInteger)index
 {
     //calculate relative position
-    CGFloat itemOffset = scrollOffset / itemWidth;
-	if (isnan(itemOffset)) itemOffset = 0;
+    CGFloat itemOffset = itemWidth? (scrollOffset / itemWidth): 0.0f;
     CGFloat offset = index - itemOffset;
     if (shouldWrap)
     {
@@ -954,8 +953,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     //adjust scroll offset
 	if (prevItemWidth)
 	{
-		scrollOffset = scrollOffset / prevItemWidth * itemWidth;
-		if (isnan(scrollOffset)) scrollOffset = 0;
+		scrollOffset = itemWidth? (scrollOffset / prevItemWidth * itemWidth): 0.0f;
 	}
 	else
 	{
@@ -1232,8 +1230,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
             return 0;
         }
 		CGFloat contentWidth = numberOfItems * itemWidth;
-		CGFloat clampedOffset = offset - floorf(offset / contentWidth) * contentWidth;
-		if (isnan(clampedOffset)) clampedOffset = 0;
+		CGFloat clampedOffset = contentWidth? (offset - floorf(offset / contentWidth) * contentWidth): 0.0f;
 		return clampedOffset;
     }
     else
@@ -1244,7 +1241,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (NSInteger)currentItemIndex
 {	
-    return itemWidth? [self clampedIndex:roundf(scrollOffset / itemWidth)]: 0;
+    return itemWidth? [self clampedIndex:roundf(scrollOffset / itemWidth)]: 0.0f;
 }
 
 - (NSInteger)minScrollDistanceFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex
@@ -1288,18 +1285,15 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 		previousItemIndex = roundf(scrollOffset/itemWidth);
         if (itemCount > 0)
         {
-            endOffset = (floorf(startOffset / itemWidth) + itemCount) * itemWidth;
-			if (isnan(endOffset)) endOffset = 0;
+            endOffset = itemWidth? ((floorf(startOffset / itemWidth) + itemCount) * itemWidth): 0.0f;
         }
         else if (itemCount < 0)
         {
-            endOffset = (ceilf(startOffset / itemWidth) + itemCount) * itemWidth;
-			if (isnan(endOffset)) endOffset = 0;
+            endOffset = itemWidth? ((ceilf(startOffset / itemWidth) + itemCount) * itemWidth): 0.0f;
         }
         else
         {
-            endOffset = roundf(startOffset / itemWidth) * itemWidth;
-			if (isnan(endOffset)) endOffset = 0;
+            endOffset = itemWidth? (roundf(startOffset / itemWidth) * itemWidth): 0.0f;
         }
 		if (!shouldWrap)
 		{
@@ -1596,13 +1590,11 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     {
         if (distance > 0.0f)
         {
-            endOffset = ceilf(endOffset / itemWidth) * itemWidth;
-			if (isnan(endOffset)) endOffset = 0;
+            endOffset = itemWidth? (ceilf(endOffset / itemWidth) * itemWidth): 0.0f;
         }
         else
         {
-            endOffset = floorf(endOffset / itemWidth) * itemWidth;
-			if (isnan(endOffset)) endOffset = 0;
+            endOffset = itemWidth? (floorf(endOffset / itemWidth) * itemWidth): 0.0f;
         }
     }
     if (!shouldWrap)
