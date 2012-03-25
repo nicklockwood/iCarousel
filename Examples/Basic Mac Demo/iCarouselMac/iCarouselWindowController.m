@@ -9,7 +9,7 @@
 #import "iCarouselWindowController.h"
 
 
-#define NUMBER_OF_ITEMS 19
+#define NUMBER_OF_ITEMS 50
 #define NUMBER_OF_VISIBLE_ITEMS 19
 #define ITEM_SPACING 210
 #define INCLUDE_PLACEHOLDERS YES

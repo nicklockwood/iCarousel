@@ -86,6 +86,7 @@
     [super viewDidLoad];
     
     //configure carousel
+    carousel.decelerationRate = 0.5;
     carousel.type = iCarouselTypeCoverFlow2;
     navItem.title = @"CoverFlow2";
 }

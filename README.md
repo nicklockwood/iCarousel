@@ -15,13 +15,19 @@ Supported OS & SDK Versions
 * Earliest supported deployment target - iOS 4.3 / Mac OS 10.7 (Xcode 4.2)
 * Earliest compatible deployment target - iOS 3.2 / Mac OS 10.6
 
-NOTE: 'Supported' means that the library has been tested with this version. 'Compatible' means that the library should work on this iOS version (i.e. it doesn't rely on any unavailable SDK features) but is no longer being tested for compatibility and may require tweaking or bug fixes to run correctly.
+NOTE: 'Supported' means that the library has been tested with this version. 'Compatible' means that the library should work on this OS version (i.e. it doesn't rely on any unavailable SDK features) but is no longer being tested for compatibility and may require tweaking or bug fixes to run correctly.
 
 
 ARC Compatibility
 ------------------
 
 As of version 1.6.1, iCarousel automatically works with both ARC and non-ARC projects through conditional compilation. There is no need to exclude iCarousel files from the ARC validation process, or to convert iCarousel using the ARC conversion tool.
+
+
+Thread Safety
+--------------
+
+iCarousel is derives from UIView and - as with all UIKit components - it should only be accessed from the main thread. You may wish to use threads for loading or updating carousel contents or items, but always ensure that once your content has loaded, you switch back to the main thread before updating the carousel.
 
 
 Installation
@@ -216,6 +222,10 @@ The index for a given item view in the carousel. Works for item views and placeh
 	- (NSInteger)indexOfItemViewOrSubview:(UIView *)view
 
 This method gives you the item index of either the view passed or the view containing the view passed as a parameter. It works by walking up the view hierarchy starting with the view passed until it finds an item view and returns its index within the carousel. If no currently-loaded item view is found, it returns NSNotFound. This method is extremely useful for handling events on controls embedded within an item view. This allows you to bind all your item controls to a single action method on your view controller, and then work out which item the control that triggered the action was related to. You can see an example of this technique in the *Controls Demo* example project.
+
+    - (CGFloat)offsetForItemAtIndex:(NSInteger)index;
+
+Returns the offset for the specified item index in multiples of `itemWidth` from the center position. This is the same value used for calculating the view transform and alpha, and can be used to customise item views based on their position in the carousel. This value can be expected to change for each view whenever the `carouselDidScroll:` delegate method is called.
 
 	- (void)removeItemAtIndex:(NSInteger)index animated:(BOOL)animated;
 

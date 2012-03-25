@@ -1,3 +1,8 @@
+Version 1.6.3 beta
+
+- Added offsetForItemAtIndex: method
+- Fixed Mac OS scrolling glitch when using numberOfVisibleViews
+
 Version 1.6.2
 
 - Fixed long-standing viewpointOffset bug
