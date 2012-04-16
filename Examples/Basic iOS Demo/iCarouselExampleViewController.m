@@ -11,8 +11,8 @@
 
 #define IS_IPAD (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 
-#define NUMBER_OF_ITEMS (IS_IPAD? 19: 12)
-#define NUMBER_OF_VISIBLE_ITEMS 25
+#define NUMBER_OF_ITEMS 1000
+#define NUMBER_OF_VISIBLE_ITEMS (IS_IPAD? 12: 19)
 #define ITEM_SPACING 210.0f
 #define INCLUDE_PLACEHOLDERS YES
 
@@ -86,7 +86,6 @@
     [super viewDidLoad];
     
     //configure carousel
-    carousel.decelerationRate = 0.5;
     carousel.type = iCarouselTypeCoverFlow2;
     navItem.title = @"CoverFlow2";
 }

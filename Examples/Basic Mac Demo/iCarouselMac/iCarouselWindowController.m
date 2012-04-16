@@ -9,7 +9,7 @@
 #import "iCarouselWindowController.h"
 
 
-#define NUMBER_OF_ITEMS 50
+#define NUMBER_OF_ITEMS 1000
 #define NUMBER_OF_VISIBLE_ITEMS 19
 #define ITEM_SPACING 210
 #define INCLUDE_PLACEHOLDERS YES
@@ -136,7 +136,7 @@
 	}
     
 	//set label
-	[label setStringValue:[NSString stringWithFormat:@"%i", index]];
+	[label setStringValue:[NSString stringWithFormat:@"%lu", index]];
     [label sizeToFit];
     [label setFrameOrigin:NSMakePoint((view.bounds.size.width - label.frame.size.width)/2.0,
                                       (view.bounds.size.height - label.frame.size.height)/2.0)];

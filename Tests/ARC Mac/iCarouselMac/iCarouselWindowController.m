@@ -122,7 +122,7 @@
     [label setSelectable:NO];
     [label setAlignment:NSCenterTextAlignment];
     [label setFont:[NSFont fontWithName:[[label font] fontName] size:50]];
-    [label setStringValue:[NSString stringWithFormat:@"%i", index]];
+    [label setStringValue:[NSString stringWithFormat:@"%lu", index]];
     [label sizeToFit];
     [label setFrameOrigin:NSMakePoint((view.bounds.size.width - label.frame.size.width)/2.0,
                                       (view.bounds.size.height - label.frame.size.height)/2.0)];
