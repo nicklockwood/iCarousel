@@ -808,6 +808,9 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     
 #endif
     
+    //update backface visibility
+    view.superview.layer.doubleSided = view.layer.doubleSided;
+    
     //special-case logic for iCarouselTypeCoverFlow2
     CGFloat clampedOffset = fmaxf(-1.0f, fminf(1.0f, offset));
     if (decelerating || (scrolling && !didDrag) || (scrollOffset - [self clampedOffset:scrollOffset]) != 0.0f)

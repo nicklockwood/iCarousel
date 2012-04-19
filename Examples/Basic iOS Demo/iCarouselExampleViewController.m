@@ -36,13 +36,13 @@
 
 - (void)setUp
 {
-	//set up data
-	wrap = YES;
-	self.items = [NSMutableArray array];
-	for (int i = 0; i < NUMBER_OF_ITEMS; i++)
-	{
-		[items addObject:[NSNumber numberWithInt:i]];
-	}
+    //set up data
+    wrap = YES;
+    self.items = [NSMutableArray array];
+    for (int i = 0; i < NUMBER_OF_ITEMS; i++)
+    {
+        [items addObject:[NSNumber numberWithInt:i]];
+    }
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -65,11 +65,11 @@
 
 - (void)dealloc
 {
-	//it's a good idea to set these to nil here to avoid
-	//sending messages to a deallocated viewcontroller
-	carousel.delegate = nil;
-	carousel.dataSource = nil;
-	
+    //it's a good idea to set these to nil here to avoid
+    //sending messages to a deallocated viewcontroller
+    carousel.delegate = nil;
+    carousel.dataSource = nil;
+    
     [carousel release];
     [navItem release];
     [orientationBarItem release];
@@ -187,58 +187,60 @@
 
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
 {
-	UILabel *label = nil;
-	
-	//create new view if no view is available for recycling
-	if (view == nil)
-	{
-		view = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]] autorelease];
-		label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
-		label.backgroundColor = [UIColor clearColor];
-		label.textAlignment = UITextAlignmentCenter;
-		label.font = [label.font fontWithSize:50];
-		[view addSubview:label];
-	}
-	else
-	{
-		label = [[view subviews] lastObject];
-	}
-	
+    UILabel *label = nil;
+    
+    //create new view if no view is available for recycling
+    if (view == nil)
+    {
+        view = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]] autorelease];
+        view.layer.doubleSided = NO; //prevent back side of view from showing
+        label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
+        label.backgroundColor = [UIColor clearColor];
+        label.textAlignment = UITextAlignmentCenter;
+        label.font = [label.font fontWithSize:50];
+        [view addSubview:label];
+    }
+    else
+    {
+        label = [[view subviews] lastObject];
+    }
+    
     //set label
-	label.text = [[items objectAtIndex:index] stringValue];
-	
-	return view;
+    label.text = [[items objectAtIndex:index] stringValue];
+    
+    return view;
 }
 
 - (NSUInteger)numberOfPlaceholdersInCarousel:(iCarousel *)carousel
 {
-	//note: placeholder views are only displayed on some carousels if wrapping is disabled
-	return INCLUDE_PLACEHOLDERS? 2: 0;
+    //note: placeholder views are only displayed on some carousels if wrapping is disabled
+    return INCLUDE_PLACEHOLDERS? 2: 0;
 }
 
 - (UIView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index reusingView:(UIView *)view
 {
-	UILabel *label = nil;
-	
-	//create new view if no view is available for recycling
-	if (view == nil)
-	{
-		view = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]] autorelease];
-		label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
-		label.backgroundColor = [UIColor clearColor];
-		label.textAlignment = UITextAlignmentCenter;
-		label.font = [label.font fontWithSize:50.0f];
-		[view addSubview:label];
-	}
-	else
-	{
-		label = [[view subviews] lastObject];
-	}
-	
+    UILabel *label = nil;
+    
+    //create new view if no view is available for recycling
+    if (view == nil)
+    {
+        view = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]] autorelease];
+        view.layer.doubleSided = NO; //prevent back side of view from showing
+        label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
+        label.backgroundColor = [UIColor clearColor];
+        label.textAlignment = UITextAlignmentCenter;
+        label.font = [label.font fontWithSize:50.0f];
+        [view addSubview:label];
+    }
+    else
+    {
+        label = [[view subviews] lastObject];
+    }
+    
     //set label
-	label.text = (index == 0)? @"[": @"]";
-	
-	return view;
+    label.text = (index == 0)? @"[": @"]";
+    
+    return view;
 }
 
 - (CGFloat)carouselItemWidth:(iCarousel *)carousel
@@ -249,7 +251,7 @@
 
 - (CGFloat)carousel:(iCarousel *)carousel itemAlphaForOffset:(CGFloat)offset
 {
-	//set opacity based on distance from camera
+    //set opacity based on distance from camera
     return 1.0f - fminf(fmaxf(offset, 0.0f), 1.0f);
 }
 
