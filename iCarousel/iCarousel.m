@@ -1859,6 +1859,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     {
         if ([self viewOrSuperview:touch.view isKindOfClass:[UISlider class]] ||
             [self viewOrSuperview:touch.view isKindOfClass:[UISwitch class]] ||
+            [self viewOrSuperview:touch.view isKindOfClass:[UIButton class]] ||
             !scrollEnabled)
         {
             return NO;
