@@ -3,6 +3,7 @@ Version 1.6.3 beta
 - Added offsetForItemAtIndex: method
 - Fixed Mac OS scrolling glitch when using numberOfVisibleViews
 - iCarousel now respects the layer.doubleSided property of item views
+- Added Basic and Multiple Carousels example projects
 
 Version 1.6.2
 

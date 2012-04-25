@@ -185,7 +185,7 @@ This property toggles whether the carousel is displayed horizontally or vertical
 
 If YES, the carousel will ignore swipe gestures that are perpendicular to the orientation of the carousel. So for a horizontal carousel, vertical swipes will not be intercepted. This means that you can have a vertically scrolling scrollView inside a carousel item view and it will still function correctly. Defaults to YES.
 
-	@property (nonatomic, assign) BOOL clipToBounds;
+	@property (nonatomic, assign) BOOL clipsToBounds;
 	
 This is actually not a property of iCarousel but is inherited from UIView. It's included here because it's a frequently missed feature. Set this to YES to prevent the carousel item views overflowing their bounds. You can set this property in Interface Builder by ticking the 'Clip Subviews' option. Defaults to NO.
 
@@ -378,3 +378,21 @@ If you wish to detect other types of interaction such as swipes, double taps or 
 Note that taps and gestures will be ignored on any item view except the currently selected one, unless you set the `centerItemWhenSelected` property to NO.
 
 On Mac OS there is no easy way to detect clicks on carousel items currently. You cannot just supply an NSButton as or inside your item view because the transforms applied to the item views mean that hit detection doesn't work properly. I'm investigating possible solutions to this (if you know a good way to fix this, please get in touch, or fork the project on github).
+
+FAQ
+------------
+
+    Q. Can I use iCarousel without a nib file?
+    A. Yes, check out the *No Nib Demo* for how to set up iCarousel without nibs
+    
+    Q. How do I prevent iCarousel item views from overflowing their bounds?
+    A. Set the `clipsToBounds` property to YES on your iCarousel view. You can set this property in Interface Builder by ticking the 'Clip Subviews' option.
+    
+    Q. Can I use multiple carousels in the same view controller?
+    A. Yes, check out the *Multiple Carousels* example for how to do this.
+    
+    Q. I can't figure out how to use iCarousel in my project, is there a simple example?
+    A. Yes, check out the *Basic Example* project for a bare-bones implementation. If you're still not clear what's going on, read up about how UITableView works, and once you understand that, iCarousel will make more sense.
+    
+    Q. In the cylindrical carousels, the back-side of the item views is visible. How can I hide it?
+    A. Set the `view.layer.doubleSided` property of your item views to `NO` to hide them when they are facing backwards.
