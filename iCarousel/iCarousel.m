@@ -1230,7 +1230,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     {
         if (numberOfItems == 0)
         {
-            return 0;
+            return 0.0f;
         }
         CGFloat contentWidth = numberOfItems * itemWidth;
         CGFloat clampedOffset = contentWidth? (offset - floorf(offset / contentWidth) * contentWidth): 0.0f;

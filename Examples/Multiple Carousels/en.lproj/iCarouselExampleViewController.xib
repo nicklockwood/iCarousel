@@ -57,11 +57,11 @@
 					</object>
 					<object class="IBUIView" id="474539717">
 						<reference key="NSNextResponder" ref="774585933"/>
-						<int key="NSvFlags">274</int>
+						<int key="NSvFlags">306</int>
 						<string key="NSFrameSize">{320, 230}</string>
 						<reference key="NSSuperview" ref="774585933"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="192313258"/>
+						<reference key="NSNextKeyView" ref="372534735"/>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MSAwAA</bytes>
@@ -71,9 +71,9 @@
 						</object>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 					</object>
-					<object class="IBUIView" id="192313258">
+					<object class="IBUIView" id="372534735">
 						<reference key="NSNextResponder" ref="774585933"/>
-						<int key="NSvFlags">274</int>
+						<int key="NSvFlags">266</int>
 						<string key="NSFrame">{{0, 230}, {320, 230}}</string>
 						<reference key="NSSuperview" ref="774585933"/>
 						<reference key="NSWindow"/>
@@ -123,7 +123,7 @@
 					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">carousel2</string>
 						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="192313258"/>
+						<reference key="destination" ref="372534735"/>
 					</object>
 					<int key="connectionID">42</int>
 				</object>
@@ -146,7 +146,7 @@
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">dataSource</string>
-						<reference key="source" ref="192313258"/>
+						<reference key="source" ref="372534735"/>
 						<reference key="destination" ref="372490531"/>
 					</object>
 					<int key="connectionID">39</int>
@@ -154,7 +154,7 @@
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">delegate</string>
-						<reference key="source" ref="192313258"/>
+						<reference key="source" ref="372534735"/>
 						<reference key="destination" ref="372490531"/>
 					</object>
 					<int key="connectionID">40</int>
@@ -189,7 +189,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="28049241"/>
 							<reference ref="474539717"/>
-							<reference ref="192313258"/>
+							<reference ref="372534735"/>
 						</object>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -209,7 +209,7 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">38</int>
-						<reference key="object" ref="192313258"/>
+						<reference key="object" ref="372534735"/>
 						<reference key="parent" ref="774585933"/>
 						<string key="objectName">iCarousel 2</string>
 					</object>
@@ -308,13 +308,11 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>carousel</string>
 							<string>carousel1</string>
 							<string>carousel2</string>
 						</object>
 						<object class="NSArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>iCarousel</string>
 							<string>iCarousel</string>
 							<string>iCarousel</string>
 						</object>
@@ -323,16 +321,11 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>carousel</string>
 							<string>carousel1</string>
 							<string>carousel2</string>
 						</object>
 						<object class="NSArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<object class="IBToOneOutletInfo">
-								<string key="name">carousel</string>
-								<string key="candidateClassName">iCarousel</string>
-							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">carousel1</string>
 								<string key="candidateClassName">iCarousel</string>
