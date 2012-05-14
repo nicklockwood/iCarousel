@@ -709,7 +709,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (void)depthSortViews
 {
-    for (UIView *view in [[itemViews allValues] sortedArrayUsingFunction:(NSInteger (*)(id, id, void *))compareViewDepth context:(void *)self])
+    for (UIView *view in [[itemViews allValues] sortedArrayUsingFunction:(NSInteger (*)(id, id, void *))compareViewDepth context:(__AH_BRIDGE void *)self])
     {
         [contentView addSubview:view.superview];
     }
