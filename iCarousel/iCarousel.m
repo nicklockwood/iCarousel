@@ -303,7 +303,7 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     }
 }
 
-- (void)setUseDisplayLinkIfAvailable:(BOOL)_useDisplayLink
+- (void)setUseDisplayLink:(BOOL)_useDisplayLink
 {
     if (useDisplayLink != _useDisplayLink)
     {
