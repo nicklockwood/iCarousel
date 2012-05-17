@@ -1,7 +1,7 @@
 //
 //  iCarousel.m
 //
-//  Version 1.6.3 beta
+//  Version 1.6.3
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2010 Charcoal Design
@@ -1080,14 +1080,14 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         UIView *oldItemView = [containerView.subviews lastObject];
         if (index < 0 || index >= numberOfItems)
         {
-            [self queuePlaceholderView:view];
+            [self queuePlaceholderView:oldItemView];
         }
         else
         {
-            [self queueItemView:view];
+            [self queueItemView:oldItemView];
         }
+        view.frame = oldItemView.frame;
         [oldItemView removeFromSuperview];
-        containerView.frame = view.frame;
         [containerView addSubview:view];
     }
     else
@@ -1161,7 +1161,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 - (void)reloadData
 {    
     //remove old views
-    for (UIView *view in [self.itemViews allValues])
+    for (UIView *view in [itemViews allValues])
     {
         [view.superview removeFromSuperview];
     }
