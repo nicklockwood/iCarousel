@@ -141,13 +141,13 @@ This is the current offset in pixels of the carousel. This value, divided by the
 
 This is the offset multiplier used when the user drags the carousel with their finger. It does not affect programmatic scrolling or deceleration speed. This defaults to 1.0 for most carousel types, but defaults to 2.0 for the CoverFlow-style carousels to compensate for the fact that their items are more closely spaced and so must be dragged further to move the same distance. You cannot set this property directly, but you can override the default value by implementing the `carouselOffsetMultiplier:` delegate method.
 
-	@property (nonatomic, readonly) NSInteger currentItemIndex;
+	@property (nonatomic, assign) NSInteger currentItemIndex;
 
-The index of the currently centered item in the carousel (read only). To change this, use the `scrollToItemAtIndex:` methods. 
+The index of the currently centered item in the carousel. Setting this property is equivalent to calling `scrollToItemAtIndex:animated:` with the animated argument set to NO. 
 
 	@property (nonatomic, retain, readonly) UIView *currentItemView;
 	
-The currently centered item view in the carousel. The index of this view matches `currentItemIndex`. 
+The currently centered item view in the carousel. The index of this view matches `currentItemIndex`.
 
 	@property (nonatomic, readonly) CGFloat itemWidth;
 

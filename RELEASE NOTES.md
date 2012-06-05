@@ -1,3 +1,9 @@
+Version 1.6.4 beta
+
+- exposed the setUp method to simplify subclassing.
+- currentItemIndex property is now writable.
+- Switched CADisplayLink to use NSDefaultRunLoopMode, which is less likely to interfere with UIScrollViews, etc.
+
 Version 1.6.3
 
 - Added offsetForItemAtIndex: method
