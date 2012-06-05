@@ -1314,8 +1314,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         decelerating = NO;
         [self disableAnimation];
         scrollOffset = itemWidth * [self clampedIndex:previousItemIndex + itemCount];
-        previousItemIndex = previousItemIndex + itemCount;
         [self didScroll];
+        previousItemIndex = previousItemIndex + itemCount;
         [self depthSortViews];
         [self enableAnimation];
     }
