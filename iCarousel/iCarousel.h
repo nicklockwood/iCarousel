@@ -224,7 +224,6 @@ iCarouselTranformOption;
 @property (nonatomic, assign, getter = isVertical) BOOL vertical;
 @property (nonatomic, assign) BOOL ignorePerpendicularSwipes;
 
-- (void)setUp;
 - (void)scrollByNumberOfItems:(NSInteger)itemCount duration:(NSTimeInterval)duration;
 - (void)scrollToItemAtIndex:(NSInteger)index duration:(NSTimeInterval)duration;
 - (void)scrollToItemAtIndex:(NSInteger)index animated:(BOOL)animated;
