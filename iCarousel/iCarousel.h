@@ -89,6 +89,8 @@
 //  ARC Helper ends
 
 
+#import <QuartzCore/QuartzCore.h>
+
 #ifdef USING_CHAMELEON
 #define ICAROUSEL_IOS
 #elif defined __IPHONE_OS_VERSION_MAX_ALLOWED
@@ -100,7 +102,6 @@ typedef CGSize NSSize;
 #endif
 
 
-#import <QuartzCore/QuartzCore.h>
 #ifdef ICAROUSEL_IOS
 #import <UIKit/UIKit.h>
 #else
