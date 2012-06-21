@@ -30,6 +30,7 @@
 #import "UIGeometry.h"
 
 const UIEdgeInsets UIEdgeInsetsZero = {0,0,0,0};
+const UIOffset UIOffsetZero = {0,0};
 
 NSString *NSStringFromCGPoint(CGPoint p)
 {
@@ -54,6 +55,11 @@ NSString *NSStringFromCGAffineTransform(CGAffineTransform transform)
 NSString *NSStringFromUIEdgeInsets(UIEdgeInsets insets)
 {
     return [NSString stringWithFormat:@"{%g, %g, %g, %g}", insets.top, insets.left, insets.bottom, insets.right];
+}
+
+NSString *NSStringFromUIOffset(UIOffset offset)
+{
+    return [NSString stringWithFormat:@"{%g, %g}", offset.horizontal, offset.vertical];
 }
 
 @implementation NSValue (NSValueUIGeometryExtensions)
@@ -100,7 +106,23 @@ NSString *NSStringFromUIEdgeInsets(UIEdgeInsets insets)
         [self getValue: &insets];
         return insets;
     }
-    return (UIEdgeInsets){0,0,0,0};
+    return UIEdgeInsetsZero;
+}
+
++ (NSValue *)valueWithUIOffset:(UIOffset)offset
+{
+    return [NSValue valueWithBytes: &offset objCType: @encode(UIOffset)];
+}
+
+- (UIOffset)UIOffsetValue
+{
+    if(strcmp([self objCType], @encode(UIOffset)) == 0)
+    {
+        UIOffset offset;
+        [self getValue: &offset];
+        return offset;
+    }
+    return UIOffsetZero;
 }
 @end
 

@@ -37,9 +37,9 @@
     NSArray *_viewControllers;
     
     struct {
-        BOOL willPresentViewController : 1;
-        BOOL willHideViewController : 1;
-        BOOL willShowViewController : 1;
+        unsigned willPresentViewController : 1;
+        unsigned willHideViewController : 1;
+        unsigned willShowViewController : 1;
     } _delegateHas;
 }
 

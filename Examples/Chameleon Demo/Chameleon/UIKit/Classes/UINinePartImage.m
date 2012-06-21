@@ -28,72 +28,72 @@
  */
 
 #import "UINinePartImage.h"
-#import "AppKitIntegration.h"
-#import "UIGraphics.h"
-#import <AppKit/AppKit.h>
+#import "UIImageRep.h"
 
 @implementation UINinePartImage
 
-- (id)initWithNSImage:(id)theImage leftCapWidth:(NSInteger)leftCapWidth topCapHeight:(NSInteger)topCapHeight
+- (id)initWithRepresentations:(NSArray *)reps leftCapWidth:(NSInteger)leftCapWidth topCapHeight:(NSInteger)topCapHeight
 {
-    if ((self=[super initWithNSImage:theImage])) {
-        const CGSize size = self.size;
-        const CGFloat stretchyWidth = (leftCapWidth < size.width)? 1 : 0;
-        const CGFloat stretchyHeight = (topCapHeight < size.height)? 1 : 0;
-        const CGFloat bottomCapHeight = size.height - topCapHeight - stretchyHeight;
-        
-        _topLeftCorner = _NSImageCreateSubimage(theImage, CGRectMake(0,0,leftCapWidth,topCapHeight));
-        _topEdgeFill = _NSImageCreateSubimage(theImage, CGRectMake(leftCapWidth,0,stretchyWidth,topCapHeight));
-        _topRightCorner = _NSImageCreateSubimage(theImage, CGRectMake(leftCapWidth+stretchyWidth,0,size.width-leftCapWidth-stretchyWidth,topCapHeight));
-        
-        _bottomLeftCorner = _NSImageCreateSubimage(theImage, CGRectMake(0,size.height-bottomCapHeight,leftCapWidth,bottomCapHeight));
-        _bottomEdgeFill = _NSImageCreateSubimage(theImage, CGRectMake(leftCapWidth,size.height-bottomCapHeight,stretchyWidth,bottomCapHeight));
-        _bottomRightCorner = _NSImageCreateSubimage(theImage, CGRectMake(leftCapWidth+stretchyWidth,size.height-bottomCapHeight,size.width-leftCapWidth-stretchyWidth,bottomCapHeight));
-
-        _leftEdgeFill = _NSImageCreateSubimage(theImage, CGRectMake(0,topCapHeight,leftCapWidth,stretchyHeight));
-        _centerFill = _NSImageCreateSubimage(theImage, CGRectMake(leftCapWidth,topCapHeight,stretchyWidth,stretchyHeight));
-        _rightEdgeFill = _NSImageCreateSubimage(theImage, CGRectMake(leftCapWidth+stretchyWidth,topCapHeight,size.width-leftCapWidth-stretchyWidth,stretchyHeight));
+    if ((self=[super _initWithRepresentations:reps])) {
+        _leftCapWidth = leftCapWidth;
+        _topCapHeight = topCapHeight;
     }
     return self;
 }
 
-- (void)dealloc
-{
-    [_topLeftCorner release];
-    [_topEdgeFill release];
-    [_topRightCorner release];
-    [_leftEdgeFill release];
-    [_centerFill release];
-    [_rightEdgeFill release];
-    [_bottomLeftCorner release];
-    [_bottomEdgeFill release];
-    [_bottomRightCorner release];
-    [super dealloc];
-}
-
 - (NSInteger)leftCapWidth
 {
-    return [_topLeftCorner size].width;
+    return _leftCapWidth;
 }
 
 - (NSInteger)topCapHeight
 {
-    return [_topLeftCorner size].height;
+    return _topCapHeight;
 }
 
-- (void)drawInRect:(CGRect)rect
+- (void)_drawRepresentation:(UIImageRep *)rep inRect:(CGRect)rect
 {
-    // There aren't enough NSCompositingOperations to map all possible CGBlendModes, so rather than have gaps in the support,
-    // I am drawing the multipart image into a new image context which is then drawn in the usual way which results in the draw
-    // obeying the currently active CGBlendMode and doing the expected thing. This is no doubt more expensive than it could be,
-    // but I suspect it's pretty irrelevant in the grand scheme of things.
-    UIGraphicsBeginImageContext(rect.size);
-    NSDrawNinePartImage(NSMakeRect(0,0,rect.size.width,rect.size.height), _topLeftCorner, _topEdgeFill, _topRightCorner, _leftEdgeFill, _centerFill, _rightEdgeFill, _bottomLeftCorner, _bottomEdgeFill, _bottomRightCorner, NSCompositeCopy, 1, YES);
-    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
+    const CGSize size = self.size;
+    const CGFloat stretchyWidth = (_leftCapWidth < size.width)? 1 : 0;
+    const CGFloat stretchyHeight = (_topCapHeight < size.height)? 1 : 0;
+    const CGFloat bottomCapHeight = size.height - _topCapHeight - stretchyHeight;
+    const CGFloat rightCapWidth = size.width - _leftCapWidth - stretchyWidth;
     
-    [img drawInRect:rect];
+    //topLeftCorner
+    [rep drawInRect:CGRectMake(CGRectGetMinX(rect), CGRectGetMinY(rect), _leftCapWidth, _topCapHeight)
+           fromRect:CGRectMake(0, 0, _leftCapWidth, _topCapHeight)];
+
+    //topEdgeFill
+    [rep drawInRect:CGRectMake(CGRectGetMinX(rect)+_leftCapWidth, CGRectGetMinY(rect), rect.size.width-rightCapWidth-_leftCapWidth, _topCapHeight)
+           fromRect:CGRectMake(_leftCapWidth, 0, stretchyWidth, _topCapHeight)];
+
+    //topRightCorner
+    [rep drawInRect:CGRectMake(CGRectGetMaxX(rect)-rightCapWidth, CGRectGetMinY(rect), rightCapWidth, _topCapHeight)
+           fromRect:CGRectMake(size.width-rightCapWidth, 0, rightCapWidth, _topCapHeight)];
     
+    //bottomLeftCorner
+    [rep drawInRect:CGRectMake(CGRectGetMinX(rect), CGRectGetMaxY(rect)-bottomCapHeight, _leftCapWidth, bottomCapHeight)
+           fromRect:CGRectMake(0, size.height-bottomCapHeight, _leftCapWidth, bottomCapHeight)];
+    
+    //bottomEdgeFill
+    [rep drawInRect:CGRectMake(CGRectGetMinX(rect)+_leftCapWidth, CGRectGetMaxY(rect)-bottomCapHeight, rect.size.width-rightCapWidth-_leftCapWidth, bottomCapHeight)
+           fromRect:CGRectMake(_leftCapWidth, size.height-bottomCapHeight, stretchyWidth, bottomCapHeight)];
+    
+    //bottomRightCorner
+    [rep drawInRect:CGRectMake(CGRectGetMaxX(rect)-rightCapWidth, CGRectGetMaxY(rect)-bottomCapHeight, rightCapWidth, bottomCapHeight)
+           fromRect:CGRectMake(size.width-rightCapWidth, size.height-bottomCapHeight, rightCapWidth, bottomCapHeight)];
+    
+    //leftEdgeFill
+    [rep drawInRect:CGRectMake(CGRectGetMinX(rect), CGRectGetMinY(rect)+_topCapHeight, _leftCapWidth, rect.size.height-bottomCapHeight-_topCapHeight)
+           fromRect:CGRectMake(0, _topCapHeight, _leftCapWidth, stretchyHeight)];
+    
+    //rightEdgeFill
+    [rep drawInRect:CGRectMake(CGRectGetMaxX(rect)-rightCapWidth, CGRectGetMinY(rect)+_topCapHeight, rightCapWidth, rect.size.height-bottomCapHeight-_topCapHeight)
+           fromRect:CGRectMake(size.width-rightCapWidth, _topCapHeight, rightCapWidth, stretchyHeight)];
+    
+    //centerFill
+    [rep drawInRect:CGRectMake(CGRectGetMinX(rect)+_leftCapWidth, CGRectGetMinY(rect)+_topCapHeight, rect.size.width-rightCapWidth-_leftCapWidth, rect.size.height-bottomCapHeight-_topCapHeight)
+           fromRect:CGRectMake(_leftCapWidth, _topCapHeight, stretchyWidth, stretchyHeight)];
 }
 
 @end

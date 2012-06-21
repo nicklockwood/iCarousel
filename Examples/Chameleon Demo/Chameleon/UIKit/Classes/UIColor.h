@@ -29,14 +29,12 @@
 
 #import <Foundation/Foundation.h>
 
-@class UIImage, NSColor;
+@class UIImage;
 
 @interface UIColor : NSObject {
 @private
-    CGColorRef _color;
+    id _representations;
 }
-
-- (id)initWithNSColor:(NSColor *)c;
 
 + (UIColor *)colorWithWhite:(CGFloat)white alpha:(CGFloat)alpha;
 + (UIColor *)colorWithHue:(CGFloat)hue saturation:(CGFloat)saturation brightness:(CGFloat)brightness alpha:(CGFloat)alpha;

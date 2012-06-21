@@ -77,9 +77,9 @@
     BOOL changingResponderStatus;
 
     struct {
-        unsigned int didChange : 1;
-        unsigned int didChangeSelection : 1;
-        unsigned int didReturnKey : 1;
+        unsigned didChange : 1;
+        unsigned didChangeSelection : 1;
+        unsigned didReturnKey : 1;
     } textDelegateHas;
 }
 

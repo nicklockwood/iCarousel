@@ -29,10 +29,6 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol UIViewLayoutManagerProtocol <NSObject>
-- (void)layoutSubviews;
-@end
-
 @interface UIViewLayoutManager : NSObject
 + (UIViewLayoutManager *)layoutManager;
 @end

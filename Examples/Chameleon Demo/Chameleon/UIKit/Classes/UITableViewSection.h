@@ -44,11 +44,14 @@
 }
 
 - (CGFloat)sectionHeight;
+
+- (void)setNumberOfRows:(NSInteger)rows withHeights:(CGFloat *)newRowHeights;
+
 @property (nonatomic, assign) CGFloat rowsHeight;
 @property (nonatomic, assign) CGFloat headerHeight;
 @property (nonatomic, assign) CGFloat footerHeight;
-@property (nonatomic, assign) NSInteger numberOfRows;
-@property (nonatomic, assign) CGFloat *rowHeights;          // this takes ownership!!
+@property (nonatomic, readonly) NSInteger numberOfRows;
+@property (nonatomic, readonly) CGFloat *rowHeights;
 @property (nonatomic, retain) UIView *headerView;
 @property (nonatomic, retain) UIView *footerView;
 @property (nonatomic, copy) NSString *headerTitle;

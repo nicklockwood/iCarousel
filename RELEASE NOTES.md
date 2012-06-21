@@ -1,4 +1,4 @@
-Version 1.6.4 beta
+Version 1.7 beta
 
 - Fixed bug with scrollByNumberOfItems where duration is 0
 - currentItemIndex property is now writable

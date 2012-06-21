@@ -58,13 +58,13 @@ extern NSString *const UITextViewTextDidEndEditingNotification;
     UIView *_inputView;
     
     struct {
-        BOOL shouldBeginEditing : 1;
-        BOOL didBeginEditing : 1;
-        BOOL shouldEndEditing : 1;
-        BOOL didEndEditing : 1;
-        BOOL shouldChangeText : 1;
-        BOOL didChange : 1;
-        BOOL didChangeSelection : 1;
+        unsigned shouldBeginEditing : 1;
+        unsigned didBeginEditing : 1;
+        unsigned shouldEndEditing : 1;
+        unsigned didEndEditing : 1;
+        unsigned shouldChangeText : 1;
+        unsigned didChange : 1;
+        unsigned didChangeSelection : 1;
     } _delegateHas;
 }
 

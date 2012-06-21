@@ -35,8 +35,7 @@ typedef struct UIEdgeInsets {
 } UIEdgeInsets;
 
 static inline UIEdgeInsets UIEdgeInsetsMake(CGFloat top, CGFloat left, CGFloat bottom, CGFloat right) {
-    UIEdgeInsets insets = {top, left, bottom, right};
-    return insets;
+    return (UIEdgeInsets){top, left, bottom, right};
 }
 
 static inline CGRect UIEdgeInsetsInsetRect(CGRect rect, UIEdgeInsets insets) {
@@ -54,6 +53,20 @@ static inline BOOL UIEdgeInsetsEqualToEdgeInsets(UIEdgeInsets insets1, UIEdgeIns
 
 extern const UIEdgeInsets UIEdgeInsetsZero;
 
+typedef struct UIOffset {
+    CGFloat horizontal, vertical;
+} UIOffset;
+
+static inline UIOffset UIOffsetMake(CGFloat horizontal, CGFloat vertical) {
+    return (UIOffset){horizontal, vertical};
+}
+
+static inline BOOL UIOffsetEqualToOffset(UIOffset offset1, UIOffset offset2) {
+    return offset1.horizontal == offset2.horizontal && offset1.vertical == offset2.vertical;
+}
+
+extern const UIOffset UIOffsetZero;
+
 NSString *NSStringFromCGPoint(CGPoint p);
 NSString *NSStringFromCGRect(CGRect r);
 NSString *NSStringFromCGSize(CGSize s);
@@ -62,15 +75,19 @@ NSString *NSStringFromCGAffineTransform(CGAffineTransform transform);
 
 NSString *NSStringFromUIEdgeInsets(UIEdgeInsets insets);
 
+NSString *NSStringFromUIOffset(UIOffset offset);
+
 @interface NSValue (NSValueUIGeometryExtensions)
 + (NSValue *)valueWithCGPoint:(CGPoint)point;
 + (NSValue *)valueWithCGRect:(CGRect)rect;
 + (NSValue *)valueWithCGSize:(CGSize)size;
 + (NSValue *)valueWithUIEdgeInsets:(UIEdgeInsets)insets;
++ (NSValue *)valueWithUIOffset:(UIOffset)offset;
 - (CGPoint)CGPointValue;
 - (CGRect)CGRectValue;
 - (CGSize)CGSizeValue;
 - (UIEdgeInsets)UIEdgeInsetsValue;
+- (UIOffset)UIOffsetValue;
 @end
 
 @interface NSCoder (NSCoderUIGeometryExtensions)

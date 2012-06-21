@@ -39,6 +39,7 @@
 #import "UIScreenMode+UIPrivate.h"
 #import "UIWindow.h"
 #import "UIKitView.h"
+#import "UIView+UIPrivate.h"
 
 NSString *const UIScreenDidConnectNotification = @"UIScreenDidConnectNotification";
 NSString *const UIScreenDidDisconnectNotification = @"UIScreenDidDisconnectNotification";
@@ -78,14 +79,6 @@ NSMutableArray *_allScreens = nil;
         _layer = [[CALayer layer] retain];
         _layer.delegate = self;		// required to get the magic of the UIViewLayoutManager...
         _layer.layoutManager = [UIViewLayoutManager layoutManager];
-
-        // NOTE: This line adds a 10.6 depedency The commented out line after this would appear to do a similar thing and should work on 10.5,
-        // but ironically, it then makes the UIImageView images render upside down. I suspect this has to do with flipped-ness of images, but
-        // in trying to track that down I noticed that I'm using at least one 10.6-only NSImage method in there already, so I decided it wasn't
-        // worth the effort right now to bother with 10.5 support since there'd be a couple changes there and who knows what other things are
-        // lurking around that only works on 10.6. Got bigger fish to fry right now.
-        _layer.geometryFlipped = YES;
-        //_layer.sublayerTransform = CATransform3DMakeScale(1,-1,1);
         
         _grabber = [[UIImageView alloc] initWithImage:[UIImage _windowResizeGrabberImage]];
         _grabber.layer.zPosition = 10000;
@@ -114,7 +107,11 @@ NSMutableArray *_allScreens = nil;
 
 - (CGFloat)scale
 {
-    return 1;
+    if ([[_UIKitView window] respondsToSelector:@selector(backingScaleFactor)]) {
+        return [[_UIKitView window] backingScaleFactor];
+    } else {
+        return 1;
+    }
 }
 
 - (void)_setPopoverController:(UIPopoverController *)controller
@@ -147,7 +144,7 @@ NSMutableArray *_allScreens = nil;
     return NO;
 }
 
-- (void)layoutSubviews
+- (void)_layoutSubviews
 {
     if ([self _hasResizeIndicator]) {
         const CGSize grabberSize = _grabber.frame.size;
@@ -183,28 +180,41 @@ NSMutableArray *_allScreens = nil;
     return _layer;
 }
 
+- (void)_UIKitViewFrameDidChange
+{
+    NSDictionary *userInfo = (self.currentMode)? [NSDictionary dictionaryWithObject:self.currentMode forKey:@"_previousMode"] : nil;
+    self.currentMode = [UIScreenMode screenModeWithNSView:_UIKitView];
+    [[NSNotificationCenter defaultCenter] postNotificationName:UIScreenModeDidChangeNotification object:self userInfo:userInfo];
+}
+
+- (void)_NSScreenDidChange
+{
+    for (UIWindow *window in [[UIApplication sharedApplication].windows reverseObjectEnumerator]) {
+        if (window.screen == self) {
+            [window _didMoveToScreen];
+        }
+    }
+}
+
 - (void)_setUIKitView:(id)theView
 {
     if (_UIKitView != theView) {
         [[NSNotificationCenter defaultCenter] removeObserver:self name:NSViewFrameDidChangeNotification object:_UIKitView];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowDidChangeScreenNotification object:nil];
+        
         if ((_UIKitView = theView)) {
             [_allScreens addObject:[NSValue valueWithNonretainedObject:self]];
             self.currentMode = [UIScreenMode screenModeWithNSView:_UIKitView];
             [[NSNotificationCenter defaultCenter] postNotificationName:UIScreenDidConnectNotification object:self];
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_UIKitViewFrameDidChange:) name:NSViewFrameDidChangeNotification object:_UIKitView];
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_UIKitViewFrameDidChange) name:NSViewFrameDidChangeNotification object:_UIKitView];
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_NSScreenDidChange) name:NSWindowDidChangeScreenNotification object:[_UIKitView window]];
+            [self _NSScreenDidChange];
         } else {
             self.currentMode = nil;
             [_allScreens removeObject:[NSValue valueWithNonretainedObject:self]];
             [[NSNotificationCenter defaultCenter] postNotificationName:UIScreenDidDisconnectNotification object:self];
         }
     }
-}
-
-- (void)_UIKitViewFrameDidChange:(NSNotification *)note
-{
-    NSDictionary *userInfo = (self.currentMode)? [NSDictionary dictionaryWithObject:self.currentMode forKey:@"_previousMode"] : nil;
-    self.currentMode = [UIScreenMode screenModeWithNSView:_UIKitView];
-    [[NSNotificationCenter defaultCenter] postNotificationName:UIScreenModeDidChangeNotification object:self userInfo:userInfo];
 }
 
 - (NSArray *)availableModes

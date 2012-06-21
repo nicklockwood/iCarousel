@@ -29,6 +29,7 @@
 
 #import "UITapGestureRecognizer.h"
 #import "UIGestureRecognizerSubclass.h"
+#import "UITouch.h"
 
 @implementation UITapGestureRecognizer
 @synthesize numberOfTapsRequired=_numberOfTapsRequired, numberOfTouchesRequired=_numberOfTouchesRequired;
@@ -61,6 +62,39 @@
         return (((UITapGestureRecognizer *)preventedGestureRecognizer).numberOfTapsRequired <= self.numberOfTapsRequired);
     } else {
         return [super canPreventGestureRecognizer:preventedGestureRecognizer];
+    }
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch = [touches anyObject];
+    if (touch.tapCount >= self.numberOfTapsRequired) {
+        if (self.state == UIGestureRecognizerStatePossible) {
+            self.state = UIGestureRecognizerStateBegan;
+        } else if (self.state == UIGestureRecognizerStateBegan) {
+            self.state = UIGestureRecognizerStateChanged;
+        }
+    }
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
+        self.state = UIGestureRecognizerStateCancelled;
+    }
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
+        self.state = UIGestureRecognizerStateEnded;
+    }
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
+        self.state = UIGestureRecognizerStateCancelled;
     }
 }
 

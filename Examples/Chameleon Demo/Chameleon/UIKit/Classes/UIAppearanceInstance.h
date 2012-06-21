@@ -1,11 +1,5 @@
-//
-//  UINSCellControl.h
-//  UIKit
-//
-//  Created by Jim Dovey on 11-03-23.
-//
 /*
- * Copyright (c) 2011, The Iconfactory. All rights reserved.
+ * Copyright (c) 2012, The Iconfactory. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -33,24 +27,16 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <Foundation/Foundation.h>
-#import "UIControl.h"
+#import "UIAppearance.h"
 
-@class NSCell, UIImage, UIFont;
+@class UIAppearanceProperty;
 
-@interface UINSCellControl : UIControl {
-@private
-    NSCell *		_cell;
-}
+@interface NSObject (UIAppearanceInstance)
++ (id)appearance;
++ (id)appearanceWhenContainedIn:(Class <UIAppearanceContainer>)containerClass, ...;
 
-+ (UINSCellControl *)checkboxWithFrame:(CGRect)frame;
-
-- (id)initWithFrame:(CGRect)frame cell:(NSCell *)cell;
-
-@property (nonatomic, readonly) NSCell * cell;
-
-@property (nonatomic, copy) NSString * title;
-@property (nonatomic, copy) UIImage * image;
-@property (nonatomic, copy) UIFont * font;
-
+- (void)_appearancePropertyDidChange:(UIAppearanceProperty *)property;
+- (id)_appearanceContainer;
+- (void)_updateAppearanceIfNeeded;
+- (void)_setAppearanceNeedsUpdate;
 @end

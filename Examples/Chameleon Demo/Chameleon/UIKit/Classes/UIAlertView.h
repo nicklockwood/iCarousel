@@ -40,12 +40,12 @@
     NSMutableArray *_buttonTitles;
     
     struct {
-        BOOL clickedButtonAtIndex : 1;
-        BOOL alertViewCancel : 1;
-        BOOL willPresentAlertView : 1;
-        BOOL didPresentAlertView : 1;
-        BOOL willDismissWithButtonIndex : 1;
-        BOOL didDismissWithButtonIndex : 1;
+        unsigned clickedButtonAtIndex : 1;
+        unsigned alertViewCancel : 1;
+        unsigned willPresentAlertView : 1;
+        unsigned didPresentAlertView : 1;
+        unsigned willDismissWithButtonIndex : 1;
+        unsigned didDismissWithButtonIndex : 1;
     } _delegateHas;
 }
 

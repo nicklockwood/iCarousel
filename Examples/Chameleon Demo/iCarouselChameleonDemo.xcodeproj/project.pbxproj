@@ -213,7 +213,7 @@
 		0153202E14A71EFF00C4A088 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0450;
 			};
 			buildConfigurationList = 0153203114A71EFF00C4A088 /* Build configuration list for PBXProject "iCarouselChameleonDemo" */;
 			compatibilityVersion = "Xcode 3.2";

@@ -62,12 +62,12 @@ typedef enum {
     id _menu;
     
     struct {
-        BOOL clickedButtonAtIndex : 1;
-        BOOL willPresentActionSheet : 1;
-        BOOL didPresentActionSheet : 1;
-        BOOL willDismissWithButtonIndex : 1;
-        BOOL didDismissWithButtonIndex : 1;
-        BOOL actionSheetCancel : 1;
+        unsigned clickedButtonAtIndex : 1;
+        unsigned willPresentActionSheet : 1;
+        unsigned didPresentActionSheet : 1;
+        unsigned willDismissWithButtonIndex : 1;
+        unsigned didDismissWithButtonIndex : 1;
+        unsigned actionSheetCancel : 1;
     } _delegateHas;
 }
 

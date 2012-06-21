@@ -29,6 +29,15 @@
 
 #import "UILongPressGestureRecognizer.h"
 #import "UIGestureRecognizerSubclass.h"
+#import "UITouch+UIPrivate.h"
+#import "UIEvent.h"
+
+static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
+{
+    CGFloat a = B.x - A.x;
+    CGFloat b = B.y - A.y;
+    return sqrtf((a*a) + (b*b));
+}
 
 @implementation UILongPressGestureRecognizer
 @synthesize minimumPressDuration=_minimumPressDuration, allowableMovement=_allowableMovement, numberOfTapsRequired=_numberOfTapsRequired;
@@ -43,6 +52,82 @@
         _numberOfTouchesRequired = 1;
     }
     return self;
+}
+
+- (void)_discreteGestures:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch = [[event touchesForGestureRecognizer:self] anyObject];
+    
+    if (self.state == UIGestureRecognizerStatePossible && [touch _gesture] == _UITouchDiscreteGestureRightClick) {
+        self.state = UIGestureRecognizerStateBegan;
+        [self performSelector:@selector(_endFakeContinuousGesture) withObject:nil afterDelay:0];
+    }
+}
+
+- (void)_endFakeContinuousGesture
+{
+    if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
+        self.state = UIGestureRecognizerStateEnded;
+    }
+}
+
+- (void)_beginGesture
+{
+    _waiting = NO;
+    if (self.state == UIGestureRecognizerStatePossible) {
+        self.state = UIGestureRecognizerStateBegan;
+    }
+}
+
+- (void)_cancelWaiting
+{
+    if (_waiting) {
+        _waiting = NO;
+        [isa cancelPreviousPerformRequestsWithTarget:self selector:@selector(_beginGesture) object:nil];
+    }
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch = [[event touchesForGestureRecognizer:self] anyObject];
+    
+    if (!_waiting && self.state == UIGestureRecognizerStatePossible && touch.tapCount >= self.numberOfTapsRequired) {
+        _beginLocation = [touch locationInView:self.view];
+        _waiting = YES;
+        [self performSelector:@selector(_beginGesture) withObject:nil afterDelay:self.minimumPressDuration];
+    }
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
+        UITouch *touch = [[event touchesForGestureRecognizer:self] anyObject];        
+        const CGFloat distance = DistanceBetweenTwoPoints([touch locationInView:self.view], _beginLocation);
+        
+        if (distance <= self.allowableMovement) {
+            self.state = UIGestureRecognizerStateChanged;
+        } else {
+            self.state = UIGestureRecognizerStateCancelled;
+        }
+    }
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
+        self.state = UIGestureRecognizerStateEnded;
+    } else {
+        [self _cancelWaiting];
+    }
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
+        self.state = UIGestureRecognizerStateCancelled;
+    } else {
+        [self _cancelWaiting];
+    }
 }
 
 @end

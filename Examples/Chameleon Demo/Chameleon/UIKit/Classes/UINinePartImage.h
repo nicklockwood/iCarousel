@@ -31,17 +31,10 @@
 
 @interface UINinePartImage : UIImage {
 @private
-    id _topLeftCorner;
-    id _topEdgeFill;
-    id _topRightCorner;
-    id _leftEdgeFill;
-    id _centerFill;
-    id _rightEdgeFill;
-    id _bottomLeftCorner;
-    id _bottomEdgeFill;
-    id _bottomRightCorner;
+    NSInteger _leftCapWidth;
+    NSInteger _topCapHeight;
 }
 
-- (id)initWithNSImage:(id)theImage leftCapWidth:(NSInteger)leftCapWidth topCapHeight:(NSInteger)topCapHeight;
+- (id)initWithRepresentations:(NSArray *)reps leftCapWidth:(NSInteger)leftCapWidth topCapHeight:(NSInteger)topCapHeight;
 
 @end

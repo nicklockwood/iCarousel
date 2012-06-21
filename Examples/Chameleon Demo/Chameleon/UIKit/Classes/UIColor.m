@@ -27,52 +27,12 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "UIColor.h"
-#import "UIImage.h"
+#import "UIColor+UIPrivate.h"
+#import "UIColorRep.h"
+#import "UIImage+UIPrivate.h"
 #import "UIGraphics.h"
 #import <AppKit/NSColor.h>
 #import <AppKit/NSColorSpace.h>
-
-// callback for CreateImagePattern.
-static void drawPatternImage(void *info, CGContextRef ctx)
-{
-    CGImageRef image = (CGImageRef)info;
-    CGContextDrawImage(ctx, CGRectMake(0,0, CGImageGetWidth(image),CGImageGetHeight(image)), image);
-}
-
-// callback for CreateImagePattern.
-static void releasePatternImage(void *info)
-{
-    CGImageRelease((CGImageRef)info);
-}
-
-static CGPatternRef CreateImagePattern(CGImageRef image)
-{
-    NSCParameterAssert(image);
-    CGImageRetain(image);
-    int width = CGImageGetWidth(image);
-    int height = CGImageGetHeight(image);
-    static const CGPatternCallbacks callbacks = {0, &drawPatternImage, &releasePatternImage};
-    return CGPatternCreate (image,
-                            CGRectMake (0, 0, width, height),
-                            CGAffineTransformMake (1, 0, 0, -1, 0, height),
-                            width,
-                            height,
-                            kCGPatternTilingConstantSpacing,
-                            true,
-                            &callbacks);
-}
-
-static CGColorRef CreatePatternColor(CGImageRef image)
-{
-    CGPatternRef pattern = CreateImagePattern(image);
-    CGColorSpaceRef space = CGColorSpaceCreatePattern(NULL);
-    CGFloat components[1] = {1.0};
-    CGColorRef color = CGColorCreateWithPattern(space, pattern, components);
-    CGColorSpaceRelease(space);
-    CGPatternRelease(pattern);
-    return color;
-}
 
 static UIColor *BlackColor = nil;
 static UIColor *DarkGrayColor = nil;
@@ -96,19 +56,21 @@ static UIColor *ClearColor = nil;
 {
     if (!aColor) {
         [self release];
-        return nil;
-    } else if ((self=[super init])) {
+        self = nil;
+    } else {
         NSColor *c = [aColor colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
         CGFloat components[[c numberOfComponents]];
         [c getComponents:components];
-        _color = CGColorCreate([[c colorSpace] CGColorSpace], components);
+        CGColorRef color = CGColorCreate([[c colorSpace] CGColorSpace], components);
+        self = [self initWithCGColor:color];
+        CGColorRelease(color);
     }
     return self;
 }
 
 - (void)dealloc
 {
-    CGColorRelease(_color);
+    [_representations release];
     [super dealloc];
 }
 
@@ -173,27 +135,58 @@ static UIColor *ClearColor = nil;
     return [self initWithNSColor:[NSColor colorWithDeviceRed:red green:green blue:blue alpha:alpha]];
 }
 
-- (id)initWithCGColor:(CGColorRef)ref
+- (id)_initWithRepresentations:(NSArray *)reps
 {
-    if (!ref) {
+    if ([reps count] == 0) {
         [self release];
-        return nil;
+        self = nil;
     } else if ((self=[super init])) {
-        _color = CGColorRetain(ref);
+        _representations = [reps copy];
     }
     return self;
 }
 
+- (id)initWithCGColor:(CGColorRef)ref
+{
+    return [self _initWithRepresentations:[NSArray arrayWithObjects:[[[UIColorRep alloc] initWithCGColor:ref] autorelease], nil]];
+}
+
 - (id)initWithPatternImage:(UIImage *)patternImage
 {
-    if (!patternImage) {
-        [self release];
-        self = nil;
-    } else if ((self=[super init])) {
-        _color = CreatePatternColor(patternImage.CGImage);
+    NSArray *imageReps = [patternImage _representations];
+    NSMutableArray *colorReps = [NSMutableArray arrayWithCapacity:[imageReps count]];
+
+    for (UIImageRep *imageRep in imageReps) {
+        [colorReps addObject:[[[UIColorRep alloc] initWithPatternImageRepresentation:imageRep] autorelease]];
+    }
+    
+    return [self _initWithRepresentations:colorReps];
+}
+
+- (UIColorRep *)_bestRepresentationForProposedScale:(CGFloat)scale
+{
+    UIColorRep *bestRep = nil;
+    
+    for (UIColorRep *rep in _representations) {
+        if (rep.scale > scale) {
+            break;
+        } else {
+            bestRep = rep;
+        }
+    }
+    
+    return bestRep ?: [_representations lastObject];
+}
+
+- (BOOL)_isOpaque
+{
+    for (UIColorRep *rep in _representations) {
+        if (!rep.opaque) {
+            return NO;
+        }
     }
 
-    return self;
+    return YES;
 }
 
 - (void)set
@@ -204,22 +197,24 @@ static UIColor *ClearColor = nil;
 
 - (void)setFill
 {
-    CGContextSetFillColorWithColor(UIGraphicsGetCurrentContext(), _color);
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(ctx, [self _bestRepresentationForProposedScale:_UIGraphicsGetContextScaleFactor(ctx)].CGColor);
 }
 
 - (void)setStroke
 {
-    CGContextSetStrokeColorWithColor(UIGraphicsGetCurrentContext(), _color);
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    CGContextSetStrokeColorWithColor(ctx, [self _bestRepresentationForProposedScale:_UIGraphicsGetContextScaleFactor(ctx)].CGColor);
 }
 
 - (CGColorRef)CGColor
 {
-    return _color;
+    return [self _bestRepresentationForProposedScale:1].CGColor;
 }
 
 - (UIColor *)colorWithAlphaComponent:(CGFloat)alpha
 {
-    CGColorRef newColor = CGColorCreateCopyWithAlpha(_color, alpha);
+    CGColorRef newColor = CGColorCreateCopyWithAlpha(self.CGColor, alpha);
     UIColor *resultingUIColor = [UIColor colorWithCGColor:newColor];
     CGColorRelease(newColor);
     return resultingUIColor;
@@ -227,9 +222,10 @@ static UIColor *ClearColor = nil;
 
 - (NSColor *)NSColor
 {
-    NSColorSpace *colorSpace = [[NSColorSpace alloc] initWithCGColorSpace:CGColorGetColorSpace(_color)];
-    const NSInteger numberOfComponents = CGColorGetNumberOfComponents(_color);
-    const CGFloat *components = CGColorGetComponents(_color);
+    CGColorRef color = self.CGColor;
+    NSColorSpace *colorSpace = [[NSColorSpace alloc] initWithCGColorSpace:CGColorGetColorSpace(color)];
+    const NSInteger numberOfComponents = CGColorGetNumberOfComponents(color);
+    const CGFloat *components = CGColorGetComponents(color);
     NSColor *theColor = [NSColor colorWithColorSpace:colorSpace components:components count:numberOfComponents];
     [colorSpace release];
     return theColor;

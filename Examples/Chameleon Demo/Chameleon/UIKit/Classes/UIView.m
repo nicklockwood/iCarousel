@@ -35,8 +35,12 @@
 #import "UIViewAnimationGroup.h"
 #import "UIViewBlockAnimationDelegate.h"
 #import "UIViewController.h"
+#import "UIAppearanceInstance.h"
 #import "UIApplication+UIPrivate.h"
 #import "UIGestureRecognizer+UIPrivate.h"
+#import "UIScreen.h"
+#import "UIColor+UIPrivate.h"
+#import "UIColorRep.h"
 #import <QuartzCore/CALayer.h>
 
 NSString *const UIViewFrameDidChangeNotification = @"UIViewFrameDidChangeNotification";
@@ -88,6 +92,8 @@ static BOOL _animationsEnabled = YES;
         _layer.delegate = self;
         _layer.layoutManager = [UIViewLayoutManager layoutManager];
 
+        self.contentMode = UIViewContentModeScaleToFill;
+        self.contentScaleFactor = 0;
         self.frame = theFrame;
         self.alpha = 1;
         self.opaque = YES;
@@ -132,6 +138,11 @@ static BOOL _animationsEnabled = YES;
     return (UIResponder *)[self _viewController] ?: (UIResponder *)_superview;
 }
 
+- (id)_appearanceContainer
+{
+    return self.superview;
+}
+
 - (NSArray *)subviews
 {
     NSArray *sublayers = _layer.sublayers;
@@ -150,7 +161,6 @@ static BOOL _animationsEnabled = YES;
     return subviews;
 }
 
-
 - (void)_willMoveFromWindow:(UIWindow *)fromWindow toWindow:(UIWindow *)toWindow
 {
     if (fromWindow != toWindow) {
@@ -162,11 +172,25 @@ static BOOL _animationsEnabled = YES;
             [self resignFirstResponder];
         }
         
+        [self _setAppearanceNeedsUpdate];
         [self willMoveToWindow:toWindow];
 
         for (UIView *subview in self.subviews) {
             [subview _willMoveFromWindow:fromWindow toWindow:toWindow];
         }
+    }
+}
+
+- (void)_didMoveToScreen
+{
+    if (_implementsDrawRect && self.contentScaleFactor != self.window.screen.scale) {
+        self.contentScaleFactor = self.window.screen.scale;
+    } else {
+        [self setNeedsDisplay];
+    }
+    
+    for (UIView *subview in self.subviews) {
+        [subview _didMoveToScreen];
     }
 }
 
@@ -230,6 +254,10 @@ static BOOL _animationsEnabled = YES;
             [subview release];
         }
 
+        if (oldWindow.screen != newWindow.screen) {
+            [subview _didMoveToScreen];
+        }
+        
         [subview _didMoveFromWindow:oldWindow toWindow:newWindow];
         [subview didMoveToSuperview];
         
@@ -481,7 +509,9 @@ static BOOL _animationsEnabled = YES;
     // whole bitmap the size of view just to hold the backgroundColor, this allows a lot of views to simply act as containers and not waste
     // a bunch of unnecessary memory in those cases - but you can still use background colors because CALayer manages that effeciently.
     
-    // Clever, huh?
+    // note that the last time I checked this, the layer's background color was being set immediately on call to -setBackgroundColor:
+    // when there was no -drawRect: implementation, but I needed to change this to work around issues with pattern image colors in HiDPI.
+    _layer.backgroundColor = [self.backgroundColor _bestRepresentationForProposedScale:self.window.screen.scale].CGColor;
 }
 
 - (BOOL)respondsToSelector:(SEL)aSelector
@@ -735,16 +765,7 @@ static BOOL _animationsEnabled = YES;
     if (_backgroundColor != newColor) {
         [_backgroundColor release];
         _backgroundColor = [newColor retain];
-
-        CGColorRef color = [_backgroundColor CGColor];
-
-        if (color) {
-            self.opaque = (CGColorGetAlpha(color) == 1);
-        }
-        
-        if (!_implementsDrawRect) {
-            _layer.backgroundColor = color;
-        }
+        self.opaque = [_backgroundColor _isOpaque];
     }
 }
 
@@ -762,14 +783,33 @@ static BOOL _animationsEnabled = YES;
 
 - (void)setContentStretch:(CGRect)rect
 {
-    if (!CGRectEqualToRect(rect,_layer.contentsRect)) {
-        _layer.contentsRect = rect;
+    if (!CGRectEqualToRect(rect,_layer.contentsCenter)) {
+        _layer.contentsCenter = rect;
     }
 }
 
 - (CGRect)contentStretch
 {
-    return _layer.contentsRect;
+    return _layer.contentsCenter;
+}
+
+- (void)setContentScaleFactor:(CGFloat)scale
+{
+    if (scale <= 0 && _implementsDrawRect) {
+        scale = [UIScreen mainScreen].scale;
+    }
+    
+    if (scale > 0 && scale != self.contentScaleFactor) {
+        if ([_layer respondsToSelector:@selector(setContentsScale:)]) {
+            [_layer setContentsScale:scale];
+            [self setNeedsDisplay];
+        }
+    }
+}
+
+- (CGFloat)contentScaleFactor
+{
+    return [_layer respondsToSelector:@selector(contentsScale)]? [_layer contentsScale] : 1;
 }
 
 - (void)setHidden:(BOOL)h
@@ -797,6 +837,14 @@ static BOOL _animationsEnabled = YES;
 
 - (void)layoutSubviews
 {
+}
+
+- (void)_layoutSubviews
+{
+    [self _updateAppearanceIfNeeded];
+    [[self _viewController] viewWillLayoutSubviews];
+    [self layoutSubviews];
+    [[self _viewController] viewDidLayoutSubviews];
 }
 
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event

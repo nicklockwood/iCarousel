@@ -249,7 +249,7 @@ static NSArray *GestureRecognizersForView(UIView *view)
             phase = @"DiscreteGesture";
             break;
     }
-    return [NSString stringWithFormat:@"<%@: %p; timestamp = %e; tapCount = %d; phase = %@; view = %@; window = %@>", [self className], self, self.timestamp, self.tapCount, phase, self.view, self.window];
+    return [NSString stringWithFormat:@"<%@: %p; timestamp = %e; tapCount = %lu; phase = %@; view = %@; window = %@>", [self className], self, self.timestamp, self.tapCount, phase, self.view, self.window];
 }
 
 @end

@@ -107,12 +107,11 @@
 #import "UIRotationGestureRecognizer.h"
 #import "UISwipeGestureRecognizer.h"
 #import "UIDatePicker.h"
+#import "UIAppearance.h"
 
 // non-standard imports
 #import "UIKey.h"
 #import "UIScrollWheelGestureRecognizer.h"
-#import "UINSCellControl.h"
-#import "CALayer+UIKitCompatibility.h"      // only needed on 10.6
 
 // only add if core data is included on 10.6
 #import "NSFetchedResultsController.h"

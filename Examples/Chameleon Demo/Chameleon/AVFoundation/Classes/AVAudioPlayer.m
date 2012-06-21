@@ -31,7 +31,7 @@
 #import <AppKit/NSSound.h>
 
 @implementation AVAudioPlayer
-@synthesize delegate=_delegate, url=_url, data=_data, numberOfLoops=_numberOfLoops;
+@synthesize delegate=_delegate, url=_url, data=_data;
 
 - (id)init
 {
@@ -106,26 +106,29 @@
 
 - (BOOL)isPlaying
 {
-    BOOL is = NO;
     @synchronized (self) {
-        is = [_player isPlaying];
+        return [_player isPlaying];
     }
-    return is;
 }
 
 - (float)volume
 {
-    float v = 0;
     @synchronized (self) {
-        v = [_player volume];
+        return [_player volume];
     }
-    return v;
 }
 
 - (void)setVolume:(float)v
 {
     @synchronized (self) {
         [_player setVolume:v];
+    }
+}
+
+- (NSInteger)numberOfLoops
+{
+    @synchronized (self) {
+        return _numberOfLoops;
     }
 }
 
@@ -139,11 +142,9 @@
 
 - (NSTimeInterval)duration
 {
-    NSTimeInterval d = 0;
     @synchronized (self) {
-        d = [_player duration];
+        return [_player duration];
     }
-    return d;
 }
 
 - (void)setCurrentTime:(NSTimeInterval)newTime
@@ -155,11 +156,9 @@
 
 - (NSTimeInterval)currentTime
 {
-    NSTimeInterval t = 0;
     @synchronized (self) {
-        t = [_player currentTime];
+        return [_player currentTime];
     }
-    return t;
 }
 
 - (void)sound:(NSSound *)sound didFinishPlaying:(BOOL)finishedPlaying

@@ -29,12 +29,19 @@
 
 #import "UIGestureRecognizer.h"
 
+// This will work for normal left-click long presses OR a right-click. The right-click will always
+// be recognized as a long press regardless of how long the user holds down the right mouse button
+// and it doesn't worry about allowableMovement and the other parameters that the regular long
+// press would normally need to be worried about.
+
 @interface UILongPressGestureRecognizer : UIGestureRecognizer {
 @private
     CFTimeInterval _minimumPressDuration;
     CGFloat _allowableMovement;
     NSUInteger _numberOfTapsRequired;
     NSInteger _numberOfTouchesRequired;
+    CGPoint _beginLocation;
+    BOOL _waiting;
 }
 
 @property (nonatomic) CFTimeInterval minimumPressDuration;

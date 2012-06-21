@@ -139,7 +139,7 @@ static NSArray *_getFontCollectionNames(CTFontCollectionRef collection, CFString
 
 - (void)dealloc
 {
-    CFRelease(_font);
+    if (_font) CFRelease(_font);
     [super dealloc];
 }
 

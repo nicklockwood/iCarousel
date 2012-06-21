@@ -85,13 +85,13 @@ typedef enum {
     UIView *_inputView;
 
     struct {
-        BOOL shouldBeginEditing : 1;
-        BOOL didBeginEditing : 1;
-        BOOL shouldEndEditing : 1;
-        BOOL didEndEditing : 1;
-        BOOL shouldChangeCharacters : 1;
-        BOOL shouldClear : 1;
-        BOOL shouldReturn : 1;
+        unsigned shouldBeginEditing : 1;
+        unsigned didBeginEditing : 1;
+        unsigned shouldEndEditing : 1;
+        unsigned didEndEditing : 1;
+        unsigned shouldChangeCharacters : 1;
+        unsigned shouldClear : 1;
+        unsigned shouldReturn : 1;
     } _delegateHas;	
 }
 

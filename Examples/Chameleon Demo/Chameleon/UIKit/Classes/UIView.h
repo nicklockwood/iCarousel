@@ -29,6 +29,7 @@
 
 #import "UIResponder.h"
 #import "UIGeometry.h"
+#import "UIAppearance.h"
 
 enum {
     UIViewAutoresizingNone                 = 0,
@@ -98,7 +99,7 @@ typedef NSUInteger UIViewAnimationOptions;
 
 @class UIColor, CALayer, UIViewController, UIGestureRecognizer;
 
-@interface UIView : UIResponder {
+@interface UIView : UIResponder <UIAppearanceContainer, UIAppearance> {
 @private
     UIView *_superview;
     NSMutableSet *_subviews;
@@ -198,6 +199,7 @@ typedef NSUInteger UIViewAnimationOptions;
 @property (nonatomic, getter=isHidden) BOOL hidden;
 @property (nonatomic, getter=isUserInteractionEnabled) BOOL userInteractionEnabled;
 @property (nonatomic) UIViewContentMode contentMode;
+@property (nonatomic) CGFloat contentScaleFactor;
 @property (nonatomic, getter=isMultipleTouchEnabled) BOOL multipleTouchEnabled;	// state is maintained, but it has no effect
 @property (nonatomic, getter=isExclusiveTouch) BOOL exclusiveTouch; // state is maintained, but it has no effect
 @property (nonatomic,copy) NSArray *gestureRecognizers;

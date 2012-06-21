@@ -84,36 +84,6 @@ static UIDevice *theDevice;
     return @"Mac";
 }
 
-- (NSString *)uniqueIdentifier
-{
-    NSString *aUniqueIdentifier = nil;
-
-    io_service_t platformExpertDevice =
-        IOServiceGetMatchingService(kIOMasterPortDefault,
-                                    IOServiceMatching("IOPlatformExpertDevice"));
-    if (platformExpertDevice)
-    {
-        CFTypeRef platformUUIDTypeRef =
-            IORegistryEntryCreateCFProperty(platformExpertDevice,
-                                            CFSTR(kIOPlatformUUIDKey),
-                                            kCFAllocatorDefault,
-                                            0);
-        if (platformUUIDTypeRef)
-        {
-            CFTypeID typeID = CFGetTypeID(platformUUIDTypeRef);
-            if (typeID == CFStringGetTypeID())
-            {
-                aUniqueIdentifier = [NSString stringWithString:(__bridge NSString *)platformUUIDTypeRef];
-            }
-            CFRelease(platformUUIDTypeRef);
-        }
-
-        IOObjectRelease(platformExpertDevice);
-    }
-
-    return aUniqueIdentifier;
-}
-
 - (BOOL)isGeneratingDeviceOrientationNotifications
 {
     return NO;

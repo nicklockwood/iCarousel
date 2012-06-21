@@ -59,9 +59,9 @@ typedef NSUInteger UIWebViewNavigationType;
     BOOL _scalesPageToFit;
     
     struct {
-        BOOL shouldStartLoadWithRequest : 1;
-        BOOL didFailLoadWithError : 1;
-        BOOL didFinishLoad : 1;
+        unsigned shouldStartLoadWithRequest : 1;
+        unsigned didFailLoadWithError : 1;
+        unsigned didFinishLoad : 1;
     } _delegateHas;
 }
 

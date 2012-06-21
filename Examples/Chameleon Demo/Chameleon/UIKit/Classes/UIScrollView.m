@@ -53,7 +53,7 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 @end
 
 @implementation UIScrollView
-@synthesize contentOffset=_contentOffset, contentInset=_contentInset, scrollIndicatorInsets=_scrollIndicatorInsets, scrollEnabled=_scrollEnabled;
+@synthesize contentOffset=_contentOffset, contentInset=_contentInset, scrollIndicatorInsets=_scrollIndicatorInsets;
 @synthesize showsHorizontalScrollIndicator=_showsHorizontalScrollIndicator, showsVerticalScrollIndicator=_showsVerticalScrollIndicator, contentSize=_contentSize;
 @synthesize maximumZoomScale=_maximumZoomScale, minimumZoomScale=_minimumZoomScale, scrollsToTop=_scrollsToTop;
 @synthesize indicatorStyle=_indicatorStyle, delaysContentTouches=_delaysContentTouches, delegate=_delegate, pagingEnabled=_pagingEnabled;
@@ -68,7 +68,6 @@ const float UIScrollViewDecelerationRateFast = 0.99;
         _contentSize = CGSizeZero;
         _contentInset = UIEdgeInsetsZero;
         _scrollIndicatorInsets = UIEdgeInsetsZero;
-        _scrollEnabled = YES;
         _showsVerticalScrollIndicator = YES;
         _showsHorizontalScrollIndicator = YES;
         _maximumZoomScale = 1;
@@ -158,8 +157,14 @@ const float UIScrollViewDecelerationRateFast = 0.99;
 
 - (void)setScrollEnabled:(BOOL)enabled
 {
-    _scrollEnabled = enabled;
+    self.panGestureRecognizer.enabled = enabled;
+    self.scrollWheelGestureRecognizer.enabled = enabled;
     [self setNeedsLayout];
+}
+
+- (BOOL)isScrollEnabled
+{
+    return self.panGestureRecognizer.enabled || self.scrollWheelGestureRecognizer.enabled;
 }
 
 - (BOOL)_canScrollHorizontal

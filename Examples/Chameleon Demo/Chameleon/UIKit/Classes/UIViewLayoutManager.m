@@ -29,6 +29,7 @@
 
 #import "UIViewLayoutManager.h"
 #import <QuartzCore/CALayer.h>
+#import "UIView+UIPrivate.h"
 
 static UIViewLayoutManager *theLayoutManager = nil;
 
@@ -48,7 +49,7 @@ static UIViewLayoutManager *theLayoutManager = nil;
 
 - (void)layoutSublayersOfLayer:(CALayer *)theLayer
 {
-    [[theLayer delegate] layoutSubviews];
+    [[theLayer delegate] _layoutSubviews];
 }
 
 @end

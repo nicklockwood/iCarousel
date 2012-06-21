@@ -30,13 +30,58 @@
 #import "UIPasteboard.h"
 #import "UIImageAppKitIntegration.h"
 #import "UIColorAppKitIntegration.h"
-#import <AppKit/NSPasteboard.h>
-#import <AppKit/NSImage.h>
-#import <AppKit/NSColor.h>
+#import <AppKit/AppKit.h>
 
 static id FirstObjectOrNil(NSArray *items)
 {
     return ([items count] > 0)? [items objectAtIndex:0] : nil;
+}
+
+static BOOL IsUIPasteboardPropertyListType(id object)
+{
+    return [object isKindOfClass:[NSString class]] || 
+            [object isKindOfClass:[NSArray class]] || 
+            [object isKindOfClass:[NSDictionary class]] || 
+            [object isKindOfClass:[NSDate class]] || 
+            [object isKindOfClass:[NSNumber class]] || 
+            [object isKindOfClass:[NSURL class]];
+}
+
+static NSPasteboardItem *PasteBoardItemWithDictionary(NSDictionary *item)
+{
+    NSPasteboardItem *pasteboardItem = [[NSPasteboardItem alloc] init];
+    
+    for (NSString *type in [item allKeys]) {
+        id object = [item objectForKey:type];
+        
+        if ([object isKindOfClass:[NSData class]]) {
+            // this is a totally evil hack to support animated GIF.
+            // for some reason just copying the data with the kUTTypeGIF to the pasteboard wasn't enough.
+            // after much experimentation it would appear that building an NSAttributed string and embedding
+            // the image into it is the way Safari does it so that pasting into iChat actually works.
+            // this is really stupid. I don't know if this is really the best place for this or if there's a
+            // more general rule for when something should be converted to an attributed string, but this
+            // seemed to be the quickest way to get the job done at the time. Copying raw GIF NSData to the
+            // pasteboard on iOS and tagging it as kUTTypeGIF seems to work just fine in the few places that
+            // accept animated GIFs that I've tested so far on iOS so...... yeah.
+            if (UTTypeEqual((CFStringRef)type, kUTTypeGIF)) {
+                NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initRegularFileWithContents:object];
+                [fileWrapper setPreferredFilename:@"image.gif"];
+                NSTextAttachment *attachment = [[NSTextAttachment alloc] initWithFileWrapper:fileWrapper];
+                NSAttributedString *str = [NSAttributedString attributedStringWithAttachment:attachment];
+                [pasteboardItem setData:[str RTFDFromRange:NSMakeRange(0, [str length]) documentAttributes:nil] forType:(NSString *)kUTTypeFlatRTFD];
+                [attachment release];
+                [fileWrapper release];
+            }
+            [pasteboardItem setData:object forType:type];
+        } else if ([object isKindOfClass:[NSURL class]]) {
+            [pasteboardItem setString:[object absoluteString] forType:type];
+        } else {
+            [pasteboardItem setPropertyList:object forType:type];
+        }
+    }
+    
+    return [pasteboardItem autorelease];
 }
 
 @implementation UIPasteboard
@@ -184,36 +229,67 @@ static id FirstObjectOrNil(NSArray *items)
     return FirstObjectOrNil([self colors]);
 }
 
+- (void)addItems:(NSArray *)items
+{
+    NSMutableArray *objects = [NSMutableArray arrayWithCapacity:[items count]];
+    
+    for (NSDictionary *item in items) {
+        [objects addObject:PasteBoardItemWithDictionary(item)];
+    }
+        
+    [pasteboard writeObjects:objects];
+}
+
 - (void)setItems:(NSArray *)items
 {
-    NSMutableArray *writeItems = [NSMutableArray arrayWithCapacity:[items count]];
+    [pasteboard clearContents];
+    [self addItems:items];
+}
 
-    for (id item in items) {
-        if ([item isKindOfClass:[UIImage class]]) {
-            [writeItems addObject:[item NSImage]];
-        } else if ([item isKindOfClass:[UIColor class]]) {
-            [writeItems addObject:[item NSColor]];
-        } else {
-            [writeItems addObject:item];
+// there's a good chance this won't work correctly for all cases and indeed it's very untested in its current incarnation
+- (NSArray *)items
+{
+    NSMutableArray *items = [NSMutableArray arrayWithCapacity:0];
+    
+    for (NSPasteboardItem *item in [pasteboard pasteboardItems]) {
+        NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:0];
+        
+        for (NSString *type in [item types]) {
+            id object = nil;
+
+            if (UTTypeConformsTo((CFStringRef)type, kUTTypeURL)) {
+                object = [NSURL URLWithString:[item stringForType:type]];
+            } else {
+                object = [item propertyListForType:type] ?: [item dataForType:type];
+            }
+
+            if (object) {
+                [dict setObject:object forKey:type];
+            }
+        }
+        
+        if ([dict count] > 0) {
+            [items addObject:dict];
         }
     }
     
-    [self _writeObjects:writeItems];
+    return items;
 }
 
-- (NSArray *)items
+- (void)setData:(NSData *)data forPasteboardType:(NSString *)pasteboardType
 {
-    NSMutableArray *items = [[NSMutableArray alloc] init];
-    [items addObjectsFromArray:[self strings]];
-    [items addObjectsFromArray:[self URLs]];
-    [items addObjectsFromArray:[self images]];
-    [items addObjectsFromArray:[self colors]];
-    return [items autorelease];
+    if (data && pasteboardType) {
+        [pasteboard clearContents];
+        [pasteboard writeObjects:[NSArray arrayWithObject:PasteBoardItemWithDictionary([NSDictionary dictionaryWithObject:data forKey:pasteboardType])]];
+    }
 }
 
 - (void)setValue:(id)value forPasteboardType:(NSString *)pasteboardType
 {
-	self.items = value;
+    if (pasteboardType && IsUIPasteboardPropertyListType(value)) {
+        [pasteboard clearContents];
+        [pasteboard writeObjects:[NSArray arrayWithObject:PasteBoardItemWithDictionary([NSDictionary dictionaryWithObject:value forKey:pasteboardType])]];
+    }
 }
 
 @end

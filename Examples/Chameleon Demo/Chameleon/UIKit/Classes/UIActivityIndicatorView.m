@@ -45,7 +45,7 @@ static CGSize UIActivityIndicatorViewStyleSize(UIActivityIndicatorViewStyle styl
     }
 }
 
-static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle style, NSInteger frame, NSInteger numberOfFrames)
+static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle style, NSInteger frame, NSInteger numberOfFrames, CGFloat scale)
 {
     const CGSize frameSize = UIActivityIndicatorViewStyleSize(style);
     const CGFloat radius = frameSize.width / 2.f;
@@ -55,7 +55,7 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
 
     UIColor *toothColor = (style == UIActivityIndicatorViewStyleGray)? [UIColor grayColor] : [UIColor whiteColor];
     
-    UIGraphicsBeginImageContext(frameSize);
+    UIGraphicsBeginImageContextWithOptions(frameSize, NO, scale);
     CGContextRef c = UIGraphicsGetCurrentContext();
 
     // first put the origin in the center of the frame. this makes things easier later
@@ -176,7 +176,7 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
     NSMutableArray *images = [[NSMutableArray alloc] initWithCapacity:numberOfFrames];
     
     for (NSInteger frameNumber=0; frameNumber<numberOfFrames; frameNumber++) {
-        [images addObject:(__bridge id)UIActivityIndicatorViewFrameImage(_activityIndicatorViewStyle, frameNumber, numberOfFrames).CGImage];
+        [images addObject:(__bridge id)UIActivityIndicatorViewFrameImage(_activityIndicatorViewStyle, frameNumber, numberOfFrames, self.contentScaleFactor).CGImage];
     }
     
     CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"contents"];
@@ -184,6 +184,8 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
     animation.duration = animationDuration;
     animation.repeatCount = HUGE_VALF;
     animation.values = images;
+    animation.removedOnCompletion = NO;
+    animation.fillMode = kCAFillModeBoth;
     
     [self.layer addAnimation:animation forKey:@"contents"];
     
@@ -235,7 +237,7 @@ static UIImage *UIActivityIndicatorViewFrameImage(UIActivityIndicatorViewStyle s
         style = _activityIndicatorViewStyle;
     }
     
-    [UIActivityIndicatorViewFrameImage(style, 0, 1) drawInRect:self.bounds];
+    [UIActivityIndicatorViewFrameImage(style, 0, 1, self.contentScaleFactor) drawInRect:self.bounds];
 }
 
 @end

@@ -62,8 +62,8 @@ typedef NSUInteger UIPopoverArrowDirection;
     
     __unsafe_unretained id _delegate;
     struct {
-        BOOL popoverControllerDidDismissPopover : 1;
-        BOOL popoverControllerShouldDismissPopover : 1;
+        unsigned popoverControllerDidDismissPopover : 1;
+        unsigned popoverControllerShouldDismissPopover : 1;
     } _delegateHas;	
 }
 

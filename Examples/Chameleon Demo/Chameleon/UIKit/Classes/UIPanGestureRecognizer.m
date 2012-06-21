@@ -95,10 +95,13 @@ static UITouch *PanTouch(NSSet *touches)
     return _velocity;
 }
 
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+- (void)_gesturesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
     UITouch *touch = PanTouch([event touchesForGestureRecognizer:self]);
 
+    // note that we being the gesture here in the _gesturesMoved:withEvent: method instead of the _gesturesBegan:withEvent:
+    // method because the pan gesture cannot be recognized until the user moves their fingers a bit and OSX won't tag the
+    // gesture as a pan until that movement has actually happened so we have to do the checking here.
     if (self.state == UIGestureRecognizerStatePossible && touch) {
         [self setTranslation:[touch _delta] inView:touch.view];
         _lastMovementTime = event.timestamp;
@@ -111,33 +114,20 @@ static UITouch *PanTouch(NSSet *touches)
         } else {
             self.state = UIGestureRecognizerStateCancelled;
         }
-    } else {
-        self.state = UIGestureRecognizerStateFailed;
     }
 }
 
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+- (void)_gesturesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
         UITouch *touch = PanTouch([event touchesForGestureRecognizer:self]);
-
+        
         if (touch) {
             [self _translate:[touch _delta] withEvent:event];
             self.state = UIGestureRecognizerStateEnded;
         } else {
             self.state = UIGestureRecognizerStateCancelled;
         }
-    } else {
-        self.state = UIGestureRecognizerStateFailed;
-    }
-}
-
-- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    if (self.state == UIGestureRecognizerStatePossible) {
-        self.state = UIGestureRecognizerStateFailed;
-    } else if (self.state == UIGestureRecognizerStateBegan || self.state == UIGestureRecognizerStateChanged) {
-        self.state = UIGestureRecognizerStateCancelled;
     }
 }
 

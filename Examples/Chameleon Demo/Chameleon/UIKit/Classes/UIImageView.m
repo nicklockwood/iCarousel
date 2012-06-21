@@ -31,7 +31,12 @@
 #import "UIImage.h"
 #import "UIGraphics.h"
 #import "UIColor.h"
+#import "UIImageAppKitIntegration.h"
+#import "UIWindow.h"
+#import "UIImage+UIPrivate.h"
+#import "UIScreen.h"
 #import <QuartzCore/QuartzCore.h>
+#import "UIImageRep.h"
 
 static NSArray *CGImagesWithUIImages(NSArray *images)
 {
@@ -139,11 +144,14 @@ static NSArray *CGImagesWithUIImages(NSArray *images)
 
 - (void)displayLayer:(CALayer *)theLayer
 {
+    [super displayLayer:theLayer];
+    
     UIImage *displayImage = (_highlighted && _highlightedImage)? _highlightedImage : _image;
+    const CGFloat scale = self.window.screen.scale;
     const CGRect bounds = self.bounds;
     
     if (displayImage && self._hasResizableImage && bounds.size.width > 0 && bounds.size.height > 0) {
-        UIGraphicsBeginImageContext(bounds.size);
+        UIGraphicsBeginImageContextWithOptions(bounds.size, NO, scale);
         [displayImage drawInRect:bounds];
         displayImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
@@ -157,7 +165,7 @@ static NSArray *CGImagesWithUIImages(NSArray *images)
         imageBounds.origin = CGPointZero;
         imageBounds.size = displayImage.size;
 
-        UIGraphicsBeginImageContext(imageBounds.size);
+        UIGraphicsBeginImageContextWithOptions(imageBounds.size, NO, scale);
         
         CGBlendMode blendMode = kCGBlendModeNormal;
         CGFloat alpha = 1;
@@ -176,7 +184,12 @@ static NSArray *CGImagesWithUIImages(NSArray *images)
         UIGraphicsEndImageContext();
     }
 
-    theLayer.contents = (__bridge id)[displayImage CGImage];
+    UIImageRep *bestRepresentation = [displayImage _bestRepresentationForProposedScale:scale];
+    theLayer.contents = (__bridge id)bestRepresentation.CGImage;
+    
+    if ([theLayer respondsToSelector:@selector(setContentsScale:)]) {
+        [theLayer setContentsScale:bestRepresentation.scale];
+    }
 }
 
 - (void)_displayIfNeededChangingFromOldSize:(CGSize)oldSize toNewSize:(CGSize)newSize
@@ -207,6 +220,8 @@ static NSArray *CGImagesWithUIImages(NSArray *images)
     animation.duration = self.animationDuration ?: ([images count] * (1/30.0));
     animation.repeatCount = self.animationRepeatCount ?: HUGE_VALF;
     animation.values = CGImagesWithUIImages(images);
+    animation.removedOnCompletion = NO;
+    animation.fillMode = kCAFillModeBoth;
 
     [self.layer addAnimation:animation forKey:@"contents"];
 }

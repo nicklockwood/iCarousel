@@ -57,8 +57,8 @@ typedef enum {
     UIViewController *_visibleViewController;
 
     struct {
-        BOOL didShowViewController : 1;
-        BOOL willShowViewController : 1;
+        unsigned didShowViewController : 1;
+        unsigned willShowViewController : 1;
     } _delegateHas;
 }
 

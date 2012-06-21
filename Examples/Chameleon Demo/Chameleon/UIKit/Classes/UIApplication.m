@@ -588,13 +588,12 @@ static BOOL TouchIsActive(UITouch *touch)
 
 - (BOOL)openURL:(NSURL *)url
 {
-    return [[NSWorkspace sharedWorkspace] openURL:url];
+    return url? [[NSWorkspace sharedWorkspace] openURL:url] : NO;
 }
 
 - (BOOL)canOpenURL:(NSURL *)url
 {
-    NSURL *appURL = [[NSWorkspace sharedWorkspace] URLForApplicationToOpenURL:url];
-    return (appURL != nil);
+    return (url? [[NSWorkspace sharedWorkspace] URLForApplicationToOpenURL:url] : nil) != nil;
 }
 
 - (BOOL)_sendGlobalKeyboardNSEvent:(NSEvent *)theNSEvent fromScreen:(UIScreen *)theScreen

@@ -51,9 +51,8 @@
 - (id)initWithContainer:(UIView <UITextLayerContainerViewProtocol, UITextLayerTextDelegate> *)aView isField:(BOOL)isField
 {
     if ((self=[super init])) {
-        self.geometryFlipped = YES;
         self.masksToBounds = NO;
-        
+
         containerView = aView;
 
         textDelegateHas.didChange = [containerView respondsToSelector:@selector(_textDidChange)];
@@ -155,6 +154,7 @@
 
         [clipView setFrame:desiredFrame];
         [self updateScrollViewContentSize];
+        clipView.layer.geometryFlipped = YES;
     } else {
         [self removeNSView];
     }

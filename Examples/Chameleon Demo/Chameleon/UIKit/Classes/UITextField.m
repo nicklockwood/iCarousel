@@ -32,6 +32,7 @@
 #import "UIColor.h"
 #import "UIFont.h"
 #import "UIImage.h"
+#import <AppKit/NSCursor.h>
 
 NSString *const UITextFieldTextDidBeginEditingNotification = @"UITextFieldTextDidBeginEditingNotification";
 NSString *const UITextFieldTextDidChangeNotification = @"UITextFieldTextDidChangeNotification";
@@ -508,5 +509,9 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
     return [NSString stringWithFormat:@"<%@: %p; textAlignment = %@; editing = %@; textColor = %@; font = %@; delegate = %@>", [self className], self, textAlignment, (self.editing ? @"YES" : @"NO"), self.textColor, self.font, self.delegate];
 }
 
+- (id)mouseCursorForEvent:(UIEvent *)event
+{
+    return [NSCursor IBeamCursor];
+}
 
 @end

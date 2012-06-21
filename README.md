@@ -11,8 +11,8 @@ Not all features of iCarousel are currently supported on Mac OS. I hope to addre
 Supported OS & SDK Versions
 -----------------------------
 
-* Supported build target - iOS 5.0 / Mac OS 10.7 (Xcode 4.2, Apple LLVM compiler 3.0)
-* Earliest supported deployment target - iOS 4.3 / Mac OS 10.7 (Xcode 4.2)
+* Supported build target - iOS 5.1 / Mac OS 10.7 (Xcode 4.3.2, Apple LLVM compiler 3.1)
+* Earliest supported deployment target - iOS 4.3 / Mac OS 10.7
 * Earliest compatible deployment target - iOS 3.2 / Mac OS 10.6
 
 NOTE: 'Supported' means that the library has been tested with this version. 'Compatible' means that the library should work on this OS version (i.e. it doesn't rely on any unavailable SDK features) but is no longer being tested for compatibility and may require tweaking or bug fixes to run correctly.
@@ -121,17 +121,17 @@ The number of placeholder views to display in the carousel (read only). To set t
 	
 The maximum number of carousel item views to be displayed concurrently on screen (read only). To set this, implement the `numberOfVisibleItemsInCarousel:` dataSource method. If the dataSource method is not implemented, this will be equal to the numberOfItems + numberOfPlaceholders;
 
-	@property (nonatomic, retain, readonly) NSArray *indexesForVisibleItems;
+	@property (nonatomic, strong, readonly) NSArray *indexesForVisibleItems;
 	
-An array containing the indexes of all item views currently visible in the carousel, including placeholder views. The array contains NSNumber objects whose integer values match the indexes of the views. The indexes for item views start at zero and match the indexes passed to the dataSource to load the view, however the indexes for any visible placeholder views will either be negative (less than zero) or greater than or equal to `numberOfItems`. Indexes for placeholder views in this array do not equate to the placeholder view index used with the dataSource.
+An array containing the indexes of all item views currently visible in the carousel, including placeholder views. The array contains NSNumber objects whose integer values match the indexes of the views. The indexes for item views start at zero and match the indexes passed to the dataSource to load the view, however the indexes for any visible placeholder views will either be negative (less than zero) or greater than or equal to `numberOfItems`. Indexes for placeholder views in this array *do not* equate to the placeholder view index used with the dataSource.
 
-	@property (nonatomic, retain, readonly) NSArray *visibleItemViews;
+	@property (nonatomic, strong, readonly) NSArray *visibleItemViews;
 
 An array of all the item views currently displayed in the carousel (read only). This includes any visible placeholder views. The indexes of views in this array do not match the item indexes, however the order of these views matches the order of the visibleItemIndexes array property, i.e. you can get the item index of a given view in this array by retrieving the equivalent object from the visibleItemIndexes array (or, you can just use the `indexOfItemView:` method, which is much easier).
 
-	@property (nonatomic, retain, readonly) UIView *contentView;
+	@property (nonatomic, strong, readonly) UIView *contentView;
 
-The view containing the carousel item views. You can add subviews to this view if you want to intersperse them with the carousel items. If you want a view to appear in front or behind all of the carousel items, you should add it directly to the iCarousel view itself instead. Note that the order of views inside the contentView is subject to frequent and undocumented change while the app is running. Any views added to the contentView should have their userInteractionEnabled property set to NO to prevent conflicts with iCarousel's touch event handling.
+The view containing the carousel item views. You can add subviews to this view if you want to intersperse them with the carousel items. If you want a view to appear in front or behind all of the carousel items, you should add it directly to the iCarousel view itself instead. Note that the order of views inside the contentView is subject to frequent and undocumented change whilst the app is running. Any views added to the contentView should have their userInteractionEnabled property set to NO to prevent conflicts with iCarousel's touch event handling.
 
 	@property (nonatomic, readonly) CGFloat scrollOffset;
 	
@@ -145,7 +145,7 @@ This is the offset multiplier used when the user drags the carousel with their f
 
 The index of the currently centered item in the carousel. Setting this property is equivalent to calling `scrollToItemAtIndex:animated:` with the animated argument set to NO. 
 
-	@property (nonatomic, retain, readonly) UIView *currentItemView;
+	@property (nonatomic, strong, readonly) UIView *currentItemView;
 	
 The currently centered item view in the carousel. The index of this view matches `currentItemIndex`.
 
@@ -337,7 +337,7 @@ This method will fire if the user taps any carousel item view (not including pla
 Transform Options
 ----------------------------
 
-These are the tweakable options for standard carousels, and how they are used. Check the *Options Demo* for an example of the effect that these parameters have.
+These are the tweakable options for standard carousels. Check the *Options Demo* for an example of the effect that these parameters have.
 
 	iCarouselTranformOptionCount
 	
@@ -379,11 +379,15 @@ Note that taps and gestures will be ignored on any item view except the currentl
 
 On Mac OS there is no easy way to detect clicks on carousel items currently. You cannot just supply an NSButton as or inside your item view because the transforms applied to the item views mean that hit detection doesn't work properly. I'm investigating possible solutions to this (if you know a good way to fix this, please get in touch, or fork the project on github).
 
+
 FAQ
 ------------
 
     Q. Can I use iCarousel without a nib file?
     A. Yes, check out the *No Nib Demo* for how to set up iCarousel without nibs
+    
+    Q. Can I use iCarousel with a Storyboard?
+    A. Yes, this is pretty much the same as using it with a nib file. Check out the *Storyboard Demo* to see how it's done.
     
     Q. How do I prevent iCarousel item views from overflowing their bounds?
     A. Set the `clipsToBounds` property to YES on your iCarousel view. You can set this property in Interface Builder by ticking the 'Clip Subviews' option.
@@ -396,3 +400,10 @@ FAQ
     
     Q. In the cylindrical carousels, the back-side of the item views is visible. How can I hide it?
     A. Set the `view.layer.doubleSided` property of your item views to `NO` to hide them when they are facing backwards.
+    
+    Q. What is the `reusingView` property for in the `carousel:viewForItemAtIndex:reusingView:` dataSource method?
+    A. You can improve iCarousel performance by recycling item views when they move offscreen instead of creating a new one each time it's needed. Check if this value is nil, and if not you can re-use this view instead of creating a new one. Note however that the view will still have any subviews or properties you added when it was first created, so be careful not to introduce leaks by re-adding those views each time. You may find it's easier and safer to ignore this paramater and create a fresh view each time if you're not sure what you are doing.
+    
+    Q. If the views in my carousel all have completely different layouts, should I still use the `reusingView` parameter?
+    A. Probably not, and unless you have hundreds of views in your carousel, it's unlikely to be worth the trouble.
+    

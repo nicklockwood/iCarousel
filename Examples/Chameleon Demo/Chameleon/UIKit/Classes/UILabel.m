@@ -31,6 +31,7 @@
 #import "UIColor.h"
 #import "UIFont.h"
 #import "UIGraphics.h"
+#import <AppKit/NSApplication.h>
 
 @implementation UILabel
 @synthesize text=_text, font=_font, textColor=_textColor, textAlignment=_textAlignment, lineBreakMode=_lineBreakMode, enabled=_enabled;
@@ -189,8 +190,12 @@
         
         // if there's a shadow, let's set that up
         CGSize offset = _shadowOffset;
-        offset.height *= -1;				// Need to verify this on Lion! The shadow direction reversed in iOS 4 (I think) which might
-                                            // indicate a reversal is coming in 10.7 as well!
+
+        // stupid version compatibilities..
+        if (floorf(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_6) {
+            offset.height *= -1;
+        }
+        
         CGContextSetShadowWithColor(UIGraphicsGetCurrentContext(), offset, 0, _shadowColor.CGColor);
         
         // finally, draw the real label

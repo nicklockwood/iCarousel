@@ -61,9 +61,9 @@ typedef enum {
     NSMutableArray *_trackingTouches;
     
     struct {
-        BOOL shouldBegin : 1;
-        BOOL shouldReceiveTouch : 1;
-        BOOL shouldRecognizeSimultaneouslyWithGestureRecognizer : 1;
+        unsigned shouldBegin : 1;
+        unsigned shouldReceiveTouch : 1;
+        unsigned shouldRecognizeSimultaneouslyWithGestureRecognizer : 1;
     } _delegateHas;	
 }
 

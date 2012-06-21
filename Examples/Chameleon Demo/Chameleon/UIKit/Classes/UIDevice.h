@@ -72,7 +72,6 @@ typedef enum {
 @property (nonatomic, readonly, retain) NSString *systemName;
 @property (nonatomic, readonly, retain) NSString *systemVersion;
 @property (nonatomic, readonly, retain) NSString *model;
-@property (nonatomic, readonly, retain) NSString *uniqueIdentifier;
 @property (nonatomic, readonly, getter=isGeneratingDeviceOrientationNotifications) BOOL generatesDeviceOrientationNotifications; // aways returns NO
 
 - (void)beginGeneratingDeviceOrientationNotifications;  // no effect

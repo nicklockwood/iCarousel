@@ -38,6 +38,8 @@ extern "C" {
 void UIGraphicsPushContext(CGContextRef ctx);
 void UIGraphicsPopContext(void);
 CGContextRef UIGraphicsGetCurrentContext(void);
+    
+CGFloat _UIGraphicsGetContextScaleFactor(CGContextRef ctx);
 
 void UIGraphicsBeginImageContextWithOptions(CGSize size, BOOL opaque, CGFloat scale);
 void UIGraphicsBeginImageContext(CGSize size);

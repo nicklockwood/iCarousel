@@ -44,30 +44,13 @@
     _translation = translation;
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+- (void)_discreteGestures:(NSSet *)touches withEvent:(UIEvent *)event
 {
     UITouch *touch = [[event touchesForGestureRecognizer:self] anyObject];
-    if ([touch _gesture] == _UITouchDiscreteGestureScrollWheel) {
+    if (self.state == UIGestureRecognizerStatePossible && [touch _gesture] == _UITouchDiscreteGestureScrollWheel) {
         [self setTranslation:[touch _delta] inView:touch.view];
         self.state = UIGestureRecognizerStateRecognized;
-    } else {
-        self.state = UIGestureRecognizerStateFailed;
     }
-}
-
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    self.state = UIGestureRecognizerStateFailed;
-}
-
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    self.state = UIGestureRecognizerStateFailed;
-}
-
-- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    self.state = UIGestureRecognizerStateFailed;
 }
 
 @end
