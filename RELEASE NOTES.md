@@ -1,6 +1,8 @@
 Version 1.7 beta
 
 - Fixed bug with scrollByNumberOfItems where duration is 0
+- Now supports item click events and centering on Mac OS (buttons and controls within item views still won't work correctly receive clicks however).
+- Disabled broken scrollwheel support for carousel on Mac OS
 - currentItemIndex property is now writable
 - Switched CADisplayLink to use NSDefaultRunLoopMode, which is less likely to interfere with UIScrollViews, etc
 - Added Storyboard example

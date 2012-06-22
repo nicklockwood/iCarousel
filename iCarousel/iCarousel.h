@@ -63,11 +63,12 @@ __MAC_OS_X_VERSION_MIN_REQUIRED < __MAC_10_7)
 #define __weak __unsafe_unretained
 #endif
 #else
-#define ah_retain self
+#define ah_retain retain
 #define ah_dealloc dealloc
+#undef __weak
+#define __weak
 #define weak assign
 #define __bridge
-#define __weak
 #endif
 #endif
 
@@ -208,6 +209,7 @@ iCarouselTranformOption;
 @property (nonatomic, assign) BOOL useDisplayLink;
 @property (nonatomic, assign, getter = isVertical) BOOL vertical;
 @property (nonatomic, assign) BOOL ignorePerpendicularSwipes;
+@property (nonatomic, assign) BOOL centerItemWhenSelected;
 
 - (void)scrollByNumberOfItems:(NSInteger)itemCount duration:(NSTimeInterval)duration;
 - (void)scrollToItemAtIndex:(NSInteger)index duration:(NSTimeInterval)duration;
@@ -220,12 +222,6 @@ iCarouselTranformOption;
 - (NSInteger)indexOfItemViewOrSubview:(UIView *)view;
 - (CGFloat)offsetForItemAtIndex:(NSInteger)index;
 - (void)reloadData;
-
-#ifdef ICAROUSEL_IOS
-
-@property (nonatomic, assign) BOOL centerItemWhenSelected;
-
-#endif
 
 @end
 
@@ -261,12 +257,7 @@ iCarouselTranformOption;
 - (CGFloat)carousel:(iCarousel *)carousel itemAlphaForOffset:(CGFloat)offset;
 - (CATransform3D)carousel:(iCarousel *)carousel itemTransformForOffset:(CGFloat)offset baseTransform:(CATransform3D)transform;
 - (CGFloat)carousel:(iCarousel *)carousel valueForTransformOption:(iCarouselTranformOption)option withDefault:(CGFloat)value;
-
-#ifdef ICAROUSEL_IOS
-
 - (BOOL)carousel:(iCarousel *)carousel shouldSelectItemAtIndex:(NSInteger)index;
 - (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index;
-
-#endif
 
 @end
