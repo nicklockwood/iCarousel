@@ -45,14 +45,22 @@
 //  https://gist.github.com/1563325
 //
 
-#import <Availability.h>
-#ifndef ARC_HELPER
-#define ARC_HELPER 2.0
+#ifndef ah_retain
 #if __has_feature(objc_arc)
 #define ah_retain self
 #define ah_dealloc self
 #define release self
 #define autorelease self
+#else
+#define ah_retain retain
+#define ah_dealloc dealloc
+#define __bridge
+#endif
+#endif
+
+//  Weak reference support
+
+#import <Availability.h>
 #if (defined __IPHONE_OS_VERSION_MIN_REQUIRED && \
 __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_5_0) || \
 (defined __MAC_OS_X_VERSION_MIN_REQUIRED && \
@@ -61,15 +69,6 @@ __MAC_OS_X_VERSION_MIN_REQUIRED < __MAC_10_7)
 #define weak unsafe_unretained
 #undef __weak
 #define __weak __unsafe_unretained
-#endif
-#else
-#define ah_retain retain
-#define ah_dealloc dealloc
-#undef __weak
-#define __weak
-#define weak assign
-#define __bridge
-#endif
 #endif
 
 //  ARC Helper ends
