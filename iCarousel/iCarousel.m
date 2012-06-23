@@ -54,7 +54,6 @@
 @property (nonatomic, assign) NSInteger numberOfPlaceholdersToShow;
 @property (nonatomic, assign) NSInteger numberOfVisibleItems;
 @property (nonatomic, assign) CGFloat itemWidth;
-@property (nonatomic, assign) CGFloat scrollOffset;
 @property (nonatomic, assign) CGFloat offsetMultiplier;
 @property (nonatomic, assign) CGFloat startOffset;
 @property (nonatomic, assign) CGFloat endOffset;
@@ -291,6 +290,21 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     }
 }
 
+- (void)setScrollOffset:(CGFloat)scrollOffset
+{
+    if (_scrollOffset != scrollOffset)
+    {
+        _scrolling = NO;
+        _decelerating = NO;
+        [self disableAnimation];
+        _scrollOffset = [self clampedOffset:scrollOffset];
+        [self didScroll];
+        _previousItemIndex = self.currentItemIndex;
+        [self depthSortViews];
+        [self enableAnimation];
+    }
+}
+
 - (void)setContentOffset:(CGSize)contentOffset
 {
     if (!CGSizeEqualToSize(_contentOffset, contentOffset))
@@ -302,10 +316,7 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)setCurrentItemIndex:(NSInteger)currentItemIndex
 {
-    if (self.currentItemIndex != currentItemIndex)
-    {
-        [self scrollToItemAtIndex:currentItemIndex animated:NO];
-    }
+    [self setScrollOffset:currentItemIndex];
 }
 
 - (void)setViewpointOffset:(CGSize)viewpointOffset
@@ -1246,7 +1257,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     return directDistance;
 }
 
-- (void)scrollByNumberOfItems:(NSInteger)itemCount duration:(NSTimeInterval)duration
+- (void)scrollByOffset:(CGFloat)offset duration:(NSTimeInterval)duration
 {
     if (duration > 0.0)
     {
@@ -1255,18 +1266,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         _startOffset = _scrollOffset;
         _scrollDuration = duration;
         _previousItemIndex = roundf(_scrollOffset);
-        if (itemCount > 0)
-        {
-            _endOffset = floorf(_startOffset) + itemCount;
-        }
-        else if (itemCount < 0)
-        {
-            _endOffset = ceilf(_startOffset) + itemCount;
-        }
-        else
-        {
-            _endOffset = roundf(_startOffset);
-        }
+        _endOffset = _startOffset + offset;
         if (!_shouldWrap)
         {
             _endOffset = [self clampedOffset:_endOffset];
@@ -1279,14 +1279,37 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     }
     else
     {
-        _scrolling = NO;
-        _decelerating = NO;
-        [self disableAnimation];
-        _scrollOffset = [self clampedIndex:_previousItemIndex + itemCount];
-        [self didScroll];
-        _previousItemIndex = _previousItemIndex + itemCount;
-        [self depthSortViews];
-        [self enableAnimation];
+        self.scrollOffset += offset;
+    }
+}
+
+- (void)scrollToOffset:(CGFloat)offset duration:(NSTimeInterval)duration
+{
+    [self scrollByOffset:[self minScrollDistanceFromOffset:_scrollOffset toOffset:offset] duration:duration];
+}
+
+- (void)scrollByNumberOfItems:(NSInteger)itemCount duration:(NSTimeInterval)duration
+{
+    if (duration > 0.0)
+    {
+        CGFloat offset = 0.0f;
+        if (itemCount > 0)
+        {
+            offset = (floorf(_scrollOffset) + itemCount) - _scrollOffset;
+        }
+        else if (itemCount < 0)
+        {
+            offset = (ceilf(_scrollOffset) + itemCount) - _scrollOffset;
+        }
+        else
+        {
+            offset = roundf(_scrollOffset) - _scrollOffset;
+        }
+        [self scrollByOffset:offset duration:duration];
+    }
+    else
+    {
+        self.scrollOffset = [self clampedIndex:_previousItemIndex + itemCount];
     }
 }
 

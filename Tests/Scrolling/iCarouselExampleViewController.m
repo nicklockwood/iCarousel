@@ -20,7 +20,7 @@
 - (void)reloadAndScroll
 {
 	[carousel reloadData];
-    [carousel scrollByNumberOfItems:5 duration:0.0f];
+    [carousel scrollByOffset:4.5 duration:0.0];
 }
 
 - (void)dealloc
@@ -39,7 +39,7 @@
     [super viewDidLoad];
     
     //configure carousel
-    carousel.type = iCarouselTypeCoverFlow2;
+    carousel.type = iCarouselTypeCoverFlow;
 }
 
 - (void)viewDidUnload
@@ -73,6 +73,11 @@
     label.font = [label.font fontWithSize:50];
     [view addSubview:label];
     return view;
+}
+
+- (BOOL)carouselShouldWrap:(iCarousel *)carousel
+{
+    return YES;
 }
 
 - (CGFloat)carouselItemWidth:(iCarousel *)carousel

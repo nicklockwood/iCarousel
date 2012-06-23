@@ -133,9 +133,9 @@ An array of all the item views currently displayed in the carousel (read only). 
 
 The view containing the carousel item views. You can add subviews to this view if you want to intersperse them with the carousel items. If you want a view to appear in front or behind all of the carousel items, you should add it directly to the iCarousel view itself instead. Note that the order of views inside the contentView is subject to frequent and undocumented change whilst the app is running. Any views added to the contentView should have their userInteractionEnabled property set to NO to prevent conflicts with iCarousel's touch event handling.
 
-	@property (nonatomic, readonly) CGFloat scrollOffset;
+	@property (nonatomic, assign) CGFloat scrollOffset;
 	
-This is the current offset in pixels of the carousel. This value, divided by the itemWidth is the currentItemIndex value. You can use this value to position other screen elements while the carousel is in motion.
+This is the current scroll offset of the carousel in multiples of the itemWidth. This value, rounded to the nearest integer, is the currentItemIndex value. You can use this value to position other screen elements while the carousel is in motion. The value can also be set if you wish to scroll the carousel to a particular offset programmatically. This may be useful if you wish to disable the built-in gesture handling and provide your own implementation.
 
 	@property (nonatomic, readonly) CGFloat offsetMultiplier;
 
@@ -207,6 +207,14 @@ This method allows you to control how long the carousel takes to scroll to the s
 
 This method allows you to scroll the carousel by a fixed distance, measured in carousel item widths. Positive or negative values may be specified for itemCount, depending on the direction you wish to scroll. iCarousel gracefully handles bounds issues, so if you specify a distance greater than the number of items in the carousel, scrolling will either be clamped when it reaches the end of the carousel (if wrapping is disabled) or wrap around seamlessly.
 
+    - (void)scrollToOffset:(CGFloat)offset duration:(NSTimeInterval)duration;
+
+This works the same way as `scrollToItemAtIndex:`, but allows you to scroll to a fractional offset. This may be useful if you wish to achieve a very precise animation effect. Note that if the `scrollToItemBoundary` property is set to YES, the carousel will automatically scroll to the nearest item index after you call this method. anyway.
+
+    - (void)scrollByOffset:(CGFloat)offset duration:(NSTimeInterval)duration;
+    
+This works the same way as `scrollByNumberOfItems:`, but allows you to scroll by a fractional number of items. This may be useful if you wish to achieve a very precise animation effect. Note that if the `scrollToItemBoundary` property is set to YES, the carousel will automatically scroll to the nearest item index after you call this method anyway.
+    
 	- (void)reloadData;
 
 This reloads all carousel views from the dataSource and refreshes the carousel display.

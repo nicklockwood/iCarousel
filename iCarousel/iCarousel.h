@@ -189,7 +189,7 @@ iCarouselTranformOption;
 @property (nonatomic, assign) CGFloat bounceDistance;
 @property (nonatomic, assign) BOOL scrollEnabled;
 @property (nonatomic, assign) BOOL bounces;
-@property (nonatomic, readonly) CGFloat scrollOffset;
+@property (nonatomic, assign) CGFloat scrollOffset;
 @property (nonatomic, readonly) CGFloat offsetMultiplier;
 @property (nonatomic, assign) CGSize contentOffset;
 @property (nonatomic, assign) CGSize viewpointOffset;
@@ -210,6 +210,8 @@ iCarouselTranformOption;
 @property (nonatomic, assign) BOOL ignorePerpendicularSwipes;
 @property (nonatomic, assign) BOOL centerItemWhenSelected;
 
+- (void)scrollByOffset:(CGFloat)offset duration:(NSTimeInterval)duration;
+- (void)scrollToOffset:(CGFloat)offset duration:(NSTimeInterval)duration;
 - (void)scrollByNumberOfItems:(NSInteger)itemCount duration:(NSTimeInterval)duration;
 - (void)scrollToItemAtIndex:(NSInteger)index duration:(NSTimeInterval)duration;
 - (void)scrollToItemAtIndex:(NSInteger)index animated:(BOOL)animated;
