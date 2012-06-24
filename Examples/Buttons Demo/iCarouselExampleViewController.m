@@ -10,7 +10,6 @@
 
 
 #define NUMBER_OF_ITEMS ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)? 19: 12)
-#define ITEM_SPACING 210
 
 
 @implementation iCarouselExampleViewController
@@ -74,23 +73,6 @@
 	[button setTitle:[NSString stringWithFormat:@"%i", index] forState:UIControlStateNormal];
 	
 	return button;
-}
-
-- (CGFloat)carousel:(iCarousel *)_carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value
-{
-    //customize carousel display
-    switch (option)
-    {
-        case iCarouselOptionItemWidth:
-        {
-            //usually this should be slightly wider than the item views
-            return ITEM_SPACING;
-        }
-        default:
-        {
-            return value;
-        }
-    }
 }
 
 #pragma mark -

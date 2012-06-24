@@ -13,7 +13,6 @@
 
 #define NUMBER_OF_ITEMS (IS_IPAD? 19: 12)
 #define NUMBER_OF_VISIBLE_ITEMS 25
-#define ITEM_SPACING 210.0f
 
 
 @interface iCarouselExampleViewController () <UIActionSheetDelegate>
@@ -146,10 +145,10 @@
     //customize carousel display
     switch (option)
     {
-        case iCarouselOptionItemWidth:
+        case iCarouselOptionSpacing:
         {
-            //usually this should be slightly wider than the item views
-            return ITEM_SPACING;
+            //reduce spacing slightly
+            return value * 0.9f;
         }
         default:
         {

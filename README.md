@@ -151,7 +151,7 @@ The currently centered item view in the carousel. The index of this view matches
 
 	@property (nonatomic, readonly) CGFloat itemWidth;
 
-The display width of items in the carousel (read only). This is derived automatically from the first view passed in to the carousel using the `carousel:viewForItemAtIndex:reusingView:` dataSource method. You can also override this value using the `iCarouselOptionItemWidth` option value, which will alter the spacing between carousel items (but won't resize or scale the item views).
+The display width of items in the carousel (read only). This is derived automatically from the first view passed in to the carousel using the `carousel:viewForItemAtIndex:reusingView:` dataSource method.
 
 	@property (nonatomic, assign) BOOL centerItemWhenSelected;
 
@@ -335,10 +335,6 @@ These are the tweakable options for standard carousels. Check the *Options Demo*
     
 A boolean indicating whether the carousel should wrap when it scrolls to the end. Return YES if you want the carousel to wrap around when it reaches the end, and NO if you want it to stop. Generally, circular carousel types will wrap by default and linear ones won't. Don't worry that the return type is a floating point value - any value other than 0.0 will be treated as YES.
 
-    iCarouselOptionItemWidth
-    
-Returns the width (in points/pixels) of each item in the carousel - i.e. the spacing allocated for each item view. This defaults to the width of the first item view that is returned by the `carousel:viewForItemAtIndex:reusingView:` dataSource method (or the height, if the carousel is vertical).
-
     iCarouselOptionOffsetMultiplier
     
 The offset multiplier to use when the user drags the carousel with their finger. It does not affect programmatic scrolling or deceleration speed. This defaults to 1.0 for most carousel types, but defaults to 2.0 for the CoverFlow-style carousels to compensate for the fact that their items are more closely spaced and so must be dragged further to move the same distance.
@@ -365,7 +361,7 @@ The tilt applied to the non-centered items in the CoverFlow, CoverFlow2 and Time
 
     iCarouselOptionSpacing
 
-The spacing factor applied to the items in the CoverFlow, CoverFlow2 and TimeMachine carousel types. This value is multiplied by the item width.
+The spacing between item views. This value is multiplied by the item width (or height, if the carousel is vertical) to get the total space between each item, so a value of 1.0 (the default) means no space between views (unless the views already include padding, as they do in many of the example projects).
 
     iCarouselOptionFadeMin
     iCarouselOptionFadeMax

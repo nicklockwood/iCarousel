@@ -14,7 +14,6 @@
 
 #define NUMBER_OF_ITEMS (IS_IPAD? 19: 12)
 #define NUMBER_OF_VISIBLE_ITEMS (IS_IPAD? 19: 7)
-#define ITEM_SPACING 210
 #define INCLUDE_PLACEHOLDERS YES
 
 
@@ -198,6 +197,7 @@
 	if (view == nil)
 	{
 		view = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]] autorelease];
+        view.layer.doubleSided = NO;
 		label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
 		label.backgroundColor = [UIColor clearColor];
 		label.textAlignment = UITextAlignmentCenter;
@@ -229,6 +229,7 @@
 	if (view == nil)
 	{
 		view = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]] autorelease];
+        view.layer.doubleSided = NO;
 		label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
 		label.backgroundColor = [UIColor clearColor];
 		label.textAlignment = UITextAlignmentCenter;
@@ -262,11 +263,6 @@
         {
             //normally you would hard-code this to YES or NO
             return wrap;
-        }
-        case iCarouselOptionItemWidth:
-        {
-            //usually this should be slightly wider than the item views
-            return ITEM_SPACING;
         }
         case iCarouselOptionFadeMax:
         {

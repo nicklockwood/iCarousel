@@ -119,7 +119,6 @@ iCarouselType;
 typedef enum
 {
     iCarouselOptionWrap = 0,
-    iCarouselOptionItemWidth,
     iCarouselOptionOffsetMultiplier,
     iCarouselOptionCount,
     iCarouselOptionArc,

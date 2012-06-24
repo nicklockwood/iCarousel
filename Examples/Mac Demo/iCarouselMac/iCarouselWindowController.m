@@ -11,7 +11,6 @@
 
 #define NUMBER_OF_ITEMS 1000
 #define NUMBER_OF_VISIBLE_ITEMS 19
-#define ITEM_SPACING 210
 #define INCLUDE_PLACEHOLDERS YES
 
 
@@ -201,10 +200,10 @@
             //normally you would hard-code this to YES or NO
             return wrap;
         }
-        case iCarouselOptionItemWidth:
+        case iCarouselOptionSpacing:
         {
-            //usually this should be slightly wider than the item views
-            return ITEM_SPACING;
+            //reduce spacing slightly
+            return value * 0.9f;
         }
         case iCarouselOptionFadeMax:
         {
@@ -221,5 +220,6 @@
         }
     }
 }
+
 
 @end

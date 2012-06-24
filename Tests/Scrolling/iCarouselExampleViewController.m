@@ -10,7 +10,6 @@
 
 
 #define NUMBER_OF_ITEMS ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)? 19: 12)
-#define ITEM_SPACING 210
 
 
 @implementation iCarouselExampleViewController
@@ -82,10 +81,6 @@
         case iCarouselOptionWrap:
         {
             return YES;
-        }
-        case iCarouselOptionItemWidth:
-        {
-            return ITEM_SPACING;
         }
         default:
         {

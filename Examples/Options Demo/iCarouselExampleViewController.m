@@ -98,7 +98,7 @@
             arcSlider.enabled = NO;
         	radiusSlider.enabled = NO;
             tiltSlider.enabled = NO;
-            spacingSlider.enabled = NO;
+            spacingSlider.enabled = YES;
             break;
         }
         case iCarouselTypeCylinder:
@@ -111,7 +111,7 @@
             arcSlider.enabled = YES;
         	radiusSlider.enabled = YES;
             tiltSlider.enabled = NO;
-            spacingSlider.enabled = NO;
+            spacingSlider.enabled = YES;
             break;
         }
         default:
@@ -310,10 +310,6 @@
         case iCarouselOptionWrap:
         {
             return wrap;
-        }
-        case iCarouselOptionItemWidth:
-        {
-            return ITEM_SPACING;
         }
         case iCarouselOptionFadeMax:
         {

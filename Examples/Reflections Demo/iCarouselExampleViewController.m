@@ -11,7 +11,6 @@
 
 #define NUMBER_OF_ITEMS 50000
 #define NUMBER_OF_VISIBLE_ITEMS 18
-#define ITEM_SPACING 210
 
 
 @implementation iCarouselExampleViewController

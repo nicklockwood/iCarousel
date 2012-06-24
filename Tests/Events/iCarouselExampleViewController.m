@@ -10,7 +10,6 @@
 
 
 #define NUMBER_OF_ITEMS ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)? 19: 12)
-#define ITEM_SPACING 210
 
 
 @interface iCarouselExampleViewController () <UIActionSheetDelegate>
@@ -95,21 +94,6 @@
         label.font = [label.font fontWithSize:50];
         [view addSubview:label];
         return view;
-    }
-}
-
-- (CGFloat)carousel:(iCarousel *)_carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value
-{
-    switch (option)
-    {
-        case iCarouselOptionItemWidth:
-        {
-            return ITEM_SPACING;
-        }
-        default:
-        {
-            return value;
-        }
     }
 }
 
