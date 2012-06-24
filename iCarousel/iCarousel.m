@@ -1540,19 +1540,21 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 {
     //get container view
     UIView *containerView = [[self itemViewAtIndex:index] superview];
-    
-    if (animated)
+    if (containerView)
     {
-        //fade transition
-        CATransition *transition = [CATransition animation];
-        transition.duration = INSERT_DURATION;
-        transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-        transition.type = kCATransitionFade;
-        [containerView.layer addAnimation:transition forKey:nil];
+        if (animated)
+        {
+            //fade transition
+            CATransition *transition = [CATransition animation];
+            transition.duration = INSERT_DURATION;
+            transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+            transition.type = kCATransitionFade;
+            [containerView.layer addAnimation:transition forKey:nil];
+        }
+        
+        //reload view
+        [self loadViewAtIndex:index withContainerView:containerView];
     }
-    
-    //reload view
-    [self loadViewAtIndex:index withContainerView:containerView];
 }
 
 #pragma mark -
