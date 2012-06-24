@@ -34,7 +34,7 @@
 //
 //  ARC Helper
 //
-//  Version 2.0
+//  Version 2.1
 //
 //  Created by Nick Lockwood on 05/01/2012.
 //  Copyright 2012 Charcoal Design
@@ -58,17 +58,21 @@
 #endif
 #endif
 
-//  Weak reference support
+//  Weak delegate support
 
+#ifndef ah_weak
 #import <Availability.h>
-#if (defined __IPHONE_OS_VERSION_MIN_REQUIRED && \
-__IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_5_0) || \
+#if (__has_feature(objc_arc)) && \
+((defined __IPHONE_OS_VERSION_MIN_REQUIRED && \
+__IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_5_0) || \
 (defined __MAC_OS_X_VERSION_MIN_REQUIRED && \
-__MAC_OS_X_VERSION_MIN_REQUIRED < __MAC_10_7)
-#undef weak
-#define weak unsafe_unretained
-#undef __weak
-#define __weak __unsafe_unretained
+__MAC_OS_X_VERSION_MIN_REQUIRED > __MAC_10_7))
+#define ah_weak weak
+#define __ah_weak __weak
+#else
+#define ah_weak unsafe_unretained
+#define __ah_weak __unsafe_unretained
+#endif
 #endif
 
 //  ARC Helper ends
@@ -139,8 +143,8 @@ iCarouselOption;
 {
 	@private
 	
-    id<iCarouselDelegate> __weak _delegate;
-    id<iCarouselDataSource> __weak _dataSource;
+    id<iCarouselDelegate> __ah_weak _delegate;
+    id<iCarouselDataSource> __ah_weak _dataSource;
     iCarouselType _type;
     CGFloat _perspective;
     NSInteger _numberOfItems;
@@ -186,8 +190,8 @@ iCarouselOption;
 }
 #endif
 
-@property (nonatomic, weak) IBOutlet id<iCarouselDataSource> dataSource;
-@property (nonatomic, weak) IBOutlet id<iCarouselDelegate> delegate;
+@property (nonatomic, ah_weak) IBOutlet id<iCarouselDataSource> dataSource;
+@property (nonatomic, ah_weak) IBOutlet id<iCarouselDelegate> delegate;
 @property (nonatomic, assign) iCarouselType type;
 @property (nonatomic, assign) CGFloat perspective;
 @property (nonatomic, assign) CGFloat decelerationRate;
