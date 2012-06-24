@@ -75,14 +75,23 @@
     return view;
 }
 
-- (BOOL)carouselShouldWrap:(iCarousel *)carousel
+- (CGFloat)carousel:(iCarousel *)carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value
 {
-    return YES;
-}
-
-- (CGFloat)carouselItemWidth:(iCarousel *)carousel
-{
-    return ITEM_SPACING;
+    switch (option)
+    {
+        case iCarouselOptionWrap:
+        {
+            return YES;
+        }
+        case iCarouselOptionItemWidth:
+        {
+            return ITEM_SPACING;
+        }
+        default:
+        {
+            return value;
+        }
+    }
 }
 
 - (void)carouselWillBeginDragging:(iCarousel *)carousel

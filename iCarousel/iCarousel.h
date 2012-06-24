@@ -75,7 +75,6 @@ __MAC_OS_X_VERSION_MIN_REQUIRED < __MAC_10_7)
 
 
 #import <QuartzCore/QuartzCore.h>
-
 #ifdef USING_CHAMELEON
 #define ICAROUSEL_IOS
 #elif defined __IPHONE_OS_VERSION_MAX_ALLOWED
@@ -115,14 +114,20 @@ iCarouselType;
 
 typedef enum
 {
-    iCarouselTranformOptionCount = 0,
-    iCarouselTranformOptionArc,
-	iCarouselTranformOptionAngle,
-    iCarouselTranformOptionRadius,
-    iCarouselTranformOptionTilt,
-    iCarouselTranformOptionSpacing
+    iCarouselOptionWrap = 0,
+    iCarouselOptionItemWidth,
+    iCarouselOptionOffsetMultiplier,
+    iCarouselOptionCount,
+    iCarouselOptionArc,
+	iCarouselOptionAngle,
+    iCarouselOptionRadius,
+    iCarouselOptionTilt,
+    iCarouselOptionSpacing,
+    iCarouselOptionFadeMin,
+    iCarouselOptionFadeMax,
+    iCarouselOptionFadeRange
 }
-iCarouselTranformOption;
+iCarouselOption;
 
 
 @protocol iCarouselDataSource, iCarouselDelegate;
@@ -253,13 +258,18 @@ iCarouselTranformOption;
 - (void)carouselDidEndDragging:(iCarousel *)carousel willDecelerate:(BOOL)decelerate;
 - (void)carouselWillBeginDecelerating:(iCarousel *)carousel;
 - (void)carouselDidEndDecelerating:(iCarousel *)carousel;
-- (CGFloat)carouselItemWidth:(iCarousel *)carousel;
-- (CGFloat)carouselOffsetMultiplier:(iCarousel *)carousel;
-- (BOOL)carouselShouldWrap:(iCarousel *)carousel;
-- (CGFloat)carousel:(iCarousel *)carousel itemAlphaForOffset:(CGFloat)offset;
 - (CATransform3D)carousel:(iCarousel *)carousel itemTransformForOffset:(CGFloat)offset baseTransform:(CATransform3D)transform;
-- (CGFloat)carousel:(iCarousel *)carousel valueForTransformOption:(iCarouselTranformOption)option withDefault:(CGFloat)value;
+- (CGFloat)carousel:(iCarousel *)carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value;
 - (BOOL)carousel:(iCarousel *)carousel shouldSelectItemAtIndex:(NSInteger)index;
 - (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index;
+
+//deprecated delegate methods
+//use carousel:valueForOption:withDefault: instead
+
+- (BOOL)carouselShouldWrap:(iCarousel *)carousel __attribute__((deprecated));
+- (CGFloat)carouselItemWidth:(iCarousel *)carousel __attribute__((deprecated));
+- (CGFloat)carouselOffsetMultiplier:(iCarousel *)carousel __attribute__((deprecated));
+- (CGFloat)carousel:(iCarousel *)carousel itemAlphaForOffset:(CGFloat)offset __attribute__((deprecated));
+- (CGFloat)carousel:(iCarousel *)carousel valueForTransformOption:(iCarouselOption)option withDefault:(CGFloat)value __attribute__((deprecated));
 
 @end

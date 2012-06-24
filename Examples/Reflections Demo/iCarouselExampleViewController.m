@@ -102,9 +102,4 @@
 	return view;
 }
 
-- (CGFloat)carouselItemWidth:(iCarousel *)carousel
-{
-    return ITEM_SPACING;
-}
-
 @end

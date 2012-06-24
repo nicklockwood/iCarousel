@@ -103,7 +103,7 @@
                                                        delegate:self
                                               cancelButtonTitle:nil
                                          destructiveButtonTitle:nil
-                                              otherButtonTitles:@"Linear", @"Rotary", @"Inverted Rotary", @"Cylinder", @"Inverted Cylinder", @"Wheel", @"Inverted Wheel", @"CoverFlow", @"CoverFlow2", @"Time Machine", @"Custom", nil];
+                                              otherButtonTitles:@"Linear", @"Rotary", @"Inverted Rotary", @"Cylinder", @"Inverted Cylinder", @"Wheel", @"Inverted Wheel", @"CoverFlow", @"CoverFlow2", @"Time Machine", @"Inverted Time Machine", @"Custom", nil];
     [sheet showInView:self.view];
 }
 
@@ -176,19 +176,20 @@
 
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
 {
-	UILabel *label = nil;
-	
+    UILabel *label = nil;
+    
 	//create new view if no view is available for recycling
 	if (view == nil)
 	{
-		view = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]];
-		label = [[UILabel alloc] initWithFrame:view.bounds];
-		label.backgroundColor = [UIColor clearColor];
-		label.textAlignment = UITextAlignmentCenter;
-		label.font = [label.font fontWithSize:50.0f];
-		[view addSubview:label];
-	}
-	else
+        view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200.0f, 200.0f)];
+        view.backgroundColor = [UIColor lightGrayColor];
+        label = [[UILabel alloc] initWithFrame:view.bounds];
+        label.backgroundColor = [UIColor clearColor];
+        label.textAlignment = UITextAlignmentCenter;
+        label.font = [label.font fontWithSize:50];
+        [view addSubview:label];
+    }
+    else
 	{
 		label = [[view subviews] lastObject];
 	}
@@ -212,12 +213,13 @@
 	//create new view if no view is available for recycling
 	if (view == nil)
 	{
-		view = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]];
-		label = [[UILabel alloc] initWithFrame:view.bounds];
-		label.backgroundColor = [UIColor clearColor];
-		label.textAlignment = UITextAlignmentCenter;
-		label.font = [label.font fontWithSize:50.0f];
-		[view addSubview:label];
+		view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200.0f, 200.0f)];
+        view.backgroundColor = [UIColor lightGrayColor];
+        label = [[UILabel alloc] initWithFrame:view.bounds];
+        label.backgroundColor = [UIColor clearColor];
+        label.textAlignment = UITextAlignmentCenter;
+        label.font = [label.font fontWithSize:50];
+        [view addSubview:label];
 	}
 	else
 	{
@@ -230,18 +232,6 @@
 	return view;
 }
 
-- (CGFloat)carouselItemWidth:(iCarousel *)carousel
-{
-    //usually this should be slightly wider than the item views
-    return ITEM_SPACING;
-}
-
-- (CGFloat)carousel:(iCarousel *)carousel itemAlphaForOffset:(CGFloat)offset
-{
-	//set opacity based on distance from camera
-    return 1.0f - fminf(fmaxf(offset, 0.0f), 1.0f);
-}
-
 - (CATransform3D)carousel:(iCarousel *)_carousel itemTransformForOffset:(CGFloat)offset baseTransform:(CATransform3D)transform
 {
     //implement 'flip3D' style carousel
@@ -249,9 +239,35 @@
     return CATransform3DTranslate(transform, 0.0f, 0.0f, offset * carousel.itemWidth);
 }
 
-- (BOOL)carouselShouldWrap:(iCarousel *)carousel
+- (CGFloat)carousel:(iCarousel *)_carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value
 {
-    return wrap;
+    //customize carousel display
+    switch (option)
+    {
+        case iCarouselOptionWrap:
+        {
+            //normally you would hard-code this to YES or NO
+            return wrap;
+        }
+        case iCarouselOptionItemWidth:
+        {
+            //usually this should be slightly wider than the item views
+            return ITEM_SPACING;
+        }
+        case iCarouselOptionFadeMax:
+        {
+            if (carousel.type == iCarouselTypeCustom)
+            {
+                //set opacity based on distance from camera
+                return 0.0f;
+            }
+            return value;
+        }
+        default:
+        {
+            return value;
+        }
+    }
 }
 
 @end

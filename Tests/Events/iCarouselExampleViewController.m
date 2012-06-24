@@ -98,9 +98,19 @@
     }
 }
 
-- (CGFloat)carouselItemWidth:(iCarousel *)carousel
+- (CGFloat)carousel:(iCarousel *)_carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value
 {
-    return ITEM_SPACING;
+    switch (option)
+    {
+        case iCarouselOptionItemWidth:
+        {
+            return ITEM_SPACING;
+        }
+        default:
+        {
+            return value;
+        }
+    }
 }
 
 - (void)carouselWillBeginDragging:(iCarousel *)carousel

@@ -76,9 +76,21 @@
 	return button;
 }
 
-- (CGFloat)carouselItemWidth:(iCarousel *)carousel
+- (CGFloat)carousel:(iCarousel *)_carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value
 {
-    return ITEM_SPACING;
+    //customize carousel display
+    switch (option)
+    {
+        case iCarouselOptionItemWidth:
+        {
+            //usually this should be slightly wider than the item views
+            return ITEM_SPACING;
+        }
+        default:
+        {
+            return value;
+        }
+    }
 }
 
 #pragma mark -

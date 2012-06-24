@@ -15,16 +15,16 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "01308D8D13491C3500453707"
-               BuildableName = "ControlsDemo.app"
-               BlueprintName = "ControlsDemo"
-               ReferencedContainer = "container:iCarouselControlsDemo.xcodeproj">
+               BuildableName = "MultipleCarousels.app"
+               BlueprintName = "MultipleCarousels"
+               ReferencedContainer = "container:MultipleCarousels.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
-      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.GDB"
-      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.GDB"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
       buildConfiguration = "Debug">
       <Testables>
@@ -33,15 +33,15 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "01308D8D13491C3500453707"
-            BuildableName = "ControlsDemo.app"
-            BlueprintName = "ControlsDemo"
-            ReferencedContainer = "container:iCarouselControlsDemo.xcodeproj">
+            BuildableName = "MultipleCarousels.app"
+            BlueprintName = "MultipleCarousels"
+            ReferencedContainer = "container:MultipleCarousels.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
    <LaunchAction
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
-      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.GDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       buildConfiguration = "Debug"
@@ -52,9 +52,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "01308D8D13491C3500453707"
-            BuildableName = "ControlsDemo.app"
-            BlueprintName = "ControlsDemo"
-            ReferencedContainer = "container:iCarouselControlsDemo.xcodeproj">
+            BuildableName = "MultipleCarousels.app"
+            BlueprintName = "MultipleCarousels"
+            ReferencedContainer = "container:MultipleCarousels.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -70,9 +70,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "01308D8D13491C3500453707"
-            BuildableName = "ControlsDemo.app"
-            BlueprintName = "ControlsDemo"
-            ReferencedContainer = "container:iCarouselControlsDemo.xcodeproj">
+            BuildableName = "MultipleCarousels.app"
+            BlueprintName = "MultipleCarousels"
+            ReferencedContainer = "container:MultipleCarousels.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

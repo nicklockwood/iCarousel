@@ -85,7 +85,7 @@
 
 NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *self);
 
-#ifndef ICAROUSEL_IOS
+#ifdef ICAROUSEL_MACOS
 
 CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
                              const CVTimeStamp *inNow,
@@ -455,48 +455,110 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (CGFloat)alphaForItemWithOffset:(CGFloat)offset
 {
+    //DEPRECATED: legacy delegate method support
+    if (_type == iCarouselTypeCustom)
+    {
+        if ([_delegate respondsToSelector:@selector(carousel:itemAlphaForOffset:)])
+        {
+            NSLog(@"Warning: The carousel:itemAlphaForOffset: delegate method is deprecated. Use carousel:valueForOption:withDefault: with iCarouselOptionFadeMin, iCarouselOptionFadeMax and iCarouselOptionFadeRange instead");
+            return [_delegate carousel:self itemAlphaForOffset:offset];
+        }
+    }
+    
+    CGFloat fadeMin = -INFINITY;
+    CGFloat fadeMax = INFINITY;
+    CGFloat fadeRange = 1.0f;
     switch (_type)
     {
         case iCarouselTypeTimeMachine:
+        {
+            fadeMax = 0.0f;
+            break;
+        }
         case iCarouselTypeInvertedTimeMachine:
         {
-            if (_type == iCarouselTypeInvertedTimeMachine)
-            {
-                offset = -offset;
-            }
-            
-#ifdef ICAROUSEL_MACOS
-            
-            if (_vertical)
-            {
-                //invert again
-                offset = -offset;
-            }
-#endif
-            return 1.0f - fminf(fmaxf(offset, 0.0f), 1.0f);
-        }
-        case iCarouselTypeCustom:
-        {
-            if ([_delegate respondsToSelector:@selector(carousel:itemAlphaForOffset:)])
-            {
-                return [_delegate carousel:self itemAlphaForOffset:offset];
-            }
-            
-            //else, fall through to default
+            fadeMin = 0.0f;
+            break;
         }
         default:
         {
-            return 1.0f;
+            //do nothing
         }
     }
+    fadeMin = [self valueForOption:iCarouselOptionFadeMin withDefault:fadeMin];
+    fadeMax = [self valueForOption:iCarouselOptionFadeMax withDefault:fadeMax];
+    fadeRange = [self valueForOption:iCarouselOptionFadeRange withDefault:fadeRange];
+
+#ifdef ICAROUSEL_MACOS
+    
+    if (_vertical)
+    {
+        //invert
+        offset = -offset;
+    }
+    
+#endif
+    
+    if (offset > fadeMax)
+    {
+        return 1.0f - fminf(offset - fadeMax, fadeRange) / fadeRange;
+    }
+    else if (offset < fadeMin)
+    {
+        return 1.0f - fminf(fadeMin - offset, fadeRange) / fadeRange;
+    }
+    return 1.0f;
 }
 
-- (CGFloat)valueForTransformOption:(iCarouselTranformOption)option withDefault:(CGFloat)value
+- (CGFloat)valueForOption:(iCarouselOption)option withDefault:(CGFloat)value
 {
+    //DEPRECATED: legacy delegate method support
+    switch (option)
+    {
+        case iCarouselOptionWrap:
+        {
+            if ([_delegate respondsToSelector:@selector(carouselShouldWrap:)])
+            {
+                NSLog(@"Warning: The carouselShouldWrap: delegate method is deprecated. Use carousel:valueForOption:withDefault: with iCarouselOptionWrap instead");
+                return [_delegate carouselShouldWrap:self];
+            }
+            break;
+        }
+        case iCarouselOptionOffsetMultiplier:
+        {
+            if ([_delegate respondsToSelector:@selector(carouselOffsetMultiplier:)])
+            {
+                NSLog(@"Warning: The carouselOffsetMultiplier: delegate method is deprecated. Use carousel:valueForOption:withDefault: with iCarouselOptionOffsetMultiplier instead");
+                return [_delegate carouselOffsetMultiplier:self];
+            }
+            break;
+        }
+        case iCarouselOptionItemWidth:
+        {
+            if ([_delegate respondsToSelector:@selector(carouselItemWidth:)])
+            {
+                NSLog(@"Warning: The carouselItemWidth: delegate method is deprecated. Use carousel:valueForOption:withDefault: with iCarouselOptionOffsetItemWidth instead");
+                return [_delegate carouselItemWidth:self];
+            }
+            break;
+        }
+        default:
+        {
+            //do nothing
+        }
+    }
+    
+    if ([_delegate respondsToSelector:@selector(carousel:valueForOption:withDefault:)])
+    {
+        return [_delegate carousel:self valueForOption:option withDefault:value];
+    }
+    
+    //DEPRECATED: legacy delegate method support
     if ([_delegate respondsToSelector:@selector(carousel:valueForTransformOption:withDefault:)])
     {
         return [_delegate carousel:self valueForTransformOption:option withDefault:value];
     }
+    
     return value;
 }
 
@@ -533,12 +595,12 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
         case iCarouselTypeRotary:
         case iCarouselTypeInvertedRotary:
         {
-            NSInteger count = [self valueForTransformOption:iCarouselTranformOptionCount withDefault:
+            NSInteger count = [self valueForOption:iCarouselOptionCount withDefault:
                                MIN(_numberOfVisibleItems, _numberOfItems + _numberOfPlaceholdersToShow)];
             
-            CGFloat arc = [self valueForTransformOption:iCarouselTranformOptionArc withDefault:M_PI * 2.0f];
-            CGFloat radius = [self valueForTransformOption:iCarouselTranformOptionRadius withDefault:fmaxf(_itemWidth / 2.0f, _itemWidth / 2.0f / tanf(arc/2.0f/count))];
-            CGFloat angle = [self valueForTransformOption:iCarouselTranformOptionAngle withDefault:offset / count * arc];
+            CGFloat arc = [self valueForOption:iCarouselOptionArc withDefault:M_PI * 2.0f];
+            CGFloat radius = [self valueForOption:iCarouselOptionRadius withDefault:fmaxf(_itemWidth / 2.0f, _itemWidth / 2.0f / tanf(arc/2.0f/count))];
+            CGFloat angle = [self valueForOption:iCarouselOptionAngle withDefault:offset / count * arc];
             
             if (_type == iCarouselTypeInvertedRotary)
             {
@@ -558,12 +620,12 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
         case iCarouselTypeCylinder:
         case iCarouselTypeInvertedCylinder:
         {
-            NSInteger count = [self valueForTransformOption:iCarouselTranformOptionCount withDefault:
+            NSInteger count = [self valueForOption:iCarouselOptionCount withDefault:
                                MIN(_numberOfVisibleItems, _numberOfItems + _numberOfPlaceholdersToShow)];
             
-            CGFloat arc = [self valueForTransformOption:iCarouselTranformOptionArc withDefault:M_PI * 2.0f];
-            CGFloat radius = [self valueForTransformOption:iCarouselTranformOptionRadius withDefault:fmaxf(0.01f, _itemWidth / 2.0f / tanf(arc/2.0f/count))];
-            CGFloat angle = [self valueForTransformOption:iCarouselTranformOptionAngle withDefault:offset / count * arc];
+            CGFloat arc = [self valueForOption:iCarouselOptionArc withDefault:M_PI * 2.0f];
+            CGFloat radius = [self valueForOption:iCarouselOptionRadius withDefault:fmaxf(0.01f, _itemWidth / 2.0f / tanf(arc/2.0f/count))];
+            CGFloat angle = [self valueForOption:iCarouselOptionAngle withDefault:offset / count * arc];
             
             if (_type == iCarouselTypeInvertedCylinder)
             {
@@ -587,12 +649,12 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
         case iCarouselTypeWheel:
         case iCarouselTypeInvertedWheel:
         {
-            NSInteger count = [self valueForTransformOption:iCarouselTranformOptionCount withDefault:
+            NSInteger count = [self valueForOption:iCarouselOptionCount withDefault:
                                MIN(_numberOfVisibleItems, _numberOfItems + _numberOfPlaceholdersToShow)];
             
-            CGFloat arc = [self valueForTransformOption:iCarouselTranformOptionArc withDefault:M_PI * 2.0f];
-            CGFloat radius = [self valueForTransformOption:iCarouselTranformOptionRadius withDefault:_itemWidth * (CGFloat)count / arc];
-            CGFloat angle = [self valueForTransformOption:iCarouselTranformOptionAngle withDefault:arc / (CGFloat)count];
+            CGFloat arc = [self valueForOption:iCarouselOptionArc withDefault:M_PI * 2.0f];
+            CGFloat radius = [self valueForOption:iCarouselOptionRadius withDefault:_itemWidth * (CGFloat)count / arc];
+            CGFloat angle = [self valueForOption:iCarouselOptionAngle withDefault:arc / (CGFloat)count];
             
             if (_type == iCarouselTypeInvertedWheel)
             {
@@ -616,8 +678,8 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
         case iCarouselTypeCoverFlow:
         case iCarouselTypeCoverFlow2:
         {
-            CGFloat tilt = [self valueForTransformOption:iCarouselTranformOptionTilt withDefault:0.9f];
-            CGFloat spacing = [self valueForTransformOption:iCarouselTranformOptionSpacing withDefault:0.25f]; // should be ~ 1/scrollSpeed;
+            CGFloat tilt = [self valueForOption:iCarouselOptionTilt withDefault:0.9f];
+            CGFloat spacing = [self valueForOption:iCarouselOptionSpacing withDefault:0.25f]; // should be ~ 1/scrollSpeed;
             CGFloat clampedOffset = fmaxf(-1.0f, fminf(1.0f, offset));
             
             if (_type == iCarouselTypeCoverFlow2)
@@ -671,8 +733,8 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
         case iCarouselTypeTimeMachine:
         case iCarouselTypeInvertedTimeMachine:
         {
-            CGFloat tilt = [self valueForTransformOption:iCarouselTranformOptionTilt withDefault:0.3f];
-            CGFloat spacing = [self valueForTransformOption:iCarouselTranformOptionSpacing withDefault:1.0f];
+            CGFloat tilt = [self valueForOption:iCarouselOptionTilt withDefault:0.3f];
+            CGFloat spacing = [self valueForOption:iCarouselOptionSpacing withDefault:1.0f];
             
             if (_type == iCarouselTypeInvertedTimeMachine)
             {
@@ -879,11 +941,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (void)updateItemWidth
 {
-    if ([_delegate respondsToSelector:@selector(carouselItemWidth:)])
-    {
-        _itemWidth = [_delegate carouselItemWidth:self];
-    }
-    else if (_numberOfItems > 0)
+    if (_numberOfItems > 0)
     {
         if ([_itemViews count] == 0)
         {
@@ -901,6 +959,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         UIView *itemView = [[_itemViews allValues] lastObject];
         _itemWidth = _vertical? itemView.bounds.size.height: itemView.bounds.size.width;
     }
+    _itemWidth = [self valueForOption:iCarouselOptionItemWidth withDefault:_itemWidth];
 }
 
 - (void)layOutItemViews
@@ -915,31 +974,25 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     CGFloat prevItemWidth = _itemWidth;
     
     //update wrap
-    if ([_delegate respondsToSelector:@selector(carouselShouldWrap:)])
+    switch (_type)
     {
-        _shouldWrap = [_delegate carouselShouldWrap:self];
-    }
-    else
-    {
-        switch (_type)
+        case iCarouselTypeRotary:
+        case iCarouselTypeInvertedRotary:
+        case iCarouselTypeCylinder:
+        case iCarouselTypeInvertedCylinder:
+        case iCarouselTypeWheel:
+        case iCarouselTypeInvertedWheel:
         {
-            case iCarouselTypeRotary:
-            case iCarouselTypeInvertedRotary:
-            case iCarouselTypeCylinder:
-            case iCarouselTypeInvertedCylinder:
-            case iCarouselTypeWheel:
-            case iCarouselTypeInvertedWheel:
-            {
-                _shouldWrap = YES;
-                break;
-            }
-            default:
-            {
-                _shouldWrap = NO;
-                break;
-            }
+            _shouldWrap = YES;
+            break;
+        }
+        default:
+        {
+            _shouldWrap = NO;
+            break;
         }
     }
+    _shouldWrap = !![self valueForOption:iCarouselOptionWrap withDefault:_shouldWrap];
     
     //no placeholders on wrapped carousels
     _numberOfPlaceholdersToShow = _shouldWrap? 0: _numberOfPlaceholders;
@@ -948,27 +1001,21 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     [self updateItemWidth];
     
     //update offset multiplier
-    if ([_delegate respondsToSelector:@selector(carouselOffsetMultiplier:)])
+    switch (_type)
     {
-        _offsetMultiplier = [_delegate carouselOffsetMultiplier:self];
-    }
-    else
-    {
-        switch (_type)
+        case iCarouselTypeCoverFlow:
+        case iCarouselTypeCoverFlow2:
         {
-            case iCarouselTypeCoverFlow:
-            case iCarouselTypeCoverFlow2:
-            {
-                _offsetMultiplier = 2.0f;
-                break;
-            }
-            default:
-            {
-                _offsetMultiplier = 1.0f;
-                break;
-            }
+            _offsetMultiplier = 2.0f;
+            break;
+        }
+        default:
+        {
+            _offsetMultiplier = 1.0f;
+            break;
         }
     }
+    _offsetMultiplier = [self valueForOption:iCarouselOptionOffsetMultiplier withDefault:_offsetMultiplier];
     
     //adjust scroll offset
     if (!prevItemWidth)

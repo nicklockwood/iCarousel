@@ -27,7 +27,7 @@
 		01308D9613491C3500453707 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		01308DBF13491F7200453707 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		0148358313A36C2000E687AC /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = SOURCE_ROOT; };
-		0148358413A36C2000E687AC /* iCarouselExample-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; path = "iCarouselExample-Info.plist"; sourceTree = SOURCE_ROOT; };
+		0148358413A36C2000E687AC /* iCarouselExample-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "iCarouselExample-Info.plist"; sourceTree = SOURCE_ROOT; };
 		0148358513A36C2000E687AC /* iCarouselExample-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "iCarouselExample-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 		0148358713A36C2000E687AC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = SOURCE_ROOT; };
 		0148358B13A36C3700E687AC /* iCarouselExampleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarouselExampleViewController.m; sourceTree = SOURCE_ROOT; };
@@ -36,7 +36,7 @@
 		0148358E13A36C3700E687AC /* iCarouselExampleAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarouselExampleAppDelegate.h; sourceTree = SOURCE_ROOT; };
 		0148359013A36C3700E687AC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = SOURCE_ROOT; };
 		0148359213A36C3700E687AC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/iCarouselExampleViewController.xib; sourceTree = SOURCE_ROOT; };
-		018BBCB413A375AF005CA505 /* iCarouselExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iCarouselExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		018BBCB413A375AF005CA505 /* iCarouselOptionsDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iCarouselOptionsDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2E5E6BF146145C900EADB7A /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		B2E5E6C0146145C900EADB7A /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
 		B2E5E72B1461544B00EADB7A /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background.png; path = ../Resources/background.png; sourceTree = SOURCE_ROOT; };
@@ -158,7 +158,7 @@
 		01308D8513491C3500453707 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0450;
 			};
 			buildConfigurationList = 01308D8813491C3500453707 /* Build configuration list for PBXProject "iCarouselOptionsDemo" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -277,6 +277,7 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iCarouselExample-Prefix.pch";
+				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "iCarouselExample-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
@@ -297,6 +298,7 @@
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iCarouselExample-Prefix.pch";
+				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "iCarouselExample-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;

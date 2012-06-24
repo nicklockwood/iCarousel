@@ -151,7 +151,7 @@ The currently centered item view in the carousel. The index of this view matches
 
 	@property (nonatomic, readonly) CGFloat itemWidth;
 
-The display width of items in the carousel (read only). This is derived automatically from the first view passed in to the carousel using the `carousel:viewForItemAtIndex:reusingView:` dataSource method. You can also override this value using the `carouselItemWidth:` delegate method, which will alter the spacing between carousel items (but won't resize or scale the item views).
+The display width of items in the carousel (read only). This is derived automatically from the first view passed in to the carousel using the `carousel:viewForItemAtIndex:reusingView:` dataSource method. You can also override this value using the `iCarouselOptionItemWidth` option value, which will alter the spacing between carousel items (but won't resize or scale the item views).
 
 	@property (nonatomic, assign) BOOL centerItemWhenSelected;
 
@@ -309,29 +309,13 @@ This method is called when the carousel starts decelerating. it will typically b
 
 This method is called when the carousel finishes decelerating and you can assume that the currentItemIndex at this point is the final stopping value. Unlike previous versions, the carousel will now stop exactly on the final index position in most cases. The only exception is on non-wrapped carousels with bounce enabled, where, if the final stopping position is beyond the end of the carousel, the carousel will then scroll automatically until it aligns exactly on the end index. For backwards compatibility, the carousel will always call `scrollToItemAtIndex:animated:` after it finishes decelerating. If you need to know for certain when the carousel has stopped moving completely, use the `carouselDidEndScrollingAnimation` delegate method.
 
-	- (CGFloat)carouselItemWidth:(iCarousel *)carousel;
-
-Returns the width of each item in the carousel - i.e. the spacing for each item view. If the method is not implemented, this defaults to the width of the first item view that is returned by the `carousel:viewForItemAtIndex:reusingView:` dataSource method.
-
-	- (CGFloat)carouseOffsetMultiplier:(iCarousel *)carousel;
-	
-Returns the offset multiplier to use when the user drags the carousel with their finger. It does not affect programmatic scrolling or deceleration speed. If the method is not implemented, this defaults to 1.0 for most carousel types, but defaults to 2.0 for the CoverFlow-style carousels to compensate for the fact that their items are more closely spaced and so must be dragged further to move the same distance.
-
-	- (BOOL)carouselShouldWrap:(iCarousel *)carousel;
-
-Return YES if you want the carousel to wrap around when it reaches the end, and no if you want it to stop. If you do not implement this method, wrapping will be enabled or disabled depending on the carousel type. Generally, circular carousel types will wrap by default and linear ones won't.
-
-	- (CGFloat)carousel:(iCarousel *)carousel itemAlphaForOffset:(CGFloat)offset;
-	
-This method lets you control the opacity of views based on their position. This is useful for carousel types where certain views might otherwise obscure the centred view, such as the TimeMachine carousel type. This method is only called if the carousel type is iCarouselTypeCustom.
-
 	- (CATransform3D)carousel:(iCarousel *)carousel itemTransformForOffset:(CGFloat)offset baseTransform:(CATransform3D)transform;
 
 This method can be used to provide a custom transform for each carousel view. The offset argument is the distance of the view from the middle of the carousel. The currently centred item view would have an offset of 0.0, the one to the right would have an offset value of 1.0, the one to the left an offset value of -1.0, and so on. To implement the linear carousel style, you would therefore simply multiply the offset value by the item width and use it as the x value of the transform. This method is only called if the carousel type is iCarouselTypeCustom.
 
-	- (CGFloat)carousel:(iCarousel *)carousel valueForTransformOption:(iCarouselTranformOption)option withDefault:(CGFloat)value;
+	- (CGFloat)carousel:(iCarousel *)carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value;
 
-This method is used to customise the parameters of the standard carousel types. By implementing this method, you can tweak options such as the number of items displayed in a circular carousel, or the amount of tilt in a coverflow carousel. For any option you are not interested in tweaking, just return the default value. The meaning of these options is listed below. Check the *Options Demo* for an example of using this method.
+This method is used to customise the parameters of the standard carousel types. By implementing this method, you can tweak options such as the number of items displayed in a circular carousel, or the amount of tilt in a coverflow carousel, as well as whether the carousel should wrap and if it should fade out at the ends, etc. For any option you are not interested in tweaking, just return the default value. The meaning of these options is listed below under *iCarouselOption values*. Check the *Options Demo* for an advanced example of using this method.
 
 	- (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index;
 
@@ -342,34 +326,52 @@ This method will fire if the user taps any carousel item view (not including pla
 This method will fire if the user taps any carousel item view (not including placeholder views), including the currently selected view. The purpose of a method is to give you the opportunity to ignore a tap on the carousel. If you return YES from the method, or don't implement it, the tap will be processed as normal and the `carousel:didSelectItemAtIndex:` method will be called. If you return NO, the carousel will ignore the tap and it will continue to propagate up the view hierarchy. This is a good way to prevent the carousel intercepting tap events intended for processing by another view.
 
 
-Transform Options
+iCarouselOption values
 ----------------------------
 
 These are the tweakable options for standard carousels. Check the *Options Demo* for an example of the effect that these parameters have.
 
-	iCarouselTranformOptionCount
+    iCarouselOptionWrap
+    
+A boolean indicating whether the carousel should wrap when it scrolls to the end. Return YES if you want the carousel to wrap around when it reaches the end, and NO if you want it to stop. Generally, circular carousel types will wrap by default and linear ones won't. Don't worry that the return type is a floating point value - any value other than 0.0 will be treated as YES.
+
+    iCarouselOptionItemWidth
+    
+Returns the width (in points/pixels) of each item in the carousel - i.e. the spacing allocated for each item view. This defaults to the width of the first item view that is returned by the `carousel:viewForItemAtIndex:reusingView:` dataSource method (or the height, if the carousel is vertical).
+
+    iCarouselOptionOffsetMultiplier
+    
+The offset multiplier to use when the user drags the carousel with their finger. It does not affect programmatic scrolling or deceleration speed. This defaults to 1.0 for most carousel types, but defaults to 2.0 for the CoverFlow-style carousels to compensate for the fact that their items are more closely spaced and so must be dragged further to move the same distance.
+
+	iCarouselOptionCount
 	
-The number of items to be displayed in the Rotary, Cylinder and Wheel transforms. Normally this is based on the numberOfVisibleItems value, but you can override this if you want to decouple the shape of the carousel from the number of visible items. This property is used to calculate the carousel radius, so another option is to manipulate the radius directly.
+The number of items to be displayed in the Rotary, Cylinder and Wheel transforms. Normally this is based on the numberOfVisibleItems value, but you can override this if you want to decouple the shape of the carousel from the number of visible items. This property is used to calculate the carousel radius, so another option is to manipulate the radius directly. Note that if you specify a count value greater than the number of visible items, the carousel will contain a gap, and if you specify a count less than the number of visible items, some items will overlap.
 	
-    iCarouselTranformOptionArc
+    iCarouselOptionArc
     
 The arc of the Rotary, Cylinder and Wheel transforms (in radians). Normally this defaults to 2*M_PI (a complete circle) but you can specify a smaller value, so for example a value of M_PI will create a half-circle or cylinder. This property is used to calculate the carousel radius and angle step, so another option is to manipulate those values directly.
     
-    iCarouselTranformOptionRadius
+    iCarouselOptionRadius
     
 The radius of the Rotary, Cylinder and Wheel transforms in pixels/points. This is usually calculated so that the number of items (count) exactly fits into the specified arc. You can manipulate this value to increase or reduce the item spacing (and the radius of the circle).
     
-	iCarouselTranformOptionAngle
+	iCarouselOptionAngle
 	
 The angular step between each item in the Rotary, Cylinder and Wheel transforms (in radians). Manipulating this value without changing the radius will cause a gap at the end of the carousel or cause the items to overlap.
 	
-    iCarouselTranformOptionTilt
+    iCarouselOptionTilt
 
 The tilt applied to the non-centered items in the CoverFlow, CoverFlow2 and TimeMachine carousel types. This value should be in  the range 0.0 to 1.0.
 
-    iCarouselTranformOptionSpacing
+    iCarouselOptionSpacing
 
 The spacing factor applied to the items in the CoverFlow, CoverFlow2 and TimeMachine carousel types. This value is multiplied by the item width.
+
+    iCarouselOptionFadeMin
+    iCarouselOptionFadeMax
+    iCarouselOptionFadeRange
+
+These three options control the fading out of carousel item views based on their offset from the currently centered item. FadeMin is the minimum negative offset an item view can reach before it begins to fade. FadeMax is the maximum positive offset a view can reach before if begins to fade. FadeRange is the distance the item can move between the point at which it begins to fade and the point at which it becomes completely invisible.
 
 
 Detecting Taps on Item Views

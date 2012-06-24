@@ -1,6 +1,6 @@
 iCarousel
 
-Version 1.7 beta, June 21st, 2012
+Version 1.7 beta, June 24th, 2012
 
 Copyright (C) 2011 Charcoal Design
 

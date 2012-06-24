@@ -246,18 +246,6 @@
 	return view;
 }
 
-- (CGFloat)carouselItemWidth:(iCarousel *)carousel
-{
-    //slightly wider than item view
-    return ITEM_SPACING;
-}
-
-- (CGFloat)carousel:(iCarousel *)carousel itemAlphaForOffset:(CGFloat)offset
-{
-	//set opacity based on distance from camera
-    return 1.0f - fminf(fmaxf(offset, 0.0f), 1.0f);
-}
-
 - (CATransform3D)carousel:(iCarousel *)_carousel itemTransformForOffset:(CGFloat)offset baseTransform:(CATransform3D)transform
 {
     //implement 'flip3D' style carousel
@@ -265,10 +253,35 @@
     return CATransform3DTranslate(transform, 0.0f, 0.0f, offset * carousel.itemWidth);
 }
 
-- (BOOL)carouselShouldWrap:(iCarousel *)carousel
+- (CGFloat)carousel:(iCarousel *)_carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value
 {
-    //wrap all carousels
-    return wrap;
+    //customize carousel display
+    switch (option)
+    {
+        case iCarouselOptionWrap:
+        {
+            //normally you would hard-code this to YES or NO
+            return wrap;
+        }
+        case iCarouselOptionItemWidth:
+        {
+            //usually this should be slightly wider than the item views
+            return ITEM_SPACING;
+        }
+        case iCarouselOptionFadeMax:
+        {
+            if (carousel.type == iCarouselTypeCustom)
+            {
+                //set opacity based on distance from camera
+                return 0.0f;
+            }
+            return value;
+        }
+        default:
+        {
+            return value;
+        }
+    }
 }
 
 @end
