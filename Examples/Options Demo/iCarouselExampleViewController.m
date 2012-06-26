@@ -247,7 +247,10 @@
 	//create new view if no view is available for recycling
 	if (view == nil)
 	{
-		view = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]] autorelease];
+		view = [[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200.0f, 200.0f)] autorelease];
+        ((UIImageView *)view).image = [UIImage imageNamed:@"page.png"];
+        view.contentMode = UIViewContentModeCenter;
+
 		label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
 		label.backgroundColor = [UIColor clearColor];
 		label.textAlignment = UITextAlignmentCenter;
@@ -261,37 +264,6 @@
 	
     //set label
 	label.text = [[items objectAtIndex:index] stringValue];
-	
-	return view;
-}
-
-- (NSUInteger)numberOfPlaceholdersInCarousel:(iCarousel *)carousel
-{
-	//note: placeholder views are only displayed on some carousels if wrapping is disabled
-	return INCLUDE_PLACEHOLDERS? 2: 0;
-}
-
-- (UIView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index reusingView:(UIView *)view
-{
-	UILabel *label = nil;
-	
-	//create new view if no view is available for recycling
-	if (view == nil)
-	{
-		view = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]] autorelease];
-		label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
-		label.backgroundColor = [UIColor clearColor];
-		label.textAlignment = UITextAlignmentCenter;
-		label.font = [label.font fontWithSize:50.0f];
-		[view addSubview:label];
-	}
-	else
-	{
-		label = [[view subviews] lastObject];
-	}
-	
-    //set label
-	label.text = (index == 0)? @"[": @"]";
 	
 	return view;
 }
@@ -333,7 +305,7 @@
         }
         case iCarouselOptionSpacing:
         {
-            return spacingSlider.value;
+            return value * spacingSlider.value;
         }
         default:
         {

@@ -4,7 +4,7 @@
 //  Version 1.7 beta
 //
 //  Created by Nick Lockwood on 01/04/2011.
-//  Copyright 2010 Charcoal Design
+//  Copyright 2011 Charcoal Design
 //
 //  Distributed under the permissive zlib License
 //  Get the latest version from either of these locations:
@@ -47,7 +47,7 @@
 @interface iCarousel ()
 
 @property (nonatomic, strong) UIView *contentView;
-@property (nonatomic, strong) NSDictionary *itemViews;
+@property (nonatomic, strong) NSMutableDictionary *itemViews;
 @property (nonatomic, strong) NSMutableSet *itemViewPool;
 @property (nonatomic, strong) NSMutableSet *placeholderViewPool;
 @property (nonatomic, assign) NSInteger previousItemIndex;
@@ -278,6 +278,11 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
         {
             NSLog(@"Warning: The carouselOffsetMultiplier: delegate method is deprecated. Use carousel:valueForOption:withDefault: with iCarouselOptionOffsetMultiplier instead");
         }
+        if ([_delegate respondsToSelector:@selector(carouselCurrentItemIndexUpdated:)])
+        {
+            NSLog(@"Warning: The carouselCurrentItemIndexUpdated: delegate method is deprecated. Use carouselCurrentItemIndexDidChange: instead");
+        }
+
     }
 }
 
@@ -424,7 +429,7 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)setItemView:(UIView *)view forIndex:(NSInteger)index
 {
-    [(NSMutableDictionary *)_itemViews setObject:view forKey:[NSNumber numberWithInteger:index]];
+    [_itemViews setObject:view forKey:[NSNumber numberWithInteger:index]];
 }
 
 - (void)removeViewAtIndex:(NSInteger)index
@@ -873,7 +878,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     
     //calculate offset
     CGFloat offset = [self offsetForItemAtIndex:index];
-    
+
 #ifdef ICAROUSEL_IOS
     
     //center view
@@ -897,9 +902,6 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     
 #endif
     
-    //update backface visibility
-    view.superview.layer.doubleSided = view.layer.doubleSided;
-    
     //special-case logic for iCarouselTypeCoverFlow2
     CGFloat clampedOffset = fmaxf(-1.0f, fminf(1.0f, offset));
     if (_decelerating || (_scrolling && !_didDrag) || (_scrollOffset - [self clampedOffset:_scrollOffset]) != 0.0f)
@@ -919,6 +921,30 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     
     //transform view
     view.superview.layer.transform = transform;
+    
+    //backface culling
+    BOOL showBackfaces = view.layer.doubleSided;
+    if (showBackfaces)
+    {
+        switch (_type)
+        {
+            case iCarouselTypeInvertedCylinder:
+            {
+                showBackfaces = NO;
+                break;
+            }
+            default:
+            {
+                showBackfaces = YES;
+                break;
+            }
+        }
+    }
+    showBackfaces = !![self valueForOption:iCarouselOptionShowBackfaces withDefault:showBackfaces];
+    
+    //we can't just set the layer.doubleSided property because it doesn't block interaction
+    //instead we'll calculate if the view is front-facing based on the transform
+    view.superview.hidden = !(showBackfaces ?: (transform.m33 > 0.0f));
 }
 
 //for iOS
@@ -982,10 +1008,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     {
         return;
     }
-    
-    //record current item width
-    CGFloat prevItemWidth = _itemWidth;
-    
+
     //update wrap
     switch (_type)
     {
@@ -1013,6 +1036,9 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     //set item width
     [self updateItemWidth];
     
+    //prevent false index changed event
+    _previousItemIndex = self.currentItemIndex;
+    
     //update offset multiplier
     switch (_type)
     {
@@ -1029,14 +1055,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         }
     }
     _offsetMultiplier = [self valueForOption:iCarouselOptionOffsetMultiplier withDefault:_offsetMultiplier];
-    
-    //adjust scroll offset
-    if (!prevItemWidth)
-    {
-        //prevent false index changed event
-        _previousItemIndex = self.currentItemIndex;
-    }
-    
+
     //align
     if (!_scrolling && !_decelerating)
     {
@@ -1235,12 +1254,11 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     //reset view pools
     self.itemViews = [NSMutableDictionary dictionaryWithCapacity:_numberOfVisibleItems];
     self.itemViewPool = [NSMutableSet setWithCapacity:_numberOfVisibleItems];
-    self.placeholderViewPool = [NSMutableSet setWithCapacity:_numberOfVisibleItems];
+    self.placeholderViewPool = [NSMutableSet setWithCapacity:_numberOfPlaceholders];
     
     //layout views
     [self disableAnimation];
     [self layOutItemViews];
-    [self depthSortViews];
     [self performSelector:@selector(depthSortViews) withObject:nil afterDelay:0.0f];
     [self enableAnimation];
     
@@ -1837,6 +1855,13 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     }
     
     //notify delegate of change index
+    if ([self clampedIndex:_previousItemIndex] != self.currentItemIndex &&
+        [_delegate respondsToSelector:@selector(carouselCurrentItemIndexDidChange:)])
+    {
+        [_delegate carouselCurrentItemIndexDidChange:self];
+    }
+    
+    //DEPRECATED
     if ([self clampedIndex:_previousItemIndex] != self.currentItemIndex &&
         [_delegate respondsToSelector:@selector(carouselCurrentItemIndexUpdated:)])
     {

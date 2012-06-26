@@ -196,8 +196,9 @@
 	//create new view if no view is available for recycling
 	if (view == nil)
 	{
-		view = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]] autorelease];
-        view.layer.doubleSided = NO;
+		view = [[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200.0f, 200.0f)] autorelease];
+        ((UIImageView *)view).image = [UIImage imageNamed:@"page.png"];
+        view.contentMode = UIViewContentModeCenter;
 		label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
 		label.backgroundColor = [UIColor clearColor];
 		label.textAlignment = UITextAlignmentCenter;
@@ -228,8 +229,9 @@
 	//create new view if no view is available for recycling
 	if (view == nil)
 	{
-		view = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]] autorelease];
-        view.layer.doubleSided = NO;
+		view = [[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200.0f, 200.0f)] autorelease];
+        ((UIImageView *)view).image = [UIImage imageNamed:@"page.png"];
+        view.contentMode = UIViewContentModeCenter;
 		label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
 		label.backgroundColor = [UIColor clearColor];
 		label.textAlignment = UITextAlignmentCenter;
@@ -263,6 +265,11 @@
         {
             //normally you would hard-code this to YES or NO
             return wrap;
+        }
+        case iCarouselOptionSpacing:
+        {
+            //add a bit of spacing between the item views
+            return value * 1.05f;
         }
         case iCarouselOptionFadeMax:
         {

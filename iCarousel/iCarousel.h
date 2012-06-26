@@ -4,7 +4,7 @@
 //  Version 1.7 beta
 //
 //  Created by Nick Lockwood on 01/04/2011.
-//  Copyright 2010 Charcoal Design
+//  Copyright 2011 Charcoal Design
 //
 //  Distributed under the permissive zlib License
 //  Get the latest version from either of these locations:
@@ -119,6 +119,7 @@ iCarouselType;
 typedef enum
 {
     iCarouselOptionWrap = 0,
+    iCarouselOptionShowBackfaces,
     iCarouselOptionOffsetMultiplier,
     iCarouselOptionCount,
     iCarouselOptionArc,
@@ -151,7 +152,7 @@ iCarouselOption;
 	NSInteger _numberOfPlaceholdersToShow;
     NSInteger _numberOfVisibleItems;
     UIView *_contentView;
-    NSDictionary *_itemViews;
+    NSMutableDictionary *_itemViews;
     NSMutableSet *_itemViewPool;
     NSMutableSet *_placeholderViewPool;
     NSInteger _previousItemIndex;
@@ -196,7 +197,7 @@ iCarouselOption;
 @property (nonatomic, assign) CGFloat decelerationRate;
 @property (nonatomic, assign) CGFloat scrollSpeed;
 @property (nonatomic, assign) CGFloat bounceDistance;
-@property (nonatomic, assign) BOOL scrollEnabled;
+@property (nonatomic, assign, getter = isScrollEnabled) BOOL scrollEnabled;
 @property (nonatomic, assign) BOOL bounces;
 @property (nonatomic, assign) CGFloat scrollOffset;
 @property (nonatomic, readonly) CGFloat offsetMultiplier;
@@ -256,7 +257,7 @@ iCarouselOption;
 - (void)carouselWillBeginScrollingAnimation:(iCarousel *)carousel;
 - (void)carouselDidEndScrollingAnimation:(iCarousel *)carousel;
 - (void)carouselDidScroll:(iCarousel *)carousel;
-- (void)carouselCurrentItemIndexUpdated:(iCarousel *)carousel;
+- (void)carouselCurrentItemIndexDidChange:(iCarousel *)carousel;
 - (void)carouselWillBeginDragging:(iCarousel *)carousel;
 - (void)carouselDidEndDragging:(iCarousel *)carousel willDecelerate:(BOOL)decelerate;
 - (void)carouselWillBeginDecelerating:(iCarousel *)carousel;
@@ -269,6 +270,7 @@ iCarouselOption;
 //deprecated delegate methods
 //use carousel:valueForOption:withDefault: instead
 
+- (void)carouselCurrentItemIndexUpdated:(iCarousel *)carousel __attribute__((deprecated));
 - (BOOL)carouselShouldWrap:(iCarousel *)carousel __attribute__((deprecated));
 - (CGFloat)carouselItemWidth:(iCarousel *)carousel __attribute__((deprecated));
 - (CGFloat)carouselOffsetMultiplier:(iCarousel *)carousel __attribute__((deprecated));

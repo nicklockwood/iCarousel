@@ -28,7 +28,7 @@
     //or the recycling mechanism will destroy your data once
     //your item views move off-screen
     self.items = [NSMutableArray array];
-    for (int i = 0; i < 100; i++)
+    for (int i = 0; i < 1000; i++)
     {
         [items addObject:[NSNumber numberWithInt:i]];
     }
@@ -92,8 +92,10 @@
     //create new view if no view is available for recycling
     if (view == nil)
     {
-        view = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]];
-        view.layer.doubleSided = NO; //prevent back side of view from showing
+        view = [[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200.0f, 200.0f)] autorelease];
+        ((UIImageView *)view).image = [UIImage imageNamed:@"page.png"];
+        view.contentMode = UIViewContentModeCenter;
+
         label = [[UILabel alloc] initWithFrame:view.bounds];
         label.backgroundColor = [UIColor clearColor];
         label.textAlignment = UITextAlignmentCenter;

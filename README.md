@@ -3,10 +3,6 @@ Purpose
 
 iCarousel is a class designed to simplify the implementation of various types of carousel (paged, scrolling views) on iPhone, iPad and Mac OS. iCarousel implements a number of common effects such as cylindrical, flat and "CoverFlow" style carousels, as well as providing hooks to implement your own bespoke effects. Unlike many other "CoverFlow" libraries, iCarousel can work with any kind of view, not just images, so it is ideal for presenting paged data in a fluid and impressive way in your app. It also makes it extremely easy to swap between different carousel effects with minimal code changes.
 
-*Special thanks go to Sushant Prakash (https://github.com/sushftw) for the Mac port.*
-
-Not all features of iCarousel are currently supported on Mac OS. I hope to address this in future. Please refer to the documentation below for details.
-
 
 Supported OS & SDK Versions
 -----------------------------
@@ -27,7 +23,7 @@ As of version 1.6.1, iCarousel automatically works with both ARC and non-ARC pro
 Thread Safety
 --------------
 
-iCarousel is derives from UIView and - as with all UIKit components - it should only be accessed from the main thread. You may wish to use threads for loading or updating carousel contents or items, but always ensure that once your content has loaded, you switch back to the main thread before updating the carousel.
+iCarousel is derived from UIView and - as with all UIKit components - it should only be accessed from the main thread. You may wish to use threads for loading or updating carousel contents or items, but always ensure that once your content has loaded, you switch back to the main thread before updating the carousel.
 
 
 Installation
@@ -69,11 +65,11 @@ Properties
 
 The iCarousel has the following properties (note: for Mac OS, substitute NSView for UIView when using properties):
 
-	@property (nonatomic, assign) IBOutlet id<iCarouselDataSource> dataSource;
+	@property (nonatomic, weak) IBOutlet id<iCarouselDataSource> dataSource;
 
 An object that supports the iCarouselDataSource protocol and can provide views to populate the carousel.
 
-	@property (nonatomic, assign) IBOutlet id<iCarouselDelegate> delegate;
+	@property (nonatomic, weak) IBOutlet id<iCarouselDelegate> delegate;
 
 An object that supports the iCarouselDelegate protocol and can respond to carousel events and layout requests.
 
@@ -105,13 +101,13 @@ Sets whether the carousel should bounce past the end and return, or stop dead. N
 
 The maximum distance that a non-wrapped carousel will bounce when it overshoots the end. This is measured in multiples of the itemWidth, so a value of 1.0 would means the carousel will bounce by one whole item width, a value of 0.5 would be half an item's width, and so on. The default value is 1.0;
 
-	@property (nonatomic, assign) BOOL scrollEnabled;
+	@property (nonatomic, assign, getter = isScrollEnabled) BOOL scrollEnabled;
 
 Enables and disables user scrolling of the carousel. The carousel can still be scrolled programmatically if this property is set to NO.
 
 	@property (nonatomic, readonly) NSInteger numberOfItems;
 
-The number of items currently displayed in the carousel (read only). To set this, implement the `numberOfItemsInCarousel:` dataSource method.
+The number of items in the carousel (read only). To set this, implement the `numberOfItemsInCarousel:` dataSource method. Note that not all of these item views will be loaded or visible at a given point in time - the carousel loads item views on demand as it scrolls.
 
 	@property (nonatomic, readonly) NSInteger numberOfPlaceholders;
 
@@ -123,7 +119,7 @@ The maximum number of carousel item views to be displayed concurrently on screen
 
 	@property (nonatomic, strong, readonly) NSArray *indexesForVisibleItems;
 	
-An array containing the indexes of all item views currently visible in the carousel, including placeholder views. The array contains NSNumber objects whose integer values match the indexes of the views. The indexes for item views start at zero and match the indexes passed to the dataSource to load the view, however the indexes for any visible placeholder views will either be negative (less than zero) or greater than or equal to `numberOfItems`. Indexes for placeholder views in this array *do not* equate to the placeholder view index used with the dataSource.
+An array containing the indexes of all item views currently loaded and visible in the carousel, including placeholder views. The array contains NSNumber objects whose integer values match the indexes of the views. The indexes for item views start at zero and match the indexes passed to the dataSource to load the view, however the indexes for any visible placeholder views will either be negative (less than zero) or greater than or equal to `numberOfItems`. Indexes for placeholder views in this array *do not* equate to the placeholder view index used with the dataSource.
 
 	@property (nonatomic, strong, readonly) NSArray *visibleItemViews;
 
@@ -175,7 +171,7 @@ By default whenever the carousel stops moving it will automatically scroll to th
 
 	@property (nonatomic, assign) BOOL useDisplayLink;
 	
-By default on iOS iCarousel will use CADisplayLink instead of NSTimer for animations. On Mac OS, the CVDisplayLink API is used instead. This provides better synchronisation with the screen refresh, but can occasionally prevent the animation working properly when the carousel is combined with other views or animations. If you find that the carousel is not continuing to move after being dragged, try setting this property to NO.
+By default on iOS iCarousel will use CADisplayLink instead of NSTimer for animations. On Mac OS, the CVDisplayLink API is used instead. This provides better synchronisation with the screen refresh, but can occasionally prevents the animation working properly when the carousel is combined with other views or animations. If you find that the carousel is not continuing to move after being dragged, try setting this property to NO.
 
 	@property (nonatomic, assign, getter = isVertical) BOOL vertical;
 
@@ -259,7 +255,7 @@ Return the number of items (views) in the carousel.
 
 	- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view;
 
-Return a view to be displayed at the specified index in the carousel. The `reusingView` argument works like a UIPickerView, where views that have previously been displayed in the carousel are passed back to the method to be recycled. If this argument is nil, you can set its properties and return it instead of creating a new view instance, which will slightly improve performance. Unlike UITableView, there is no reuseIdentifier for distinguishing between different carousel view types, so if your carousel contains multiple different view types then you should just ignore this parameter and return a new view each time the method is called. You should ensure that each time the `carousel:viewForItemAtIndex:reusingView:` method is called, it either returns the reusingView or a brand new view instance rather than maintaining your own pool of recyclable views, as returning multiple copies of the same view for different carousel item indexes may cause display issues with the carousel.
+Return a view to be displayed at the specified index in the carousel. The `reusingView` argument works like a UIPickerView, where views that have previously been displayed in the carousel are passed back to the method to be recycled. If this argument is not nil, you can set its properties and return it instead of creating a new view instance, which will slightly improve performance. Unlike UITableView, there is no reuseIdentifier for distinguishing between different carousel view types, so if your carousel contains multiple different view types then you should just ignore this parameter and return a new view each time the method is called. You should ensure that each time the `carousel:viewForItemAtIndex:reusingView:` method is called, it either returns the reusingView or a brand new view instance rather than maintaining your own pool of recyclable views, as returning multiple copies of the same view for different carousel item indexes may cause display issues with the carousel.
 
 The iCarouselDataSource protocol has the following optional methods:
 
@@ -289,7 +285,7 @@ This method is called when the carousel ends an animated scroll.
 
 This method is called whenever the carousel is scrolled. It is called regardless of whether the carousel was scrolled programatically or through user interaction.
 
-	- (void)carouselCurrentItemIndexUpdated:(iCarousel *)carousel;
+	- (void)carouselCurrentItemIndexDidChange:(iCarousel *)carousel;
 
 This method is called whenever the carousel scrolls far enough for the currentItemIndex property to change. It is called regardless of whether the item index was updated programatically or through user interaction.
 
@@ -334,6 +330,10 @@ These are the tweakable options for standard carousels. Check the *Options Demo*
     iCarouselOptionWrap
     
 A boolean indicating whether the carousel should wrap when it scrolls to the end. Return YES if you want the carousel to wrap around when it reaches the end, and NO if you want it to stop. Generally, circular carousel types will wrap by default and linear ones won't. Don't worry that the return type is a floating point value - any value other than 0.0 will be treated as YES.
+
+    iCarouselOptionShowBackfaces
+    
+For some carousel types, e.g. iCarouselTypeCylinder, the rear side of some views can be seen (iCarouselTypeInvertedCylinder now hides the back faces by default). If you wish to hide the backward-facing views you can return NO for this option. To override the default back-face hiding for the iCarouselTypeInvertedCylinder, you can return YES. This option may also be useful for custom carousel transforms that cause the back face of views to be displayed.
 
     iCarouselOptionOffsetMultiplier
     
@@ -383,7 +383,7 @@ If you wish to detect other types of interaction such as swipes, double taps or 
 
 Note that taps and gestures will be ignored on any item view except the currently selected one, unless you set the `centerItemWhenSelected` property to NO.
 
-On Mac OS there is no easy way to detect clicks on carousel items currently. You cannot just supply an NSButton as or inside your item view because the transforms applied to the item views mean that hit detection doesn't work properly. I'm investigating possible solutions to this (if you know a good way to fix this, please get in touch, or fork the project on github).
+On Mac OS there is no easy way to embed controls within iCarousel item views currently. You cannot just supply an NSButton as or inside your item view because the transforms applied to the item views mean that hit detection doesn't work properly. I'm investigating possible solutions to this (if you know a good way to fix this, please get in touch, or fork the project on github).
 
 
 FAQ
@@ -404,8 +404,8 @@ FAQ
     Q. I can't figure out how to use iCarousel in my project, is there a simple example?
     A. Yes, check out the *Basic Example* project for a bare-bones implementation. If you're still not clear what's going on, read up about how UITableView works, and once you understand that, iCarousel will make more sense.
     
-    Q. In the cylindrical carousels, the back-side of the item views is visible. How can I hide it?
-    A. Set the `view.layer.doubleSided` property of your item views to `NO` to hide them when they are facing backwards.
+    Q. In the iCarouselTypeCylinder carousel, the back-side of the item views is visible. How can I hide these views?
+    A. You can either return NO as the value for the `iCarouselOptionShowBackfaces` option, or set the `view.layer.doubleSided` property of your item views to `NO` to hide them when they are facing backwards.
     
     Q. What is the `reusingView` property for in the `carousel:viewForItemAtIndex:reusingView:` dataSource method?
     A. You can improve iCarousel performance by recycling item views when they move offscreen instead of creating a new one each time it's needed. Check if this value is nil, and if not you can re-use this view instead of creating a new one. Note however that the view will still have any subviews or properties you added when it was first created, so be careful not to introduce leaks by re-adding those views each time. You may find it's easier and safer to ignore this paramater and create a fresh view each time if you're not sure what you are doing.
@@ -413,3 +413,5 @@ FAQ
     Q. If the views in my carousel all have completely different layouts, should I still use the `reusingView` parameter?
     A. Probably not, and unless you have hundreds of views in your carousel, it's unlikely to be worth the trouble.
     
+    Q. I'm using iCarouselTypeLinear. How can I make it behave more like a UIScrollView with paging enabled?
+    A. If you set decelerationRate to zero then iCarousel will more closely emulate the feel of a UIScrollView. If that's still not close enough, consider using my SwipeView library instead (https://github.com/nicklockwood/SwipeView) which is very similar to iCarousel, but based on a UIScrollView.

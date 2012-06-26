@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <archive type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="7.10">
 	<data>
-		<int key="IBDocument.SystemTarget">1280</int>
-		<string key="IBDocument.SystemVersion">11C74</string>
-		<string key="IBDocument.InterfaceBuilderVersion">1938</string>
-		<string key="IBDocument.AppKitVersion">1138.23</string>
-		<string key="IBDocument.HIToolboxVersion">567.00</string>
+		<int key="IBDocument.SystemTarget">1536</int>
+		<string key="IBDocument.SystemVersion">12A206j</string>
+		<string key="IBDocument.InterfaceBuilderVersion">2541</string>
+		<string key="IBDocument.AppKitVersion">1172.1</string>
+		<string key="IBDocument.HIToolboxVersion">613.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-			<string key="NS.object.0">933</string>
+			<string key="NS.object.0">1875</string>
 		</object>
 		<object class="NSArray" key="IBDocument.IntegratedClassDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<string>IBProxyObject</string>
-			<string>IBUIImageView</string>
 			<string>IBUIBarButtonItem</string>
-			<string>IBUIToolbar</string>
+			<string>IBUIImageView</string>
 			<string>IBUILabel</string>
 			<string>IBUINavigationBar</string>
 			<string>IBUINavigationItem</string>
 			<string>IBUISlider</string>
+			<string>IBUIToolbar</string>
 			<string>IBUIView</string>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
@@ -83,7 +83,6 @@
 						<string key="NSFrame">{{0, 416}, {320, 44}}</string>
 						<reference key="NSSuperview" ref="774585933"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -174,14 +173,14 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+						<nil key="IBUIHighlightedColor"/>
+						<int key="IBUIBaselineAdjustment">1</int>
+						<float key="IBUIMinimumFontSize">10</float>
 						<string key="IBUIText">Radius</string>
 						<object class="NSColor" key="IBUITextColor" id="358373105">
 							<int key="NSColorSpace">1</int>
 							<bytes key="NSRGB">MCAwIDAAA</bytes>
 						</object>
-						<nil key="IBUIHighlightedColor"/>
-						<int key="IBUIBaselineAdjustment">1</int>
-						<float key="IBUIMinimumFontSize">10</float>
 						<object class="IBUIFontDescription" key="IBUIFontDescription" id="841032330">
 							<int key="type">1</int>
 							<double key="pointSize">17</double>
@@ -191,6 +190,7 @@
 							<double key="NSSize">17</double>
 							<int key="NSfFlags">16</int>
 						</object>
+						<int key="IBUIAutoshrinkMode">2</int>
 					</object>
 					<object class="IBUISlider" id="936428790">
 						<reference key="NSNextResponder" ref="774585933"/>
@@ -220,13 +220,14 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">Arc</string>
-						<reference key="IBUITextColor" ref="358373105"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">1</int>
 						<float key="IBUIMinimumFontSize">10</float>
+						<string key="IBUIText">Arc</string>
+						<reference key="IBUITextColor" ref="358373105"/>
 						<reference key="IBUIFontDescription" ref="841032330"/>
 						<reference key="IBUIFont" ref="17989842"/>
+						<int key="IBUIAutoshrinkMode">2</int>
 					</object>
 					<object class="IBUISlider" id="470023568">
 						<reference key="NSNextResponder" ref="774585933"/>
@@ -256,13 +257,14 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">Tilt</string>
-						<reference key="IBUITextColor" ref="358373105"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">1</int>
 						<float key="IBUIMinimumFontSize">10</float>
+						<string key="IBUIText">Tilt</string>
+						<reference key="IBUITextColor" ref="358373105"/>
 						<reference key="IBUIFontDescription" ref="841032330"/>
 						<reference key="IBUIFont" ref="17989842"/>
+						<int key="IBUIAutoshrinkMode">2</int>
 					</object>
 					<object class="IBUISlider" id="800631803">
 						<reference key="NSNextResponder" ref="774585933"/>
@@ -276,8 +278,9 @@
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
-						<float key="IBUIValue">0.5</float>
+						<float key="IBUIValue">1</float>
 						<float key="IBUIMinValue">0.0010000000474974513</float>
+						<float key="IBUIMaxValue">2</float>
 					</object>
 					<object class="IBUILabel" id="755523658">
 						<reference key="NSNextResponder" ref="774585933"/>
@@ -292,13 +295,14 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">Spacing</string>
-						<reference key="IBUITextColor" ref="358373105"/>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">1</int>
 						<float key="IBUIMinimumFontSize">10</float>
+						<string key="IBUIText">Spacing</string>
+						<reference key="IBUITextColor" ref="358373105"/>
 						<reference key="IBUIFontDescription" ref="841032330"/>
 						<reference key="IBUIFont" ref="17989842"/>
+						<int key="IBUIAutoshrinkMode">2</int>
 					</object>
 				</object>
 				<string key="NSFrame">{{0, 20}, {320, 460}}</string>
@@ -672,7 +676,7 @@
 					<string>8.CustomClassName</string>
 					<string>8.IBPluginDependency</string>
 				</object>
-				<object class="NSMutableArray" key="dict.values">
+				<object class="NSArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>iCarouselExampleViewController</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -728,7 +732,7 @@
 							<string>dataSource</string>
 							<string>delegate</string>
 						</object>
-						<object class="NSMutableArray" key="dict.values">
+						<object class="NSArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>id</string>
 							<string>id</string>
@@ -741,7 +745,7 @@
 							<string>dataSource</string>
 							<string>delegate</string>
 						</object>
-						<object class="NSMutableArray" key="dict.values">
+						<object class="NSArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="IBToOneOutletInfo">
 								<string key="name">dataSource</string>
@@ -772,7 +776,7 @@
 							<string>toggleOrientation</string>
 							<string>toggleWrap</string>
 						</object>
-						<object class="NSMutableArray" key="dict.values">
+						<object class="NSArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>id</string>
 							<string>id</string>
@@ -793,7 +797,7 @@
 							<string>toggleOrientation</string>
 							<string>toggleWrap</string>
 						</object>
-						<object class="NSMutableArray" key="dict.values">
+						<object class="NSArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="IBActionInfo">
 								<string key="name">insertItem</string>
@@ -834,7 +838,7 @@
 							<string>tiltSlider</string>
 							<string>wrapBarItem</string>
 						</object>
-						<object class="NSMutableArray" key="dict.values">
+						<object class="NSArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>UISlider</string>
 							<string>iCarousel</string>
@@ -859,7 +863,7 @@
 							<string>tiltSlider</string>
 							<string>wrapBarItem</string>
 						</object>
-						<object class="NSMutableArray" key="dict.values">
+						<object class="NSArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="IBToOneOutletInfo">
 								<string key="name">arcSlider</string>
@@ -914,6 +918,6 @@
 			<string key="NS.key.0">background.png</string>
 			<string key="NS.object.0">{50, 468}</string>
 		</object>
-		<string key="IBCocoaTouchPluginVersion">933</string>
+		<string key="IBCocoaTouchPluginVersion">1875</string>
 	</data>
 </archive>

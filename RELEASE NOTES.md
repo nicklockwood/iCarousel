@@ -1,7 +1,8 @@
 Version 1.7 beta
 
 - Renamed iCarouselTransformOption... values to "iCarouselOption", and extended the list of available options
-- Simplified carousel interface by deprecating a number of delegate methods in favour of the simpler iCarouselOption API.
+- Simplified carousel interface by deprecating a number of delegate methods in favour of the simpler iCarouselOption API
+- Fixed backface interaction issue for iCarouselTypeInvertedCylinder
 - It is now much simpler to implement alpha fading logic based on item offset 
 - Now supports item click events and centering on Mac OS (buttons and controls within item views still won't work correctly receive clicks however).
 - Added scrollToOffset: and scrollByOffset: methods
