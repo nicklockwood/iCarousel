@@ -82,11 +82,12 @@
         label.layer.cornerRadius = 8.0f;
         label.textAlignment = UITextAlignmentCenter;
 		label.font = [label.font fontWithSize:50];
+        label.tag = 9999;
 		[view addSubview:label];
 	}
 	else
 	{
-		label = [[view subviews] lastObject];
+		label = (UILabel *)[view viewWithTag:9999];
 	}
 	
     //set label
