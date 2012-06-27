@@ -135,7 +135,7 @@ NSString *const AsyncImageErrorKey = @"error";
 - (void)dealloc
 {
     [_cache release];
-    [super dealloc];
+    [super ah_dealloc];
 }
 
 @end
