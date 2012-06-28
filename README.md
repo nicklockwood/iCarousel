@@ -386,6 +386,64 @@ Note that taps and gestures will be ignored on any item view except the currentl
 On Mac OS there is no easy way to embed controls within iCarousel item views currently. You cannot just supply an NSButton as or inside your item view because the transforms applied to the item views mean that hit detection doesn't work properly. I'm investigating possible solutions to this (if you know a good way to fix this, please get in touch, or fork the project on github).
 
 
+Example projects
+------------------
+
+iCarousel includes a number of example projects to help you get started. Here is a lift and brief description for each:
+
+    Basic Example
+    
+This is a very simple example for iOS that demonstrates setting up a carousel with the iCarouselCoverflow2 type.
+    
+    iOS Demo
+    
+This is a more complex iOS demo app that shows off all the different carousel types and additional features such as dynamic insertion/deletion of items.
+
+    Mac Demo
+
+This is a Mac OS port of the iOS Demo example, which replicates all the same functionality.
+
+    Buttons Demo
+
+This example demonstrates how to use UIButtons as your item views on iOS and correctly handle the events.
+
+    Controls Demo
+    
+This example demonstrates how to nest controls within your item views on iOS and correctly handle the events, as well as how to load complex item views from a nib file instead of generating them in code.
+
+    Multiple Carousels
+
+This example demonstrates how to use multiple carousels within a single view controller.
+
+    No Nib Demo
+    
+This example demonstrates how to set up iCarousel without using a nib file on iOS.
+
+    Storyboard Demo
+
+This example demonstrates how to set up iCarousel using Storyboards on iOS 5 and above.
+
+    Offsets Demo
+    
+This example demonstrates how to use the `contentOffset` and `viewpointOffset` properties, and the effect they have.
+    
+    Options Demo
+
+This example demonstrates how to customise the appearance of each carousel type using the iCarouselOption API.
+
+    Dynamic Reflections
+    
+This example demonstrates how to use the ReflectionView class (https://github.com/nicklockwood/ReflectionView) to dynamically generate reflections for your item views.
+
+    Dynamic Downloads
+    
+This example demonstrates how to use the AsyncImageView class (https://github.com/nicklockwood/AsyncImageView) to dynamically download remote images and display them in a carousel without blocking the main thread or negatively affecting performance.
+
+    Downloads & Reflections
+
+This example demonstrates how to combine AsyncImageView with the FXImageView class (https://github.com/nicklockwood/FXImageView) to download images on the fly and apply reflections and drop shadows to them in real time.
+
+
 FAQ
 ------------
 
