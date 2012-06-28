@@ -17,7 +17,10 @@
 		0148359513A36C3700E687AC /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0148358F13A36C3700E687AC /* MainWindow.xib */; };
 		0148359613A36C3700E687AC /* iCarouselExampleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0148359113A36C3700E687AC /* iCarouselExampleViewController.xib */; };
 		016334CD159BB378007DECD4 /* Images.plist in Resources */ = {isa = PBXBuildFile; fileRef = 016334CC159BB378007DECD4 /* Images.plist */; };
-		B2BCBA92159C8D81004942A1 /* AsyncImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = B2BCBA91159C8D81004942A1 /* AsyncImageView.m */; };
+		B2BCBA85159C6DD8004942A1 /* AsyncImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = B2BCBA7F159C6DD8004942A1 /* AsyncImageView.m */; };
+		B2BCBA86159C6DD8004942A1 /* FXImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = B2BCBA82159C6DD8004942A1 /* FXImageView.m */; };
+		B2BCBA87159C6DD8004942A1 /* UIImage+FX.m in Sources */ = {isa = PBXBuildFile; fileRef = B2BCBA84159C6DD8004942A1 /* UIImage+FX.m */; };
+		B2BCBA89159C6E57004942A1 /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = B2BCBA88159C6E57004942A1 /* placeholder.png */; };
 		B2E5E6C1146145C900EADB7A /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = B2E5E6C0146145C900EADB7A /* iCarousel.m */; };
 		B2E5E72D1461544B00EADB7A /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = B2E5E72B1461544B00EADB7A /* background.png */; };
 		B2E5E72E1461544B00EADB7A /* page.png in Resources */ = {isa = PBXBuildFile; fileRef = B2E5E72C1461544B00EADB7A /* page.png */; };
@@ -40,8 +43,13 @@
 		0148359213A36C3700E687AC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/iCarouselExampleViewController.xib; sourceTree = SOURCE_ROOT; };
 		016334CC159BB378007DECD4 /* Images.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Images.plist; sourceTree = SOURCE_ROOT; };
 		018BBCB413A375AF005CA505 /* iCarouselExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iCarouselExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		B2BCBA90159C8D81004942A1 /* AsyncImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncImageView.h; sourceTree = "<group>"; };
-		B2BCBA91159C8D81004942A1 /* AsyncImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncImageView.m; sourceTree = "<group>"; };
+		B2BCBA7E159C6DD8004942A1 /* AsyncImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncImageView.h; sourceTree = "<group>"; };
+		B2BCBA7F159C6DD8004942A1 /* AsyncImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncImageView.m; sourceTree = "<group>"; };
+		B2BCBA81159C6DD8004942A1 /* FXImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXImageView.h; sourceTree = "<group>"; };
+		B2BCBA82159C6DD8004942A1 /* FXImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXImageView.m; sourceTree = "<group>"; };
+		B2BCBA83159C6DD8004942A1 /* UIImage+FX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+FX.h"; sourceTree = "<group>"; };
+		B2BCBA84159C6DD8004942A1 /* UIImage+FX.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+FX.m"; sourceTree = "<group>"; };
+		B2BCBA88159C6E57004942A1 /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = placeholder.png; path = ../Resources/placeholder.png; sourceTree = SOURCE_ROOT; };
 		B2E5E6BF146145C900EADB7A /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		B2E5E6C0146145C900EADB7A /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
 		B2E5E72B1461544B00EADB7A /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background.png; path = ../Resources/background.png; sourceTree = SOURCE_ROOT; };
@@ -67,7 +75,8 @@
 			isa = PBXGroup;
 			children = (
 				B2E5E6BE146145C900EADB7A /* iCarousel */,
-				B2BCBA8F159C8D81004942A1 /* AsyncImageView */,
+				B2BCBA7D159C6DD8004942A1 /* AsyncImageView */,
+				B2BCBA80159C6DD8004942A1 /* FXImageView */,
 				01308D9813491C3500453707 /* iCarouselExample */,
 				01308D9113491C3500453707 /* Frameworks */,
 				01308D8F13491C3500453707 /* Products */,
@@ -120,14 +129,26 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		B2BCBA8F159C8D81004942A1 /* AsyncImageView */ = {
+		B2BCBA7D159C6DD8004942A1 /* AsyncImageView */ = {
 			isa = PBXGroup;
 			children = (
-				B2BCBA90159C8D81004942A1 /* AsyncImageView.h */,
-				B2BCBA91159C8D81004942A1 /* AsyncImageView.m */,
+				B2BCBA7E159C6DD8004942A1 /* AsyncImageView.h */,
+				B2BCBA7F159C6DD8004942A1 /* AsyncImageView.m */,
 			);
 			name = AsyncImageView;
 			path = ../Libraries/AsyncImageView;
+			sourceTree = "<group>";
+		};
+		B2BCBA80159C6DD8004942A1 /* FXImageView */ = {
+			isa = PBXGroup;
+			children = (
+				B2BCBA81159C6DD8004942A1 /* FXImageView.h */,
+				B2BCBA82159C6DD8004942A1 /* FXImageView.m */,
+				B2BCBA83159C6DD8004942A1 /* UIImage+FX.h */,
+				B2BCBA84159C6DD8004942A1 /* UIImage+FX.m */,
+			);
+			name = FXImageView;
+			path = ../Libraries/FXImageView;
 			sourceTree = "<group>";
 		};
 		B2E5E6BE146145C900EADB7A /* iCarousel */ = {
@@ -143,6 +164,7 @@
 		B2E5E72A1461543E00EADB7A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				B2BCBA88159C6E57004942A1 /* placeholder.png */,
 				B2E5E72B1461544B00EADB7A /* background.png */,
 				B2E5E72C1461544B00EADB7A /* page.png */,
 			);
@@ -204,6 +226,7 @@
 				B2E5E72D1461544B00EADB7A /* background.png in Resources */,
 				B2E5E72E1461544B00EADB7A /* page.png in Resources */,
 				016334CD159BB378007DECD4 /* Images.plist in Resources */,
+				B2BCBA89159C6E57004942A1 /* placeholder.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -218,7 +241,9 @@
 				0148359313A36C3700E687AC /* iCarouselExampleViewController.m in Sources */,
 				0148359413A36C3700E687AC /* iCarouselExampleAppDelegate.m in Sources */,
 				B2E5E6C1146145C900EADB7A /* iCarousel.m in Sources */,
-				B2BCBA92159C8D81004942A1 /* AsyncImageView.m in Sources */,
+				B2BCBA85159C6DD8004942A1 /* AsyncImageView.m in Sources */,
+				B2BCBA86159C6DD8004942A1 /* FXImageView.m in Sources */,
+				B2BCBA87159C6DD8004942A1 /* UIImage+FX.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -301,7 +326,7 @@
 				INFOPLIST_FILE = "iCarouselExample-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
 				PRODUCT_NAME = iCarouselExample;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -322,7 +347,7 @@
 				INFOPLIST_FILE = "iCarouselExample-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
 				PRODUCT_NAME = iCarouselExample;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};

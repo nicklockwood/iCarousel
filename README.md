@@ -417,7 +417,10 @@ FAQ
     A. If you set decelerationRate to zero then iCarousel will more closely emulate the feel of a UIScrollView. If that's still not close enough, consider using my SwipeView library instead (https://github.com/nicklockwood/SwipeView) which is very similar to iCarousel, but based on a UIScrollView.
     
     Q. I want my carousel items to have a real reflection, but the reflection in the examples is just drawn on. How can I render reflections dynamically?
-    A. iCarousel doesn't have built-in reflection support, but you can use my ReflectionView library to do this. Check out the *Dynamic Reflections* example.
+    A. iCarousel doesn't have built-in reflection support, but you can use my ReflectionView library to do this. Check out the *Dynamic Reflections* example. If the items in your view are images, you may wish to use the FXImageView class instead, in which case check out the *Downloads & Reflections* example instead.
     
     Q. I want to download a bunch of images on the fly and display them in my carousel. How can I do that?
     A. Downloading images asynchronously and displaying them is quite complex. You can use my AsyncImageView library to simplify the process. Check out the *Dynamic Reflections* example.
+    
+    Q. What if I want to download images on the fly *and* add a reflection? Can I combine the ReflectionView and AsyncImageView classes?
+    A. Technically yes, but if you are downloading images you'd be better off using the FXImageView class instead of ReflectionView. Check out the *Downloads & Reflections* example.
