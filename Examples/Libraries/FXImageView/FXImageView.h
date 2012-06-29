@@ -1,7 +1,7 @@
 //
 //  FXImageView.h
 //
-//  Version 1.0
+//  Version 1.1
 //
 //  Created by Nick Lockwood on 31/10/2011.
 //  Copyright (c) 2011 Charcoal Design
@@ -34,6 +34,9 @@
 
 
 @interface FXImageView : UIImageView
+
++ (NSOperationQueue *)processingQueue;
++ (NSCache *)processedImageCache;
 
 @property (nonatomic, assign, getter = isAsynchronous) BOOL asynchronous;
 @property (nonatomic, assign) CGFloat reflectionGap;
