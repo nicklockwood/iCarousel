@@ -9,14 +9,6 @@
 #import "iCarouselExampleViewController.h"
 
 
-#define IS_IPAD (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-
-#define NUMBER_OF_ITEMS (IS_IPAD? 19: 12)
-#define NUMBER_OF_VISIBLE_ITEMS 25
-#define ITEM_SPACING 210.0f
-#define INCLUDE_PLACEHOLDERS YES
-
-
 @interface iCarouselExampleViewController () <UIActionSheetDelegate>
 
 @property (nonatomic, assign) BOOL wrap;
@@ -43,7 +35,7 @@
 	//set up data
 	wrap = YES;
 	self.items = [NSMutableArray array];
-	for (int i = 0; i < NUMBER_OF_ITEMS; i++)
+	for (int i = 0; i < 1000; i++)
 	{
 		[items addObject:[NSNumber numberWithInt:i]];
 	}
@@ -159,7 +151,7 @@
                                                        delegate:self
                                               cancelButtonTitle:nil
                                          destructiveButtonTitle:nil
-                                              otherButtonTitles:@"Linear", @"Rotary", @"Inverted Rotary", @"Cylinder", @"Inverted Cylinder", @"Wheel", @"Inverted Wheel", @"CoverFlow", @"CoverFlow2", @"Time Machine", @"Custom", nil];
+                                              otherButtonTitles:@"Linear", @"Rotary", @"Inverted Rotary", @"Cylinder", @"Inverted Cylinder", @"Wheel", @"Inverted Wheel", @"CoverFlow", @"CoverFlow2", @"Time Machine", @"Inverted Time Machine", nil];
     [sheet showInView:self.view];
     [sheet release];
 }
@@ -233,46 +225,37 @@
     return [items count];
 }
 
-- (NSUInteger)numberOfVisibleItemsInCarousel:(iCarousel *)carousel
-{
-    //limit the number of items views loaded concurrently (for performance reasons)
-    //this also affects the appearance of circular-type carousels
-    return NUMBER_OF_VISIBLE_ITEMS;
-}
-
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
 {
-	UILabel *label = nil;
-	
-	//create new view if no view is available for recycling
-	if (view == nil)
-	{
-		view = [[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200.0f, 200.0f)] autorelease];
+    UILabel *label = nil;
+    
+    //create new view if no view is available for recycling
+    if (view == nil)
+    {
+        view = [[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200.0f, 200.0f)] autorelease];
         ((UIImageView *)view).image = [UIImage imageNamed:@"page.png"];
         view.contentMode = UIViewContentModeCenter;
-
-		label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
-		label.backgroundColor = [UIColor clearColor];
-		label.textAlignment = UITextAlignmentCenter;
-		label.font = [label.font fontWithSize:50];
-		[view addSubview:label];
-	}
-	else
-	{
-		label = [[view subviews] lastObject];
-	}
-	
-    //set label
-	label.text = [[items objectAtIndex:index] stringValue];
-	
-	return view;
-}
-
-- (CATransform3D)carousel:(iCarousel *)_carousel itemTransformForOffset:(CGFloat)offset baseTransform:(CATransform3D)transform
-{
-    //implement 'flip3D' style carousel
-    transform = CATransform3DRotate(transform, M_PI / 8.0f, 0.0f, 1.0f, 0.0f);
-    return CATransform3DTranslate(transform, 0.0f, 0.0f, offset * carousel.itemWidth);
+        label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
+        label.backgroundColor = [UIColor clearColor];
+        label.textAlignment = UITextAlignmentCenter;
+        label.font = [label.font fontWithSize:50];
+        label.tag = 1;
+        [view addSubview:label];
+    }
+    else
+    {
+        //get a reference to the label in the recycled view
+        label = (UILabel *)[view viewWithTag:1];
+    }
+    
+    //set item label
+    //remember to always set any properties of your carousel item
+    //views outside of the `if (view == nil) {...}` check otherwise
+    //you'll get weird issues with carousel item content appearing
+    //in the wrong place in the carousel
+    label.text = [[items objectAtIndex:index] stringValue];
+    
+    return view;
 }
 
 - (CGFloat)carousel:(iCarousel *)_carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value

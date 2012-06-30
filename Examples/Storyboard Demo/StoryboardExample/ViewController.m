@@ -75,16 +75,6 @@
     return [items count];
 }
 
-- (NSUInteger)numberOfVisibleItemsInCarousel:(iCarousel *)carousel
-{
-    //return the number of visible carousel items on screen
-    //this also affects the appearance of circular-type carousels
-    //this value should be <= numberOfItemsInCarousel
-    //if you have fewer than about 25 items in your carousel, you don't need
-    //to use this method at all (by default it matches numberOfItemsInCarousel)
-    return 25;
-}
-
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
 {
     UILabel *label = nil;
@@ -95,16 +85,17 @@
         view = [[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200.0f, 200.0f)] autorelease];
         ((UIImageView *)view).image = [UIImage imageNamed:@"page.png"];
         view.contentMode = UIViewContentModeCenter;
-
-        label = [[UILabel alloc] initWithFrame:view.bounds];
+        label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
         label.backgroundColor = [UIColor clearColor];
         label.textAlignment = UITextAlignmentCenter;
         label.font = [label.font fontWithSize:50];
+        label.tag = 1;
         [view addSubview:label];
     }
     else
     {
-        label = [[view subviews] lastObject];
+        //get a reference to the label in the recycled view
+        label = (UILabel *)[view viewWithTag:1];
     }
     
     //set item label

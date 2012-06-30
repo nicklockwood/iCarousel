@@ -2,6 +2,7 @@ Version 1.7 beta
 
 - Renamed iCarouselTransformOption... values to "iCarouselOption", and extended the list of available options
 - Simplified carousel interface by deprecating a number of delegate methods in favour of the simpler iCarouselOption API
+- numberOfVisibleItems is now calculated automatically
 - Added Dynamic Downloads example using AsyncImageView
 - Fixed backface interaction issue for iCarouselTypeInvertedCylinder
 - It is now much simpler to implement alpha fading logic based on item offset 
@@ -9,7 +10,7 @@ Version 1.7 beta
 - Added scrollToOffset: and scrollByOffset: methods
 - Disabled broken scrollwheel support for carousel on Mac OS
 - currentItemIndex property is now writable
-- scrollOffset property is not writable
+- scrollOffset property is now writable
 - Fixed bug with scrollByNumberOfItems where duration is 0
 - Switched CADisplayLink to use NSDefaultRunLoopMode, which is less likely to interfere with UIScrollViews, etc
 - Added Storyboard example

@@ -11,13 +11,6 @@
 #import "iCarousel.h"
 
 
-#define IS_IPAD (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-
-#define NUMBER_OF_ITEMS 19
-#define NUMBER_OF_VISIBLE_ITEMS 19
-#define INCLUDE_PLACEHOLDERS YES
-
-
 @interface iCarouselExampleViewController () <iCarouselDataSource, iCarouselDelegate, UIActionSheetDelegate>
 
 @property (nonatomic, retain) iCarousel *carousel;
@@ -41,7 +34,7 @@
     {
         //set up data
         self.items = [NSMutableArray array];
-        for (int i = 0; i < NUMBER_OF_ITEMS; i++)
+        for (int i = 0; i < 100; i++)
         {
             [items addObject:[NSNumber numberWithInt:i]];
         }
@@ -185,12 +178,6 @@
     return [items count];
 }
 
-- (NSUInteger)numberOfVisibleItemsInCarousel:(iCarousel *)carousel
-{
-    //limit the number of items views loaded concurrently (for performance reasons)
-    return NUMBER_OF_VISIBLE_ITEMS;
-}
-
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
 {
     UILabel *label = nil;
@@ -216,12 +203,6 @@
 	label.text = [[items objectAtIndex:index] stringValue];
 	
 	return view;
-}
-
-- (NSUInteger)numberOfPlaceholdersInCarousel:(iCarousel *)carousel
-{
-	//note: placeholder views are only displayed if wrapping is disabled
-	return INCLUDE_PLACEHOLDERS? 2: 0;
 }
 
 - (UIView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index reusingView:(UIView *)view

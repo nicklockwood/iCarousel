@@ -115,7 +115,7 @@ The number of placeholder views to display in the carousel (read only). To set t
 
 	@property (nonatomic, readonly) NSInteger numberOfVisibleItems;
 	
-The maximum number of carousel item views to be displayed concurrently on screen (read only). To set this, implement the `numberOfVisibleItemsInCarousel:` dataSource method. If the dataSource method is not implemented, this will be equal to the numberOfItems + numberOfPlaceholders;
+The maximum number of carousel item views to be displayed concurrently on screen (read only). This property is important for performance optimisation, and is calculated automatically based on the carousel type and view frame. If you wish to override the default value, implement the `carousel:valueForOption:withDefault:` delegate method and return a value for iCarouselOptionVisibleItems.
 
 	@property (nonatomic, strong, readonly) NSArray *indexesForVisibleItems;
 	
@@ -267,10 +267,6 @@ Returns the number of placeholder views to display in the carousel. Placeholder 
 
 Return a view to be displayed as the placeholder view. Works the same way as `carousel:viewForItemAtIndex:reusingView:`. Placeholder reusingViews are stored in a separate pool to the reusingViews used for regular carousel, so it's not a problem if your placeholder views are different to the item views.
 
-	- (NSUInteger)numberOfVisibleItemsInCarousel:(iCarousel *)carousel;
-	
-This is the maximum number of item views (including placeholders) that should be visible in the carousel at once. Half of this number of views will be displayed to either side of the currently selected item index. Views beyond that will not be loaded until they are scrolled into view. This allows for the carousel to contain a very large number of items without adversely affecting performance. The numberOfVisibleItems should be a positive, odd number. If this method is not implemented, all item views and placeholder views will be drawn every frame, which will result in significant degrading in performance and increased memory usage for large numbers of items (e.g more than 50).
-
 The iCarouselDelegate protocol has the following optional methods:
 
 	- (void)carouselWillBeginScrollingAnimation:(iCarousel *)carousel;
@@ -339,17 +335,17 @@ For some carousel types, e.g. iCarouselTypeCylinder, the rear side of some views
     
 The offset multiplier to use when the user drags the carousel with their finger. It does not affect programmatic scrolling or deceleration speed. This defaults to 1.0 for most carousel types, but defaults to 2.0 for the CoverFlow-style carousels to compensate for the fact that their items are more closely spaced and so must be dragged further to move the same distance.
 
-	iCarouselOptionCount
+	iCarouselOptionVisibleItems
 	
-The number of items to be displayed in the Rotary, Cylinder and Wheel transforms. Normally this is based on the numberOfVisibleItems value, but you can override this if you want to decouple the shape of the carousel from the number of visible items. This property is used to calculate the carousel radius, so another option is to manipulate the radius directly. Note that if you specify a count value greater than the number of visible items, the carousel will contain a gap, and if you specify a count less than the number of visible items, some items will overlap.
-	
+This is the maximum number of item views (including placeholders) that should be visible in the carousel at once. Half of this number of views will be displayed to either side of the currently selected item index. Views beyond that will not be loaded until they are scrolled into view. This allows for the carousel to contain a very large number of items without adversely affecting performance. iCarousel chooses a suitable default value based on the carousel type, however you may wish to override that value using this property (e.g. if you have implemented a custom carousel type).
+
     iCarouselOptionArc
     
 The arc of the Rotary, Cylinder and Wheel transforms (in radians). Normally this defaults to 2*M_PI (a complete circle) but you can specify a smaller value, so for example a value of M_PI will create a half-circle or cylinder. This property is used to calculate the carousel radius and angle step, so another option is to manipulate those values directly.
     
     iCarouselOptionRadius
     
-The radius of the Rotary, Cylinder and Wheel transforms in pixels/points. This is usually calculated so that the number of items (count) exactly fits into the specified arc. You can manipulate this value to increase or reduce the item spacing (and the radius of the circle).
+The radius of the Rotary, Cylinder and Wheel transforms in pixels/points. This is usually calculated so that the number of visible items exactly fits into the specified arc. You can manipulate this value to increase or reduce the item spacing (and the radius of the circle).
     
 	iCarouselOptionAngle
 	
@@ -391,7 +387,7 @@ Example projects
 
 iCarousel includes a number of example projects to help you get started. Here is a lift and brief description for each:
 
-    Basic Example
+    Basic iOS Example
     
 This is a very simple example for iOS that demonstrates setting up a carousel with the iCarouselCoverflow2 type.
     
@@ -456,11 +452,14 @@ FAQ
     Q. How do I prevent iCarousel item views from overflowing their bounds?
     A. Set the `clipsToBounds` property to YES on your iCarousel view. You can set this property in Interface Builder by ticking the 'Clip Subviews' option.
     
+    Q. I'm getting weird issues where views turn up at the wrong points in the carousel. What's going on?
+    A. You're probably misusing the reusingView property. Views are recycled multiple times at different points in the carousel, so even if you've checked that reusingView is not nil, you still need to set it's properties each time `carousel:viewForItemAtIndex:reusingView:` is called. 
+    
     Q. Can I use multiple carousels in the same view controller?
     A. Yes, check out the *Multiple Carousels* example for how to do this.
     
     Q. I can't figure out how to use iCarousel in my project, is there a simple example?
-    A. Yes, check out the *Basic Example* project for a bare-bones implementation. If you're still not clear what's going on, read up about how UITableView works, and once you understand that, iCarousel will make more sense.
+    A. Yes, check out the *Basic iOS Example* project for a bare-bones implementation. If you're still not clear what's going on, read up about how UITableView works, and once you understand that, iCarousel will make more sense.
     
     Q. In the iCarouselTypeCylinder carousel, the back-side of the item views is visible. How can I hide these views?
     A. You can either return NO as the value for the `iCarouselOptionShowBackfaces` option, or set the `view.layer.doubleSided` property of your item views to `NO` to hide them when they are facing backwards.

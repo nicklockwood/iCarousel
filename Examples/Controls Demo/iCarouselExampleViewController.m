@@ -9,9 +9,6 @@
 #import "iCarouselExampleViewController.h"
 
 
-#define NUMBER_OF_ITEMS ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)? 19: 12)
-
-
 @implementation iCarouselExampleViewController
 
 @synthesize carousel;
@@ -55,7 +52,11 @@
 
 - (NSUInteger)numberOfItemsInCarousel:(iCarousel *)carousel
 {
-    return NUMBER_OF_ITEMS;
+    //generate 100 item views
+    //normally we'd use a backing array
+    //as shown in the basic iOS example
+    //but for this example we haven't bothered
+    return 100;
 }
 
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
@@ -64,6 +65,8 @@
     {
     	//load new item view instance from nib
         //control events are bound to view controller in nib file
+        //note that it is only safe to use the reusingView if we return the same nib for each
+        //item view, if different items have different contents, ignore the reusingView value
     	view = [[[NSBundle mainBundle] loadNibNamed:@"ItemView" owner:self options:nil] lastObject];
     }
     return view;

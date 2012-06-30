@@ -9,13 +9,6 @@
 #import "iCarouselExampleViewController.h"
 
 
-#define IS_IPAD (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-
-#define NUMBER_OF_ITEMS (IS_IPAD? 19: 12)
-#define NUMBER_OF_VISIBLE_ITEMS 25
-#define INCLUDE_PLACEHOLDERS YES
-
-
 @interface iCarouselExampleViewController () <UIActionSheetDelegate>
 
 @property (nonatomic, assign) BOOL wrap;
@@ -38,7 +31,7 @@
 	//set up data
 	wrap = YES;
 	self.items = [NSMutableArray array];
-	for (int i = 0; i < NUMBER_OF_ITEMS; i++)
+	for (int i = 0; i < 10000; i++)
 	{
 		[items addObject:[NSNumber numberWithInt:i]];
 	}
@@ -166,13 +159,6 @@
     return [items count];
 }
 
-- (NSUInteger)numberOfVisibleItemsInCarousel:(iCarousel *)carousel
-{
-    //limit the number of items views loaded concurrently (for performance reasons)
-    //this also affects the appearance of circular-type carousels
-    return NUMBER_OF_VISIBLE_ITEMS;
-}
-
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
 {
     UILabel *label = nil;
@@ -195,38 +181,6 @@
 	
     //set label
 	label.text = [NSString stringWithFormat:@"%i", index];
-	
-	return view;
-}
-
-- (NSUInteger)numberOfPlaceholdersInCarousel:(iCarousel *)carousel
-{
-	//note: placeholder views are only displayed on some carousels if wrapping is disabled
-	return INCLUDE_PLACEHOLDERS? 2: 0;
-}
-
-- (UIView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index reusingView:(UIView *)view
-{
-	UILabel *label = nil;
-	
-	//create new view if no view is available for recycling
-	if (view == nil)
-	{
-		view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200.0f, 200.0f)];
-        view.backgroundColor = [UIColor lightGrayColor];
-        label = [[UILabel alloc] initWithFrame:view.bounds];
-        label.backgroundColor = [UIColor clearColor];
-        label.textAlignment = UITextAlignmentCenter;
-        label.font = [label.font fontWithSize:50];
-        [view addSubview:label];
-	}
-	else
-	{
-		label = [[view subviews] lastObject];
-	}
-	
-    //set label
-	label.text = (index == 0)? @"[": @"]";
 	
 	return view;
 }

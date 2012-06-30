@@ -9,11 +9,6 @@
 #import "iCarouselWindowController.h"
 
 
-#define NUMBER_OF_ITEMS 19
-#define NUMBER_OF_VISIBLE_ITEMS 19
-#define INCLUDE_PLACEHOLDERS YES
-
-
 @interface iCarouselWindowController ()
 
 @property (nonatomic, assign) BOOL wrap;
@@ -35,7 +30,7 @@
         //set up data
         wrap = YES;
         self.items = [NSMutableArray array];
-        for (int i = 0; i < NUMBER_OF_ITEMS; i++)
+        for (int i = 0; i < 10000; i++)
         {
             [items addObject:[NSNumber numberWithInt:i]];
         }
@@ -98,13 +93,7 @@
 
 - (NSUInteger)numberOfItemsInCarousel:(iCarousel *)carousel
 {
-    return NUMBER_OF_ITEMS;
-}
-
-- (NSUInteger)numberOfVisibleItemsInCarousel:(iCarousel *)carousel
-{
-    //limit the number of items views loaded concurrently (for performance reasons)
-    return NUMBER_OF_VISIBLE_ITEMS;
+    return [items count];
 }
 
 - (NSView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(NSView *)view
@@ -128,46 +117,6 @@
     [view addSubview:label];
 	
 	return view;
-}
-
-- (NSUInteger)numberOfPlaceholdersInCarousel:(iCarousel *)carousel
-{
-	//note: placeholder views are only displayed if wrapping is disabled
-	return INCLUDE_PLACEHOLDERS? 2: 0;
-}
-
-- (NSView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index reusingView:(NSView *)view
-{
-	NSTextField *label = nil;
-    
-    //create new view if no view is available for recycling
-	if (view == nil)
-	{
-		NSImage *image = [NSImage imageNamed:@"page.png"];
-       	view = [[NSImageView alloc] initWithFrame:NSMakeRect(0,0,image.size.width,image.size.height)];
-        [(NSImageView *)view setImage:image];
-        [(NSImageView *)view setImageScaling:NSImageScaleAxesIndependently];
-        
-        label = [[NSTextField alloc] init];
-        [label setBackgroundColor:[NSColor clearColor]];
-        [label setBordered:NO];
-        [label setSelectable:NO];
-        [label setAlignment:NSCenterTextAlignment];
-        [label setFont:[NSFont fontWithName:[[label font] fontName] size:50]];
-        [view addSubview:label];
-	}
-	else
-	{
-		label = [[view subviews] lastObject];
-	}
-    
-	//set label
-	[label setStringValue:(index == 0)? @"[": @"]"];
-    [label sizeToFit];
-    [label setFrameOrigin:NSMakePoint((view.bounds.size.width - label.frame.size.width)/2.0,
-                                      (view.bounds.size.height - label.frame.size.height)/2.0)];
-    
-    return view;
 }
 
 - (CATransform3D)carousel:(iCarousel *)_carousel itemTransformForOffset:(CGFloat)offset baseTransform:(CATransform3D)transform

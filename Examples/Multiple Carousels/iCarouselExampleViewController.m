@@ -93,16 +93,6 @@
     }
 }
 
-- (NSUInteger)numberOfVisibleItemsInCarousel:(iCarousel *)carousel
-{
-    //return the number of visible carousel items on screen
-    //this also affects the appearance of circular-type carousels
-    //this value should be <= numberOfItemsInCarousel
-    //if you have fewer than about 25 items in your carousel, you don't need
-    //to use this method at all (by default it matches numberOfItemsInCarousel)
-    return 25;
-}
-
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
 {
     UILabel *label = nil;
@@ -136,7 +126,7 @@
     }
     else
     {
-        //items in thsi array are strings
+        //items in this array are strings
         label.text = [items2 objectAtIndex:index];
     }
     

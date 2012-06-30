@@ -9,11 +9,6 @@
 #import "iCarouselWindowController.h"
 
 
-#define NUMBER_OF_ITEMS 1000
-#define NUMBER_OF_VISIBLE_ITEMS 19
-#define INCLUDE_PLACEHOLDERS YES
-
-
 @interface iCarouselWindowController ()
 
 @property (nonatomic, assign) BOOL wrap;
@@ -35,7 +30,7 @@
         //set up data
         wrap = YES;
         self.items = [NSMutableArray array];
-        for (int i = 0; i < NUMBER_OF_ITEMS; i++)
+        for (int i = 0; i < 1000; i++)
         {
             [items addObject:[NSNumber numberWithInt:i]];
         }
@@ -100,13 +95,7 @@
 
 - (NSUInteger)numberOfItemsInCarousel:(iCarousel *)carousel
 {
-    return NUMBER_OF_ITEMS;
-}
-
-- (NSUInteger)numberOfVisibleItemsInCarousel:(iCarousel *)carousel
-{
-    //limit the number of items views loaded concurrently (for performance reasons)
-    return NUMBER_OF_VISIBLE_ITEMS;
+    return [items count];
 }
 
 - (NSView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(NSView *)view
@@ -116,6 +105,9 @@
     //create new view if no view is available for recycling
 	if (view == nil)
 	{
+        //don't do anything specific to the index within
+        //this `if (view == nil) {...}` statement because the view will be
+        //recycled and used with other index values later
 		NSImage *image = [NSImage imageNamed:@"page.png"];
        	view = [[[NSImageView alloc] initWithFrame:NSMakeRect(0,0,image.size.width,image.size.height)] autorelease];
         [(NSImageView *)view setImage:image];
@@ -127,14 +119,20 @@
         [label setSelectable:NO];
         [label setAlignment:NSCenterTextAlignment];
         [label setFont:[NSFont fontWithName:[[label font] fontName] size:50]];
+        label.tag = 1;
         [view addSubview:label];
 	}
 	else
 	{
-		label = [[view subviews] lastObject];
+		//get a reference to the label in the recycled view
+		label = (NSTextField *)[view viewWithTag:1];
 	}
     
-	//set label
+	//set item label
+    //remember to always set any properties of your carousel item
+    //views outside of the `if (view == nil) {...}` check otherwise
+    //you'll get weird issues with carousel item content appearing
+    //in the wrong place in the carousel
 	[label setStringValue:[NSString stringWithFormat:@"%lu", index]];
     [label sizeToFit];
     [label setFrameOrigin:NSMakePoint((view.bounds.size.width - label.frame.size.width)/2.0,
@@ -146,7 +144,7 @@
 - (NSUInteger)numberOfPlaceholdersInCarousel:(iCarousel *)carousel
 {
 	//note: placeholder views are only displayed if wrapping is disabled
-	return INCLUDE_PLACEHOLDERS? 2: 0;
+	return 2;
 }
 
 - (NSView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index reusingView:(NSView *)view
@@ -167,14 +165,20 @@
         [label setSelectable:NO];
         [label setAlignment:NSCenterTextAlignment];
         [label setFont:[NSFont fontWithName:[[label font] fontName] size:50]];
+        label.tag = 1;
         [view addSubview:label];
 	}
 	else
 	{
-		label = [[view subviews] lastObject];
+        //get a reference to the label in the recycled view
+		label = (NSTextField *)[view viewWithTag:1];
 	}
     
-	//set label
+	//set item label
+    //remember to always set any properties of your carousel item
+    //views outside of the `if (view == nil) {...}` check otherwise
+    //you'll get weird issues with carousel item content appearing
+    //in the wrong place in the carousel
 	[label setStringValue:(index == 0)? @"[": @"]"];
     [label sizeToFit];
     [label setFrameOrigin:NSMakePoint((view.bounds.size.width - label.frame.size.width)/2.0,
@@ -202,8 +206,9 @@
         }
         case iCarouselOptionSpacing:
         {
-            //reduce spacing slightly
-            return value * 0.9f;
+            //reduce item spacing to compensate
+            //for drop shadow and reflection around views
+            return value * (carousel.vertical? 0.6f: 0.9f);
         }
         case iCarouselOptionFadeMax:
         {

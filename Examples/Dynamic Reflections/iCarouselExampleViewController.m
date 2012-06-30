@@ -9,9 +9,6 @@
 #import "iCarouselExampleViewController.h"
 #import "ReflectionView.h"
 
-#define NUMBER_OF_ITEMS 50000
-#define NUMBER_OF_VISIBLE_ITEMS 18
-
 
 @implementation iCarouselExampleViewController
 
@@ -52,16 +49,11 @@
 
 - (NSUInteger)numberOfItemsInCarousel:(iCarousel *)carousel
 {
-    return NUMBER_OF_ITEMS;
-}
-
-- (NSUInteger)numberOfVisibleItemsInCarousel:(iCarousel *)carousel
-{
-    //if you have less than around 30 items in the carousel
-    //you'll get better performance if NUMBER_OF_VISIBLE_ITEMS >= NUMBER_OF_ITEMS
-    //because then the item view reflections won't have to be re-generated as
-    //the carousel is scrolling
-    return NUMBER_OF_VISIBLE_ITEMS;
+    //generate 100 item views
+    //normally we'd use a backing array
+    //as shown in the basic iOS example
+    //but for this example we haven't bothered
+    return 100;
 }
 
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(ReflectionView *)view

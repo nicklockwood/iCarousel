@@ -121,7 +121,7 @@ typedef enum
     iCarouselOptionWrap = 0,
     iCarouselOptionShowBackfaces,
     iCarouselOptionOffsetMultiplier,
-    iCarouselOptionCount,
+    iCarouselOptionVisibleItems,
     iCarouselOptionArc,
 	iCarouselOptionAngle,
     iCarouselOptionRadius,
@@ -246,7 +246,6 @@ iCarouselOption;
 
 - (NSUInteger)numberOfPlaceholdersInCarousel:(iCarousel *)carousel;
 - (UIView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index reusingView:(UIView *)view;
-- (NSUInteger)numberOfVisibleItemsInCarousel:(iCarousel *)carousel;
 
 @end
 
@@ -267,9 +266,16 @@ iCarouselOption;
 - (BOOL)carousel:(iCarousel *)carousel shouldSelectItemAtIndex:(NSInteger)index;
 - (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index;
 
-//deprecated delegate methods
+@end
+
+
+@protocol iCarouselDeprecated
+@optional
+
+//deprecated delegate and datasource methods
 //use carousel:valueForOption:withDefault: instead
 
+- (NSUInteger)numberOfVisibleItemsInCarousel:(iCarousel *)carousel;
 - (void)carouselCurrentItemIndexUpdated:(iCarousel *)carousel __attribute__((deprecated));
 - (BOOL)carouselShouldWrap:(iCarousel *)carousel __attribute__((deprecated));
 - (CGFloat)carouselItemWidth:(iCarousel *)carousel __attribute__((deprecated));
