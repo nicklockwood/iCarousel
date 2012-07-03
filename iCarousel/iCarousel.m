@@ -605,7 +605,7 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
         case iCarouselTypeRotary:
         case iCarouselTypeInvertedRotary:
         {
-            CGFloat count = MIN(_numberOfVisibleItems, _numberOfItems + _numberOfPlaceholdersToShow);
+            CGFloat count = _numberOfItems + _numberOfPlaceholdersToShow;
             CGFloat spacing = [self valueForOption:iCarouselOptionSpacing withDefault:1.0f];
             CGFloat arc = [self valueForOption:iCarouselOptionArc withDefault:M_PI * 2.0f];
             CGFloat radius = [self valueForOption:iCarouselOptionRadius withDefault:fmaxf(_itemWidth * spacing / 2.0f, _itemWidth * spacing / 2.0f / tanf(arc/2.0f/count))];
@@ -629,7 +629,7 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
         case iCarouselTypeCylinder:
         case iCarouselTypeInvertedCylinder:
         {
-            CGFloat count = MIN(_numberOfVisibleItems, _numberOfItems + _numberOfPlaceholdersToShow);
+            CGFloat count = _numberOfItems + _numberOfPlaceholdersToShow;
             CGFloat spacing = [self valueForOption:iCarouselOptionSpacing withDefault:1.0f];
             CGFloat arc = [self valueForOption:iCarouselOptionArc withDefault:M_PI * 2.0f];
             CGFloat radius = [self valueForOption:iCarouselOptionRadius withDefault:fmaxf(0.01f, _itemWidth * spacing / 2.0f / tanf(arc/2.0f/count))];
@@ -657,7 +657,7 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
         case iCarouselTypeWheel:
         case iCarouselTypeInvertedWheel:
         {
-            CGFloat count = MIN(_numberOfVisibleItems, _numberOfItems + _numberOfPlaceholdersToShow);
+            CGFloat count = _numberOfItems + _numberOfPlaceholdersToShow;
             CGFloat spacing = [self valueForOption:iCarouselOptionSpacing withDefault:1.0f];
             CGFloat arc = [self valueForOption:iCarouselOptionArc withDefault:M_PI * 2.0f];
             CGFloat radius = [self valueForOption:iCarouselOptionRadius withDefault:_itemWidth * spacing * count / arc];
