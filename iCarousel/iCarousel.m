@@ -605,7 +605,7 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
         case iCarouselTypeRotary:
         case iCarouselTypeInvertedRotary:
         {
-            CGFloat count = MIN(_numberOfVisibleItems, _numberOfItems + _numberOfPlaceholdersToShow);
+            CGFloat count = [self circularCarouselItemCount];
             CGFloat spacing = [self valueForOption:iCarouselOptionSpacing withDefault:1.0f];
             CGFloat arc = [self valueForOption:iCarouselOptionArc withDefault:M_PI * 2.0f];
             CGFloat radius = [self valueForOption:iCarouselOptionRadius withDefault:fmaxf(_itemWidth * spacing / 2.0f, _itemWidth * spacing / 2.0f / tanf(arc/2.0f/count))];
@@ -629,7 +629,7 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
         case iCarouselTypeCylinder:
         case iCarouselTypeInvertedCylinder:
         {
-            CGFloat count = MIN(_numberOfVisibleItems, _numberOfItems + _numberOfPlaceholdersToShow);
+            CGFloat count = [self circularCarouselItemCount];
             CGFloat spacing = [self valueForOption:iCarouselOptionSpacing withDefault:1.0f];
             CGFloat arc = [self valueForOption:iCarouselOptionArc withDefault:M_PI * 2.0f];
             CGFloat radius = [self valueForOption:iCarouselOptionRadius withDefault:fmaxf(0.01f, _itemWidth * spacing / 2.0f / tanf(arc/2.0f/count))];
@@ -657,7 +657,7 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
         case iCarouselTypeWheel:
         case iCarouselTypeInvertedWheel:
         {
-            CGFloat count = MIN(_numberOfVisibleItems, _numberOfItems + _numberOfPlaceholdersToShow);
+            CGFloat count = [self circularCarouselItemCount];
             CGFloat spacing = [self valueForOption:iCarouselOptionSpacing withDefault:1.0f];
             CGFloat arc = [self valueForOption:iCarouselOptionArc withDefault:M_PI * 2.0f];
             CGFloat radius = [self valueForOption:iCarouselOptionRadius withDefault:_itemWidth * spacing * count / arc];
@@ -983,9 +983,12 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         NSInteger index = [number integerValue];
         UIView *view = [_itemViews objectForKey:number];
         [self transformItemView:view atIndex:index];
+        
 #ifdef ICAROUSEL_IOS
+        
         view.userInteractionEnabled = (!_centerItemWhenSelected || index == self.currentItemIndex);
 #endif
+        
     }
 }
 
@@ -1009,6 +1012,112 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
             [self loadViewAtIndex:-1];
         }
     }
+}
+
+- (void)updateNumberOfVisibleItems
+{
+    //get number of visible items
+    switch (_type)
+    {
+        case iCarouselTypeLinear:
+        {
+            //exact number required to fill screen
+            CGFloat spacing = [self valueForOption:iCarouselOptionSpacing withDefault:1.0f];
+            CGFloat width = _vertical ? self.bounds.size.height: self.bounds.size.width;
+            _numberOfVisibleItems = ceilf(width / (spacing * _itemWidth)) + 1;
+            break;
+        }
+        case iCarouselTypeCoverFlow:
+        case iCarouselTypeCoverFlow2:
+        {
+            //exact number required to fill screen
+            CGFloat spacing = [self valueForOption:iCarouselOptionSpacing withDefault:0.25f];
+            CGFloat width = _vertical ? self.bounds.size.height: self.bounds.size.width;
+            _numberOfVisibleItems = ceilf((width - _itemWidth) / (spacing * _itemWidth)) + 2;
+            break;
+        }
+        case iCarouselTypeRotary:
+        case iCarouselTypeCylinder:
+        {
+            //based on count value
+            _numberOfVisibleItems = [self circularCarouselItemCount];
+            break;
+        }
+        case iCarouselTypeInvertedRotary:
+        case iCarouselTypeInvertedCylinder:
+        {
+            //TODO: improve this
+            _numberOfVisibleItems = ceilf([self circularCarouselItemCount] / 2.0f);
+            break;
+        }
+        case iCarouselTypeWheel:
+        case iCarouselTypeInvertedWheel:
+        {
+            //TODO: improve this
+            CGFloat count = [self circularCarouselItemCount];
+            CGFloat spacing = [self valueForOption:iCarouselOptionSpacing withDefault:1.0f];
+            CGFloat arc = [self valueForOption:iCarouselOptionArc withDefault:M_PI * 2.0f];
+            CGFloat radius = [self valueForOption:iCarouselOptionRadius withDefault:_itemWidth * spacing * count / arc];
+            if (radius - _itemWidth / 2.0f < MIN(self.bounds.size.width, self.bounds.size.height) / 2.0f)
+            {
+                _numberOfVisibleItems = count;
+            }
+            else
+            {
+                _numberOfVisibleItems = ceilf(count / 2.0f) + 1;
+            }
+            break;
+        }
+        case iCarouselTypeTimeMachine:
+        case iCarouselTypeInvertedTimeMachine:
+        case iCarouselTypeCustom:
+        default:
+        {
+            //slightly arbitrary number, chosen for performance reasons
+            _numberOfVisibleItems = MAX_VISIBLE_ITEMS;
+            break;
+        }
+    }
+    _numberOfVisibleItems = MIN(MAX_VISIBLE_ITEMS, _numberOfVisibleItems);
+    _numberOfVisibleItems = [self valueForOption:iCarouselOptionVisibleItems withDefault:_numberOfVisibleItems];
+    
+    //DEPRECATED
+    if ([_dataSource respondsToSelector:@selector(numberOfVisibleItemsInCarousel:)])
+    {
+        _numberOfVisibleItems = [(id<iCarouselDeprecated>)_dataSource numberOfVisibleItemsInCarousel:self];
+    }
+    
+    _numberOfVisibleItems = MAX(0, MIN(_numberOfVisibleItems, _numberOfItems + _numberOfPlaceholdersToShow));
+
+}
+
+- (NSInteger)circularCarouselItemCount
+{
+    NSInteger count = 0;
+    switch (_type)
+    {
+        case iCarouselTypeRotary:
+        case iCarouselTypeInvertedRotary:
+        case iCarouselTypeCylinder:
+        case iCarouselTypeInvertedCylinder:
+        case iCarouselTypeWheel:
+        case iCarouselTypeInvertedWheel:
+        {
+            //slightly arbitrary number, chosen for aesthetic reasons
+            CGFloat spacing = [self valueForOption:iCarouselOptionSpacing withDefault:1.0f];
+            CGFloat width = _vertical ? self.bounds.size.height: self.bounds.size.width;
+            count = MIN(MAX_VISIBLE_ITEMS, MAX(12, ceilf(width / (spacing * _itemWidth)) * M_PI));
+            count = MIN(_numberOfItems + _numberOfPlaceholdersToShow, count);
+            break;
+        }
+        default:
+        {
+            //not used for non-circular carousels
+            return _numberOfItems + _numberOfPlaceholdersToShow;
+            break;
+        }
+    }
+    return [self valueForOption:iCarouselOptionCount withDefault:count];
 }
 
 - (void)layOutItemViews
@@ -1046,58 +1155,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     //set item width
     [self updateItemWidth];
     
-    //get number of visible items
-    switch (_type)
-    {
-        case iCarouselTypeLinear:
-        {
-            //exact number required to fill screen
-            CGFloat spacing = [self valueForOption:iCarouselOptionSpacing withDefault:1.0f];
-            CGFloat width = _vertical ? self.bounds.size.height: self.bounds.size.width;
-            _numberOfVisibleItems = MIN(MAX_VISIBLE_ITEMS, ceilf(width / (spacing * _itemWidth)) + 1);
-            break;
-        }
-        case iCarouselTypeCoverFlow:
-        case iCarouselTypeCoverFlow2:
-        {
-            //exact number required to fill screen
-            CGFloat spacing = [self valueForOption:iCarouselOptionSpacing withDefault:0.25f];
-            CGFloat width = _vertical ? self.bounds.size.height: self.bounds.size.width;
-            _numberOfVisibleItems = MIN(MAX_VISIBLE_ITEMS, ceilf((width - _itemWidth) / (spacing * _itemWidth)) + 2);
-            break;
-        }
-        case iCarouselTypeRotary:
-        case iCarouselTypeInvertedRotary:
-        case iCarouselTypeCylinder:
-        case iCarouselTypeInvertedCylinder:
-        case iCarouselTypeWheel:
-        case iCarouselTypeInvertedWheel:
-        {
-            //slightly arbitrary number, chosen for aesthetic reasons
-            CGFloat spacing = [self valueForOption:iCarouselOptionSpacing withDefault:1.0f];
-            CGFloat width = _vertical ? self.bounds.size.height: self.bounds.size.width;
-            _numberOfVisibleItems = MIN(MAX_VISIBLE_ITEMS, MAX(12, ceilf(width / (spacing * _itemWidth)) * M_PI));
-            break;
-        }
-        case iCarouselTypeTimeMachine:
-        case iCarouselTypeInvertedTimeMachine:
-        case iCarouselTypeCustom:
-        default:
-        {
-            //slightly arbitrary number, chosen for performance reasons
-            _numberOfVisibleItems = MAX_VISIBLE_ITEMS;
-            break;
-        }
-    }
-    _numberOfVisibleItems = [self valueForOption:iCarouselOptionVisibleItems withDefault:_numberOfVisibleItems];
-
-    //DEPRECATED
-    if ([_dataSource respondsToSelector:@selector(numberOfVisibleItemsInCarousel:)])
-    {
-        _numberOfVisibleItems = [(id<iCarouselDeprecated>)_dataSource numberOfVisibleItemsInCarousel:self];
-    }
-    
-    _numberOfVisibleItems = MAX(0, MIN(_numberOfVisibleItems, _numberOfItems + _numberOfPlaceholdersToShow));
+    //update number of visible items
+    [self updateNumberOfVisibleItems];
     
     //prevent false index changed event
     _previousItemIndex = self.currentItemIndex;
@@ -1273,7 +1332,12 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         {
             index = [self clampedIndex:index];
         }
-        [visibleIndices addObject:[NSNumber numberWithInteger:index]];
+        CGFloat alpha = [self alphaForItemWithOffset:[self offsetForItemAtIndex:index]];
+        if (alpha)
+        {
+            //only add views with alpha > 0
+            [visibleIndices addObject:[NSNumber numberWithInteger:index]];
+        }
     }
     
     //remove offscreen views
@@ -1500,10 +1564,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         [UIView setAnimationDidStopSelector:@selector(depthSortViews)];
         [self removeViewAtIndex:index];
         _numberOfItems --;
-        if (![_dataSource respondsToSelector:@selector(numberOfVisibleItemsInCarousel:)])
-        {
-            _numberOfVisibleItems --;
-        }
+        [self updateNumberOfVisibleItems];
         _scrollOffset = self.currentItemIndex;
         [self didScroll];
         [UIView commitAnimations];
@@ -1574,10 +1635,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 - (void)insertItemAtIndex:(NSInteger)index animated:(BOOL)animated
 {
     _numberOfItems ++;
-    if (![_dataSource respondsToSelector:@selector(numberOfVisibleItemsInCarousel:)])
-    {
-        _numberOfVisibleItems ++;
-    }
+    [self updateNumberOfVisibleItems];
     
     index = [self clampedIndex:index];
     [self insertView:nil atIndex:index];

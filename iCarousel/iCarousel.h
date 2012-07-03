@@ -122,6 +122,7 @@ typedef enum
     iCarouselOptionShowBackfaces,
     iCarouselOptionOffsetMultiplier,
     iCarouselOptionVisibleItems,
+    iCarouselOptionCount,
     iCarouselOptionArc,
 	iCarouselOptionAngle,
     iCarouselOptionRadius,

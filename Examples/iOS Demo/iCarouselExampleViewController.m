@@ -31,7 +31,7 @@
     //set up data
     wrap = YES;
     self.items = [NSMutableArray array];
-    for (int i = 0; i < 10000; i++)
+    for (int i = 0; i < 1000; i++)
     {
         [items addObject:[NSNumber numberWithInt:i]];
     }
