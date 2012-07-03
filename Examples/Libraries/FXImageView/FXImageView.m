@@ -1,7 +1,7 @@
 //
 //  FXImageView.m
 //
-//  Version 1.1
+//  Version 1.1.1
 //
 //  Created by Nick Lockwood on 31/10/2011.
 //  Copyright (c) 2011 Charcoal Design
@@ -35,12 +35,45 @@
 #import <objc/message.h>
 
 
+@interface FXImageOperation : NSOperation
+
+@property (nonatomic, strong) FXImageView *target;
+
+@end
+
+
 @interface FXImageView ()
 
 @property (nonatomic, strong) UIImage *originalImage;
 @property (nonatomic, strong) UIImageView *imageView;
-@property (nonatomic, strong) UIView *selfReference;
 @property (nonatomic, strong) NSOperation *operation;
+
+- (void)processImage;
+
+@end
+
+
+@implementation FXImageOperation
+
+@synthesize target = _target;
+
+- (void)main
+{
+    @autoreleasepool
+    {
+        [_target processImage];
+    }
+}
+
+#if !__has_feature(objc_arc)
+
+- (void)dealloc
+{
+    [_target release];
+    [super dealloc];
+}
+
+#endif
 
 @end
 
@@ -57,8 +90,6 @@
 
 @synthesize originalImage = _originalImage;
 @synthesize imageView = _imageView;
-@synthesize selfReference = _selfReference;
-@synthesize operation = _operation;
 
 
 #pragma mark -
@@ -117,21 +148,17 @@
     return self;
 }
 
+#if !__has_feature(objc_arc)
+
 - (void)dealloc
 {
-    [_operation cancel];
-    
-#if !__has_feature(objc_arc)
-    
-    [_operation release];
     [_originalImage release];
     [_shadowColor release];
     [_imageView release];
-    [super dealloc];
-    
-#endif
-    
+    [super dealloc];    
 }
+
+#endif
 
 
 #pragma mark -
@@ -154,116 +181,135 @@
     return colorString;
 }
 
-- (NSString *)cacheKeyForImage:(UIImage *)image
+- (NSString *)cacheKey
 {
-    return [NSString stringWithFormat:@"%i_%@_%.2f_%.2f_%.2f_%@_%@_%.2f",
-            (int)image,
+    return [NSString stringWithFormat:@"%i_%@_%.2f_%.2f_%.2f_%@_%@_%.2f_%i",
+            (int)_originalImage,
             NSStringFromCGSize(self.bounds.size),
             _reflectionGap,
             _reflectionScale,
             _reflectionAlpha,
             [self colorString:_shadowColor],
             NSStringFromCGSize(_shadowOffset),
-            _shadowBlur];
+            _shadowBlur,
+            self.contentMode];
 }
 
-- (UIImage *)cachedProcessedImageForImage:(UIImage *)image
+- (UIImage *)cachedProcessedImage
 {
-    NSString *key = [self cacheKeyForImage:image];
+    NSString *key = [self cacheKey];
     return [[[self class] processedImageCache] objectForKey:key];
 }
-
-- (void)cacheProcessedImage:(UIImage *)processedImage forImage:(UIImage *)image
-{
-    NSString *key = [self cacheKeyForImage:image];
-    [[[self class] processedImageCache] setObject:processedImage forKey:key];
-}
-
 
 #pragma mark -
 #pragma mark Processing
 
-- (void)setProcessedImageAnimated:(UIImage *)image
+- (void)setProcessedImageOnMainThread:(NSArray *)images
 {
-    //cache image
-    [self cacheProcessedImage:image forImage:self.image];
+    //get images
+    NSString *cacheKey = [images objectAtIndex:1];
+    UIImage *processedImage = [images objectAtIndex:0];
     
-    //implement crossfade transition without needing to import QuartzCore
-    id animation = objc_msgSend(NSClassFromString(@"CATransition"), @selector(animation));
-    objc_msgSend(animation, @selector(setType:), @"kCATransitionFade");
-    objc_msgSend(self.layer, @selector(addAnimation:forKey:), animation, nil);
+    //cache image
+    [[[self class] processedImageCache] setObject:processedImage forKey:cacheKey];
     
     //set image
-    _imageView.image = image;
+    if ([[self cacheKey] isEqualToString:cacheKey])
+    {
+        //implement crossfade transition without needing to import QuartzCore
+        id animation = objc_msgSend(NSClassFromString(@"CATransition"), @selector(animation));
+        objc_msgSend(animation, @selector(setType:), @"kCATransitionFade");
+        objc_msgSend(self.layer, @selector(addAnimation:forKey:), animation, nil);
+        
+        //set processed image
+        _imageView.image = processedImage;
+    }
 }
 
-- (void)processImage:(UIImage *)image
+- (void)processImage
 {
-    @autoreleasepool
+    //get properties
+    NSString *cacheKey = [self cacheKey];
+    UIImage *image = self.image;
+    CGSize size = self.bounds.size;
+    CGFloat reflectionGap = _reflectionGap;
+    CGFloat reflectionScale = _reflectionScale;
+    CGFloat reflectionAlpha = _reflectionAlpha;
+    UIColor *shadowColor = _shadowColor;
+    CGSize shadowOffset = _shadowOffset;
+    CGFloat shadowBlur = _shadowBlur;
+    UIViewContentMode contentMode = self.contentMode;
+    
+    //check cache
+    UIImage *processedImage = [self cachedProcessedImage];
+    if (!processedImage)
     {
-        if (image == _originalImage)
+        //crop and scale image
+        processedImage = [image imageCroppedAndScaledToSize:size
+                                                contentMode:contentMode
+                                                   padToFit:NO];
+        
+        //apply reflection
+        if (self.reflectionScale && self.reflectionAlpha)
         {
-            //prevent premature release
-            self.selfReference = self;
-            
-            //crop and scale image
-            UIImage *processedImage = [image imageCroppedAndScaledToSize:self.bounds.size
-                                                             contentMode:self.contentMode
-                                                                padToFit:NO];
-            
-            //apply reflection
-            if (image == _originalImage && _reflectionScale > 0.0f)
-            {
-                processedImage = [processedImage imageWithReflectionWithScale:_reflectionScale
-                                                                          gap:_reflectionGap
-                                                                        alpha:_reflectionAlpha];
-            }
-            
-            //apply shadow
-            if (image == _originalImage && _shadowColor &&
-                ![_shadowColor isEqual:[UIColor clearColor]] &&
-                (_shadowBlur || !CGSizeEqualToSize(_shadowOffset, CGSizeZero)))
-            {
-                processedImage = [processedImage imageWithShadowColor:_shadowColor
-                                                               offset:_shadowOffset
-                                                                 blur:_shadowBlur];
-            }
-            
-            //set resultant image
-            if ([[NSThread currentThread] isMainThread])
-            {
-                [self cacheProcessedImage:processedImage forImage:image];
-                _imageView.image = processedImage;
-            }
-            else if (image == _originalImage)
-            {
-                [self performSelectorOnMainThread:@selector(setProcessedImageAnimated:)
-                                       withObject:processedImage
-                                    waitUntilDone:YES];
-            }
-            
-            //release self reference
-            self.selfReference = nil;
+            processedImage = [processedImage imageWithReflectionWithScale:reflectionScale
+                                                                      gap:reflectionGap
+                                                                    alpha:reflectionAlpha];
+        }
+        
+        //apply shadow
+        if (shadowColor && ![shadowColor isEqual:[UIColor clearColor]] &&
+            (shadowBlur || !CGSizeEqualToSize(shadowOffset, CGSizeZero)))
+        {
+            processedImage = [processedImage imageWithShadowColor:shadowColor
+                                                           offset:shadowOffset
+                                                             blur:shadowBlur];
+        }
+    }
+    
+    //cache and set image
+    if (processedImage)
+    {
+        if ([[NSThread currentThread] isMainThread])
+        {
+            [[[self class] processedImageCache] setObject:processedImage forKey:cacheKey];
+            self.imageView.image = processedImage;
+        }
+        else
+        {
+            [self performSelectorOnMainThread:@selector(setProcessedImageOnMainThread:)
+                                   withObject:[NSArray arrayWithObjects:processedImage, cacheKey, nil]
+                                waitUntilDone:YES];
         }
     }
 }
 
-- (void)queueImageForProcessing:(UIImage *)image
+- (void)queueImageForProcessing
 {
-    //cancel existing operation
-    [_operation cancel];
-    
-    //create processing operation
-    self.operation = [NSBlockOperation blockOperationWithBlock:^{
-        [self processImage:image];
-    }];
-    
-    //set operation thread priority
-    [_operation setThreadPriority:1.0];
-    
-    //suspend queue
+    //suspend operation queue
     NSOperationQueue *queue = [[self class] processingQueue];
     [queue setSuspended:YES];
+    
+    //check for existing operations
+    for (FXImageOperation *op in queue.operations)
+    {
+        if ([op isKindOfClass:[FXImageOperation class]])
+        {
+            if (op.target == self && ![op isExecuting])
+            {
+                //already queued
+                [queue setSuspended:NO];
+                return;
+            }
+        }
+    }
+
+    //create processing operation
+    FXImageOperation *operation = [[FXImageOperation alloc] init];
+    operation.target = self;
+    
+    //set operation thread priority
+    [operation setThreadPriority:1.0];
     
     //make op a dependency of all queued ops
     NSInteger index = [queue operationCount] - [queue maxConcurrentOperationCount];
@@ -272,15 +318,22 @@
         NSOperation *op = [[queue operations] objectAtIndex:index];
         if (![op isExecuting])
         {
-            [op addDependency:_operation];
+            [op addDependency:operation];
         }
     }
     
     //add operation to queue
-    [queue addOperation:_operation];
+    [queue addOperation:operation];
     
     //resume queue
     [queue setSuspended:NO];
+    
+#if !__has_feature(objc_arc)
+
+    [operation release];
+    
+#endif
+    
 }
 
 - (void)layoutSubviews
@@ -288,7 +341,7 @@
     _imageView.frame = self.bounds;
     if (self.image)
     {
-        UIImage *processedImage = [self cachedProcessedImageForImage:self.image];
+        UIImage *processedImage = [self cachedProcessedImage];
         if (processedImage)
         {
             //use cached version
@@ -297,12 +350,12 @@
         else if (_asynchronous)
         {
             //process in background
-            [self queueImageForProcessing:self.image];
+            [self queueImageForProcessing];
         }
         else
         {
             //process on main thread
-            [self processImage:self.image];
+            [self processImage];
         }
     }
 }
@@ -334,7 +387,7 @@
         self.originalImage = image;
         if (image)
         {
-            UIImage *processedImage = [self cachedProcessedImageForImage:image];
+            UIImage *processedImage = [self cachedProcessedImage];
             if (processedImage)
             {
                 //use cached version
@@ -343,12 +396,12 @@
             else if (_asynchronous)
             {
                 //process in background
-                [self queueImageForProcessing:image];
+                [self queueImageForProcessing];
             }
             else
             {
                 //process on main thread
-                [self processImage:image];
+                [self processImage];
             }
         }
         else
@@ -420,6 +473,15 @@
     if (_shadowBlur != shadowBlur)
     {
         _shadowBlur = shadowBlur;
+        [self setNeedsLayout];
+    }
+}
+
+- (void)setContentMode:(UIViewContentMode)contentMode
+{
+    if (self.contentMode != contentMode)
+    {
+        super.contentMode = contentMode;
         [self setNeedsLayout];
     }
 }

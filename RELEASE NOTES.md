@@ -4,6 +4,7 @@ Version 1.7 beta
 - Simplified carousel interface by deprecating a number of delegate methods in favour of the simpler iCarouselOption API
 - numberOfVisibleItems is now calculated automatically
 - Added Dynamic Downloads example using AsyncImageView
+- Item view interaction area is now more precisely set on iOS
 - Fixed backface interaction issue for iCarouselTypeInvertedCylinder
 - It is now much simpler to implement alpha fading logic based on item offset 
 - Now supports item click events and centering on Mac OS (buttons and controls within item views still won't work correctly receive clicks however).

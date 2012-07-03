@@ -147,7 +147,7 @@ The currently centered item view in the carousel. The index of this view matches
 
 	@property (nonatomic, readonly) CGFloat itemWidth;
 
-The display width of items in the carousel (read only). This is derived automatically from the first view passed in to the carousel using the `carousel:viewForItemAtIndex:reusingView:` dataSource method.
+The display width of items in the carousel (read only). This is derived automatically from the first view passed in to the carousel using the `carousel:viewForItemAtIndex:reusingView:` dataSource method. You can also override this value using the `carouselItemWidth:` delegate method, which will alter the space allocated for carousel items (but won't resize or scale the item views).
 
 	@property (nonatomic, assign) BOOL centerItemWhenSelected;
 
@@ -300,6 +300,10 @@ This method is called when the carousel starts decelerating. it will typically b
 	- (void)carouselDidEndDecelerating:(iCarousel *)carousel;
 
 This method is called when the carousel finishes decelerating and you can assume that the currentItemIndex at this point is the final stopping value. Unlike previous versions, the carousel will now stop exactly on the final index position in most cases. The only exception is on non-wrapped carousels with bounce enabled, where, if the final stopping position is beyond the end of the carousel, the carousel will then scroll automatically until it aligns exactly on the end index. For backwards compatibility, the carousel will always call `scrollToItemAtIndex:animated:` after it finishes decelerating. If you need to know for certain when the carousel has stopped moving completely, use the `carouselDidEndScrollingAnimation` delegate method.
+
+	- (CGFloat)carouselItemWidth:(iCarousel *)carousel;
+
+Returns the width of each item in the carousel - i.e. the spacing for each item view. If the method is not implemented, this defaults to the width of the first item view that is returned by the `carousel:viewForItemAtIndex:reusingView:` dataSource method. This method should only be used to crop or pad item views if the views returned from `carousel:viewForItemAtIndex:reusingView:` are not correct (e.g. if the views are differing sizes, or include a drop shadow or outer glow in their background image that affects their size) - if you just want to space out the views a bit then it's better to use the `iCarouselOptionSpacing` value instead.
 
 	- (CATransform3D)carousel:(iCarousel *)carousel itemTransformForOffset:(CGFloat)offset baseTransform:(CATransform3D)transform;
 

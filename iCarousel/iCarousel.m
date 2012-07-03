@@ -208,7 +208,11 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 #endif
     
     [self addSubview:_contentView];
-    [self reloadData];
+    
+    if (_dataSource)
+    {
+        [self reloadData];
+    }
 }
 
 #ifndef USING_CHAMELEON
@@ -264,7 +268,7 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
         _delegate = delegate;
         if (_delegate && _dataSource)
         {
-            [self layOutItemViews];
+            [self setNeedsLayout];
         }
         
         //DEPRECATED: check for legacy delegate method usage
@@ -275,10 +279,6 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
         if ([_delegate respondsToSelector:@selector(carouselShouldWrap:)])
         {
             NSLog(@"Warning: The carouselShouldWrap: delegate method is deprecated. Use carousel:valueForOption:withDefault: with iCarouselOptionWrap instead");
-        }
-        if ([_delegate respondsToSelector:@selector(carouselItemWidth:)])
-        {
-            NSLog(@"Warning: The carouselItemWidth: delegate method is deprecated. Use carousel:valueForOption:withDefault: with iCarouselOptionSpacing instead");
         }
         if ([_delegate respondsToSelector:@selector(carouselOffsetMultiplier:)])
         {
@@ -798,11 +798,16 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 {
     for (UIView *view in [[_itemViews allValues] sortedArrayUsingFunction:(NSInteger (*)(id, id, void *))compareViewDepth context:(__bridge void *)self])
     {
-        [_contentView addSubview:view.superview];
+        [_contentView bringSubviewToFront:view.superview];
     }
 }
 
 #else
+
+- (void)setNeedsLayout
+{
+    [self setNeedsLayout:YES];
+}
 
 - (void)depthSortViews
 {
@@ -848,33 +853,51 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (UIView *)containView:(UIView *)view
 {
-    UIView *container = [[[UIView alloc] initWithFrame:view.frame] autorelease];
+    //set item width
+    if (!_itemWidth)
+    {
+        _itemWidth = _vertical? view.bounds.size.height: view.bounds.size.width;
+    }
+    
+    //set container frame
+    CGRect frame = view.bounds;
+    frame.size.width = _vertical? frame.size.width: _itemWidth;
+    frame.size.height = _vertical? _itemWidth: frame.size.height;
+    UIView *containerView = [[[UIView alloc] initWithFrame:frame] autorelease];
     
 #ifdef ICAROUSEL_IOS
     
     //add tap gesture recogniser
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTap:)];
     tapGesture.delegate = (id <UIGestureRecognizerDelegate>)self;
-    [container addGestureRecognizer:tapGesture];
+    [containerView addGestureRecognizer:tapGesture];
     [tapGesture release];
+    
+#else
+    
+    //clipping works differently on Mac OS
+    [containerView setBoundsSize:view.frame.size];
     
 #endif
     
-    [container addSubview:view];
-    return container;
+    //set view frame
+    frame = view.frame;
+    frame.origin.x = (containerView.bounds.size.width - frame.size.width) / 2.0f;
+    frame.origin.y = (containerView.bounds.size.height - frame.size.height) / 2.0f;
+    view.frame = frame;
+    [containerView addSubview:view];
+    
+    return containerView;
 }
 
 - (void)transformItemView:(UIView *)view atIndex:(NSInteger)index
 {
-    view.superview.bounds = view.bounds;
-    
     //calculate offset
     CGFloat offset = [self offsetForItemAtIndex:index];
 
 #ifdef ICAROUSEL_IOS
     
     //center view
-    view.center = CGPointMake(view.bounds.size.width/2.0f, view.bounds.size.height/2.0f);
     view.superview.center = CGPointMake(self.bounds.size.width/2.0f + _contentOffset.width,
                                         self.bounds.size.height/2.0f + _contentOffset.height);
     
@@ -884,7 +907,6 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 #else
     
     //center view
-    [view setFrameOrigin:NSMakePoint(0.0f, 0.0f)];
     [view.superview setFrameOrigin:NSMakePoint(self.bounds.size.width/2.0f + _contentOffset.width,
                                                self.bounds.size.height/2.0f + _contentOffset.height)];
     view.superview.layer.anchorPoint = CGPointMake(0.5f, 0.5f);
@@ -969,14 +991,16 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (void)updateItemWidth
 {
-    if (_numberOfItems > 0)
+    if ([_delegate respondsToSelector:@selector(carouselItemWidth:)])
+    {
+        _itemWidth = [_delegate carouselItemWidth:self];
+    }
+    else if (_numberOfItems > 0)
     {
         if ([_itemViews count] == 0)
         {
             [self loadViewAtIndex:0];
         }
-        UIView *itemView = [[_itemViews allValues] lastObject];
-        _itemWidth = _vertical? itemView.bounds.size.height: itemView.bounds.size.width;
     }
     else if (_numberOfPlaceholders > 0)
     {
@@ -984,14 +1008,6 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         {
             [self loadViewAtIndex:-1];
         }
-        UIView *itemView = [[_itemViews allValues] lastObject];
-        _itemWidth = _vertical? itemView.bounds.size.height: itemView.bounds.size.width;
-    }
-    
-    //DEPRECATED
-    if ([_delegate respondsToSelector:@selector(carouselItemWidth:)])
-    {
-        _itemWidth = [(id<iCarouselDeprecated>)_delegate carouselItemWidth:self];
     }
 }
 
@@ -1189,6 +1205,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     [self setItemView:view forIndex:index];
     if (containerView)
     {
+        //get old item view
         UIView *oldItemView = [containerView.subviews lastObject];
         if (index < 0 || index >= _numberOfItems)
         {
@@ -1198,7 +1215,27 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         {
             [self queueItemView:oldItemView];
         }
-        view.frame = oldItemView.frame;
+        
+        //set container frame
+        CGRect frame = containerView.bounds;
+        frame.size.width = MIN(_itemWidth, view.frame.size.width);
+        frame.size.height = view.frame.size.height;
+        containerView.bounds = frame;
+        
+#ifdef ICAROUSEL_MACOS
+        
+        //clipping works differently on Mac OS
+        [containerView setBoundsSize:view.frame.size];
+        
+#endif
+        
+        //set view frame
+        frame = view.frame;
+        frame.origin.x = (containerView.bounds.size.width - frame.size.width) / 2.0f;
+        frame.origin.y = (containerView.bounds.size.height - frame.size.height) / 2.0f;
+        view.frame = frame;
+        
+        //switch views
         [oldItemView removeFromSuperview];
         [containerView addSubview:view];
     }
@@ -1296,11 +1333,9 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     self.placeholderViewPool = [NSMutableSet setWithCapacity:_numberOfPlaceholders];
     
     //layout views
-    [self disableAnimation];
-    [self layOutItemViews];
-    [self performSelector:@selector(depthSortViews) withObject:nil afterDelay:0.0f];
-    [self enableAnimation];
+    [self setNeedsLayout];
     
+    //fix scroll offset
     if (_numberOfItems > 0 && _scrollOffset < 0.0f)
     {
         [self scrollToItemAtIndex:0 animated:(_numberOfPlaceholders > 0)];
@@ -1828,7 +1863,6 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 {
     if (self.superview)
     {
-        [self reloadData];
         [self startAnimation];
     }
     else

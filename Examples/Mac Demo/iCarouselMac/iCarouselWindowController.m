@@ -187,6 +187,13 @@
     return view;
 }
 
+- (CGFloat)carouselItemWidth:(iCarousel *)carousel
+{
+    //set correct view size
+    //because the background image on the views makes them too large
+    return 200.0f;
+}
+
 - (CATransform3D)carousel:(iCarousel *)_carousel itemTransformForOffset:(CGFloat)offset baseTransform:(CATransform3D)transform
 {
     //implement 'flip3D' style carousel
@@ -208,7 +215,7 @@
         {
             //reduce item spacing to compensate
             //for drop shadow and reflection around views
-            return value * (carousel.vertical? 0.6f: 0.9f);
+            return value * 1.05f;
         }
         case iCarouselOptionFadeMax:
         {
