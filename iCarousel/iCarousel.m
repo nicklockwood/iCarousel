@@ -76,20 +76,6 @@
 @property (nonatomic, assign) NSTimeInterval toggleTime;
 @property (nonatomic, assign) NSInteger animationDisableCount;
 
-- (void)step;
-- (void)didMoveToSuperview;
-- (void)layOutItemViews;
-- (UIView *)loadViewAtIndex:(NSInteger)index;
-- (NSInteger)clampedIndex:(NSInteger)index;
-- (CGFloat)clampedOffset:(CGFloat)offset;
-- (void)transformItemView:(UIView *)view atIndex:(NSInteger)index;
-- (CGFloat)valueForOption:(iCarouselOption)option withDefault:(CGFloat)value;
-- (void)startAnimation;
-- (void)stopAnimation;
-- (void)enableAnimation;
-- (void)disableAnimation;
-- (void)didScroll;
-
 NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *self);
 
 #ifdef ICAROUSEL_MACOS

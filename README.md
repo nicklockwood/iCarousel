@@ -7,7 +7,7 @@ iCarousel is a class designed to simplify the implementation of various types of
 Supported OS & SDK Versions
 -----------------------------
 
-* Supported build target - iOS 5.1 / Mac OS 10.7 (Xcode 4.3.2, Apple LLVM compiler 3.1)
+* Supported build target - iOS 5.1 / Mac OS 10.7 (Xcode 4.3.3, Apple LLVM compiler 3.1)
 * Earliest supported deployment target - iOS 4.3 / Mac OS 10.7
 * Earliest compatible deployment target - iOS 3.2 / Mac OS 10.6
 
@@ -454,6 +454,9 @@ This example demonstrates how to combine AsyncImageView with the FXImageView cla
 
 FAQ
 ------------
+
+    Q. I upgrade to the new version of iCarousel and it broke my project, how do I get the old one back?
+    A. Every previous release of iCarousel is tagged as a separate download on github - look in the tags tab.
 
     Q. Can I use iCarousel without a nib file?
     A. Yes, check out the *No Nib Demo* for how to set up iCarousel without nibs
