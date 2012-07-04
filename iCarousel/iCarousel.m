@@ -83,6 +83,7 @@
 - (NSInteger)clampedIndex:(NSInteger)index;
 - (CGFloat)clampedOffset:(CGFloat)offset;
 - (void)transformItemView:(UIView *)view atIndex:(NSInteger)index;
+- (CGFloat)valueForOption:(iCarouselOption)option withDefault:(CGFloat)value;
 - (void)startAnimation;
 - (void)stopAnimation;
 - (void)enableAnimation;
