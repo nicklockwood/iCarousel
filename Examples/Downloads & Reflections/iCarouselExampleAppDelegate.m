@@ -25,7 +25,6 @@
 {
     [window release];
     [viewController release];
-    [super dealloc];
 }
 
 @end

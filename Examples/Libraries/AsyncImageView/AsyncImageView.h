@@ -1,7 +1,7 @@
 //
 //  AsyncImageView.h
 //
-//  Version 1.3
+//  Version 1.4
 //
 //  Created by Nick Lockwood on 03/04/2011.
 //  Copyright (c) 2011 Charcoal Design
@@ -62,7 +62,6 @@
 
 
 #import <UIKit/UIKit.h>
-#import <QuartzCore/QuartzCore.h>
 
 
 extern NSString *const AsyncImageLoadDidFinish;
@@ -74,26 +73,12 @@ extern NSString *const AsyncImageCacheKey;
 extern NSString *const AsyncImageErrorKey;
 
 
-@interface AsyncImageCache : NSObject
-
-+ (AsyncImageCache *)sharedCache;
-
-@property (nonatomic, assign) BOOL useImageNamed;
-@property (nonatomic, assign) NSUInteger countLimit;
-
-- (UIImage *)imageForURL:(NSURL *)URL;
-- (void)setImage:(UIImage *)image forURL:(NSURL *)URL;
-- (void)removeImageForURL:(NSURL *)URL;
-- (void)clearCache;
-
-@end
-
-
 @interface AsyncImageLoader : NSObject
 
 + (AsyncImageLoader *)sharedLoader;
++ (NSCache *)defaultCache;
 
-@property (nonatomic, strong) AsyncImageCache *cache;
+@property (nonatomic, strong) NSCache *cache;
 @property (nonatomic, assign) NSUInteger concurrentLoads;
 @property (nonatomic, assign) NSTimeInterval loadingTimeout;
 

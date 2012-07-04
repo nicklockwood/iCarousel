@@ -1,7 +1,7 @@
 //
 //  AsyncImageView.m
 //
-//  Version 1.3
+//  Version 1.4
 //
 //  Created by Nick Lockwood on 03/04/2011.
 //  Copyright (c) 2011 Charcoal Design
@@ -33,7 +33,6 @@
 
 #import "AsyncImageView.h"
 #import <objc/message.h>
-#import <QuartzCore/QuartzCore.h>
 
 
 NSString *const AsyncImageLoadDidFinish = @"AsyncImageLoadDidFinish";
@@ -46,107 +45,12 @@ NSString *const AsyncImageCacheKey = @"cache";
 NSString *const AsyncImageErrorKey = @"error";
 
 
-@interface AsyncImageCache ()
-
-@property (nonatomic, strong) NSCache *cache;
-
-@end
-
-
-@implementation AsyncImageCache
-
-@synthesize cache = _cache;
-@synthesize useImageNamed = _useImageNamed;
-
-+ (AsyncImageCache *)sharedCache
-{
-    static AsyncImageCache *sharedInstance = nil;
-    if (sharedInstance == nil)
-    {
-        sharedInstance = [[self alloc] init];
-    }
-    return sharedInstance;
-}
-
-- (id)init
-{
-    if ((self = [super init]))
-    {
-		_useImageNamed = YES;
-        _cache = [[NSCache alloc] init];
-    }
-    return self;
-}
-
-- (void)setCountLimit:(NSUInteger)countLimit
-{
-    _cache.countLimit = countLimit;
-}
-
-- (NSUInteger)countLimit
-{
-    return _cache.countLimit;
-}
-
-- (UIImage *)imageForURL:(NSURL *)URL
-{
-	if (_useImageNamed && [URL isFileURL])
-	{
-		NSString *path = [URL path];
-		NSString *imageName = [path lastPathComponent];
-		NSString *directory = [path stringByDeletingLastPathComponent];
-		if ([[[NSBundle mainBundle] resourcePath] isEqualToString:directory])
-		{
-			return [UIImage imageNamed:imageName];
-		}
-	}
-    return [_cache objectForKey:URL];
-}
-
-- (void)setImage:(UIImage *)image forURL:(NSURL *)URL
-{
-    if (_useImageNamed && [URL isFileURL])
-    {
-        NSString *path = [URL path];
-        NSString *directory = [path stringByDeletingLastPathComponent];
-        if ([[[NSBundle mainBundle] resourcePath] isEqualToString:directory])
-        {
-            //do not store in cache
-            return;
-        }
-    }
-    if (image && URL)
-    {
-        [_cache setObject:image forKey:URL];
-    }
-}
-
-- (void)removeImageForURL:(NSURL *)URL
-{
-    [_cache removeObjectForKey:URL];
-}
-
-- (void)clearCache
-{
-    //remove objects that aren't in use
-    [_cache removeAllObjects];
-}
-
-- (void)dealloc
-{
-    [_cache release];
-    [super ah_dealloc];
-}
-
-@end
-
-
 @interface AsyncImageConnection : NSObject
 
 @property (nonatomic, strong) NSURLConnection *connection;
 @property (nonatomic, strong) NSMutableData *data;
 @property (nonatomic, strong) NSURL *URL;
-@property (nonatomic, strong) AsyncImageCache *cache;
+@property (nonatomic, strong) NSCache *cache;
 @property (nonatomic, strong) id target;
 @property (nonatomic, assign) SEL success;
 @property (nonatomic, assign) SEL failure;
@@ -154,7 +58,7 @@ NSString *const AsyncImageErrorKey = @"error";
 @property (nonatomic, readonly) BOOL cancelled;
 
 - (AsyncImageConnection *)initWithURL:(NSURL *)URL
-                                cache:(AsyncImageCache *)cache
+                                cache:(NSCache *)cache
 							   target:(id)target
 							  success:(SEL)success
 							  failure:(SEL)failure;
@@ -179,7 +83,7 @@ NSString *const AsyncImageErrorKey = @"error";
 @synthesize cancelled = _cancelled;
 
 - (AsyncImageConnection *)initWithURL:(NSURL *)URL
-                                cache:(AsyncImageCache *)cache
+                                cache:(NSCache *)cache
 							   target:(id)target
 							  success:(SEL)success
 							  failure:(SEL)failure
@@ -195,9 +99,23 @@ NSString *const AsyncImageErrorKey = @"error";
     return self;
 }
 
+- (UIImage *)cachedImage
+{
+    if ([_URL isFileURL])
+	{
+		NSString *path = [[_URL absoluteURL] path];
+        NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
+		if ([path hasPrefix:resourcePath])
+		{
+			return [UIImage imageNamed:[path substringFromIndex:[resourcePath length]]];
+		}
+	}
+    return [_cache objectForKey:_URL];
+}
+
 - (BOOL)isInCache
 {
-    return [_cache imageForURL:_URL] != nil;
+    return [self cachedImage] != nil;
 }
 
 - (void)loadFailedWithError:(NSError *)error
@@ -216,9 +134,21 @@ NSString *const AsyncImageErrorKey = @"error";
 {
 	if (!_cancelled)
 	{
-        if (image)
+        if (image && _URL)
         {
-            [_cache setImage:image forURL:_URL];
+            BOOL storeInCache = YES;
+            if ([_URL isFileURL])
+            {
+                if ([[[_URL absoluteURL] path] hasPrefix:[[NSBundle mainBundle] resourcePath]])
+                {
+                    //do not store in cache
+                    storeInCache = NO;
+                }
+            }
+            if (storeInCache)
+            {
+                [_cache setObject:image forKey:_URL];
+            }
         }
         
 		NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithObjectsAndKeys:
@@ -320,7 +250,7 @@ NSString *const AsyncImageErrorKey = @"error";
     }
     
     //check for cached image
-	UIImage *image = [_cache imageForURL:_URL];
+	UIImage *image = [self cachedImage];
     if (image)
     {
         //add to cache (cached already but it doesn't matter)
@@ -384,11 +314,21 @@ NSString *const AsyncImageErrorKey = @"error";
 	return sharedInstance;
 }
 
++ (NSCache *)defaultCache
+{
+    static NSCache *sharedInstance = nil;
+	if (sharedInstance == nil)
+	{
+		sharedInstance = [[NSCache alloc] init];
+	}
+	return sharedInstance;
+}
+
 - (AsyncImageLoader *)init
 {
 	if ((self = [super init]))
 	{
-        _cache = [[AsyncImageCache sharedCache] ah_retain];
+        self.cache = [[self class] defaultCache];
         _concurrentLoads = 2;
         _loadingTimeout = 60.0;
 		_connections = [[NSMutableArray alloc] init];
@@ -516,13 +456,38 @@ NSString *const AsyncImageErrorKey = @"error";
 
 - (void)loadImageWithURL:(NSURL *)URL target:(id)target success:(SEL)success failure:(SEL)failure
 {
+    //check cache
+    UIImage *image = [_cache objectForKey:URL];
+    if (image)
+    {
+        [self cancelLoadingImagesForTarget:self action:success];
+        if (success) [target performSelectorOnMainThread:success withObject:image waitUntilDone:NO];
+        return;
+    }
+    
     //create new connection
     AsyncImageConnection *connection = [[AsyncImageConnection alloc] initWithURL:URL
                                                                            cache:_cache
                                                                           target:target
                                                                          success:success
                                                                          failure:failure];
-    [_connections addObject:[connection autorelease]];
+    BOOL added = NO;
+    for (int i = 0; i < [_connections count]; i++)
+    {
+        AsyncImageConnection *connection = [_connections objectAtIndex:i];
+        if (!connection.loading)
+        {
+            [_connections insertObject:connection atIndex:i];
+            added = YES;
+            break;
+        }
+    }
+    if (!added)
+    {
+        [_connections addObject:connection];
+    }
+    
+    [connection release];
     [self updateQueue];
 }
 
@@ -724,10 +689,11 @@ NSString *const AsyncImageErrorKey = @"error";
 {
     if (_crossfadeImages)
     {
-        CATransition *animation = [CATransition animation];
-        animation.type = kCATransitionFade;
-        animation.duration = _crossfadeDuration;
-        [self.layer addAnimation:animation forKey:nil];
+        //implement crossfade transition without needing to import QuartzCore
+        id animation = objc_msgSend(NSClassFromString(@"CATransition"), @selector(animation));
+        objc_msgSend(animation, @selector(setType:), @"kCATransitionFade");
+        objc_msgSend(animation, @selector(setDuration:), _crossfadeDuration);
+        objc_msgSend(self.layer, @selector(addAnimation:forKey:), animation, nil);
     }
     super.image = image;
     [_activityView stopAnimating];

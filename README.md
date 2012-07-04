@@ -435,9 +435,13 @@ This example demonstrates how to use the `contentOffset` and `viewpointOffset` p
 
 This example demonstrates how to customise the appearance of each carousel type using the iCarouselOption API.
 
-    Dynamic Reflections
+    Dynamic View Reflections
     
-This example demonstrates how to use the ReflectionView class (https://github.com/nicklockwood/ReflectionView) to dynamically generate reflections for your item views.
+This example demonstrates how to use the ReflectionView class (https://github.com/nicklockwood/ReflectionView) to dynamically generate reflections for your item views. This is applicable to item views that contain subviews or controls. For item views that are just images, it's better to use the approach shown in the *Dynamic Image Reflections* example.
+
+    Dynamic Image Reflections
+    
+This example demonstrates how to use the FXImageView class (https://github.com/nicklockwood/FXImageView) to dynamically generate reflections and drop shadows for your carousel images.
 
     Dynamic Downloads
     
@@ -461,8 +465,11 @@ FAQ
     A. Set the `clipsToBounds` property to YES on your iCarousel view. You can set this property in Interface Builder by ticking the 'Clip Subviews' option.
     
     Q. I'm getting weird issues where views turn up at the wrong points in the carousel. What's going on?
-    A. You're probably misusing the reusingView property. Views are recycled multiple times at different points in the carousel, so even if you've checked that reusingView is not nil, you still need to set it's properties each time `carousel:viewForItemAtIndex:reusingView:` is called. 
+    A. You're probably recycling views in your `carousel:viewForItemAtIndex:reusingView:` using the `reusingView` parameter without setting the view contents each time. Study the demo app more closely and make sure you aren't doing all your item view setup in the wrong place.
     
+    Q. I'm loading 50 images in my carousel and I keep running out of memory. How can I fix it?
+    A. The trick is to load the views on a background thread as the carousel is scrolling instead of loading them all in advance. Check out the *Dynamic Downloads* example for how to do this using the AsyncImageView library. The example is using remote image URLs, but the exact same approach will work just as well for locally hosted images in your app - just create local file URLs using `[NSURL fileUrlWithPath:...]`.
+
     Q. Can I use multiple carousels in the same view controller?
     A. Yes, check out the *Multiple Carousels* example for how to do this.
     
@@ -477,15 +484,15 @@ FAQ
     
     Q. If the views in my carousel all have completely different layouts, should I still use the `reusingView` parameter?
     A. Probably not, and unless you have hundreds of views in your carousel, it's unlikely to be worth the trouble.
-    
+
     Q. I'm using iCarouselTypeLinear. How can I make it behave more like a UIScrollView with paging enabled?
     A. If you set decelerationRate to zero then iCarousel will more closely emulate the feel of a UIScrollView. If that's still not close enough, consider using my SwipeView library instead (https://github.com/nicklockwood/SwipeView) which is very similar to iCarousel, but based on a UIScrollView.
     
     Q. I want my carousel items to have a real reflection, but the reflection in the examples is just drawn on. How can I render reflections dynamically?
-    A. iCarousel doesn't have built-in reflection support, but you can use my ReflectionView library to do this. Check out the *Dynamic Reflections* example. If the items in your view are images, you may wish to use the FXImageView class instead, in which case check out the *Downloads & Reflections* example instead.
+    A. iCarousel doesn't have built-in reflection support, but you can use some additional libraries to do this. Check out the *Dynamic View Reflections* and  *Dynamic Image Reflections* examples.
     
     Q. I want to download a bunch of images on the fly and display them in my carousel. How can I do that?
-    A. Downloading images asynchronously and displaying them is quite complex. You can use my AsyncImageView library to simplify the process. Check out the *Dynamic Reflections* example.
+    A. Downloading images asynchronously and displaying them is quite complex. You can use my AsyncImageView library to simplify the process. Check out the *Dynamic Downloads* example.
     
     Q. What if I want to download images on the fly *and* add a reflection? Can I combine the ReflectionView and AsyncImageView classes?
     A. Technically yes, but if you are downloading images you'd be better off using the FXImageView class instead of ReflectionView. Check out the *Downloads & Reflections* example.

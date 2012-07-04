@@ -1,7 +1,7 @@
 //
 //  FXImageView.m
 //
-//  Version 1.1.1
+//  Version 1.1.2
 //
 //  Created by Nick Lockwood on 31/10/2011.
 //  Copyright (c) 2011 Charcoal Design
@@ -46,7 +46,6 @@
 
 @property (nonatomic, strong) UIImage *originalImage;
 @property (nonatomic, strong) UIImageView *imageView;
-@property (nonatomic, strong) NSOperation *operation;
 
 - (void)processImage;
 
@@ -312,7 +311,8 @@
     [operation setThreadPriority:1.0];
     
     //make op a dependency of all queued ops
-    NSInteger index = [queue operationCount] - [queue maxConcurrentOperationCount];
+    NSInteger maxOperations = ([queue maxConcurrentOperationCount] > 0) ? [queue maxConcurrentOperationCount]: INT_MAX;
+    NSInteger index = [queue operationCount] - maxOperations;
     if (index >= 0)
     {
         NSOperation *op = [[queue operations] objectAtIndex:index];

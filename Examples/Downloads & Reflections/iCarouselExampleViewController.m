@@ -13,7 +13,7 @@
 
 @interface iCarouselExampleViewController ()
 
-@property (nonatomic, retain) NSMutableArray *items;
+@property (nonatomic) NSMutableArray *items;
 
 @end
 
@@ -61,7 +61,6 @@
     
     [carousel release];
     [items release];
-    [super dealloc];
 }
 
 #pragma mark -
@@ -118,7 +117,7 @@
     
     //show placeholder
     ((FXImageView *)view).processedImage = [UIImage imageNamed:@"placeholder.png"];
-    
+
     //set image URL. AsyncImageView class will then dynamically load the image
     ((FXImageView *)view).imageURL = [items objectAtIndex:index];
     
