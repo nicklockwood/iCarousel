@@ -303,14 +303,17 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)setScrollOffset:(CGFloat)scrollOffset
 {
-    _scrolling = NO;
-    _decelerating = NO;
-    [self disableAnimation];
-    _scrollOffset = [self clampedOffset:scrollOffset];
-    [self didScroll];
-    _previousItemIndex = self.currentItemIndex;
-    [self depthSortViews];
-    [self enableAnimation];
+    if (_scrollOffset != scrollOffset)
+    {
+        _scrolling = NO;
+        _decelerating = NO;
+        [self disableAnimation];
+        _scrollOffset = [self clampedOffset:scrollOffset];
+        [self didScroll];
+        _previousItemIndex = self.currentItemIndex;
+        [self depthSortViews];
+        [self enableAnimation];
+    }
 }
 
 - (void)setContentOffset:(CGSize)contentOffset
@@ -1923,7 +1926,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 }
 
 - (void)didScroll
-{   
+{
     if (_shouldWrap || !_bounces)
     {
         _scrollOffset = [self clampedOffset:_scrollOffset];
