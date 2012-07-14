@@ -1,7 +1,7 @@
 //
 //  iCarousel.m
 //
-//  Version 1.7 beta
+//  Version 1.7
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2011 Charcoal Design
@@ -70,7 +70,7 @@
 @property (nonatomic, unsafe_unretained) id timer;
 @property (nonatomic, assign) BOOL decelerating;
 @property (nonatomic, assign) CGFloat previousTranslation;
-@property (nonatomic, assign) BOOL shouldWrap;
+@property (nonatomic, assign, getter = isWrapEnabled) BOOL wrapEnabled;
 @property (nonatomic, assign) BOOL dragging;
 @property (nonatomic, assign) BOOL didDrag;
 @property (nonatomic, assign) NSTimeInterval toggleTime;
@@ -125,7 +125,7 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 @synthesize startTime = _startTime;
 @synthesize scrolling = _scrolling;
 @synthesize previousTranslation = _previousTranslation;
-@synthesize shouldWrap = _shouldWrap;
+@synthesize wrapEnabled = _wrapEnabled;
 @synthesize vertical = _vertical;
 @synthesize dragging = _dragging;
 @synthesize didDrag = _didDrag;
@@ -169,7 +169,7 @@ CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     _offsetMultiplier = 1.0f;
     _contentOffset = CGSizeZero;
     _viewpointOffset = CGSizeZero;
-    _shouldWrap = NO;
+    _wrapEnabled = NO;
     _scrollSpeed = 1.0f;
     _bounceDistance = 1.0f;
     _toggle = 0.0f;
@@ -810,7 +810,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 {
     //calculate relative position
     CGFloat offset = index - _scrollOffset;
-    if (_shouldWrap)
+    if (_wrapEnabled)
     {
         if (offset > _numberOfItems/2)
         {
@@ -1128,19 +1128,19 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         case iCarouselTypeWheel:
         case iCarouselTypeInvertedWheel:
         {
-            _shouldWrap = YES;
+            _wrapEnabled = YES;
             break;
         }
         default:
         {
-            _shouldWrap = NO;
+            _wrapEnabled = NO;
             break;
         }
     }
-    _shouldWrap = !![self valueForOption:iCarouselOptionWrap withDefault:_shouldWrap];
+    _wrapEnabled = !![self valueForOption:iCarouselOptionWrap withDefault:_wrapEnabled];
     
     //no placeholders on wrapped carousels
-    _numberOfPlaceholdersToShow = _shouldWrap? 0: _numberOfPlaceholders;
+    _numberOfPlaceholdersToShow = _wrapEnabled? 0: _numberOfPlaceholders;
     
     //set item width
     [self updateItemWidth];
@@ -1311,14 +1311,14 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     NSInteger min = -(int)ceilf((CGFloat)_numberOfPlaceholdersToShow/2.0f);
     NSInteger max = _numberOfItems - 1 + _numberOfPlaceholdersToShow/2;
     NSInteger offset = self.currentItemIndex - _numberOfVisibleItems/2;
-    if (!_shouldWrap)
+    if (!_wrapEnabled)
     {
         offset = MAX(min, MIN(max - _numberOfVisibleItems + 1, offset));
     }
     for (NSInteger i = 0; i < _numberOfVisibleItems; i++)
     {
         NSInteger index = i + offset;
-        if (_shouldWrap)
+        if (_wrapEnabled)
         {
             index = [self clampedIndex:index];
         }
@@ -1402,7 +1402,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (NSInteger)clampedIndex:(NSInteger)index
 {
-    if (_shouldWrap)
+    if (_wrapEnabled)
     {
         if (_numberOfItems == 0)
         {
@@ -1418,7 +1418,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (CGFloat)clampedOffset:(CGFloat)offset
 {
-    if (_shouldWrap)
+    if (_wrapEnabled)
     {
         return _numberOfItems? (offset - floorf(offset / (CGFloat)_numberOfItems) * _numberOfItems): 0.0f;
     }
@@ -1436,7 +1436,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 - (NSInteger)minScrollDistanceFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex
 {
     NSInteger directDistance = toIndex - fromIndex;
-    if (_shouldWrap)
+    if (_wrapEnabled)
     {
         NSInteger wrappedDistance = MIN(toIndex, fromIndex) + _numberOfItems - MAX(toIndex, fromIndex);
         if (fromIndex < toIndex)
@@ -1451,7 +1451,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 - (CGFloat)minScrollDistanceFromOffset:(CGFloat)fromOffset toOffset:(CGFloat)toOffset
 {
     CGFloat directDistance = toOffset - fromOffset;
-    if (_shouldWrap)
+    if (_wrapEnabled)
     {
         CGFloat wrappedDistance = fminf(toOffset, fromOffset) + _numberOfItems - fmaxf(toOffset, fromOffset);
         if (fromOffset < toOffset)
@@ -1474,7 +1474,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         _scrollDuration = duration;
         _previousItemIndex = roundf(_scrollOffset);
         _endOffset = _startOffset + offset;
-        if (!_shouldWrap)
+        if (!_wrapEnabled)
         {
             _endOffset = [self clampedOffset:_endOffset];
         }
@@ -1795,7 +1795,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
             _endOffset = floorf(_endOffset);
         }
     }
-    if (!_shouldWrap)
+    if (!_wrapEnabled)
     {
         if (_bounces)
         {
@@ -1927,7 +1927,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (void)didScroll
 {
-    if (_shouldWrap || !_bounces)
+    if (_wrapEnabled || !_bounces)
     {
         _scrollOffset = [self clampedOffset:_scrollOffset];
     }
@@ -2162,7 +2162,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
             {
                 CGFloat translation = (_vertical? [panGesture translationInView:self].y: [panGesture translationInView:self].x) - _previousTranslation;
                 CGFloat factor = 1.0f;
-                if (!_shouldWrap && _bounces)
+                if (!_wrapEnabled && _bounces)
                 {
                     factor = 1.0f - fminf(fabsf(_scrollOffset - [self clampedOffset:_scrollOffset]), _bounceDistance) / _bounceDistance;
                 }
@@ -2206,7 +2206,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         
         CGFloat translation = _vertical? [theEvent deltaY]: [theEvent deltaX];
         CGFloat factor = 1.0f;
-        if (!_shouldWrap && _bounces)
+        if (!_wrapEnabled && _bounces)
         {
             factor = 1.0f - fminf(fabsf(_scrollOffset - [self clampedOffset:_scrollOffset]), _bounceDistance) / _bounceDistance;
         }

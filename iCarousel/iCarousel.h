@@ -1,7 +1,7 @@
 //
 //  iCarousel.h
 //
-//  Version 1.7 beta
+//  Version 1.7
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2011 Charcoal Design
@@ -175,7 +175,7 @@ iCarouselOption;
     BOOL _scrolling;
     CGFloat _previousTranslation;
 	BOOL _centerItemWhenSelected;
-	BOOL _shouldWrap;
+	BOOL _wrapEnabled;
 	BOOL _dragging;
     BOOL _didDrag;
     CGFloat _scrollSpeed;
@@ -199,6 +199,8 @@ iCarouselOption;
 @property (nonatomic, assign) CGFloat scrollSpeed;
 @property (nonatomic, assign) CGFloat bounceDistance;
 @property (nonatomic, assign, getter = isScrollEnabled) BOOL scrollEnabled;
+@property (nonatomic, assign, getter = isVertical) BOOL vertical;
+@property (nonatomic, readonly, getter = isWrapEnabled) BOOL wrapEnabled;
 @property (nonatomic, assign) BOOL bounces;
 @property (nonatomic, assign) CGFloat scrollOffset;
 @property (nonatomic, readonly) CGFloat offsetMultiplier;
@@ -217,7 +219,6 @@ iCarouselOption;
 @property (nonatomic, assign) BOOL stopAtItemBoundary;
 @property (nonatomic, assign) BOOL scrollToItemBoundary;
 @property (nonatomic, assign) BOOL useDisplayLink;
-@property (nonatomic, assign, getter = isVertical) BOOL vertical;
 @property (nonatomic, assign) BOOL ignorePerpendicularSwipes;
 @property (nonatomic, assign) BOOL centerItemWhenSelected;
 

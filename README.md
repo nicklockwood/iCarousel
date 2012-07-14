@@ -105,6 +105,10 @@ The maximum distance that a non-wrapped carousel will bounce when it overshoots 
 
 Enables and disables user scrolling of the carousel. The carousel can still be scrolled programmatically if this property is set to NO.
 
+    @property (nonatomic, readonly, getter = isWrapEnabled) BOOL wrapEnabled;
+
+Returns YES if wrapping is enabled and NO if it isn't. This property is read only. If you wish to override the default value, implement the `carousel:valueForOption:withDefault:` delegate method and return a value for `iCarouselOptionWrap`. 
+
 	@property (nonatomic, readonly) NSInteger numberOfItems;
 
 The number of items in the carousel (read only). To set this, implement the `numberOfItemsInCarousel:` dataSource method. Note that not all of these item views will be loaded or visible at a given point in time - the carousel loads item views on demand as it scrolls.
@@ -499,3 +503,6 @@ FAQ
     
     Q. What if I want to download images on the fly *and* add a reflection? Can I combine the ReflectionView and AsyncImageView classes?
     A. Technically yes, but if you are downloading images you'd be better off using the FXImageView class instead of ReflectionView. Check out the *Downloads & Reflections* example.
+    
+    Q. The edges of my item views look jaggy. Is there any way to smooth/antialias them?
+    A. If you include (at least) a single pixel of transparent space around the edge of your item view images then iOS will smooth them automatically. This is because iOS automatically antialiases the pixels inside images, but doesn't antialias the edges of views. Even if your item views are a flat color, it's worth adding a background image of the same color to the views in order to get the smoothing effect.

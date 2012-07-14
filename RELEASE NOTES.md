@@ -1,4 +1,4 @@
-Version 1.7 beta
+Version 1.7
 
 - Renamed iCarouselTransformOption... values to "iCarouselOption", and extended the list of available options
 - Simplified carousel interface by deprecating a number of delegate methods in favour of the simpler iCarouselOption API
