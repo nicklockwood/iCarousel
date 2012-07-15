@@ -7,7 +7,6 @@
 //
 
 #import "iCarouselExampleViewController.h"
-#import "AsyncImageView.h"
 #import "FXImageView.h"
 
 
@@ -111,15 +110,12 @@
         imageView.shadowBlur = 5.0f;
         view = imageView;
     }
-    
-    //cancel any previously loading images for this view
-    [[AsyncImageLoader sharedLoader] cancelLoadingImagesForTarget:view];
-    
+
     //show placeholder
     ((FXImageView *)view).processedImage = [UIImage imageNamed:@"placeholder.png"];
 
-    //set image URL. AsyncImageView class will then dynamically load the image
-    ((FXImageView *)view).imageURL = [items objectAtIndex:index];
+    //set image with URL. FXImageView will then download and process the image
+    [(FXImageView *)view setImageWithContentsOfURL:[items objectAtIndex:index]];
     
     return view;
 }

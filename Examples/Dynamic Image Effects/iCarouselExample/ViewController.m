@@ -25,15 +25,14 @@
 {
     if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]))
     {
-        //get image URLs
-        NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"Images" ofType:@"plist"];
-        NSArray *imagePaths = [NSArray arrayWithContentsOfFile:plistPath];
+        //get image paths
+        NSArray *imagePaths = [[NSBundle mainBundle] pathsForResourcesOfType:@"jpg" inDirectory:@"Lake"];
         
-        //load images
+        //preload images (although FXImageView can actually do this for us on the fly)
         _images = [[NSMutableArray alloc] init];
         for (NSString *path in imagePaths)
         {
-            [_images addObject:[UIImage imageNamed:path]];
+            [_images addObject:[UIImage imageWithContentsOfFile:path]];
         }
     }
     return self;
@@ -65,6 +64,7 @@
         imageView.reflectionGap = 10.0f;
         imageView.shadowOffset = CGSizeMake(0.0f, 2.0f);
         imageView.shadowBlur = 5.0f;
+        imageView.cornerRadius = 10.0f;
         view = imageView;
     }
     

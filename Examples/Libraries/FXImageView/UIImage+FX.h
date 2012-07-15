@@ -1,7 +1,7 @@
 //
 //  UIImage+FX.h
 //
-//  Version 1.1.1
+//  Version 1.2
 //
 //  Created by Nick Lockwood on 31/10/2011.
 //  Copyright (c) 2011 Charcoal Design
@@ -46,6 +46,7 @@
 - (UIImage *)reflectedImageWithScale:(CGFloat)scale;
 - (UIImage *)imageWithReflectionWithScale:(CGFloat)scale gap:(CGFloat)gap alpha:(CGFloat)alpha;
 - (UIImage *)imageWithShadowColor:(UIColor *)color offset:(CGSize)offset blur:(CGFloat)blur;
+- (UIImage *)imageWithCornerRadius:(CGFloat)radius;
 - (UIImage *)imageWithAlpha:(CGFloat)alpha;
 
 @end

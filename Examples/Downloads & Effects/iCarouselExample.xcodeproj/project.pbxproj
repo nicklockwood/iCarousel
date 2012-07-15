@@ -17,7 +17,6 @@
 		0148359513A36C3700E687AC /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0148358F13A36C3700E687AC /* MainWindow.xib */; };
 		0148359613A36C3700E687AC /* iCarouselExampleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0148359113A36C3700E687AC /* iCarouselExampleViewController.xib */; };
 		016334CD159BB378007DECD4 /* Images.plist in Resources */ = {isa = PBXBuildFile; fileRef = 016334CC159BB378007DECD4 /* Images.plist */; };
-		B2BCBA85159C6DD8004942A1 /* AsyncImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = B2BCBA7F159C6DD8004942A1 /* AsyncImageView.m */; };
 		B2BCBA86159C6DD8004942A1 /* FXImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = B2BCBA82159C6DD8004942A1 /* FXImageView.m */; };
 		B2BCBA87159C6DD8004942A1 /* UIImage+FX.m in Sources */ = {isa = PBXBuildFile; fileRef = B2BCBA84159C6DD8004942A1 /* UIImage+FX.m */; };
 		B2BCBA89159C6E57004942A1 /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = B2BCBA88159C6E57004942A1 /* placeholder.png */; };
@@ -43,8 +42,6 @@
 		0148359213A36C3700E687AC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/iCarouselExampleViewController.xib; sourceTree = SOURCE_ROOT; };
 		016334CC159BB378007DECD4 /* Images.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Images.plist; sourceTree = SOURCE_ROOT; };
 		018BBCB413A375AF005CA505 /* iCarouselExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iCarouselExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		B2BCBA7E159C6DD8004942A1 /* AsyncImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncImageView.h; sourceTree = "<group>"; };
-		B2BCBA7F159C6DD8004942A1 /* AsyncImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncImageView.m; sourceTree = "<group>"; };
 		B2BCBA81159C6DD8004942A1 /* FXImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXImageView.h; sourceTree = "<group>"; };
 		B2BCBA82159C6DD8004942A1 /* FXImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXImageView.m; sourceTree = "<group>"; };
 		B2BCBA83159C6DD8004942A1 /* UIImage+FX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+FX.h"; sourceTree = "<group>"; };
@@ -75,7 +72,6 @@
 			isa = PBXGroup;
 			children = (
 				B2E5E6BE146145C900EADB7A /* iCarousel */,
-				B2BCBA7D159C6DD8004942A1 /* AsyncImageView */,
 				B2BCBA80159C6DD8004942A1 /* FXImageView */,
 				01308D9813491C3500453707 /* iCarouselExample */,
 				01308D9113491C3500453707 /* Frameworks */,
@@ -127,16 +123,6 @@
 				0148358613A36C2000E687AC /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		B2BCBA7D159C6DD8004942A1 /* AsyncImageView */ = {
-			isa = PBXGroup;
-			children = (
-				B2BCBA7E159C6DD8004942A1 /* AsyncImageView.h */,
-				B2BCBA7F159C6DD8004942A1 /* AsyncImageView.m */,
-			);
-			name = AsyncImageView;
-			path = ../Libraries/AsyncImageView;
 			sourceTree = "<group>";
 		};
 		B2BCBA80159C6DD8004942A1 /* FXImageView */ = {
@@ -241,7 +227,6 @@
 				0148359313A36C3700E687AC /* iCarouselExampleViewController.m in Sources */,
 				0148359413A36C3700E687AC /* iCarouselExampleAppDelegate.m in Sources */,
 				B2E5E6C1146145C900EADB7A /* iCarousel.m in Sources */,
-				B2BCBA85159C6DD8004942A1 /* AsyncImageView.m in Sources */,
 				B2BCBA86159C6DD8004942A1 /* FXImageView.m in Sources */,
 				B2BCBA87159C6DD8004942A1 /* UIImage+FX.m in Sources */,
 			);

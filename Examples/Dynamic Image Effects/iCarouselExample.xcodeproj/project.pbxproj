@@ -18,7 +18,6 @@
 		B2F2748415A4555700513759 /* FXImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = B2F2748115A4555700513759 /* FXImageView.m */; };
 		B2F2748515A4555700513759 /* UIImage+FX.m in Sources */ = {isa = PBXBuildFile; fileRef = B2F2748315A4555700513759 /* UIImage+FX.m */; };
 		B2F2749515A4556000513759 /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = B2F2748815A4556000513759 /* iCarousel.m */; };
-		B2F274A715A4570100513759 /* Images.plist in Resources */ = {isa = PBXBuildFile; fileRef = B2F274A615A4570100513759 /* Images.plist */; };
 		B2F274A915A457C500513759 /* Lake in Resources */ = {isa = PBXBuildFile; fileRef = B2F274A815A457C500513759 /* Lake */; };
 		B2F274AB15A4588000513759 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2F274AA15A4588000513759 /* QuartzCore.framework */; };
 		B2F274C515A45D7900513759 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = B2F274C215A45D7900513759 /* background.png */; };
@@ -45,7 +44,6 @@
 		B2F2748315A4555700513759 /* UIImage+FX.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+FX.m"; sourceTree = "<group>"; };
 		B2F2748715A4556000513759 /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		B2F2748815A4556000513759 /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
-		B2F274A615A4570100513759 /* Images.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Images.plist; sourceTree = "<group>"; };
 		B2F274A815A457C500513759 /* Lake */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Lake; path = ../Lake; sourceTree = "<group>"; };
 		B2F274AA15A4588000513759 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		B2F274C215A45D7900513759 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
@@ -115,7 +113,6 @@
 		01FA10C8145E9951001906CB /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				B2F274A615A4570100513759 /* Images.plist */,
 				01FA10C9145E9951001906CB /* iCarouselExample-Info.plist */,
 				01FA10CA145E9951001906CB /* InfoPlist.strings */,
 				01FA10CD145E9951001906CB /* main.m */,
@@ -207,7 +204,6 @@
 			files = (
 				01FA10CC145E9951001906CB /* InfoPlist.strings in Resources */,
 				01FA10D8145E9951001906CB /* ViewController.xib in Resources */,
-				B2F274A715A4570100513759 /* Images.plist in Resources */,
 				B2F274A915A457C500513759 /* Lake in Resources */,
 				B2F274C515A45D7900513759 /* background.png in Resources */,
 				B2F274C715A45D7900513759 /* placeholder.png in Resources */,

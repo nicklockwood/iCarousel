@@ -441,9 +441,9 @@ This example demonstrates how to customise the appearance of each carousel type 
 
     Dynamic View Reflections
     
-This example demonstrates how to use the ReflectionView class (https://github.com/nicklockwood/ReflectionView) to dynamically generate reflections for your item views. This is applicable to item views that contain subviews or controls. For item views that are just images, it's better to use the approach shown in the *Dynamic Image Reflections* example.
+This example demonstrates how to use the ReflectionView class (https://github.com/nicklockwood/ReflectionView) to dynamically generate reflections for your item views. This is applicable to item views that contain subviews or controls. For item views that are just images, it's better to use the approach shown in the *Dynamic Image Effects* example.
 
-    Dynamic Image Reflections
+    Dynamic Image Effects
     
 This example demonstrates how to use the FXImageView class (https://github.com/nicklockwood/FXImageView) to dynamically generate reflections and drop shadows for your carousel images.
 
@@ -451,9 +451,9 @@ This example demonstrates how to use the FXImageView class (https://github.com/n
     
 This example demonstrates how to use the AsyncImageView class (https://github.com/nicklockwood/AsyncImageView) to dynamically download remote images and display them in a carousel without blocking the main thread or negatively affecting performance.
 
-    Downloads & Reflections
+    Downloads & Effects
 
-This example demonstrates how to combine AsyncImageView with the FXImageView class (https://github.com/nicklockwood/FXImageView) to download images on the fly and apply reflections and drop shadows to them in real time.
+This example demonstrates how to use the FXImageView class (https://github.com/nicklockwood/FXImageView) to download images on the fly and apply reflections and drop shadows to them in real time.
 
 
 FAQ
@@ -496,7 +496,7 @@ FAQ
     A. If you set decelerationRate to zero then iCarousel will more closely emulate the feel of a UIScrollView. If that's still not close enough, consider using my SwipeView library instead (https://github.com/nicklockwood/SwipeView) which is very similar to iCarousel, but based on a UIScrollView.
     
     Q. I want my carousel items to have a real reflection, but the reflection in the examples is just drawn on. How can I render reflections dynamically?
-    A. iCarousel doesn't have built-in reflection support, but you can use some additional libraries to do this. Check out the *Dynamic View Reflections* and  *Dynamic Image Reflections* examples.
+    A. iCarousel doesn't have built-in reflection support, but you can use some additional libraries to do this. Check out the *Dynamic View Reflections* and  *Dynamic Image Effects* examples.
     
     Q. I want to download a bunch of images on the fly and display them in my carousel. How can I do that?
     A. Downloading images asynchronously and displaying them is quite complex. You can use my AsyncImageView library to simplify the process. Check out the *Dynamic Downloads* example.
