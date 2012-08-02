@@ -1,3 +1,8 @@
+Version 1.7.1
+
+- Fixed issue where reloading carousel with fewer items could sometimes crash
+- Fixed issue where scrollToItemAtIndex:duration: method would sometimes scroll to the wrong index
+
 Version 1.7
 
 - Renamed iCarouselTransformOption... values to "iCarouselOption", and extended the list of available options

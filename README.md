@@ -51,7 +51,7 @@ iCarousel supports the following built-in display types:
 - iCarouselTypeWheel
 - iCarouselTypeInvertedWheel
 - iCarouselTypeCoverFlow
-- iCarouselTypeCoverflow2
+- iCarouselTypeCoverFlow2
 - iCarouselTypeTimeMachine
 - iCarouselTypeInvertedTimeMachine
 

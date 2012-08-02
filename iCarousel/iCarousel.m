@@ -1,7 +1,7 @@
 //
 //  iCarousel.m
 //
-//  Version 1.7
+//  Version 1.7.1
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2011 Charcoal Design
@@ -1306,6 +1306,12 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (void)loadUnloadViews
 {
+    //set item width
+    [self updateItemWidth];
+    
+    //update number of visible items
+    [self updateNumberOfVisibleItems];
+    
     //calculate visible view indices
     NSMutableSet *visibleIndices = [NSMutableSet setWithCapacity:_numberOfVisibleItems];
     NSInteger min = -(int)ceilf((CGFloat)_numberOfPlaceholdersToShow/2.0f);
@@ -1375,6 +1381,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     }
     
     //get number of items and placeholders
+    _numberOfVisibleItems = 0;
     _numberOfItems = [_dataSource numberOfItemsInCarousel:self];
     if ([_dataSource respondsToSelector:@selector(numberOfPlaceholdersInCarousel:)])
     {
@@ -1522,7 +1529,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (void)scrollToItemAtIndex:(NSInteger)index duration:(NSTimeInterval)duration
 {
-    [self scrollByNumberOfItems:[self minScrollDistanceFromIndex:roundf(_scrollOffset) toIndex:index] duration:duration];
+    [self scrollToOffset:index duration:duration];
 }
 
 - (void)scrollToItemAtIndex:(NSInteger)index animated:(BOOL)animated
