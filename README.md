@@ -7,7 +7,7 @@ iCarousel is a class designed to simplify the implementation of various types of
 Supported OS & SDK Versions
 -----------------------------
 
-* Supported build target - iOS 5.1 / Mac OS 10.7 (Xcode 4.3.3, Apple LLVM compiler 3.1)
+* Supported build target - iOS 5.1 / Mac OS 10.7 (Xcode 4.4.1, Apple LLVM compiler 4.0)
 * Earliest supported deployment target - iOS 4.3 / Mac OS 10.7
 * Earliest compatible deployment target - iOS 3.2 / Mac OS 10.6
 
@@ -180,6 +180,18 @@ By default on iOS iCarousel will use CADisplayLink instead of NSTimer for animat
 	@property (nonatomic, assign, getter = isVertical) BOOL vertical;
 
 This property toggles whether the carousel is displayed horizontally or vertically on screen. All the built-in carousel types work in both orientations. Switching to vertical changes both the layout of the carousel and also the direction of swipe detection on screen. Note that custom carousel transforms are not affected by this property, however the swipe gesture direction will still be affected.
+
+    @property (nonatomic, readonly, getter = isDragging) BOOL dragging;
+    
+Returns YES if user has started scrolling the carousel and has not yet released it.
+    
+    @property (nonatomic, readonly, getter = isDecelerating) BOOL decelerating;
+
+Returns YES if the user isn't dragging the carousel any more, but it is still moving.
+
+    @property (nonatomic, readonly, getter = isScrolling) BOOL scrolling;
+
+Returns YES if the carousel is currently being scrolled programatically.
 
 	@property (nonatomic, assign) BOOL ignorePerpendicularSwipes;
 
@@ -375,7 +387,7 @@ The spacing between item views. This value is multiplied by the item width (or h
     iCarouselOptionFadeMax
     iCarouselOptionFadeRange
 
-These three options control the fading out of carousel item views based on their offset from the currently centered item. FadeMin is the minimum negative offset an item view can reach before it begins to fade. FadeMax is the maximum positive offset a view can reach before if begins to fade. FadeRange is the distance the item can move between the point at which it begins to fade and the point at which it becomes completely invisible.
+These three options control the fading out of carousel item views based on their offset from the currently centered item. FadeMin is the minimum negative offset an item view can reach before it begins to fade. FadeMax is the maximum positive offset a view can reach before if begins to fade. FadeRange is the distance over which the fadeout occurs, measured in multiples of an item width (defaults to 1.0).
 
 
 Detecting Taps on Item Views
@@ -439,6 +451,10 @@ This example demonstrates how to use the `contentOffset` and `viewpointOffset` p
 
 This example demonstrates how to customise the appearance of each carousel type using the iCarouselOption API.
 
+    Fading Demo
+    
+This example demonstrates how to use the iCarouselOption API to implement a nice looking fade out effect at the edges of the carousel.
+
     Dynamic View Reflections
     
 This example demonstrates how to use the ReflectionView class (https://github.com/nicklockwood/ReflectionView) to dynamically generate reflections for your item views. This is applicable to item views that contain subviews or controls. For item views that are just images, it's better to use the approach shown in the *Dynamic Image Effects* example.
@@ -454,6 +470,10 @@ This example demonstrates how to use the AsyncImageView class (https://github.co
     Downloads & Effects
 
 This example demonstrates how to use the FXImageView class (https://github.com/nicklockwood/FXImageView) to download images on the fly and apply reflections and drop shadows to them in real time.
+
+    Autoscrolling Example
+    
+This example demonstrates how to implement auto-scrolling of the carousel using a timer.
 
 
 FAQ

@@ -1,7 +1,7 @@
 //
 //  iCarousel.h
 //
-//  Version 1.7.1
+//  Version 1.7.2
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2011 Charcoal Design
@@ -161,7 +161,7 @@ iCarouselOption;
     CGFloat _scrollOffset;
     CGFloat _offsetMultiplier;
     CGFloat _startVelocity;
-    id __unsafe_unretained _timer;
+    NSTimer __unsafe_unretained *_timer;
     BOOL _decelerating;
     BOOL _scrollEnabled;
     CGFloat _decelerationRate;
@@ -184,7 +184,6 @@ iCarouselOption;
     CGFloat _toggle;
     BOOL _stopAtItemBoundary;
     BOOL _scrollToItemBoundary;
-    BOOL _useDisplayLink;
 	BOOL _vertical;
     BOOL _ignorePerpendicularSwipes;
     NSInteger _animationDisableCount;
@@ -218,9 +217,11 @@ iCarouselOption;
 @property (nonatomic, readonly) CGFloat toggle;
 @property (nonatomic, assign) BOOL stopAtItemBoundary;
 @property (nonatomic, assign) BOOL scrollToItemBoundary;
-@property (nonatomic, assign) BOOL useDisplayLink;
 @property (nonatomic, assign) BOOL ignorePerpendicularSwipes;
 @property (nonatomic, assign) BOOL centerItemWhenSelected;
+@property (nonatomic, readonly, getter = isDragging) BOOL dragging;
+@property (nonatomic, readonly, getter = isDecelerating) BOOL decelerating;
+@property (nonatomic, readonly, getter = isScrolling) BOOL scrolling;
 
 - (void)scrollByOffset:(CGFloat)offset duration:(NSTimeInterval)duration;
 - (void)scrollToOffset:(CGFloat)offset duration:(NSTimeInterval)duration;

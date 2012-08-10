@@ -1,3 +1,13 @@
+Version 1.7.2
+
+- Core animation is no longer disabled when calling delegate methods.
+- Fixed a potential divide-by-zero error when scrolling
+- Removed useDisplayLink option as the performance benefits are unclear
+- Added dragging, scrolling and decelerating properties (readonly)
+- iCarouselWrap property is now refreshed after inserting/deleting items
+- Added Autoscrolling Example
+- Added Fading Demo example
+
 Version 1.7.1
 
 - Fixed issue where reloading carousel with fewer items could sometimes crash
