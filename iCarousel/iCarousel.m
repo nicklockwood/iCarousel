@@ -49,6 +49,11 @@
 #define MAX_VISIBLE_ITEMS 30
 #endif
 
+@interface iCarousel (PrivateMethods)
+- (CGFloat)clampedOffset:(CGFloat)offset;
+- (CGFloat)valueForOption:(iCarouselOption)option withDefault:(CGFloat)value;
+- (NSInteger)circularCarouselItemCount;
+@end
 
 @interface iCarousel ()
 
@@ -476,47 +481,6 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         return 1.0f - fminf(fadeMin - offset, fadeRange) / fadeRange;
     }
     return 1.0f;
-}
-
-- (CGFloat)valueForOption:(iCarouselOption)option withDefault:(CGFloat)value
-{
-    //DEPRECATED: legacy delegate method support
-    switch (option)
-    {
-        case iCarouselOptionWrap:
-        {
-            if ([_delegate respondsToSelector:@selector(carouselShouldWrap:)])
-            {
-                return [(id<iCarouselDeprecated>)_delegate carouselShouldWrap:self];
-            }
-            break;
-        }
-        case iCarouselOptionOffsetMultiplier:
-        {
-            if ([_delegate respondsToSelector:@selector(carouselOffsetMultiplier:)])
-            {
-                return [(id<iCarouselDeprecated>)_delegate carouselOffsetMultiplier:self];
-            }
-            break;
-        }
-        default:
-        {
-            //do nothing
-        }
-    }
-    
-    if ([_delegate respondsToSelector:@selector(carousel:valueForOption:withDefault:)])
-    {
-        return [_delegate carousel:self valueForOption:option withDefault:value];
-    }
-    
-    //DEPRECATED: legacy delegate method support
-    if ([_delegate respondsToSelector:@selector(carousel:valueForTransformOption:withDefault:)])
-    {
-        return [(id<iCarouselDeprecated>)_delegate carousel:self valueForTransformOption:option withDefault:value];
-    }
-    
-    return value;
 }
 
 - (CATransform3D)transformForItemView:(UIView *)view withOffset:(CGFloat)offset
@@ -1039,35 +1003,6 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 }
 
-- (NSInteger)circularCarouselItemCount
-{
-    NSInteger count = 0;
-    switch (_type)
-    {
-        case iCarouselTypeRotary:
-        case iCarouselTypeInvertedRotary:
-        case iCarouselTypeCylinder:
-        case iCarouselTypeInvertedCylinder:
-        case iCarouselTypeWheel:
-        case iCarouselTypeInvertedWheel:
-        {
-            //slightly arbitrary number, chosen for aesthetic reasons
-            CGFloat spacing = [self valueForOption:iCarouselOptionSpacing withDefault:1.0f];
-            CGFloat width = _vertical ? self.bounds.size.height: self.bounds.size.width;
-            count = MIN(MAX_VISIBLE_ITEMS, MAX(12, ceilf(width / (spacing * _itemWidth)) * M_PI));
-            count = MIN(_numberOfItems + _numberOfPlaceholdersToShow, count);
-            break;
-        }
-        default:
-        {
-            //not used for non-circular carousels
-            return _numberOfItems + _numberOfPlaceholdersToShow;
-            break;
-        }
-    }
-    return [self valueForOption:iCarouselOptionCount withDefault:count];
-}
-
 - (void)layOutItemViews
 {
     //bail out if not set up yet
@@ -1378,18 +1313,6 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     else
     {
         return MIN(MAX(index, 0), _numberOfItems - 1);
-    }
-}
-
-- (CGFloat)clampedOffset:(CGFloat)offset
-{
-    if (_wrapEnabled)
-    {
-        return _numberOfItems? (offset - floorf(offset / (CGFloat)_numberOfItems) * _numberOfItems): 0.0f;
-    }
-    else
-    {
-        return fminf(fmaxf(0.0f, offset), (CGFloat)_numberOfItems - 1.0f);
     }
 }
 
@@ -2278,5 +2201,90 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 }
 
 #endif
+
+@end
+
+@implementation iCarousel (PrivateMethods)
+- (CGFloat)clampedOffset:(CGFloat)offset
+{
+    if (_wrapEnabled)
+    {
+        return _numberOfItems? (offset - floorf(offset / (CGFloat)_numberOfItems) * _numberOfItems): 0.0f;
+    }
+    else
+    {
+        return fminf(fmaxf(0.0f, offset), (CGFloat)_numberOfItems - 1.0f);
+    }
+}
+
+- (CGFloat)valueForOption:(iCarouselOption)option withDefault:(CGFloat)value
+{
+    //DEPRECATED: legacy delegate method support
+    switch (option)
+    {
+        case iCarouselOptionWrap:
+        {
+            if ([_delegate respondsToSelector:@selector(carouselShouldWrap:)])
+            {
+                return [(id<iCarouselDeprecated>)_delegate carouselShouldWrap:self];
+            }
+            break;
+        }
+        case iCarouselOptionOffsetMultiplier:
+        {
+            if ([_delegate respondsToSelector:@selector(carouselOffsetMultiplier:)])
+            {
+                return [(id<iCarouselDeprecated>)_delegate carouselOffsetMultiplier:self];
+            }
+            break;
+        }
+        default:
+        {
+            //do nothing
+        }
+    }
+
+    if ([_delegate respondsToSelector:@selector(carousel:valueForOption:withDefault:)])
+    {
+        return [_delegate carousel:self valueForOption:option withDefault:value];
+    }
+
+    //DEPRECATED: legacy delegate method support
+    if ([_delegate respondsToSelector:@selector(carousel:valueForTransformOption:withDefault:)])
+    {
+        return [(id<iCarouselDeprecated>)_delegate carousel:self valueForTransformOption:option withDefault:value];
+    }
+
+    return value;
+}
+
+- (NSInteger)circularCarouselItemCount
+{
+    NSInteger count = 0;
+    switch (_type)
+    {
+        case iCarouselTypeRotary:
+        case iCarouselTypeInvertedRotary:
+        case iCarouselTypeCylinder:
+        case iCarouselTypeInvertedCylinder:
+        case iCarouselTypeWheel:
+        case iCarouselTypeInvertedWheel:
+        {
+            //slightly arbitrary number, chosen for aesthetic reasons
+            CGFloat spacing = [self valueForOption:iCarouselOptionSpacing withDefault:1.0f];
+            CGFloat width = _vertical ? self.bounds.size.height: self.bounds.size.width;
+            count = MIN(MAX_VISIBLE_ITEMS, MAX(12, ceilf(width / (spacing * _itemWidth)) * M_PI));
+            count = MIN(_numberOfItems + _numberOfPlaceholdersToShow, count);
+            break;
+        }
+        default:
+        {
+            //not used for non-circular carousels
+            return _numberOfItems + _numberOfPlaceholdersToShow;
+            break;
+        }
+    }
+    return [self valueForOption:iCarouselOptionCount withDefault:count];
+}
 
 @end
