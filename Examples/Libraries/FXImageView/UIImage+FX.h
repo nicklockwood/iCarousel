@@ -1,7 +1,7 @@
 //
 //  UIImage+FX.h
 //
-//  Version 1.2
+//  Version 1.2.2
 //
 //  Created by Nick Lockwood on 31/10/2011.
 //  Copyright (c) 2011 Charcoal Design
@@ -48,5 +48,9 @@
 - (UIImage *)imageWithShadowColor:(UIColor *)color offset:(CGSize)offset blur:(CGFloat)blur;
 - (UIImage *)imageWithCornerRadius:(CGFloat)radius;
 - (UIImage *)imageWithAlpha:(CGFloat)alpha;
+- (UIImage *)imageWithMask:(UIImage *)maskImage;
+
+- (UIImage *)maskImageFromImageAlpha;
+
 
 @end
