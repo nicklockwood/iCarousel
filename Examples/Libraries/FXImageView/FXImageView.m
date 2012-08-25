@@ -1,7 +1,7 @@
 //
 //  FXImageView.m
 //
-//  Version 1.2.2
+//  Version 1.2.3
 //
 //  Created by Nick Lockwood on 31/10/2011.
 //  Copyright (c) 2011 Charcoal Design
@@ -88,9 +88,8 @@
 @synthesize shadowOffset = _shadowOffset;
 @synthesize shadowBlur = _shadowBlur;
 @synthesize cornerRadius = _cornerRadius;
-
 @synthesize customEffectsBlock = _customEffectsBlock;
-@synthesize customEffectsIdentifier = _customEffectsIdentifier;
+@synthesize cacheKey = _cacheKey;
 
 @synthesize originalImage = _originalImage;
 @synthesize imageView = _imageView;
@@ -176,7 +175,7 @@
 - (void)dealloc
 {
     [_customEffectsBlock release];
-    [_customEffectsIdentifier release];
+    [_cacheKey release];
     [_originalImage release];
     [_shadowColor release];
     [_imageView release];
@@ -190,7 +189,7 @@
 #pragma mark -
 #pragma mark Caching
 
-- (NSString *)colorString:(UIColor *)color
+- (NSString *)colorHash:(UIColor *)color
 {
     NSString *colorString = @"{0.00,0.00}";
     if (color && ![color isEqual:[UIColor clearColor]])
@@ -207,31 +206,43 @@
     return colorString;
 }
 
+- (NSString *)imageHash:(UIImage *)image
+{
+    static NSInteger hashKey = 1;
+    NSString *number = objc_getAssociatedObject(image, @"FXImageHash");
+    if (!number && image)
+    {
+        number = [NSString stringWithFormat:@"%i", hashKey++];
+        objc_setAssociatedObject(image, @"FXImageHash", number, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    return number;
+}
+
 - (NSString *)cacheKey
 {
-    NSString *key = [NSString stringWithFormat:@"%@_%@_%.2f_%.2f_%.2f_%@_%@_%.2f_%.2f_%i",
-                     _imageContentURL ?: _originalImage,
-                     NSStringFromCGSize(self.bounds.size),
-                     _reflectionGap,
-                     _reflectionScale,
-                     _reflectionAlpha,
-                     [self colorString:_shadowColor],
-                     NSStringFromCGSize(_shadowOffset),
-                     _shadowBlur,
-                     _cornerRadius,
-                     self.contentMode];
+    if (_cacheKey) return _cacheKey;
     
-    if (_customEffectsBlock)
-    {
-        key = [key stringByAppendingFormat:@"_%@", _customEffectsIdentifier];
-    }
-    return key;
+    return [NSString stringWithFormat:@"%@_%@_%.2f_%.2f_%.2f_%@_%@_%.2f_%.2f_%i",
+            _imageContentURL ?: [self imageHash:_originalImage],
+            NSStringFromCGSize(self.bounds.size),
+            _reflectionGap,
+            _reflectionScale,
+            _reflectionAlpha,
+            [self colorHash:_shadowColor],
+            NSStringFromCGSize(_shadowOffset),
+            _shadowBlur,
+            _cornerRadius,
+            self.contentMode];
+}
+
+- (void)cacheProcessedImage:(UIImage *)processedImage forKey:(NSString *)cacheKey
+{
+    [[[self class] processedImageCache] setObject:processedImage forKey:cacheKey];
 }
 
 - (UIImage *)cachedProcessedImage
 {
-    NSString *key = [self cacheKey];
-    return [[[self class] processedImageCache] objectForKey:key];
+    return [[[self class] processedImageCache] objectForKey:[self cacheKey]];
 }
 
 #pragma mark -
@@ -247,7 +258,7 @@
     if (processedImage)
     {
         //cache image
-        [[[self class] processedImageCache] setObject:processedImage forKey:cacheKey];
+        [self cacheProcessedImage:processedImage forKey:cacheKey];
     }
     
     //set image
@@ -284,7 +295,10 @@
     
 #if !__has_feature(objc_arc)
 
-    [_customEffectsBlock autorelease];
+    [[image retain] autorelease];
+    [[imageURL retain] autorelease];
+    [[shadowColor retain] autorelease];
+    [customEffectsBlock autorelease];
     
 #endif
     
@@ -358,7 +372,7 @@
     {
         if (processedImage)
         {
-            [[[self class] processedImageCache] setObject:processedImage forKey:cacheKey];
+            [self cacheProcessedImage:processedImage forKey:cacheKey];
         }
         [self willChangeValueForKey:@"processedImage"];
         _imageView.image = processedImage;
@@ -586,11 +600,11 @@
     }
 }
 
-- (void)setCustomEffectsIdentifier:(NSString *)customEffectsIdentifier
+- (void)setCacheKey:(NSString *)cacheKey
 {
-    if (![customEffectsIdentifier isEqual:_customEffectsIdentifier])
+    if (![cacheKey isEqual:_cacheKey])
     {
-        _customEffectsIdentifier = [customEffectsIdentifier copy];
+        _cacheKey = [cacheKey copy];
         [self setNeedsLayout];
     }
 }

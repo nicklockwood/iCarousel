@@ -1,7 +1,7 @@
 //
 //  FXImageView.h
 //
-//  Version 1.2.2
+//  Version 1.2.3
 //
 //  Created by Nick Lockwood on 31/10/2011.
 //  Copyright (c) 2011 Charcoal Design
@@ -49,7 +49,7 @@
 @property (nonatomic, strong) UIImage *processedImage;
 
 @property (nonatomic, copy) UIImage *(^customEffectsBlock)(UIImage *image);
-@property (nonatomic, copy) NSString *customEffectsIdentifier;
+@property (nonatomic, copy) NSString *cacheKey;
 
 - (void)setImageWithContentsOfFile:(NSString *)file;
 - (void)setImageWithContentsOfURL:(NSURL *)URL;

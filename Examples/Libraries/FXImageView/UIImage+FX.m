@@ -1,7 +1,7 @@
 //
 //  UIImage+FX.m
 //
-//  Version 1.2.2
+//  Version 1.2.3
 //
 //  Created by Nick Lockwood on 31/10/2011.
 //  Copyright (c) 2011 Charcoal Design
@@ -396,7 +396,7 @@
     
     //create alpha image
     NSInteger bytesPerRow = ((width + 3) / 4) * 4;
-    unsigned char *data = calloc(bytesPerRow * height, sizeof(unsigned char *));
+    void *data = calloc(bytesPerRow * height, sizeof(unsigned char *));
     CGContextRef context = CGBitmapContextCreate(data, width, height, 8, bytesPerRow, NULL, kCGImageAlphaOnly);
     CGContextDrawImage(context, CGRectMake(0.0f, 0.0f, width, height), self.CGImage);
     
@@ -406,7 +406,7 @@
         for (int x = 0; x < width; x++)
         {
             NSInteger index = y * bytesPerRow + x;
-            data[index] = 255 - data[index];
+            ((unsigned char *)data)[index] = 255 - ((unsigned char *)data)[index];
         }
     }
     
