@@ -1690,8 +1690,18 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (CGFloat)decelerationDistance
 {
-    CGFloat acceleration = -_startVelocity * DECELERATION_MULTIPLIER * (1.0f - _decelerationRate);
+    CGFloat acceleration = -_startVelocity * [self decelerationMultiplier] * (1.0f - _decelerationRate);
     return -powf(_startVelocity, 2.0f) / (2.0f * acceleration);
+}
+
+- (CGFloat)decelerationMultiplier
+{
+    CGFloat multiplier = DECELERATION_MULTIPLIER;
+
+    if ([_delegate respondsToSelector:@selector(decelerationMultiplier)]) {
+        multiplier = [_delegate decelerationMultiplier];
+    }
+    return multiplier;
 }
 
 - (BOOL)shouldDecelerate
