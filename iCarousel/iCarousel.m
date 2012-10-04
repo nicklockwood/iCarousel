@@ -126,7 +126,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 @synthesize ignorePerpendicularSwipes = _ignorePerpendicularSwipes;
 @synthesize animationDisableCount = _animationDisableCount;
 @synthesize centerItemWhenSelected = _centerItemWhenSelected;
-
+@synthesize enableSelectedItemOnly = _enableSelectedItemOnly;
 #pragma mark -
 #pragma mark Initialisation
 
@@ -149,7 +149,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     _scrollToItemBoundary = YES;
     _ignorePerpendicularSwipes = YES;
     _centerItemWhenSelected = YES;
-    
+  _enableSelectedItemOnly = YES;
     _contentView = [[UIView alloc] initWithFrame:self.bounds];
     
 #ifdef ICAROUSEL_IOS
@@ -933,8 +933,12 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         [self transformItemView:view atIndex:index];
         
 #ifdef ICAROUSEL_IOS
-        
-        view.userInteractionEnabled = (!_centerItemWhenSelected || index == self.currentItemIndex);
+        if (self.enableSelectedItemOnly) {
+            view.userInteractionEnabled = (!_centerItemWhenSelected || index == self.currentItemIndex);
+        }
+        else {
+            view.userInteractionEnabled = YES;
+        }
 #endif
         
     }
