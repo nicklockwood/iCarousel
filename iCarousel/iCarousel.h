@@ -49,11 +49,13 @@
 #if __has_feature(objc_arc)
 #define ah_retain self
 #define ah_dealloc self
-#define release self
-#define autorelease self
+#define ah_release self
+#define ah_autorelease self
 #else
 #define ah_retain retain
 #define ah_dealloc dealloc
+#define ah_release release
+#define ah_autorelease autorelease
 #define __bridge
 #endif
 #endif
