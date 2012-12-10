@@ -429,7 +429,10 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     {
         if ([_delegate respondsToSelector:@selector(carousel:itemAlphaForOffset:)])
         {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
             return [(id<iCarouselDeprecated>)_delegate carousel:self itemAlphaForOffset:offset];
+#pragma clang diagnostic pop
         }
     }
     
@@ -487,7 +490,10 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         {
             if ([_delegate respondsToSelector:@selector(carouselShouldWrap:)])
             {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
                 return [(id<iCarouselDeprecated>)_delegate carouselShouldWrap:self];
+#pragma clang diagnostic pop
             }
             break;
         }
@@ -495,7 +501,10 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         {
             if ([_delegate respondsToSelector:@selector(carouselOffsetMultiplier:)])
             {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
                 return [(id<iCarouselDeprecated>)_delegate carouselOffsetMultiplier:self];
+#pragma clang diagnostic pop
             }
             break;
         }
@@ -513,7 +522,10 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     //DEPRECATED: legacy delegate method support
     if ([_delegate respondsToSelector:@selector(carousel:valueForTransformOption:withDefault:)])
     {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
         return [(id<iCarouselDeprecated>)_delegate carousel:self valueForTransformOption:option withDefault:value];
+#pragma clang diagnostic pop
     }
     
     return value;
@@ -1922,7 +1934,10 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     if ([self clampedIndex:_previousItemIndex] != self.currentItemIndex &&
         [_delegate respondsToSelector:@selector(carouselCurrentItemIndexUpdated:)])
     {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
         [(id<iCarouselDeprecated>)_delegate carouselCurrentItemIndexUpdated:self];
+#pragma clang diagnostic pop
     }
     
     //update previous index
