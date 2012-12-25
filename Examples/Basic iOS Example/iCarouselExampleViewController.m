@@ -57,7 +57,7 @@
     [super viewDidLoad];
     
     //configure carousel
-    carousel.type = iCarouselTypeCoverFlow2;
+    carousel.type = iCarouselTypeLinear;
 }
 
 - (void)viewDidUnload
@@ -98,7 +98,7 @@
         
         label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
         label.backgroundColor = [UIColor clearColor];
-        label.textAlignment = UITextAlignmentCenter;
+        label.textAlignment = NSTextAlignmentCenter;
         label.font = [label.font fontWithSize:50];
         label.tag = 1;
         [view addSubview:label];
@@ -117,6 +117,15 @@
     label.text = [[items objectAtIndex:index] stringValue];
     
     return view;
+}
+
+- (CGFloat)carousel:(iCarousel *)carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value
+{
+    if (option == iCarouselOptionSpacing)
+    {
+        return 1.1f;
+    }
+    return value;
 }
 
 @end
