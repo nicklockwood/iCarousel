@@ -157,7 +157,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPan:)];
     panGesture.delegate = (id <UIGestureRecognizerDelegate>)self;
     [_contentView addGestureRecognizer:panGesture];
-    [panGesture release];
+    [panGesture ah_release];
     
 #else
     
@@ -200,10 +200,10 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 {   
     [self stopAnimation];
     
-    [_contentView release];
-    [_itemViews release];
-    [_itemViewPool release];
-    [_placeholderViewPool release];
+    [_contentView ah_release];
+    [_itemViews ah_release];
+    [_itemViewPool ah_release];
+    [_placeholderViewPool ah_release];
     [super ah_dealloc];
 }
 
@@ -811,7 +811,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     CGRect frame = view.bounds;
     frame.size.width = _vertical? frame.size.width: _itemWidth;
     frame.size.height = _vertical? _itemWidth: frame.size.height;
-    UIView *containerView = [[[UIView alloc] initWithFrame:frame] autorelease];
+    UIView *containerView = [[[UIView alloc] initWithFrame:frame] ah_autorelease];
     
 #ifdef ICAROUSEL_IOS
     
@@ -819,7 +819,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTap:)];
     tapGesture.delegate = (id <UIGestureRecognizerDelegate>)self;
     [containerView addGestureRecognizer:tapGesture];
-    [tapGesture release];
+    [tapGesture ah_release];
     
 #else
     
@@ -1170,7 +1170,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     {
         [_itemViewPool removeObject:view];
     }
-    return [view autorelease];
+    return [view ah_autorelease];
 }
 
 - (UIView *)dequeuePlaceholderView
@@ -1180,7 +1180,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     {
         [_placeholderViewPool removeObject:view];
     }
-    return [view autorelease];
+    return [view ah_autorelease];
 }
 
 
@@ -1207,7 +1207,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     
     if (view == nil)
     {
-        view = [[[UIView alloc] init] autorelease];
+        view = [[[UIView alloc] init] ah_autorelease];
     }
     [self setItemView:view forIndex:index];
     if (containerView)
