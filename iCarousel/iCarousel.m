@@ -33,6 +33,8 @@
 
 #import "iCarousel.h"
 
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
 
 #define MIN_TOGGLE_DURATION 0.2f
 #define MAX_TOGGLE_DURATION 0.4f
