@@ -1,3 +1,7 @@
+Version 1.7.4
+
+- Fixed deprecation warnings when using Xcode 4.6
+
 Version 1.7.3
 
 - Moved ARCHelper macros into .m file to avoid affecting other classes

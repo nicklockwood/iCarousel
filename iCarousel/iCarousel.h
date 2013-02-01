@@ -1,15 +1,14 @@
 //
 //  iCarousel.h
 //
-//  Version 1.7.3
+//  Version 1.7.4
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2011 Charcoal Design
 //
 //  Distributed under the permissive zlib License
-//  Get the latest version from either of these locations:
+//  Get the latest version from here:
 //
-//  http://charcoaldesign.co.uk/source/cocoa#icarousel
 //  https://github.com/nicklockwood/iCarousel
 //
 //  This software is provided 'as-is', without any express or implied
