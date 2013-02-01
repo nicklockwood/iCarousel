@@ -1280,8 +1280,13 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         
         //set container frame
         CGRect frame = containerView.bounds;
-        frame.size.width = MIN(_itemWidth, view.frame.size.width);
-        frame.size.height = view.frame.size.height;
+        if(_vertical) {
+            frame.size.width = view.frame.size.width;
+            frame.size.height = MIN(_itemWidth, view.frame.size.height);
+        } else {
+            frame.size.width = MIN(_itemWidth, view.frame.size.width);
+            frame.size.height = view.frame.size.height;
+        }
         containerView.bounds = frame;
         
 #ifdef ICAROUSEL_MACOS
