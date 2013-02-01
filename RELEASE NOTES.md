@@ -1,6 +1,8 @@
 Version 1.7.4
 
 - Fixed deprecation warnings when using Xcode 4.6
+- Fixed wide items in a vertical carousel getting incorrect hitboxes
+- Added podspec file
 
 Version 1.7.3
 

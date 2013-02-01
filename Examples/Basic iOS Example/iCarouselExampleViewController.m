@@ -57,7 +57,7 @@
     [super viewDidLoad];
     
     //configure carousel
-    carousel.type = iCarouselTypeLinear;
+    carousel.type = iCarouselTypeCoverFlow2;
 }
 
 - (void)viewDidUnload
@@ -123,7 +123,7 @@
 {
     if (option == iCarouselOptionSpacing)
     {
-        return 1.1f;
+        return value * 1.1f;
     }
     return value;
 }
