@@ -214,7 +214,13 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 #endif
 
-- (id)initWithFrame:(GenericRect)frame
+#ifdef ICAROUSEL_IOS
+//for iOS
+- (id)initWithFrame:(CGRect)frame
+#else
+//for Mac OS
+- (id)initWithFrame:(NSRect)frame
+#endif
 {
     if ((self = [super initWithFrame:frame]))
     {
@@ -964,20 +970,22 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     view.superview.hidden = !(showBackfaces ?: (transform.m33 > 0.0f));
 }
 
+#ifdef ICAROUSEL_IOS
 //for iOS
 - (void)layoutSubviews
 {
     _contentView.frame = self.bounds;
     [self layOutItemViews];
 }
-
+#else
 //for Mac OS
-- (void)resizeSubviewsWithOldSize:(GenericSize)oldSize
+- (void)resizeSubviewsWithOldSize:(NSSize)oldSize
 {
     [self disableAnimation];
     [self layoutSubviews];
     [self enableAnimation];
 }
+#endif
 
 - (void)transformItemViews
 {
