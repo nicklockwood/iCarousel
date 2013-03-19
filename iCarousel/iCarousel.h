@@ -50,8 +50,8 @@ __MAC_OS_X_VERSION_MIN_REQUIRED >= __MAC_10_8)
 #define ICAROUSEL_IOS
 #elif defined __IPHONE_OS_VERSION_MAX_ALLOWED
 #define ICAROUSEL_IOS
-typedef CGRect NSRect;
-typedef CGSize NSSize;
+// typedef CGRect NSRect;
+// typedef CGSize NSSize;
 #else
 #define ICAROUSEL_MACOS
 #endif

@@ -214,7 +214,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 #endif
 
-- (id)initWithFrame:(NSRect)frame
+- (id)initWithFrame:(CGRect)frame
 {
     if ((self = [super initWithFrame:frame]))
     {
@@ -972,7 +972,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 }
 
 //for Mac OS
-- (void)resizeSubviewsWithOldSize:(NSSize)oldSize
+- (void)resizeSubviewsWithOldSize:(CGSize)oldSize
 {
     [self disableAnimation];
     [self layoutSubviews];
