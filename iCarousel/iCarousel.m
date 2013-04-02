@@ -176,6 +176,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     _scrollToItemBoundary = YES;
     _ignorePerpendicularSwipes = YES;
     _centerItemWhenSelected = YES;
+    _allowViewDepthReordering = YES;
     
     _contentView = [[UIView alloc] initWithFrame:self.bounds];
     
@@ -799,9 +800,12 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (void)depthSortViews
 {
-    for (UIView *view in [[_itemViews allValues] sortedArrayUsingFunction:(NSInteger (*)(id, id, void *))compareViewDepth context:(__bridge void *)self])
+    if (_allowViewDepthReordering)
     {
-        [_contentView bringSubviewToFront:view.superview];
+        for (UIView *view in [[_itemViews allValues] sortedArrayUsingFunction:(NSInteger (*)(id, id, void *))compareViewDepth context:(__bridge void *)self])
+        {
+            [_contentView bringSubviewToFront:view.superview];
+        }
     }
 }
 
