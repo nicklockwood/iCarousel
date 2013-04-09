@@ -18,6 +18,7 @@
 @property (nonatomic, retain) IBOutlet UIBarItem *wrapBarItem;
 @property (nonatomic, retain) IBOutlet UISlider *arcSlider;
 @property (nonatomic, retain) IBOutlet UISlider *radiusSlider;
+@property (nonatomic, retain) IBOutlet UISlider *radiusZSlider;
 @property (nonatomic, retain) IBOutlet UISlider *tiltSlider;
 @property (nonatomic, retain) IBOutlet UISlider *spacingSlider;
 

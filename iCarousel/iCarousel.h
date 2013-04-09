@@ -93,6 +93,7 @@ typedef enum
     iCarouselOptionArc,
 	iCarouselOptionAngle,
     iCarouselOptionRadius,
+    iCarouselOptionRadiusZ,
     iCarouselOptionTilt,
     iCarouselOptionSpacing,
     iCarouselOptionFadeMin,
