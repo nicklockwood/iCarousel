@@ -612,21 +612,23 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
             CGFloat spacing = [self valueForOption:iCarouselOptionSpacing withDefault:1.0f];
             CGFloat arc = [self valueForOption:iCarouselOptionArc withDefault:M_PI * 2.0f];
             CGFloat radius = [self valueForOption:iCarouselOptionRadius withDefault:fmaxf(_itemWidth * spacing / 2.0f, _itemWidth * spacing / 2.0f / tanf(arc/2.0f/count))];
+            CGFloat radiusZ = [self valueForOption:iCarouselOptionRadiusZ withDefault:radius];
             CGFloat angle = [self valueForOption:iCarouselOptionAngle withDefault:offset / count * arc];
             
             if (_type == iCarouselTypeInvertedRotary)
             {
                 radius = -radius;
+                radiusZ = -radiusZ;
                 angle = -angle;
             }
             
             if (_vertical)
             {
-                return CATransform3DTranslate(transform, 0.0f, radius * sin(angle), radius * cos(angle) - radius);
+                return CATransform3DTranslate(transform, 0.0f, radius * sin(angle), radiusZ * cos(angle) - radiusZ);
             }
             else
             {
-                return CATransform3DTranslate(transform, radius * sin(angle), 0.0f, radius * cos(angle) - radius);
+                return CATransform3DTranslate(transform, radius * sin(angle), 0.0f, radiusZ * cos(angle) - radiusZ);
             }
         }
         case iCarouselTypeCylinder:

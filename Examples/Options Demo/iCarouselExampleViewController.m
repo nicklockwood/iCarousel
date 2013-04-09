@@ -27,6 +27,7 @@
 @synthesize items;
 @synthesize arcSlider;
 @synthesize radiusSlider;
+@synthesize radiusZSlider;
 @synthesize tiltSlider;
 @synthesize spacingSlider;
 
@@ -73,6 +74,7 @@
     [items release];
     [arcSlider release];
     [radiusSlider release];
+    [radiusZSlider release];
     [tiltSlider release];
     [spacingSlider release];
     [super dealloc];
@@ -89,6 +91,7 @@
         {
             arcSlider.enabled = NO;
         	radiusSlider.enabled = NO;
+        	radiusZSlider.enabled = NO;
             tiltSlider.enabled = NO;
             spacingSlider.enabled = YES;
             break;
@@ -102,6 +105,7 @@
         {
             arcSlider.enabled = YES;
         	radiusSlider.enabled = YES;
+        	radiusZSlider.enabled = YES;
             tiltSlider.enabled = NO;
             spacingSlider.enabled = YES;
             break;
@@ -110,6 +114,7 @@
         {
             arcSlider.enabled = NO;
         	radiusSlider.enabled = NO;
+        	radiusZSlider.enabled = NO;
             tiltSlider.enabled = YES;
             spacingSlider.enabled = YES;
             break;
@@ -136,6 +141,7 @@
     self.wrapBarItem = nil;
     self.arcSlider = nil;
     self.radiusSlider = nil;
+    self.radiusZSlider = nil;
     self.tiltSlider = nil;
     self.spacingSlider = nil;
 }
@@ -281,6 +287,10 @@
         case iCarouselOptionRadius:
         {
             return value * radiusSlider.value;
+        }
+        case iCarouselOptionRadiusZ:
+        {
+            return value * radiusZSlider.value;
         }
         case iCarouselOptionTilt:
         {
