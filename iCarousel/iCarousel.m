@@ -63,7 +63,6 @@
 
 #define MIN_TOGGLE_DURATION 0.2f
 #define MAX_TOGGLE_DURATION 0.4f
-#define SCROLL_DURATION 0.4f
 #define INSERT_DURATION 0.4f
 #define DECELERATE_THRESHOLD 0.1f
 #define SCROLL_SPEED_THRESHOLD 2.0f
@@ -153,6 +152,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 @synthesize ignorePerpendicularSwipes = _ignorePerpendicularSwipes;
 @synthesize animationDisableCount = _animationDisableCount;
 @synthesize centerItemWhenSelected = _centerItemWhenSelected;
+@synthesize animationDuration = _animationDuration;
 
 #pragma mark -
 #pragma mark Initialisation
@@ -176,6 +176,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     _scrollToItemBoundary = YES;
     _ignorePerpendicularSwipes = YES;
     _centerItemWhenSelected = YES;
+    _animationDuration = 0.4f;
     
     _contentView = [[UIView alloc] initWithFrame:self.bounds];
     
@@ -1552,7 +1553,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (void)scrollToItemAtIndex:(NSInteger)index animated:(BOOL)animated
 {   
-    [self scrollToItemAtIndex:index duration:animated? SCROLL_DURATION: 0];
+    [self scrollToItemAtIndex:index duration:animated? _animationDuration: 0];
 }
 
 - (void)removeItemAtIndex:(NSInteger)index animated:(BOOL)animated

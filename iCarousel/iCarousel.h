@@ -154,6 +154,7 @@ iCarouselOption;
 	BOOL _vertical;
     BOOL _ignorePerpendicularSwipes;
     NSInteger _animationDisableCount;
+    NSTimeInterval _animationDuration;
 }
 #endif
 
@@ -189,6 +190,7 @@ iCarouselOption;
 @property (nonatomic, readonly, getter = isDragging) BOOL dragging;
 @property (nonatomic, readonly, getter = isDecelerating) BOOL decelerating;
 @property (nonatomic, readonly, getter = isScrolling) BOOL scrolling;
+@property (nonatomic, assign) NSTimeInterval animationDuration;
 
 - (void)scrollByOffset:(CGFloat)offset duration:(NSTimeInterval)duration;
 - (void)scrollToOffset:(CGFloat)offset duration:(NSTimeInterval)duration;
