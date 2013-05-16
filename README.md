@@ -386,8 +386,9 @@ The spacing between item views. This value is multiplied by the item width (or h
     iCarouselOptionFadeMin
     iCarouselOptionFadeMax
     iCarouselOptionFadeRange
+	iCarouselOptionFadeMinAlpha
 
-These three options control the fading out of carousel item views based on their offset from the currently centered item. FadeMin is the minimum negative offset an item view can reach before it begins to fade. FadeMax is the maximum positive offset a view can reach before if begins to fade. FadeRange is the distance over which the fadeout occurs, measured in multiples of an item width (defaults to 1.0).
+These four options control the fading out of carousel item views based on their offset from the currently centered item. FadeMin is the minimum negative offset an item view can reach before it begins to fade. FadeMax is the maximum positive offset a view can reach before if begins to fade. FadeRange is the distance over which the fadeout occurs, measured in multiples of an item width (defaults to 1.0).  FadeMinAlpha is the minimum alpha value an item view can fade to (defaults to 0.0).
 
 
 Detecting Taps on Item Views

@@ -470,6 +470,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     CGFloat fadeMin = -INFINITY;
     CGFloat fadeMax = INFINITY;
     CGFloat fadeRange = 1.0f;
+    CGFloat fadeMinAlpha = 0.0f;
+    
     switch (_type)
     {
         case iCarouselTypeTimeMachine:
@@ -487,9 +489,11 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
             //do nothing
         }
     }
+    
     fadeMin = [self valueForOption:iCarouselOptionFadeMin withDefault:fadeMin];
     fadeMax = [self valueForOption:iCarouselOptionFadeMax withDefault:fadeMax];
     fadeRange = [self valueForOption:iCarouselOptionFadeRange withDefault:fadeRange];
+    fadeMinAlpha = [self valueForOption:iCarouselOptionFadeMinAlpha withDefault:fadeMinAlpha];
 
 #ifdef ICAROUSEL_MACOS
     
@@ -500,16 +504,19 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     }
     
 #endif
+
+    CGFloat maxAlphaDifference = 1.0 - fadeMinAlpha;
+    CGFloat alphaDifference = 0.0;
     
     if (offset > fadeMax)
     {
-        return 1.0f - fminf(offset - fadeMax, fadeRange) / fadeRange;
+        alphaDifference = (fminf(offset - fadeMax, fadeRange) / fadeRange) * maxAlphaDifference;
     }
     else if (offset < fadeMin)
     {
-        return 1.0f - fminf(fadeMin - offset, fadeRange) / fadeRange;
+        alphaDifference = (fminf(fadeMin - offset, fadeRange) / fadeRange) * maxAlphaDifference;
     }
-    return 1.0f;
+    return 1.0f - alphaDifference;
 }
 
 - (CGFloat)valueForOption:(iCarouselOption)option withDefault:(CGFloat)value
