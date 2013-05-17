@@ -94,7 +94,7 @@
 @property (nonatomic, assign, getter = isScrolling) BOOL scrolling;
 @property (nonatomic, assign) NSTimeInterval startTime;
 @property (nonatomic, assign) CGFloat startVelocity;
-@property (nonatomic, unsafe_unretained) NSTimer *timer;
+@property (nonatomic) NSTimer *timer;
 @property (nonatomic, assign, getter = isDecelerating) BOOL decelerating;
 @property (nonatomic, assign) CGFloat previousTranslation;
 @property (nonatomic, assign, getter = isWrapEnabled) BOOL wrapEnabled;
@@ -1732,9 +1732,9 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (void)startAnimation
 {
-    if (!_timer)
+    if (!self.timer)
     {
-        _timer = [NSTimer scheduledTimerWithTimeInterval:1.0/60.0
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0/60.0
                                                   target:self
                                                 selector:@selector(step)
                                                 userInfo:nil
@@ -1744,8 +1744,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (void)stopAnimation
 {
-    [_timer invalidate];
-    _timer = nil;
+    [self.timer invalidate];
+    self.timer = nil;
 }
 
 - (CGFloat)decelerationDistance
