@@ -82,10 +82,10 @@
     //create new view if no view is available for recycling
     if (view == nil)
     {
-        view = [[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200.0f, 200.0f)] autorelease];
+        view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200.0f, 200.0f)];
         ((UIImageView *)view).image = [UIImage imageNamed:@"page.png"];
         view.contentMode = UIViewContentModeCenter;
-        label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
+        label = [[UILabel alloc] initWithFrame:view.bounds];
         label.backgroundColor = [UIColor clearColor];
         label.textAlignment = UITextAlignmentCenter;
         label.font = [label.font fontWithSize:50];
