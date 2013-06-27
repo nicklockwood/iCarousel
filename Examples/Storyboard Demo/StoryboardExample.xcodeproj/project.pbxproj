@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0134E14C177C85B10007BF1A /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0134E14B177C85B10007BF1A /* Default-568h@2x.png */; };
 		B2E56E5C158250730090ECAC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E56E5B158250730090ECAC /* UIKit.framework */; };
 		B2E56E5E158250730090ECAC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E56E5D158250730090ECAC /* Foundation.framework */; };
 		B2E56E60158250730090ECAC /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2E56E5F158250730090ECAC /* CoreGraphics.framework */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0134E14B177C85B10007BF1A /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		B2E56E57158250730090ECAC /* StoryboardExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StoryboardExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2E56E5B158250730090ECAC /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		B2E56E5D158250730090ECAC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -103,6 +105,7 @@
 		B2E56E62158250730090ECAC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				0134E14B177C85B10007BF1A /* Default-568h@2x.png */,
 				B2E56E63158250730090ECAC /* StoryboardExample-Info.plist */,
 				B2E56E64158250730090ECAC /* InfoPlist.strings */,
 				B2E56E67158250730090ECAC /* main.m */,
@@ -157,7 +160,7 @@
 		B2E56E4E158250730090ECAC /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0460;
 			};
 			buildConfigurationList = B2E56E51158250730090ECAC /* Build configuration list for PBXProject "StoryboardExample" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -185,6 +188,7 @@
 				B2E56E6F158250740090ECAC /* MainStoryboard.storyboard in Resources */,
 				B2E56E88158250D30090ECAC /* background.png in Resources */,
 				B2E56E89158250D30090ECAC /* page.png in Resources */,
+				0134E14C177C85B10007BF1A /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -230,6 +234,10 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -255,6 +263,10 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;

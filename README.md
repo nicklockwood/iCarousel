@@ -173,10 +173,6 @@ By default, the carousel will come to rest at an exact item boundary when it is 
 
 By default whenever the carousel stops moving it will automatically scroll to the nearest item boundary. If you set this property to NO, the carousel will not scroll after stopping and will stay wherever it is, even if it's not perfectly aligned on the current index. The exception to this is that if wrapping is disabled and `bounces` is set to YES then regardless of this setting, the carousel will automatically scroll back to the first or last item index if it comes to rest beyond the end of the carousel.
 
-	@property (nonatomic, assign) BOOL useDisplayLink;
-	
-By default on iOS iCarousel will use CADisplayLink instead of NSTimer for animations. On Mac OS, the CVDisplayLink API is used instead. This provides better synchronisation with the screen refresh, but can occasionally prevents the animation working properly when the carousel is combined with other views or animations. If you find that the carousel is not continuing to move after being dragged, try setting this property to NO.
-
 	@property (nonatomic, assign, getter = isVertical) BOOL vertical;
 
 This property toggles whether the carousel is displayed horizontally or vertically on screen. All the built-in carousel types work in both orientations. Switching to vertical changes both the layout of the carousel and also the direction of swipe detection on screen. Note that custom carousel transforms are not affected by this property, however the swipe gesture direction will still be affected.

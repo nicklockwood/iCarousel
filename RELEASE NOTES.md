@@ -1,3 +1,8 @@
+Version 1.7.5
+
+- Fixed an issue with latest llvm compiler
+- Fixed confict between iCarousel animation and UIScrollView scrolling
+
 Version 1.7.4
 
 - Fixed deprecation warnings when using Xcode 4.6

@@ -137,8 +137,8 @@
     if (carousel.numberOfItems > 0)
     {
         NSInteger index = carousel.currentItemIndex;
-        [carousel removeItemAtIndex:index animated:YES];
         [items removeObjectAtIndex:index];
+        [carousel removeItemAtIndex:index animated:YES];
     }
 }
 
@@ -282,6 +282,15 @@
             return value;
         }
     }
+}
+
+#pragma mark -
+#pragma mark iCarousel taps
+
+- (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index
+{
+    NSNumber *item = [self.items objectAtIndex:index];
+    NSLog(@"Tapped view number: %@", item);
 }
 
 @end
