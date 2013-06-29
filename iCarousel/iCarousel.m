@@ -121,6 +121,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     _perspective = -1.0f/500.0f;
     _decelerationRate = 0.95f;
     _scrollEnabled = YES;
+    _swipeToCloseEnabled = NO;
+    _swipingToClose = NO;
     _bounces = YES;
     _scrollOffset = 0.0f;
     _offsetMultiplier = 1.0f;
@@ -2040,6 +2042,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 {
     if ([gesture isKindOfClass:[UIPanGestureRecognizer class]])
     {
+        if (_swipeToCloseEnabled)
+            return YES;
         //ignore vertical swipes
         UIPanGestureRecognizer *panGesture = (UIPanGestureRecognizer *)gesture;
         CGPoint translation = [panGesture translationInView:self];
@@ -2071,7 +2075,69 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     }
 }
 
-- (void)didPan:(UIPanGestureRecognizer *)panGesture
+- (void)didPan:(UIPanGestureRecognizer *)panGesture {
+    if (!_swipeToCloseEnabled)
+        [self didPanSwipe:panGesture];
+    else if (_vertical){
+        if ((fabsf([panGesture translationInView:panGesture.view].y) < fabsf([panGesture translationInView:panGesture.view].x)) || _swipingToClose)
+            [self didPanSwipeClose:panGesture];
+        else
+            [self didPanSwipe:panGesture];
+    } else {
+        if ((fabsf([panGesture translationInView:panGesture.view].x) < fabsf([panGesture translationInView:panGesture.view].y)) || _swipingToClose)
+            [self didPanSwipeClose:panGesture];
+        else
+            [self didPanSwipe:panGesture];
+    }
+}
+
+- (void)didPanSwipeClose:(UIPanGestureRecognizer *)panGesture {
+    switch (panGesture.state)
+    {
+        case UIGestureRecognizerStateEnded:{
+            CGRect frame = self.currentItemView.frame;
+            BOOL shouldClose = NO;
+            if (fabsf(_vertical? frame.origin.x: frame.origin.y) > frame.size.height)
+                shouldClose = YES;
+            if (_vertical)
+                frame.origin.x = 0;
+            else
+                frame.origin.y = 0;
+            [UIView animateWithDuration:0.5 animations:^{
+                self.currentItemView.frame = frame;
+            }];
+            _swipingToClose = NO;
+            if (shouldClose){
+                [self.delegate carousel:self didRemoveItemAtIndex:self.currentItemIndex];
+                [self removeItemAtIndex:self.currentItemIndex animated:YES];
+            }
+            break;
+        }
+        case UIGestureRecognizerStateBegan:{
+            _swipingToClose = YES;
+        }
+        default:
+        {
+            CGFloat points = 0;
+            CGFloat velocity = 0;
+            if (_vertical) {
+                points = [panGesture translationInView:panGesture.view].x/5.0f;
+                velocity = [panGesture velocityInView:panGesture.view].x;
+            } else {
+                points = [panGesture translationInView:panGesture.view].y/5.0f;
+                velocity = [panGesture velocityInView:panGesture.view].y;
+            }
+            CGRect frame = self.currentItemView.frame;
+            if (_vertical)
+                frame.origin.x += points;
+            else
+                frame.origin.y += points;
+            self.currentItemView.frame = frame;
+        }
+    }
+}
+
+- (void)didPanSwipe:(UIPanGestureRecognizer *)panGesture
 {
     if (_scrollEnabled)
     {
