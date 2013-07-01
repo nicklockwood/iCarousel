@@ -1,3 +1,7 @@
+Version 1.7.6
+
+- Fixed animation timer bug when using ARC
+
 Version 1.7.5
 
 - Fixed an issue with latest llvm compiler
