@@ -106,57 +106,6 @@ iCarouselOption;
 
 @interface iCarousel : UIView
 
-//required for 32-bit Macs
-#ifdef __i386__
-{
-	@private
-	
-    id<iCarouselDelegate> __weak_delegate _delegate;
-    id<iCarouselDataSource> __weak_delegate _dataSource;
-    iCarouselType _type;
-    CGFloat _perspective;
-    NSInteger _numberOfItems;
-    NSInteger _numberOfPlaceholders;
-	NSInteger _numberOfPlaceholdersToShow;
-    NSInteger _numberOfVisibleItems;
-    UIView *_contentView;
-    NSMutableDictionary *_itemViews;
-    NSMutableSet *_itemViewPool;
-    NSMutableSet *_placeholderViewPool;
-    NSInteger _previousItemIndex;
-    CGFloat _itemWidth;
-    CGFloat _scrollOffset;
-    CGFloat _offsetMultiplier;
-    CGFloat _startVelocity;
-    NSTimer __unsafe_unretained *_timer;
-    BOOL _decelerating;
-    BOOL _scrollEnabled;
-    CGFloat _decelerationRate;
-    BOOL _bounces;
-    CGSize _contentOffset;
-    CGSize _viewpointOffset;
-    CGFloat _startOffset;
-    CGFloat _endOffset;
-    NSTimeInterval _scrollDuration;
-    NSTimeInterval _startTime;
-    BOOL _scrolling;
-    CGFloat _previousTranslation;
-	BOOL _centerItemWhenSelected;
-	BOOL _wrapEnabled;
-	BOOL _dragging;
-    BOOL _didDrag;
-    CGFloat _scrollSpeed;
-    CGFloat _bounceDistance;
-    NSTimeInterval _toggleTime;
-    CGFloat _toggle;
-    BOOL _stopAtItemBoundary;
-    BOOL _scrollToItemBoundary;
-	BOOL _vertical;
-    BOOL _ignorePerpendicularSwipes;
-    NSInteger _animationDisableCount;
-}
-#endif
-
 @property (nonatomic, weak_delegate) IBOutlet id<iCarouselDataSource> dataSource;
 @property (nonatomic, weak_delegate) IBOutlet id<iCarouselDelegate> delegate;
 @property (nonatomic, assign) iCarouselType type;
