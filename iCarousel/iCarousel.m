@@ -1712,6 +1712,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 - (void)stopAnimation
 {
     [_timer invalidate];
+    [_timer release];
     _timer = nil;
 }
 
