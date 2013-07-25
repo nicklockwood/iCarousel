@@ -9,10 +9,10 @@
 #import "iCarouselExampleViewController.h"
 
 
-@interface iCarouselExampleViewController () <UIActionSheetDelegate>
+@interface iCarouselExampleViewController () <UIActionSheetDelegate, UITextFieldDelegate>
 
 @property (nonatomic, assign) BOOL wrap;
-@property (nonatomic, retain) NSMutableArray *items;
+@property (nonatomic, retain) NSMutableArray* items;
 
 @end
 
@@ -29,19 +29,25 @@
 @synthesize radiusSlider;
 @synthesize tiltSlider;
 @synthesize spacingSlider;
+@synthesize fadeRangeSlider;
+@synthesize fadeMaxSlider;
+@synthesize fadeMinSlider;
+@synthesize decelSlider;
+@synthesize itemHeightTextField;
+@synthesize itemWidthTextField;
 
-- (void)setUp
+- (void) setUp
 {
-	//set up data
-	wrap = YES;
-	self.items = [NSMutableArray array];
-	for (int i = 0; i < 1000; i++)
-	{
-		[items addObject:[NSNumber numberWithInt:i]];
-	}
+    //set up data
+    wrap       = YES;
+    self.items = [NSMutableArray array];
+    for (int i = 0; i < 5; i++)
+    {
+        [items addObject:[NSNumber numberWithInt:i]];
+    }
 }
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id) initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil
 {
     if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]))
     {
@@ -50,7 +56,7 @@
     return self;
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder
+- (id) initWithCoder:(NSCoder*)aDecoder
 {
     if ((self = [super initWithCoder:aDecoder]))
     {
@@ -59,13 +65,13 @@
     return self;
 }
 
-- (void)dealloc
+- (void) dealloc
 {
-	//it's a good idea to set these to nil here to avoid
-	//sending messages to a deallocated viewcontroller
-	carousel.delegate = nil;
-	carousel.dataSource = nil;
-	
+    //it's a good idea to set these to nil here to avoid
+    //sending messages to a deallocated viewcontroller
+    carousel.delegate   = nil;
+    carousel.dataSource = nil;
+
     [carousel release];
     [navItem release];
     [orientationBarItem release];
@@ -81,15 +87,15 @@
 #pragma mark -
 #pragma mark View lifecycle
 
-- (void)updateSliders
+- (void) updateSliders
 {
     switch (carousel.type)
     {
         case iCarouselTypeLinear:
         {
-            arcSlider.enabled = NO;
-        	radiusSlider.enabled = NO;
-            tiltSlider.enabled = NO;
+            arcSlider.enabled     = NO;
+            radiusSlider.enabled  = NO;
+            tiltSlider.enabled    = NO;
             spacingSlider.enabled = YES;
             break;
         }
@@ -100,88 +106,89 @@
         case iCarouselTypeWheel:
         case iCarouselTypeInvertedWheel:
         {
-            arcSlider.enabled = YES;
-        	radiusSlider.enabled = YES;
-            tiltSlider.enabled = NO;
+            arcSlider.enabled     = YES;
+            radiusSlider.enabled  = YES;
+            tiltSlider.enabled    = NO;
             spacingSlider.enabled = YES;
             break;
         }
         default:
         {
-            arcSlider.enabled = NO;
-        	radiusSlider.enabled = NO;
-            tiltSlider.enabled = YES;
+            arcSlider.enabled     = NO;
+            radiusSlider.enabled  = NO;
+            tiltSlider.enabled    = YES;
             spacingSlider.enabled = YES;
             break;
         }
     }
 }
 
-- (void)viewDidLoad
+- (void) viewDidLoad
 {
     [super viewDidLoad];
-    
     //configure carousel
     carousel.type = iCarouselTypeCoverFlow2;
     [self updateSliders];
     navItem.title = @"CoverFlow2";
+
+    itemWidthTextField.text  = [NSString stringWithFormat:@"%i", (int)carousel.frame.size.width -20];
+    itemHeightTextField.text = [NSString stringWithFormat:@"%i", (int)carousel.frame.size.height -20];
+
+    [self reloadCarousel];
 }
 
-- (void)viewDidUnload
+- (void) viewDidUnload
 {
     [super viewDidUnload];
     self.carousel = nil;
-    self.navItem = nil;
+    self.navItem  = nil;
     self.orientationBarItem = nil;
-    self.wrapBarItem = nil;
-    self.arcSlider = nil;
-    self.radiusSlider = nil;
-    self.tiltSlider = nil;
+    self.wrapBarItem        = nil;
+    self.arcSlider     = nil;
+    self.radiusSlider  = nil;
+    self.tiltSlider    = nil;
     self.spacingSlider = nil;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+- (IBAction) switchCarouselType
 {
-    return YES;
-}
-
-- (IBAction)switchCarouselType
-{
-    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"Select Carousel Type"
+    UIActionSheet* sheet = [[UIActionSheet alloc] initWithTitle:@"Select Carousel Type"
                                                        delegate:self
                                               cancelButtonTitle:nil
                                          destructiveButtonTitle:nil
                                               otherButtonTitles:@"Linear", @"Rotary", @"Inverted Rotary", @"Cylinder", @"Inverted Cylinder", @"Wheel", @"Inverted Wheel", @"CoverFlow", @"CoverFlow2", @"Time Machine", @"Inverted Time Machine", nil];
+
     [sheet showInView:self.view];
     [sheet release];
 }
 
-- (IBAction)toggleOrientation
+- (IBAction) toggleOrientation
 {
     //carousel orientation can be animated
     [UIView beginAnimations:nil context:nil];
     carousel.vertical = !carousel.vertical;
     [UIView commitAnimations];
-    
+
     //update button
-    orientationBarItem.title = carousel.vertical? @"Vertical": @"Horizontal";
+    orientationBarItem.title = carousel.vertical ? @"Vertical" : @"Horizontal";
 }
 
-- (IBAction)toggleWrap
+- (IBAction) toggleWrap
 {
     wrap = !wrap;
-    wrapBarItem.title = wrap? @"Wrap: ON": @"Wrap: OFF";
+    wrapBarItem.title = wrap ? @"Wrap: ON" : @"Wrap: OFF";
     [carousel reloadData];
 }
 
-- (IBAction)insertItem
+- (IBAction) insertItem
 {
     NSInteger index = MAX(0, carousel.currentItemIndex);
+
     [items insertObject:[NSNumber numberWithInt:carousel.numberOfItems] atIndex:index];
     [carousel insertItemAtIndex:index animated:YES];
 }
 
-- (IBAction)removeItem
+- (IBAction) removeItem
 {
     if (carousel.numberOfItems > 0)
     {
@@ -191,27 +198,36 @@
     }
 }
 
-- (IBAction)reloadCarousel
+- (IBAction) reloadCarousel
 {
+    _arcLabel.text            = [NSString stringWithFormat:@"%f", arcSlider.value];
+    _radiusLabel.text         = [NSString stringWithFormat:@"%f", radiusSlider.value];
+    _tiltLabel.text           = [NSString stringWithFormat:@"%f", tiltSlider.value];
+    _spacingLabel.text        = [NSString stringWithFormat:@"%f", spacingSlider.value];
+    _fadeRangeLabel.text      = [NSString stringWithFormat:@"%f", fadeRangeSlider.value];
+    _fadeMinLabel.text        = [NSString stringWithFormat:@"%f", fadeMinSlider.value];
+    _fadeMaxLabel.text        = [NSString stringWithFormat:@"%f", fadeMaxSlider.value];
+    _decelLabel.text          = [NSString stringWithFormat:@"%f", decelSlider.value];
+    carousel.decelerationRate = decelSlider.value;
     [carousel reloadData];
 }
 
 #pragma mark -
 #pragma mark UIActionSheet methods
 
-- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
+- (void) actionSheet:(UIActionSheet*)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex	>= 0)
+    if (buttonIndex >= 0)
     {
         //map button index to carousel type
         iCarouselType type = buttonIndex;
-        
+
         //carousel can smoothly animate between types
         [UIView beginAnimations:nil context:nil];
         carousel.type = type;
         [self updateSliders];
         [UIView commitAnimations];
-        
+
         //update title
         navItem.title = [actionSheet buttonTitleAtIndex:buttonIndex];
     }
@@ -220,45 +236,49 @@
 #pragma mark -
 #pragma mark iCarousel methods
 
-- (NSUInteger)numberOfItemsInCarousel:(iCarousel *)carousel
+- (NSUInteger) numberOfItemsInCarousel:(iCarousel*)carousel
 {
     return [items count];
 }
 
-- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
+- (UIView*) carousel:(iCarousel*)aCarousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView*)view
 {
-    UILabel *label = nil;
-    
+    UILabel*     label     = nil;
+    UIImageView* imageView = nil;
+
     //create new view if no view is available for recycling
     if (view == nil)
     {
-        view = [[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200.0f, 200.0f)] autorelease];
-        ((UIImageView *)view).image = [UIImage imageNamed:@"page.png"];
-        view.contentMode = UIViewContentModeCenter;
+        view = [[[UIView alloc] initWithFrame:CGRectMake(10, 10, itemWidthTextField.text.integerValue, itemHeightTextField.text.integerValue)] autorelease];
+        view.backgroundColor = [UIColor clearColor];
+        imageView     = [[[UIImageView alloc] initWithFrame:CGRectMake(10, 10, view.frame.size.width-20, view.frame.size.height-20)] autorelease];
+        imageView.image = [UIImage imageNamed:@"page.png"];
+        imageView.contentMode = UIViewContentModeScaleToFill;
+        [view addSubview:imageView];
         label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
         label.backgroundColor = [UIColor clearColor];
-        label.textAlignment = UITextAlignmentCenter;
+        label.textAlignment   = UITextAlignmentCenter;
         label.font = [label.font fontWithSize:50];
-        label.tag = 1;
+        label.tag  = 1;
         [view addSubview:label];
     }
     else
     {
         //get a reference to the label in the recycled view
-        label = (UILabel *)[view viewWithTag:1];
+        label     = (UILabel*)[view viewWithTag:1];
+        imageView = (UIImageView*)[view viewWithTag:2];
     }
-    
+
     //set item label
     //remember to always set any properties of your carousel item
     //views outside of the `if (view == nil) {...}` check otherwise
     //you'll get weird issues with carousel item content appearing
     //in the wrong place in the carousel
-    label.text = [[items objectAtIndex:index] stringValue];
-    
+    label.text      = [[items objectAtIndex:index] stringValue];
     return view;
 }
 
-- (CGFloat)carousel:(iCarousel *)_carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value
+- (CGFloat) carousel:(iCarousel*)_carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value
 {
     switch (option)
     {
@@ -272,7 +292,7 @@
             {
                 return 0.0f;
             }
-            return value;
+            return fadeMaxSlider.value;
         }
         case iCarouselOptionArc:
         {
@@ -290,11 +310,37 @@
         {
             return value * spacingSlider.value;
         }
+        case iCarouselOptionFadeRange:
+        {
+            return fadeRangeSlider.value;
+        }
+        case iCarouselOptionFadeMin:
+        {
+            return fadeMinSlider.value;
+        }
+
         default:
         {
             return value;
         }
     }
+}
+
+#pragma Text Field Delegate
+
+- (void) textFieldDidEndEditing:(UITextField*)textField
+{
+    [self reloadCarousel];
+}
+
+- (BOOL) textFieldShouldReturn:(UITextField*)textField
+{
+    return YES;
+}
+
+- (IBAction) editingEnded:(id)sender
+{
+    [sender resignFirstResponder];
 }
 
 @end

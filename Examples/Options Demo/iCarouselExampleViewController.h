@@ -21,6 +21,23 @@
 @property (nonatomic, retain) IBOutlet UISlider *tiltSlider;
 @property (nonatomic, retain) IBOutlet UISlider *spacingSlider;
 
+@property (nonatomic, retain) IBOutlet UISlider *fadeRangeSlider;
+@property (nonatomic, retain) IBOutlet UISlider *fadeMinSlider;
+@property (nonatomic, retain) IBOutlet UISlider *fadeMaxSlider;
+@property (nonatomic, retain) IBOutlet UISlider *decelSlider;
+
+@property (nonatomic, retain) IBOutlet UILabel *arcLabel;
+@property (nonatomic, retain) IBOutlet UILabel *radiusLabel;
+@property (nonatomic, retain) IBOutlet UILabel *tiltLabel;
+@property (nonatomic, retain) IBOutlet UILabel *spacingLabel;
+
+@property (nonatomic, retain) IBOutlet UILabel *fadeRangeLabel;
+@property (nonatomic, retain) IBOutlet UILabel *fadeMinLabel;
+@property (nonatomic, retain) IBOutlet UILabel *fadeMaxLabel;
+@property (nonatomic, retain) IBOutlet UILabel *decelLabel;
+
+@property (nonatomic, retain) IBOutlet UITextField *itemWidthTextField;
+@property (nonatomic, retain) IBOutlet UITextField *itemHeightTextField;
 
 - (IBAction)switchCarouselType;
 - (IBAction)toggleOrientation;
@@ -28,5 +45,5 @@
 - (IBAction)insertItem;
 - (IBAction)removeItem;
 - (IBAction)reloadCarousel;
-
+- (IBAction) editingEnded:(id)sender;
 @end
