@@ -12,17 +12,15 @@
 #define SYNCHRONIZE_CAROUSELS NO
 
 
-@interface iCarouselExampleViewController ()
+@interface iCarouselExampleViewController () <iCarouselDataSource, iCarouselDelegate>
 
-@property (nonatomic, retain) NSMutableArray *items;
+@property (nonatomic, strong) IBOutlet iCarousel *carousel;
+@property (nonatomic, strong) NSMutableArray *items;
 
 @end
 
 
 @implementation iCarouselExampleViewController
-
-@synthesize carousel = _carousel;
-@synthesize items = _items;
 
 - (void)awakeFromNib
 {
@@ -38,6 +36,7 @@
         }
         [_items addObject:subitems];
     }
+    [_carousel reloadData];
 }
 
 - (void)dealloc
@@ -48,10 +47,6 @@
     //you are targeting iOS 5 as a minimum deployment target
     _carousel.delegate = nil;
     _carousel.dataSource = nil;
-    
-    [_carousel release];
-    [_items release];
-    [super dealloc];
 }
 
 #pragma mark -
@@ -84,7 +79,14 @@
 
 - (CGFloat)carouselItemWidth:(iCarousel *)carousel
 {
-    return 210.0f;
+    if (carousel == _carousel)
+    {
+        return 210.0f;
+    }
+    else
+    {
+        return 210.0f;
+    }
 }
 
 - (NSUInteger)numberOfItemsInCarousel:(iCarousel *)carousel
@@ -106,7 +108,7 @@
     {
         //item for outer carousel
         iCarousel *subCarousel = (iCarousel *)view;
-        
+
         if (view == nil)
         {
             subCarousel = [[iCarousel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 200.0f, self.view.bounds.size.height)];
@@ -114,9 +116,9 @@
             subCarousel.delegate = self;
             subCarousel.vertical = YES;
             subCarousel.type = iCarouselTypeCylinder;
-            view = [subCarousel autorelease];
+            view = subCarousel;
         }
-        
+
         //configure view
         //you might want to restore a saved scrollOffset here
         //but for now we'll just set it to zero
@@ -134,9 +136,9 @@
             UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200.0f, 200.0f)];
             imageView.image = [UIImage imageNamed:@"page.png"];
             imageView.contentMode = UIViewContentModeCenter;
-            view = [imageView autorelease];
+            view = imageView;
             
-            label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
+            label = [[UILabel alloc] initWithFrame:view.bounds];
             label.backgroundColor = [UIColor clearColor];
             label.textAlignment = UITextAlignmentCenter;
             label.font = [label.font fontWithSize:50];

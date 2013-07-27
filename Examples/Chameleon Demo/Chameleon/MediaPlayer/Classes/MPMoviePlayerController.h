@@ -87,10 +87,19 @@ extern NSString *const MPMovieDurationAvailableNotification;
 @property (nonatomic, copy) NSURL *contentURL;
 @property (nonatomic) MPMovieControlStyle controlStyle;
 @property (nonatomic) MPMovieSourceType movieSourceType;
+
+// A view for customization which is always displayed behind movie content.
+@property(nonatomic, readonly) UIView *backgroundView;
+
 @property (nonatomic, readonly) MPMoviePlaybackState playbackState;
 @property (nonatomic) MPMovieRepeatMode repeatMode;
+
+// Indicates if a movie should automatically start playback when it is likely to finish uninterrupted based on e.g. network conditions. Defaults to YES.
+@property(nonatomic) BOOL shouldAutoplay;
+
 @property (nonatomic, readonly) NSTimeInterval duration;
 @property (nonatomic) MPMovieScalingMode scalingMode;
+
 
 - (id)initWithContentURL: (NSURL*)url;
 

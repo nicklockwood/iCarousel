@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		018AE995179D866100FB7311 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 018AE994179D866100FB7311 /* Default-568h@2x.png */; };
+		018AE999179D868F00FB7311 /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 018AE998179D868F00FB7311 /* iCarousel.m */; };
 		01FA10C2145E9951001906CB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01FA10C1145E9951001906CB /* UIKit.framework */; };
 		01FA10C4145E9951001906CB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01FA10C3145E9951001906CB /* Foundation.framework */; };
 		01FA10C6145E9951001906CB /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01FA10C5145E9951001906CB /* CoreGraphics.framework */; };
@@ -17,7 +19,6 @@
 		01FA10D8145E9951001906CB /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01FA10D6145E9951001906CB /* ViewController.xib */; };
 		B2F2748415A4555700513759 /* FXImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = B2F2748115A4555700513759 /* FXImageView.m */; };
 		B2F2748515A4555700513759 /* UIImage+FX.m in Sources */ = {isa = PBXBuildFile; fileRef = B2F2748315A4555700513759 /* UIImage+FX.m */; };
-		B2F2749515A4556000513759 /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = B2F2748815A4556000513759 /* iCarousel.m */; };
 		B2F274A915A457C500513759 /* Lake in Resources */ = {isa = PBXBuildFile; fileRef = B2F274A815A457C500513759 /* Lake */; };
 		B2F274AB15A4588000513759 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2F274AA15A4588000513759 /* QuartzCore.framework */; };
 		B2F274C515A45D7900513759 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = B2F274C215A45D7900513759 /* background.png */; };
@@ -25,6 +26,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		018AE994179D866100FB7311 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = SOURCE_ROOT; };
+		018AE997179D868F00FB7311 /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
+		018AE998179D868F00FB7311 /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
 		01FA10BD145E9951001906CB /* iCarouselExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iCarouselExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		01FA10C1145E9951001906CB /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		01FA10C3145E9951001906CB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -42,8 +46,6 @@
 		B2F2748115A4555700513759 /* FXImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXImageView.m; sourceTree = "<group>"; };
 		B2F2748215A4555700513759 /* UIImage+FX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+FX.h"; sourceTree = "<group>"; };
 		B2F2748315A4555700513759 /* UIImage+FX.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+FX.m"; sourceTree = "<group>"; };
-		B2F2748715A4556000513759 /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
-		B2F2748815A4556000513759 /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
 		B2F274A815A457C500513759 /* Lake */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Lake; path = ../Lake; sourceTree = "<group>"; };
 		B2F274AA15A4588000513759 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		B2F274C215A45D7900513759 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
@@ -65,10 +67,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		018AE996179D868F00FB7311 /* iCarousel */ = {
+			isa = PBXGroup;
+			children = (
+				018AE997179D868F00FB7311 /* iCarousel.h */,
+				018AE998179D868F00FB7311 /* iCarousel.m */,
+			);
+			name = iCarousel;
+			path = ../../iCarousel;
+			sourceTree = "<group>";
+		};
 		01FA10B2145E994F001906CB = {
 			isa = PBXGroup;
 			children = (
-				B2F2748615A4556000513759 /* iCarousel */,
+				018AE996179D868F00FB7311 /* iCarousel */,
 				B2F2747F15A4555700513759 /* FXImageView */,
 				01FA10C7145E9951001906CB /* iCarouselExample */,
 				01FA10C0145E9951001906CB /* Frameworks */,
@@ -113,6 +125,7 @@
 		01FA10C8145E9951001906CB /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				018AE994179D866100FB7311 /* Default-568h@2x.png */,
 				01FA10C9145E9951001906CB /* iCarouselExample-Info.plist */,
 				01FA10CA145E9951001906CB /* InfoPlist.strings */,
 				01FA10CD145E9951001906CB /* main.m */,
@@ -131,15 +144,6 @@
 			);
 			name = FXImageView;
 			path = ../Libraries/FXImageView;
-			sourceTree = "<group>";
-		};
-		B2F2748615A4556000513759 /* iCarousel */ = {
-			isa = PBXGroup;
-			children = (
-				B2F2748715A4556000513759 /* iCarousel.h */,
-				B2F2748815A4556000513759 /* iCarousel.m */,
-			);
-			path = iCarousel;
 			sourceTree = "<group>";
 		};
 		B2F274C115A45D7900513759 /* Resources */ = {
@@ -178,7 +182,7 @@
 		01FA10B4145E994F001906CB /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0460;
 			};
 			buildConfigurationList = 01FA10B7145E994F001906CB /* Build configuration list for PBXProject "iCarouselExample" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -207,6 +211,7 @@
 				B2F274A915A457C500513759 /* Lake in Resources */,
 				B2F274C515A45D7900513759 /* background.png in Resources */,
 				B2F274C715A45D7900513759 /* placeholder.png in Resources */,
+				018AE995179D866100FB7311 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -222,7 +227,7 @@
 				01FA10D5145E9951001906CB /* ViewController.m in Sources */,
 				B2F2748415A4555700513759 /* FXImageView.m in Sources */,
 				B2F2748515A4555700513759 /* UIImage+FX.m in Sources */,
-				B2F2749515A4556000513759 /* iCarousel.m in Sources */,
+				018AE999179D868F00FB7311 /* iCarousel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -253,6 +258,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -266,6 +275,7 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				SDKROOT = iphoneos;
@@ -277,12 +287,17 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
@@ -294,6 +309,7 @@
 		01FA10DC145E9951001906CB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iCarouselExample/iCarouselExample-Prefix.pch";
 				INFOPLIST_FILE = "iCarouselExample/iCarouselExample-Info.plist";
@@ -305,6 +321,7 @@
 		01FA10DD145E9951001906CB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iCarouselExample/iCarouselExample-Prefix.pch";
 				INFOPLIST_FILE = "iCarouselExample/iCarouselExample-Info.plist";

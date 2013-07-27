@@ -12,14 +12,14 @@
 
 @interface iCarouselExampleViewController : UIViewController <iCarouselDataSource, iCarouselDelegate>
 
-@property (nonatomic, retain) IBOutlet iCarousel *carousel;
-@property (nonatomic, retain) IBOutlet UINavigationItem *navItem;
-@property (nonatomic, retain) IBOutlet UIBarItem *orientationBarItem;
-@property (nonatomic, retain) IBOutlet UIBarItem *wrapBarItem;
-@property (nonatomic, retain) IBOutlet UISlider *arcSlider;
-@property (nonatomic, retain) IBOutlet UISlider *radiusSlider;
-@property (nonatomic, retain) IBOutlet UISlider *tiltSlider;
-@property (nonatomic, retain) IBOutlet UISlider *spacingSlider;
+@property (nonatomic, strong) IBOutlet iCarousel *carousel;
+@property (nonatomic, strong) IBOutlet UINavigationItem *navItem;
+@property (nonatomic, strong) IBOutlet UIBarItem *orientationBarItem;
+@property (nonatomic, strong) IBOutlet UIBarItem *wrapBarItem;
+@property (nonatomic, strong) IBOutlet UISlider *arcSlider;
+@property (nonatomic, strong) IBOutlet UISlider *radiusSlider;
+@property (nonatomic, strong) IBOutlet UISlider *tiltSlider;
+@property (nonatomic, strong) IBOutlet UISlider *spacingSlider;
 
 
 - (IBAction)switchCarouselType;

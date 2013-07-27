@@ -10,7 +10,7 @@
 
 @interface ViewController ()
 
-@property (nonatomic, retain) NSMutableArray *items;
+@property (nonatomic, strong) NSMutableArray *items;
 
 @end
 
@@ -30,7 +30,7 @@
     self.items = [NSMutableArray array];
     for (int i = 0; i < 1000; i++)
     {
-        [items addObject:[NSNumber numberWithInt:i]];
+        [items addObject:@(i)];
     }
 }
 
@@ -103,7 +103,7 @@
     //views outside of the `if (view == nil) {...}` check otherwise
     //you'll get weird issues with carousel item content appearing
     //in the wrong place in the carousel
-    label.text = [[items objectAtIndex:index] stringValue];
+    label.text = [items[index] stringValue];
     
     return view;
 }

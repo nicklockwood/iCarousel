@@ -17,7 +17,9 @@ NOTE: 'Supported' means that the library has been tested with this version. 'Com
 ARC Compatibility
 ------------------
 
-As of version 1.6.1, iCarousel automatically works with both ARC and non-ARC projects through conditional compilation. There is no need to exclude iCarousel files from the ARC validation process, or to convert iCarousel using the ARC conversion tool.
+As of version 1.8, iCarousel requires ARC. If you wish to use iCarousel in a non-ARC project, just add the -fobjc-arc compiler flag to the iCarousel.m class. To do this, go to the Build Phases tab in your target settings, open the Compile Sources group, double-click iCarousel.m in the list and type -fobjc-arc into the popover.
+
+If you wish to convert your whole project to ARC, comment out the #error line in iCarousel.m, then run the Edit > Refactor > Convert to Objective-C ARC... tool in Xcode and make sure all files that you wish to use ARC for (including iCarousel.m) are checked.
 
 
 Thread Safety
@@ -107,7 +109,11 @@ Enables and disables user scrolling of the carousel. The carousel can still be s
 
     @property (nonatomic, readonly, getter = isWrapEnabled) BOOL wrapEnabled;
 
-Returns YES if wrapping is enabled and NO if it isn't. This property is read only. If you wish to override the default value, implement the `carousel:valueForOption:withDefault:` delegate method and return a value for `iCarouselOptionWrap`. 
+Returns YES if wrapping is enabled and NO if it isn't. This property is read only. If you wish to override the default value, implement the `carousel:valueForOption:withDefault:` delegate method and return a value for `iCarouselOptionWrap`.
+
+    @property (nonatomic, assign, getter = isPagingEnabled) BOOL pagingEnabled;
+    
+Enables and disables paging. When paging is enabled, the carousel will stop at each item view as the user scrolls, much like the pagingEnabled property of a UIScrollView.
 
 	@property (nonatomic, readonly) NSInteger numberOfItems;
 
@@ -382,8 +388,9 @@ The spacing between item views. This value is multiplied by the item width (or h
     iCarouselOptionFadeMin
     iCarouselOptionFadeMax
     iCarouselOptionFadeRange
+    iCarouselOptionFadeMinAlpha
 
-These three options control the fading out of carousel item views based on their offset from the currently centered item. FadeMin is the minimum negative offset an item view can reach before it begins to fade. FadeMax is the maximum positive offset a view can reach before if begins to fade. FadeRange is the distance over which the fadeout occurs, measured in multiples of an item width (defaults to 1.0).
+These four options control the fading out of carousel item views based on their offset from the currently centered item. FadeMin is the minimum negative offset an item view can reach before it begins to fade. FadeMax is the maximum positive offset a view can reach before if begins to fade. FadeRange is the distance over which the fadeout occurs, measured in multiples of an item width (defaults to 1.0), and FadeMinAlpha is the minimum alpha value to which the views will fade (defaults to 0.0 - fully transparent).
 
 
 Detecting Taps on Item Views
@@ -508,8 +515,8 @@ FAQ
     Q. If the views in my carousel all have completely different layouts, should I still use the `reusingView` parameter?
     A. Probably not, and unless you have hundreds of views in your carousel, it's unlikely to be worth the trouble.
 
-    Q. I'm using iCarouselTypeLinear. How can I make it behave more like a UIScrollView with paging enabled?
-    A. If you set decelerationRate to zero then iCarousel will more closely emulate the feel of a UIScrollView. If that's still not close enough, consider using my SwipeView library instead (https://github.com/nicklockwood/SwipeView) which is very similar to iCarousel, but based on a UIScrollView.
+    Q. How can I make iCarousl behave like a UIScrollView with paging enabled?
+    A. As of version 1.8, iCarousel has a pagingEnabled property that emulates the behaviour of a UIScrollView (see the *Paging Example* project). The bounce physics are not quite the same though, and you may want to consider using the SwipeView library instead (https://github.com/nicklockwood/SwipeView) which is very similar to iCarousel, but based on a UIScrollView under the hood.
     
     Q. I want my carousel items to have a real reflection, but the reflection in the examples is just drawn on. How can I render reflections dynamically?
     A. iCarousel doesn't have built-in reflection support, but you can use some additional libraries to do this. Check out the *Dynamic View Reflections* and  *Dynamic Image Effects* examples.

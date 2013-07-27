@@ -8,11 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@class iCarouselExampleViewController;
 
 @interface iCarouselExampleAppDelegate : NSObject <UIApplicationDelegate>
 
-@property (nonatomic, retain) IBOutlet UIWindow *window;
-@property (nonatomic, retain) iCarouselExampleViewController *viewController;
+@property (nonatomic, strong) IBOutlet UIWindow *window;
 
 @end

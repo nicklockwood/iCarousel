@@ -12,6 +12,6 @@
 
 @interface ViewController : UIViewController <iCarouselDataSource, iCarouselDelegate>
 
-@property (nonatomic, retain) IBOutlet iCarousel *carousel;
+@property (nonatomic, strong) IBOutlet iCarousel *carousel;
 
 @end

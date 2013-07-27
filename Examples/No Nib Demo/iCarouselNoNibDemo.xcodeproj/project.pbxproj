@@ -14,6 +14,7 @@
 		0148358813A36C2000E687AC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0148358313A36C2000E687AC /* main.m */; };
 		0148359313A36C3700E687AC /* iCarouselExampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0148358B13A36C3700E687AC /* iCarouselExampleViewController.m */; };
 		0148359413A36C3700E687AC /* iCarouselExampleAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0148358D13A36C3700E687AC /* iCarouselExampleAppDelegate.m */; };
+		018AE9B9179E869A00FB7311 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 018AE9B8179E869A00FB7311 /* Default-568h@2x.png */; };
 		B2E5E73B146154E200EADB7A /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = B2E5E73A146154E200EADB7A /* iCarousel.m */; };
 		B2E5E73F1461550900EADB7A /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = B2E5E73D1461550900EADB7A /* background.png */; };
 		B2E5E7401461550900EADB7A /* page.png in Resources */ = {isa = PBXBuildFile; fileRef = B2E5E73E1461550900EADB7A /* page.png */; };
@@ -32,6 +33,7 @@
 		0148358C13A36C3700E687AC /* iCarouselExampleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarouselExampleViewController.h; sourceTree = SOURCE_ROOT; };
 		0148358D13A36C3700E687AC /* iCarouselExampleAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarouselExampleAppDelegate.m; sourceTree = SOURCE_ROOT; };
 		0148358E13A36C3700E687AC /* iCarouselExampleAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarouselExampleAppDelegate.h; sourceTree = SOURCE_ROOT; };
+		018AE9B8179E869A00FB7311 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = SOURCE_ROOT; };
 		018BBCB413A375AF005CA505 /* iCarouselNoNibDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iCarouselNoNibDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2E5E739146154E200EADB7A /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		B2E5E73A146154E200EADB7A /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 		01308D9913491C3500453707 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				018AE9B8179E869A00FB7311 /* Default-568h@2x.png */,
 				0148358313A36C2000E687AC /* main.m */,
 				0148358413A36C2000E687AC /* iCarouselNoNibDemo-Prefix.pch */,
 				0148358513A36C2000E687AC /* iCarouselNoNibDemo-Info.plist */,
@@ -180,6 +183,7 @@
 			files = (
 				B2E5E73F1461550900EADB7A /* background.png in Resources */,
 				B2E5E7401461550900EADB7A /* page.png in Resources */,
+				018AE9B9179E869A00FB7311 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -251,6 +255,7 @@
 					armv6,
 					armv7,
 				);
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -273,6 +278,7 @@
 					armv6,
 					armv7,
 				);
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iCarouselNoNibDemo-Prefix.pch";

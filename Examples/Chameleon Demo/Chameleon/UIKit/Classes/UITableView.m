@@ -54,7 +54,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 @synthesize style=_style, dataSource=_dataSource, rowHeight=_rowHeight, separatorStyle=_separatorStyle, separatorColor=_separatorColor;
 @synthesize tableHeaderView=_tableHeaderView, tableFooterView=_tableFooterView, allowsSelection=_allowsSelection, editing=_editing;
 @synthesize sectionFooterHeight=_sectionFooterHeight, sectionHeaderHeight=_sectionHeaderHeight;
-@synthesize allowsSelectionDuringEditing=_allowsSelectionDuringEditing;
+@synthesize allowsSelectionDuringEditing=_allowsSelectionDuringEditing, backgroundView=_backgroundView;
 @dynamic delegate;
 
 - (id)initWithFrame:(CGRect)frame
@@ -519,6 +519,16 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
     }
 }
 
+- (void)setBackgroundView:(UIView *)backgroundView
+{
+    if (_backgroundView != backgroundView) {
+        [_backgroundView removeFromSuperview];
+        [_backgroundView release];
+        _backgroundView = [backgroundView retain];
+        [self insertSubview:_backgroundView atIndex:0];
+    }
+}
+
 - (NSInteger)numberOfSections
 {
     if (_dataSourceHas.numberOfSectionsInTableView) {
@@ -569,6 +579,7 @@ const CGFloat _UITableViewDefaultRowHeight = 43;
 
 - (void)layoutSubviews
 {
+    _backgroundView.frame = self.bounds;
     [self _reloadDataIfNeeded];
     [self _layoutTableView];
     [super layoutSubviews];

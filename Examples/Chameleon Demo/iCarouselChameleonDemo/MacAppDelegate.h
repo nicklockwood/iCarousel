@@ -11,7 +11,7 @@
 
 @interface MacAppDelegate : NSObject <NSApplicationDelegate>
 
-@property (nonatomic, assign) IBOutlet NSWindow *window;
-@property (nonatomic, assign) IBOutlet UIKitView *chameleonNSView;
+@property (nonatomic, unsafe_unretained) IBOutlet NSWindow *window;
+@property (nonatomic, unsafe_unretained) IBOutlet UIKitView *chameleonNSView;
 
 @end

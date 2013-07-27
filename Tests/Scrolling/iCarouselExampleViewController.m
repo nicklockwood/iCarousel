@@ -23,8 +23,6 @@
 {
     carousel.delegate = nil;
     carousel.dataSource = nil;
-    [carousel release];
-    [super dealloc];
 }
 
 #pragma mark -
@@ -60,9 +58,9 @@
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
 {
     //create a numbered view
-    view = [[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200.0f, 200.0f)] autorelease];
+    view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200.0f, 200.0f)];
     view.backgroundColor = [UIColor lightGrayColor];
-    UILabel *label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
+    UILabel *label = [[UILabel alloc] initWithFrame:view.bounds];
     label.text = [NSString stringWithFormat:@"%i", index];
     label.backgroundColor = [UIColor clearColor];
     label.textAlignment = UITextAlignmentCenter;

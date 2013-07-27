@@ -16,6 +16,7 @@
 		0148359413A36C3700E687AC /* iCarouselExampleAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0148358D13A36C3700E687AC /* iCarouselExampleAppDelegate.m */; };
 		0148359513A36C3700E687AC /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0148358F13A36C3700E687AC /* MainWindow.xib */; };
 		0148359613A36C3700E687AC /* iCarouselExampleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0148359113A36C3700E687AC /* iCarouselExampleViewController.xib */; };
+		018AE98C179D7F6A00FB7311 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 018AE98B179D7F6A00FB7311 /* Default-568h@2x.png */; };
 		B29BD7B814A3476C00BB4E68 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = B29BD7B614A3476C00BB4E68 /* background.png */; };
 		B29BD7B914A3476C00BB4E68 /* page.png in Resources */ = {isa = PBXBuildFile; fileRef = B29BD7B714A3476C00BB4E68 /* page.png */; };
 		B2E5E749146155E300EADB7A /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = B2E5E748146155E300EADB7A /* iCarousel.m */; };
@@ -36,6 +37,7 @@
 		0148358E13A36C3700E687AC /* iCarouselExampleAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarouselExampleAppDelegate.h; sourceTree = SOURCE_ROOT; };
 		0148359013A36C3700E687AC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = SOURCE_ROOT; };
 		0148359213A36C3700E687AC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/iCarouselExampleViewController.xib; sourceTree = SOURCE_ROOT; };
+		018AE98B179D7F6A00FB7311 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = SOURCE_ROOT; };
 		018BBCB413A375AF005CA505 /* iCarouselButtonsDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iCarouselButtonsDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B29BD7B614A3476C00BB4E68 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
 		B29BD7B714A3476C00BB4E68 /* page.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page.png; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 		01308D9913491C3500453707 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				018AE98B179D7F6A00FB7311 /* Default-568h@2x.png */,
 				0148358313A36C2000E687AC /* main.m */,
 				0148358413A36C2000E687AC /* iCarouselButtonsDemo-Prefix.pch */,
 				0148358513A36C2000E687AC /* iCarouselButtonsDemo-Info.plist */,
@@ -187,6 +190,7 @@
 				0148359613A36C3700E687AC /* iCarouselExampleViewController.xib in Resources */,
 				B29BD7B814A3476C00BB4E68 /* background.png in Resources */,
 				B29BD7B914A3476C00BB4E68 /* page.png in Resources */,
+				018AE98C179D7F6A00FB7311 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -274,6 +278,7 @@
 					armv6,
 					armv7,
 				);
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -296,6 +301,7 @@
 					armv6,
 					armv7,
 				);
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iCarouselButtonsDemo-Prefix.pch";

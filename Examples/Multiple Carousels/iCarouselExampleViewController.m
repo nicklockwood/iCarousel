@@ -11,8 +11,8 @@
 
 @interface iCarouselExampleViewController ()
 
-@property (nonatomic, retain) NSMutableArray *items1;
-@property (nonatomic, retain) NSMutableArray *items2;
+@property (nonatomic, strong) NSMutableArray *items1;
+@property (nonatomic, strong) NSMutableArray *items2;
 
 @end
 
@@ -49,11 +49,6 @@
     carousel2.delegate = nil;
     carousel2.dataSource = nil;
     
-    [carousel1 release];
-    [carousel2 release];
-    [items1 release];
-    [items2 release];
-    [super dealloc];
 }
 
 #pragma mark -
@@ -100,10 +95,10 @@
     //create new view if no view is available for recycling
     if (view == nil)
     {
-        view = [[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200.0f, 200.0f)] autorelease];
+        view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200.0f, 200.0f)];
         ((UIImageView *)view).image = [UIImage imageNamed:@"page.png"];
         view.contentMode = UIViewContentModeCenter;
-        label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
+        label = [[UILabel alloc] initWithFrame:view.bounds];
         label.backgroundColor = [UIColor clearColor];
         label.textAlignment = UITextAlignmentCenter;
         label.font = [label.font fontWithSize:50];
