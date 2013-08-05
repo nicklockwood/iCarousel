@@ -34,6 +34,9 @@
     
     //configure carousel
     carousel.type = iCarouselTypeCoverFlow;
+    
+    //scroll to fixed offset
+    [carousel scrollToItemAtIndex:5 animated:NO];
 }
 
 - (void)viewDidUnload
