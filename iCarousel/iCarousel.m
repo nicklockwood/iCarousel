@@ -1,7 +1,7 @@
 //
 //  iCarousel.m
 //
-//  Version 1.8 beta 2
+//  Version 1.8 beta 3
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2011 Charcoal Design
@@ -31,6 +31,7 @@
 //
 
 #import "iCarousel.h"
+#import <objc/message.h>
 
 
 #import <Availability.h>
@@ -1285,15 +1286,11 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 {
     if (_wrapEnabled)
     {
-        if (_numberOfItems == 0)
-        {
-            return 0;
-        }
-        return index - floorf((CGFloat)index / (CGFloat)_numberOfItems) * _numberOfItems;
+        return _numberOfItems? (index - floorf((CGFloat)index / (CGFloat)_numberOfItems) * _numberOfItems): 0;
     }
     else
     {
-        return MIN(MAX(index, 0), _numberOfItems - 1);
+        return MIN(MAX(0, index), MAX(0, _numberOfItems - 1));
     }
 }
 
@@ -1305,7 +1302,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     }
     else
     {
-        return fminf(fmaxf(0.0f, offset), (CGFloat)_numberOfItems - 1.0f);
+        return fminf(fmaxf(0.0f, offset), fmaxf(0.0f, (CGFloat)_numberOfItems - 1.0f));
     }
 }
 
@@ -1867,17 +1864,33 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     return index;
 }
 
-- (BOOL)viewOrSuperview:(UIView *)view isKindOfClass:(Class)class
+- (BOOL)viewOrSuperview:(UIView *)view implementsSelector:(SEL)selector
 {
-    if (view == nil || view == _contentView)
+    //thanks to @mattjgalloway and @shaps for idea
+    //https://gist.github.com/mattjgalloway/6279363
+    //https://gist.github.com/shaps80/6279008
+    
+    Class class = [view class];
+	while (class && class != [UIView class])
     {
-        return NO;
-    }
-    else if ([view isKindOfClass:class])
+		int unsigned numberOfMethods;
+		Method *methods = class_copyMethodList(class, &numberOfMethods);
+		for (int i = 0; i < numberOfMethods; i++)
+        {
+			if (method_getName(methods[i]) == selector)
+            {
+				return YES;
+			}
+		}
+		class = [class superclass];
+	}
+    
+    if (view.superview)
     {
-        return YES;
+        return [self viewOrSuperview:view.superview implementsSelector:selector];
     }
-    return [self viewOrSuperview:view.superview isKindOfClass:class];
+    
+	return NO;
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gesture shouldReceiveTouch:(UITouch *)touch
@@ -1897,8 +1910,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
             {
                 return NO;
             }
-            else if ([self viewOrSuperview:touch.view isKindOfClass:[UIControl class]] ||
-                     [self viewOrSuperview:touch.view isKindOfClass:[UITableViewCell class]])
+            else if ([self viewOrSuperview:touch.view implementsSelector:@selector(touchesBegan:withEvent:)])
             {
                 return NO;
             }
@@ -1906,9 +1918,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     }
     else if ([gesture isKindOfClass:[UIPanGestureRecognizer class]])
     {
-        if ([self viewOrSuperview:touch.view isKindOfClass:[UISlider class]] ||
-            [self viewOrSuperview:touch.view isKindOfClass:[UISwitch class]] ||
-            !_scrollEnabled)
+        if (!_scrollEnabled || [self viewOrSuperview:touch.view implementsSelector:@selector(touchesMoved:withEvent:)])
         {
             return NO;
         }

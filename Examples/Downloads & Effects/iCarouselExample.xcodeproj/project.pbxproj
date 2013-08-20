@@ -186,7 +186,7 @@
 		01308D8513491C3500453707 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0450;
+				LastUpgradeCheck = 0460;
 			};
 			buildConfigurationList = 01308D8813491C3500453707 /* Build configuration list for PBXProject "iCarouselExample" */;
 			compatibilityVersion = "Xcode 3.2";
