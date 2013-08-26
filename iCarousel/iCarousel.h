@@ -113,6 +113,7 @@ iCarouselOption;
 @property (nonatomic, assign, getter = isVertical) BOOL vertical;
 @property (nonatomic, readonly, getter = isWrapEnabled) BOOL wrapEnabled;
 @property (nonatomic, assign) BOOL bounces;
+@property (nonatomic, assign) BOOL checksGesturesInSuperview;
 @property (nonatomic, assign) CGFloat scrollOffset;
 @property (nonatomic, readonly) CGFloat offsetMultiplier;
 @property (nonatomic, assign) CGSize contentOffset;
