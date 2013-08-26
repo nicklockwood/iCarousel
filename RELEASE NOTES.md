@@ -1,4 +1,4 @@
-Verson 1.8
+Verson 1.8 beta
 
 - iCarousel now requires ARC
 - iCarousel now requires 64-bit processors on Mac OS
