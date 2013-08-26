@@ -134,6 +134,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     _scrollToItemBoundary = YES;
     _ignorePerpendicularSwipes = YES;
     _centerItemWhenSelected = YES;
+    _checksGesturesInSuperview = YES;
     
     _contentView = [[UIView alloc] initWithFrame:self.bounds];
     
@@ -1910,7 +1911,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
             {
                 return NO;
             }
-            else if ([self viewOrSuperview:touch.view implementsSelector:@selector(touchesBegan:withEvent:)])
+            else if (_checksGesturesInSuperview && [self viewOrSuperview:touch.view implementsSelector:@selector(touchesBegan:withEvent:)])
             {
                 return NO;
             }
@@ -1918,7 +1919,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     }
     else if ([gesture isKindOfClass:[UIPanGestureRecognizer class]])
     {
-        if (!_scrollEnabled || [self viewOrSuperview:touch.view implementsSelector:@selector(touchesMoved:withEvent:)])
+        if (!_scrollEnabled || (_checksGesturesInSuperview && [self viewOrSuperview:touch.view implementsSelector:@selector(touchesMoved:withEvent:)]))
         {
             return NO;
         }
