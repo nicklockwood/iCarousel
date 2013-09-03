@@ -1,7 +1,7 @@
 //
 //  iCarousel.m
 //
-//  Version 1.8 beta 4
+//  Version 1.8 beta 5
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2011 Charcoal Design
@@ -646,18 +646,31 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *self)
 {
+    //compare depths
     CATransform3D t1 = view1.superview.layer.transform;
     CATransform3D t2 = view2.superview.layer.transform;
     CGFloat z1 = t1.m13 + t1.m23 + t1.m33 + t1.m43;
     CGFloat z2 = t2.m13 + t2.m23 + t2.m33 + t2.m43;
     CGFloat difference = z1 - z2;
+    
+    //if depths are equal, compare distance from current view
     if (difference == 0.0f)
     {
         CATransform3D t3 = [self currentItemView].superview.layer.transform;
-        CGFloat x1 = t1.m11 + t1.m21 + t1.m31 + t1.m41;
-        CGFloat x2 = t2.m11 + t2.m21 + t2.m31 + t2.m41;
-        CGFloat x3 = t3.m11 + t3.m21 + t3.m31 + t3.m41;
-        difference = fabsf(x2 - x3) - fabsf(x1 - x3);
+        if (self.vertical)
+        {
+            CGFloat y1 = t1.m12 + t1.m22 + t1.m32 + t1.m42;
+            CGFloat y2 = t2.m12 + t2.m22 + t2.m32 + t2.m42;
+            CGFloat y3 = t3.m12 + t3.m22 + t3.m32 + t3.m42;
+            difference = fabsf(y2 - y3) - fabsf(y1 - y3);
+        }
+        else
+        {
+            CGFloat x1 = t1.m11 + t1.m21 + t1.m31 + t1.m41;
+            CGFloat x2 = t2.m11 + t2.m21 + t2.m31 + t2.m41;
+            CGFloat x3 = t3.m11 + t3.m21 + t3.m31 + t3.m41;
+            difference = fabsf(x2 - x3) - fabsf(x1 - x3);
+        }
     }
     return (difference < 0.0f)? NSOrderedAscending: NSOrderedDescending;
 }
