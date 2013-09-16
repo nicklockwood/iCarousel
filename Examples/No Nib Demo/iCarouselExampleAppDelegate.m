@@ -11,24 +11,12 @@
 
 @implementation iCarouselExampleAppDelegate
 
-@synthesize window;
-@synthesize viewController;
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    viewController = [[iCarouselExampleViewController alloc] init];
-    viewController.view.frame = window.screen.applicationFrame;
-    [window addSubview:viewController.view];
-    [window makeKeyAndVisible];
+    _window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    _window.rootViewController = [[iCarouselExampleViewController alloc] init];
+    [_window makeKeyAndVisible];
     return YES;
-}
-
-- (void)dealloc
-{
-    [window release];
-    [viewController release];
-    [super dealloc];
 }
 
 @end

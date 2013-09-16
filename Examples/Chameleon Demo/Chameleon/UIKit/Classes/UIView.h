@@ -94,6 +94,9 @@ enum {
     UIViewAnimationOptionTransitionFlipFromRight   = 2 << 20,		// not currently supported
     UIViewAnimationOptionTransitionCurlUp          = 3 << 20,		// not currently supported
     UIViewAnimationOptionTransitionCurlDown        = 4 << 20,		// not currently supported
+    UIViewAnimationOptionTransitionCrossDissolve   = 5 << 20,		// not currently supported
+    UIViewAnimationOptionTransitionFlipFromTop     = 6 << 20,		// not currently supported
+    UIViewAnimationOptionTransitionFlipFromBottom  = 7 << 20,		// not currently supported
 };
 typedef NSUInteger UIViewAnimationOptions;
 

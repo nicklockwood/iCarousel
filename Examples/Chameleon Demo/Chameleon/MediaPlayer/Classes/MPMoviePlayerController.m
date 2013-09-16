@@ -24,8 +24,10 @@ NSString *const MPMovieDurationAvailableNotification = @"MPMovieDurationAvailabl
 @synthesize contentURL=_contentURL;
 @synthesize controlStyle=_controlStyle;
 @synthesize movieSourceType=_movieSourceType;
+@synthesize backgroundView;
 @synthesize playbackState=_playbackState;
 @synthesize repeatMode=_repeatMode;
+@synthesize shouldAutoplay;
 @synthesize scalingMode=_scalingMode;
 
 
@@ -233,6 +235,11 @@ NSString *const MPMovieDurationAvailableNotification = @"MPMovieDurationAvailabl
     _playbackState = MPMoviePlaybackStatePaused;
 }
 
+///////////////////////////////////////////////////////////////////////////////
+//
+- (void)prepareToPlay {
+    // Do nothing
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -241,5 +248,17 @@ NSString *const MPMovieDurationAvailableNotification = @"MPMovieDurationAvailabl
     [movie stop];
     _playbackState = MPMoviePlaybackStateStopped;
 }
+
+#pragma mark - Pending
+
+- (void) setShouldAutoplay:(BOOL)shouldAutoplay {
+    NSLog(@"[CHAMELEON] MPMoviePlayerController.shouldAutoplay not implemented");
+}
+
+- (UIView*) backgroundView {
+    NSLog(@"[CHAMELEON] MPMoviePlayerController.backgroundView not implemented");
+    return nil;
+}
+
 
 @end

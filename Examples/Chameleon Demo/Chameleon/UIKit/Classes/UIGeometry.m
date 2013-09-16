@@ -136,6 +136,17 @@ NSString *NSStringFromUIOffset(UIOffset offset)
 {
     return NSPointToCGPoint([self decodePointForKey:key]);
 }
+
+- (void)encodeCGRect:(CGRect)rect forKey:(NSString *)key
+{
+    [self encodeRect:NSRectFromCGRect(rect) forKey:key];
+}
+
+- (CGRect)decodeCGRectForKey:(NSString *)key
+{
+    return NSRectToCGRect([self decodeRectForKey:key]);
+}
+
 @end
 
 

@@ -12,7 +12,7 @@
 
 @interface iCarouselExampleViewController ()
 
-@property (nonatomic, retain) NSMutableArray *items;
+@property (nonatomic, strong) NSMutableArray *items;
 
 @end
 
@@ -60,7 +60,6 @@
     
     [carousel release];
     [items release];
-    [super dealloc];
 }
 
 #pragma mark -

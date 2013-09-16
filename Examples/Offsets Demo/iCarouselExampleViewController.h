@@ -13,8 +13,8 @@
 @interface iCarouselExampleViewController : UIViewController <iCarouselDataSource, iCarouselDelegate>
 
 @property (nonatomic, strong) IBOutlet iCarousel *carousel;
-@property (nonatomic, assign) IBOutlet UILabel *viewpointOffsetLabel;
-@property (nonatomic, assign) IBOutlet UILabel *contentOffsetLabel;
+@property (nonatomic, unsafe_unretained) IBOutlet UILabel *viewpointOffsetLabel;
+@property (nonatomic, unsafe_unretained) IBOutlet UILabel *contentOffsetLabel;
 
 - (IBAction)updateViewpointOffset:(UISlider *)slider;
 - (IBAction)updateContentOffset:(UISlider *)slider;

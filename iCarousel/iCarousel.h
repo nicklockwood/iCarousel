@@ -1,7 +1,7 @@
 //
 //  iCarousel.h
 //
-//  Version 1.7.4
+//  Version 1.8 beta 5
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2011 Charcoal Design
@@ -34,14 +34,12 @@
 #import <Availability.h>
 #undef weak_delegate
 #undef __weak_delegate
-#if __has_feature(objc_arc_weak) && \
+#if __has_feature(objc_arc) && __has_feature(objc_arc_weak) && \
 (!(defined __MAC_OS_X_VERSION_MIN_REQUIRED) || \
 __MAC_OS_X_VERSION_MIN_REQUIRED >= __MAC_10_8)
 #define weak_delegate weak
-#define __weak_delegate __weak
 #else
 #define weak_delegate unsafe_unretained
-#define __weak_delegate __unsafe_unretained
 #endif
 
 
@@ -98,7 +96,8 @@ typedef enum
     iCarouselOptionSpacing,
     iCarouselOptionFadeMin,
     iCarouselOptionFadeMax,
-    iCarouselOptionFadeRange
+    iCarouselOptionFadeRange,
+    iCarouselOptionFadeMinAlpha
 }
 iCarouselOption;
 
@@ -106,57 +105,6 @@ iCarouselOption;
 @protocol iCarouselDataSource, iCarouselDelegate;
 
 @interface iCarousel : UIView
-
-//required for 32-bit Macs
-#ifdef __i386__
-{
-	@private
-	
-    id<iCarouselDelegate> __weak_delegate _delegate;
-    id<iCarouselDataSource> __weak_delegate _dataSource;
-    iCarouselType _type;
-    CGFloat _perspective;
-    NSInteger _numberOfItems;
-    NSInteger _numberOfPlaceholders;
-	NSInteger _numberOfPlaceholdersToShow;
-    NSInteger _numberOfVisibleItems;
-    UIView *_contentView;
-    NSMutableDictionary *_itemViews;
-    NSMutableSet *_itemViewPool;
-    NSMutableSet *_placeholderViewPool;
-    NSInteger _previousItemIndex;
-    CGFloat _itemWidth;
-    CGFloat _scrollOffset;
-    CGFloat _offsetMultiplier;
-    CGFloat _startVelocity;
-    NSTimer __unsafe_unretained *_timer;
-    BOOL _decelerating;
-    BOOL _scrollEnabled;
-    CGFloat _decelerationRate;
-    BOOL _bounces;
-    CGSize _contentOffset;
-    CGSize _viewpointOffset;
-    CGFloat _startOffset;
-    CGFloat _endOffset;
-    NSTimeInterval _scrollDuration;
-    NSTimeInterval _startTime;
-    BOOL _scrolling;
-    CGFloat _previousTranslation;
-	BOOL _centerItemWhenSelected;
-	BOOL _wrapEnabled;
-	BOOL _dragging;
-    BOOL _didDrag;
-    CGFloat _scrollSpeed;
-    CGFloat _bounceDistance;
-    NSTimeInterval _toggleTime;
-    CGFloat _toggle;
-    BOOL _stopAtItemBoundary;
-    BOOL _scrollToItemBoundary;
-	BOOL _vertical;
-    BOOL _ignorePerpendicularSwipes;
-    NSInteger _animationDisableCount;
-}
-#endif
 
 @property (nonatomic, weak_delegate) IBOutlet id<iCarouselDataSource> dataSource;
 @property (nonatomic, weak_delegate) IBOutlet id<iCarouselDelegate> delegate;
@@ -166,6 +114,7 @@ iCarouselOption;
 @property (nonatomic, assign) CGFloat scrollSpeed;
 @property (nonatomic, assign) CGFloat bounceDistance;
 @property (nonatomic, assign, getter = isScrollEnabled) BOOL scrollEnabled;
+@property (nonatomic, assign, getter = isPagingEnabled) BOOL pagingEnabled;
 @property (nonatomic, assign, getter = isVertical) BOOL vertical;
 @property (nonatomic, readonly, getter = isWrapEnabled) BOOL wrapEnabled;
 @property (nonatomic, assign) BOOL bounces;
@@ -242,21 +191,5 @@ iCarouselOption;
 - (CGFloat)carouselItemWidth:(iCarousel *)carousel;
 - (CATransform3D)carousel:(iCarousel *)carousel itemTransformForOffset:(CGFloat)offset baseTransform:(CATransform3D)transform;
 - (CGFloat)carousel:(iCarousel *)carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value;
-
-@end
-
-
-@protocol iCarouselDeprecated
-@optional
-
-//deprecated delegate and datasource methods
-//use carousel:valueForOption:withDefault: instead
-
-- (NSUInteger)numberOfVisibleItemsInCarousel:(iCarousel *)carousel;
-- (void)carouselCurrentItemIndexUpdated:(iCarousel *)carousel __attribute__((deprecated));
-- (BOOL)carouselShouldWrap:(iCarousel *)carousel __attribute__((deprecated));
-- (CGFloat)carouselOffsetMultiplier:(iCarousel *)carousel __attribute__((deprecated));
-- (CGFloat)carousel:(iCarousel *)carousel itemAlphaForOffset:(CGFloat)offset __attribute__((deprecated));
-- (CGFloat)carousel:(iCarousel *)carousel valueForTransformOption:(iCarouselOption)option withDefault:(CGFloat)value __attribute__((deprecated));
 
 @end

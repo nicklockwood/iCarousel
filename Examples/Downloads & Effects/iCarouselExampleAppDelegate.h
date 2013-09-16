@@ -12,7 +12,7 @@
 
 @interface iCarouselExampleAppDelegate : NSObject <UIApplicationDelegate>
 
-@property (nonatomic) IBOutlet UIWindow *window;
-@property (nonatomic) IBOutlet iCarouselExampleViewController *viewController;
+@property (strong, nonatomic) IBOutlet UIWindow *window;
+@property (strong, nonatomic) IBOutlet iCarouselExampleViewController *viewController;
 
 @end

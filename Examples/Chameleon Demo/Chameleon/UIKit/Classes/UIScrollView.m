@@ -155,18 +155,6 @@ const float UIScrollViewDecelerationRateFast = 0.99;
     [self setNeedsLayout];
 }
 
-- (void)setScrollEnabled:(BOOL)enabled
-{
-    self.panGestureRecognizer.enabled = enabled;
-    self.scrollWheelGestureRecognizer.enabled = enabled;
-    [self setNeedsLayout];
-}
-
-- (BOOL)isScrollEnabled
-{
-    return self.panGestureRecognizer.enabled || self.scrollWheelGestureRecognizer.enabled;
-}
-
 - (BOOL)_canScrollHorizontal
 {
     return self.scrollEnabled && (_contentSize.width > self.bounds.size.width);
@@ -177,7 +165,7 @@ const float UIScrollViewDecelerationRateFast = 0.99;
     return self.scrollEnabled && (_contentSize.height > self.bounds.size.height);
 }
 
-- (void)_updateContentLayout
+- (void)_updateScrollers
 {
     _verticalScroller.contentSize = _contentSize.height;
     _verticalScroller.contentOffset = _contentOffset.y;
@@ -186,13 +174,19 @@ const float UIScrollViewDecelerationRateFast = 0.99;
     
     _verticalScroller.hidden = !self._canScrollVertical;
     _horizontalScroller.hidden = !self._canScrollHorizontal;
-    
-    CGRect bounds = self.bounds;
-    bounds.origin.x = _contentOffset.x+_contentInset.left;
-    bounds.origin.y = _contentOffset.y+_contentInset.top;
-    self.bounds = bounds;
-    
+}
+
+- (void)setScrollEnabled:(BOOL)enabled
+{
+    self.panGestureRecognizer.enabled = enabled;
+    self.scrollWheelGestureRecognizer.enabled = enabled;
+    [self _updateScrollers];
     [self setNeedsLayout];
+}
+
+- (BOOL)isScrollEnabled
+{
+    return self.panGestureRecognizer.enabled || self.scrollWheelGestureRecognizer.enabled;
 }
 
 - (void)_cancelScrollAnimation
@@ -337,7 +331,13 @@ const float UIScrollViewDecelerationRateFast = 0.99;
         _contentOffset.x = roundf(theOffset.x);
         _contentOffset.y = roundf(theOffset.y);
 
-        [self _updateContentLayout];
+        CGRect bounds = self.bounds;
+        bounds.origin.x = _contentOffset.x+_contentInset.left;
+        bounds.origin.y = _contentOffset.y+_contentInset.top;
+        self.bounds = bounds;
+        
+        [self _updateScrollers];
+        [self setNeedsLayout];
 
         if (_delegateCan.scrollViewDidScroll) {
             [_delegate scrollViewDidScroll:self];

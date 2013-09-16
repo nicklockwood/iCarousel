@@ -80,6 +80,7 @@ typedef enum {
     BOOL _adjustsFontSizeToFitWidth;
     NSString *_placeholder;
     UITextBorderStyle _borderStyle;
+    CGFloat _minimumFontSize;
 
     UIView *_inputAccessoryView;
     UIView *_inputView;
@@ -116,6 +117,7 @@ typedef enum {
 @property (nonatomic, readonly, getter=isEditing) BOOL editing;
 @property (nonatomic) BOOL clearsOnBeginEditing;
 @property (nonatomic) BOOL adjustsFontSizeToFitWidth;
+@property (nonatomic) CGFloat minimumFontSize;
 
 @property (nonatomic, retain) UIImage *background;
 @property (nonatomic, retain) UIImage *disabledBackground;

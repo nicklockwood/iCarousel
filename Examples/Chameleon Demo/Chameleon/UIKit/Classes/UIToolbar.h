@@ -30,6 +30,12 @@
 #import "UIView.h"
 #import "UIInterface.h"
 
+typedef enum {
+    UIToolbarPositionAny = 0,
+    UIToolbarPositionBottom = 1,
+    UIToolbarPositionTop = 2,
+} UIToolbarPosition;
+
 @interface UIToolbar : UIView {
 @private
     UIBarStyle _barStyle;

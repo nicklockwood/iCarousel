@@ -12,7 +12,7 @@
 @interface iCarouselWindowController ()
 
 @property (nonatomic, assign) BOOL wrap;
-@property (nonatomic, retain) NSMutableArray *items;
+@property (nonatomic, strong) NSMutableArray *items;
 
 @end
 
@@ -52,8 +52,6 @@
 	carousel.delegate = nil;
 	carousel.dataSource = nil;
 	
-    [carousel release];
-    [super dealloc];
 }
 
 - (IBAction)switchCarouselType:(id)sender
@@ -109,11 +107,11 @@
         //this `if (view == nil) {...}` statement because the view will be
         //recycled and used with other index values later
 		NSImage *image = [NSImage imageNamed:@"page.png"];
-       	view = [[[NSImageView alloc] initWithFrame:NSMakeRect(0,0,image.size.width,image.size.height)] autorelease];
+       	view = [[NSImageView alloc] initWithFrame:NSMakeRect(0,0,image.size.width,image.size.height)];
         [(NSImageView *)view setImage:image];
         [(NSImageView *)view setImageScaling:NSImageScaleAxesIndependently];
         
-        label = [[[NSTextField alloc] init] autorelease];
+        label = [[NSTextField alloc] init];
         [label setBackgroundColor:[NSColor clearColor]];
         [label setBordered:NO];
         [label setSelectable:NO];
@@ -155,11 +153,11 @@
 	if (view == nil)
 	{
 		NSImage *image = [NSImage imageNamed:@"page.png"];
-       	view = [[[NSImageView alloc] initWithFrame:NSMakeRect(0,0,image.size.width,image.size.height)] autorelease];
+       	view = [[NSImageView alloc] initWithFrame:NSMakeRect(0,0,image.size.width,image.size.height)];
         [(NSImageView *)view setImage:image];
         [(NSImageView *)view setImageScaling:NSImageScaleAxesIndependently];
         
-        label = [[[NSTextField alloc] init] autorelease];
+        label = [[NSTextField alloc] init];
         [label setBackgroundColor:[NSColor clearColor]];
         [label setBordered:NO];
         [label setSelectable:NO];

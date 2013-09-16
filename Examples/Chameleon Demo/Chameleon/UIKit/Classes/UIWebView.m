@@ -190,6 +190,8 @@
     if (_delegateHas.didFinishLoad) {
         [_delegate webViewDidFinishLoad:self];
     }
+//    [_webViewAdapter becomeFirstResponder];
+//    [_webViewAdapter setNeedsDisplay];
 }
 
 - (void)webView:(WebView *)sender didFailLoadWithError:(NSError *)error forFrame:(WebFrame *)frame
@@ -204,12 +206,27 @@
 
 - (void)webView:(WebView *)sender makeFirstResponder:(NSResponder *)responder
 {
-    //[[_webViewAdapter.NSView window] makeFirstResponder:responder];
+    [[_webViewAdapter.NSView window] makeFirstResponder:responder];
 }
 
 - (NSArray *)webView:(WebView *)sender contextMenuItemsForElement:(NSDictionary *)element defaultMenuItems:(NSArray *)defaultMenuItems
 {
     return [NSArray array];
+}
+
+- (BOOL)webViewIsResizable:(WebView *)sender
+{
+    return NO;
+}
+
+- (BOOL)canBecomeFirstResponder
+{
+    return YES;
+}
+
+- (void)webView:(WebView *)sender setFrame:(NSRect)frame
+{
+    // DO NOTHING to prevent WebView resize window
 }
 
 @end

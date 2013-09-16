@@ -27,8 +27,7 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import <Foundation/Foundation.h>
-#import "UIGeometry.h"
+#import "UIControl.h"
 
 @class UIImage;
 
@@ -46,5 +45,8 @@
 @property (nonatomic, assign) UIEdgeInsets imageInsets;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic) NSInteger tag;
+
+- (void)setTitleTextAttributes:(NSDictionary *)attributes forState:(UIControlState)state;
+- (NSDictionary *)titleTextAttributesForState:(UIControlState)state;
 
 @end

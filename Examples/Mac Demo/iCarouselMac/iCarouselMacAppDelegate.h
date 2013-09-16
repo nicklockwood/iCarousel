@@ -10,11 +10,11 @@
 
 @interface iCarouselMacAppDelegate : NSObject <NSApplicationDelegate>
 {
-    NSWindow *window;
-    NSWindowController *windowController;
+    NSWindow *__weak window;
+    NSWindowController *__weak windowController;
 }
 
-@property (assign) IBOutlet NSWindow *window;
-@property (assign) IBOutlet NSWindowController *windowController;
+@property (weak) IBOutlet NSWindow *window;
+@property (weak) IBOutlet NSWindowController *windowController;
 
 @end

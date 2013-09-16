@@ -56,7 +56,7 @@
     //create new view if no view is available for recycling
     if (view == nil)
     {
-        FXImageView *imageView = [[[FXImageView alloc] initWithFrame:CGRectMake(0, 0, 200.0f, 200.0f)] autorelease];
+        FXImageView *imageView = [[FXImageView alloc] initWithFrame:CGRectMake(0, 0, 200.0f, 200.0f)];
         imageView.contentMode = UIViewContentModeScaleAspectFit;
         imageView.asynchronous = YES;
         imageView.reflectionScale = 0.5f;
@@ -72,7 +72,7 @@
     ((FXImageView *)view).processedImage = [UIImage imageNamed:@"placeholder.png"];
     
     //set image
-    ((FXImageView *)view).image = [_images objectAtIndex:index];
+    ((FXImageView *)view).image = _images[index];
     
     return view;
 }
@@ -81,13 +81,6 @@
 {
     // Return YES for supported orientations
     return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
-}
-
-- (void)dealloc
-{
-    [_carousel release];
-    [_images release];
-    [super dealloc];
 }
 
 @end
