@@ -44,8 +44,13 @@ __MAC_OS_X_VERSION_MIN_REQUIRED >= __MAC_10_8)
 
 
 #import <QuartzCore/QuartzCore.h>
-#if defined USING_CHAMELEON || defined __IPHONE_OS_VERSION_MAX_ALLOWED
+#ifdef USING_CHAMELEON
 #define ICAROUSEL_IOS
+#elif defined __IPHONE_OS_VERSION_MAX_ALLOWED
+#define ICAROUSEL_IOS
+// DON'T retype stuff, bad stuff happens to the type hierarchy!
+// typedef CGRect NSRect;
+// typedef CGSize NSSize;
 #else
 #define ICAROUSEL_MACOS
 #endif
