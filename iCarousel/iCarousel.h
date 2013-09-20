@@ -109,6 +109,7 @@ iCarouselOption;
 @property (nonatomic, assign) CGFloat scrollSpeed;
 @property (nonatomic, assign) CGFloat bounceDistance;
 @property (nonatomic, assign, getter = isScrollEnabled) BOOL scrollEnabled;
+@property (nonatomic, assign) BOOL alwaysReceivePanGestureTouches;
 @property (nonatomic, assign, getter = isPagingEnabled) BOOL pagingEnabled;
 @property (nonatomic, assign, getter = isVertical) BOOL vertical;
 @property (nonatomic, readonly, getter = isWrapEnabled) BOOL wrapEnabled;
