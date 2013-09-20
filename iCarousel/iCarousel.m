@@ -1931,7 +1931,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     }
     else if ([gesture isKindOfClass:[UIPanGestureRecognizer class]])
     {
-        if (!_scrollEnabled || [self viewOrSuperview:touch.view implementsSelector:@selector(touchesMoved:withEvent:)])
+        if (!_alwaysReceivePanGestureTouches && (!_scrollEnabled || [self viewOrSuperview:touch.view implementsSelector:@selector(touchesMoved:withEvent:)]))
         {
             return NO;
         }
