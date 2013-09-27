@@ -1,7 +1,7 @@
 //
 //  iCarousel.m
 //
-//  Version 1.8 beta 5
+//  Version 1.8 beta 6
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2011 Charcoal Design
@@ -1892,9 +1892,11 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         {
 			if (method_getName(methods[i]) == selector)
             {
+                free(methods);
 				return YES;
 			}
 		}
+        if (methods) free(methods);
 		class = [class superclass];
 	}
     
