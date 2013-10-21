@@ -1,7 +1,7 @@
 //
 //  iCarousel.m
 //
-//  Version 1.8 beta 6
+//  Version 1.8 beta 7
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2011 Charcoal Design
@@ -1908,6 +1908,19 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 	return NO;
 }
 
+- (id)viewOrSuperview:(UIView *)view ofClass:(Class)class
+{
+    if (!view || view == self.contentView)
+    {
+        return nil;
+    }
+    else if ([view isKindOfClass:class])
+    {
+        return view;
+    }
+    return [self viewOrSuperview:view.superview ofClass:class];
+}
+
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gesture shouldReceiveTouch:(UITouch *)touch
 {
     if ([gesture isKindOfClass:[UITapGestureRecognizer class]])
@@ -1933,8 +1946,19 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     }
     else if ([gesture isKindOfClass:[UIPanGestureRecognizer class]])
     {
-        if (!_scrollEnabled || [self viewOrSuperview:touch.view implementsSelector:@selector(touchesMoved:withEvent:)])
+        if (!_scrollEnabled)
         {
+            return NO;
+        }
+        else if ([self viewOrSuperview:touch.view implementsSelector:@selector(touchesMoved:withEvent:)])
+        {
+            UIScrollView *scrollView = [self viewOrSuperview:touch.view ofClass:[UIScrollView class]];
+            if (scrollView)
+            {
+                return !scrollView.scrollEnabled ||
+                (self.vertical && scrollView.contentSize.height <= scrollView.frame.size.height) ||
+                (!self.vertical && scrollView.contentSize.width <= scrollView.frame.size.width);
+            }
             return NO;
         }
     }
