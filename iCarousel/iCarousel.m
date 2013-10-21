@@ -136,6 +136,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     _centerItemWhenSelected = YES;
     
     _contentView = [[UIView alloc] initWithFrame:self.bounds];
+    _contentView.clipsToBounds = YES;
     
 #ifdef ICAROUSEL_IOS
         
