@@ -845,6 +845,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (void)layoutSubviews
 {
+    [super layoutSubviews];
+    
     _contentView.frame = self.bounds;
     [self layOutItemViews];
 }
