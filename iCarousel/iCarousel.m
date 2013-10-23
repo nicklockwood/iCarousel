@@ -1,7 +1,7 @@
 //
 //  iCarousel.m
 //
-//  Version 1.8 beta 7
+//  Version 1.8 beta 8
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2011 Charcoal Design
@@ -138,9 +138,10 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     _contentView = [[UIView alloc] initWithFrame:self.bounds];
     
 #ifdef ICAROUSEL_IOS
-        
+    
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPan:)];
     panGesture.delegate = (id <UIGestureRecognizerDelegate>)self;
+    _contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [_contentView addGestureRecognizer:panGesture];
     
 #else
@@ -244,11 +245,13 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (void)setScrollOffset:(CGFloat)scrollOffset
 {
+    _scrolling = NO;
+    _decelerating = NO;
+    _startOffset = scrollOffset;
+    _endOffset = scrollOffset;
+    
     if (_scrollOffset != scrollOffset)
     {
-        _scrolling = NO;
-        _startOffset = scrollOffset;
-        _endOffset = scrollOffset;
         _scrollOffset = scrollOffset;
         [self didScroll];
     }
@@ -845,6 +848,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (void)layoutSubviews
 {
+    [super layoutSubviews];
     _contentView.frame = self.bounds;
     [self layOutItemViews];
 }
@@ -854,7 +858,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 - (void)resizeSubviewsWithOldSize:(NSSize)oldSize
 {
     [self pushAnimationState:NO];
-    [self layoutSubviews];
+    _contentView.frame = self.bounds;
+    [self layOutItemViews];
     [self popAnimationState];
 }
 
@@ -1934,11 +1939,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         }
         if (index != NSNotFound)
         {
-            if (_delegate && ![_delegate carousel:self shouldSelectItemAtIndex:index])
-            {
-                return NO;
-            }
-            else if ([self viewOrSuperview:touch.view implementsSelector:@selector(touchesBegan:withEvent:)])
+            if ([self viewOrSuperview:touch.view implementsSelector:@selector(touchesBegan:withEvent:)])
             {
                 return NO;
             }
@@ -1989,12 +1990,15 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (void)didTap:(UITapGestureRecognizer *)tapGesture
 {
-    NSInteger index = [self indexOfItemView:[tapGesture.view.subviews lastObject]];
-    if (_centerItemWhenSelected && index != self.currentItemIndex)
+    if (!_delegate || [_delegate carousel:self shouldSelectItemAtIndex:index])
     {
-        [self scrollToItemAtIndex:index animated:YES];
+        NSInteger index = [self indexOfItemView:[tapGesture.view.subviews lastObject]];
+        if (_centerItemWhenSelected && index != self.currentItemIndex)
+        {
+            [self scrollToItemAtIndex:index animated:YES];
+        }
+        [_delegate carousel:self didSelectItemAtIndex:index];
     }
-    [_delegate carousel:self didSelectItemAtIndex:index];
 }
 
 - (void)didPan:(UIPanGestureRecognizer *)panGesture

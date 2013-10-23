@@ -11,18 +11,21 @@
 
 @implementation iCarouselExampleViewController
 
-@synthesize carousel;
-
-- (void)reloadAndScroll
+- (IBAction)reloadAndScroll;
 {
-	[carousel reloadData];
-    [carousel scrollByOffset:4.5 duration:0.0];
+	[self.carousel reloadData];
+    [self.carousel scrollByOffset:4.5 duration:0.0];
+}
+
+- (IBAction)stop
+{
+    self.carousel.scrollOffset = self.carousel.scrollOffset;
 }
 
 - (void)dealloc
 {
-    carousel.delegate = nil;
-    carousel.dataSource = nil;
+    self.carousel.delegate = nil;
+    self.carousel.dataSource = nil;
 }
 
 #pragma mark -
@@ -33,10 +36,10 @@
     [super viewDidLoad];
     
     //configure carousel
-    carousel.type = iCarouselTypeCoverFlow;
+    self.carousel.type = iCarouselTypeCoverFlow;
     
     //scroll to fixed offset
-    [carousel scrollToItemAtIndex:5 animated:NO];
+    [self.carousel scrollToItemAtIndex:5 animated:NO];
 }
 
 - (void)viewDidUnload

@@ -14,6 +14,4 @@
 
 @property (nonatomic, strong) IBOutlet iCarousel *carousel;
 
-- (IBAction)reloadAndScroll;
-
 @end
