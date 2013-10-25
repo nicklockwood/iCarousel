@@ -1990,9 +1990,9 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (void)didTap:(UITapGestureRecognizer *)tapGesture
 {
+    NSInteger index = [self indexOfItemView:[tapGesture.view.subviews lastObject]];
     if (!_delegate || [_delegate carousel:self shouldSelectItemAtIndex:index])
     {
-        NSInteger index = [self indexOfItemView:[tapGesture.view.subviews lastObject]];
         if (_centerItemWhenSelected && index != self.currentItemIndex)
         {
             [self scrollToItemAtIndex:index animated:YES];
