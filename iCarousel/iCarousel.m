@@ -1,7 +1,7 @@
 //
 //  iCarousel.m
 //
-//  Version 1.8 beta 8
+//  Version 1.8 beta 9
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2011 Charcoal Design
@@ -59,26 +59,26 @@
 
 @implementation NSObject (iCarousel)
 
-- (NSUInteger)numberOfPlaceholdersInCarousel:(iCarousel *)carousel { return 0; }
-- (void)carouselWillBeginScrollingAnimation:(iCarousel *)carousel {}
-- (void)carouselDidEndScrollingAnimation:(iCarousel *)carousel {}
-- (void)carouselDidScroll:(iCarousel *)carousel {}
+- (NSUInteger)numberOfPlaceholdersInCarousel:(__unused iCarousel *)carousel { return 0; }
+- (void)carouselWillBeginScrollingAnimation:(__unused iCarousel *)carousel {}
+- (void)carouselDidEndScrollingAnimation:(__unused iCarousel *)carousel {}
+- (void)carouselDidScroll:(__unused iCarousel *)carousel {}
 
-- (void)carouselCurrentItemIndexDidChange:(iCarousel *)carousel {}
-- (void)carouselWillBeginDragging:(iCarousel *)carousel {}
-- (void)carouselDidEndDragging:(iCarousel *)carousel willDecelerate:(BOOL)decelerate {}
-- (void)carouselWillBeginDecelerating:(iCarousel *)carousel {}
-- (void)carouselDidEndDecelerating:(iCarousel *)carousel {}
+- (void)carouselCurrentItemIndexDidChange:(__unused iCarousel *)carousel {}
+- (void)carouselWillBeginDragging:(__unused iCarousel *)carousel {}
+- (void)carouselDidEndDragging:(__unused iCarousel *)carousel willDecelerate:(__unused BOOL)decelerate {}
+- (void)carouselWillBeginDecelerating:(__unused iCarousel *)carousel {}
+- (void)carouselDidEndDecelerating:(__unused iCarousel *)carousel {}
 
-- (BOOL)carousel:(iCarousel *)carousel shouldSelectItemAtIndex:(NSInteger)index { return YES; }
-- (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index {}
+- (BOOL)carousel:(__unused iCarousel *)carousel shouldSelectItemAtIndex:(__unused NSInteger)index { return YES; }
+- (void)carousel:(__unused iCarousel *)carousel didSelectItemAtIndex:(__unused NSInteger)index {}
 
-- (CGFloat)carouselItemWidth:(iCarousel *)carousel { return 0; }
-- (CATransform3D)carousel:(iCarousel *)carousel
-   itemTransformForOffset:(CGFloat)offset
+- (CGFloat)carouselItemWidth:(__unused iCarousel *)carousel { return 0; }
+- (CATransform3D)carousel:(__unused iCarousel *)carousel
+   itemTransformForOffset:(__unused CGFloat)offset
             baseTransform:(CATransform3D)transform { return transform; }
-- (CGFloat)carousel:(iCarousel *)carousel
-     valueForOption:(iCarouselOption)option
+- (CGFloat)carousel:(__unused iCarousel *)carousel
+     valueForOption:(__unused iCarouselOption)option
         withDefault:(CGFloat)value { return value; }
 
 @end
@@ -446,10 +446,10 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (CGFloat)valueForOption:(iCarouselOption)option withDefault:(CGFloat)value
 {    
-    return [_delegate carousel:self valueForOption:option withDefault:value];
+    return _delegate? [_delegate carousel:self valueForOption:option withDefault:value]: value;
 }
 
-- (CATransform3D)transformForItemView:(UIView *)view withOffset:(CGFloat)offset
+- (CATransform3D)transformForItemViewWithOffset:(CGFloat)offset
 {   
     //set up base transform
     CATransform3D transform = CATransform3DIdentity;
@@ -639,11 +639,6 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
                 return CATransform3DTranslate(transform, offset * _itemWidth * tilt, 0.0f, offset * _itemWidth * spacing);
             }
         }
-        default:
-        {
-            //shouldn't ever happen
-            return CATransform3DIdentity;
-        }
     }
 }
 
@@ -816,7 +811,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     }
     
     //calculate transform
-    CATransform3D transform = [self transformForItemView:view withOffset:offset];
+    CATransform3D transform = [self transformForItemViewWithOffset:offset];
     
     //transform view
     view.superview.layer.transform = transform;
@@ -959,7 +954,6 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         case iCarouselTypeTimeMachine:
         case iCarouselTypeInvertedTimeMachine:
         case iCarouselTypeCustom:
-        default:
         {
             //slightly arbitrary number, chosen for performance reasons
             _numberOfVisibleItems = MAX_VISIBLE_ITEMS;
@@ -1888,12 +1882,12 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     //https://gist.github.com/mattjgalloway/6279363
     //https://gist.github.com/shaps80/6279008
     
-    Class class = [view class];
-	while (class && class != [UIView class])
+    Class viewClass = [view class];
+	while (viewClass && viewClass != [UIView class])
     {
-		int unsigned numberOfMethods;
-		Method *methods = class_copyMethodList(class, &numberOfMethods);
-		for (int i = 0; i < numberOfMethods; i++)
+		unsigned int numberOfMethods;
+		Method *methods = class_copyMethodList(viewClass, &numberOfMethods);
+		for (unsigned int i = 0; i < numberOfMethods; i++)
         {
 			if (method_getName(methods[i]) == selector)
             {
@@ -1902,7 +1896,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 			}
 		}
         if (methods) free(methods);
-		class = [class superclass];
+		viewClass = [viewClass superclass];
 	}
     
     if (view.superview && view.superview != self.contentView)
