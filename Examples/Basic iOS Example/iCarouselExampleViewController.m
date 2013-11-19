@@ -51,7 +51,7 @@
     [super viewDidLoad];
     
     //configure carousel
-    _carousel.type = iCarouselTypeCoverFlow2;
+    _carousel.type = iCarouselTypeCustom;
 }
 
 - (void)viewDidUnload
@@ -120,6 +120,34 @@
         return value * 1.1f;
     }
     return value;
+}
+
+- (CATransform3D)carousel:(iCarousel *)carousel itemTransformForOffset:(CGFloat)offset baseTransform:(CATransform3D)transform {
+    
+    const CGFloat centerItemZoom = 1.6;
+    const CGFloat centerItemSpacing = 1.5;
+    const CGFloat centerItemOffset = 50;
+    
+    CGFloat spacing = [self carousel:carousel valueForOption:iCarouselOptionSpacing withDefault:1.0f];
+    CGFloat absClampedOffset = MIN(1.0, fabs(offset));
+    CGFloat clampedOffset = MIN(1.0, MAX(-1.0, offset));
+    CGFloat scaleFactor = 1.0 + absClampedOffset * (1.0/centerItemZoom - 1.0);
+    CGFloat yoffset = (1.0f - absClampedOffset) * -centerItemOffset;
+    offset = (scaleFactor * offset + scaleFactor * (centerItemSpacing - 1.0) * clampedOffset) * carousel.itemWidth * spacing;
+    
+    
+    if (carousel.vertical)
+    {
+        transform = CATransform3DTranslate(transform, yoffset, offset, -absClampedOffset);
+    }
+    else
+    {
+        transform = CATransform3DTranslate(transform, offset, yoffset, -absClampedOffset);
+    }
+    
+    transform = CATransform3DScale(transform, scaleFactor, scaleFactor, 2.0f);
+    
+    return transform;
 }
 
 @end

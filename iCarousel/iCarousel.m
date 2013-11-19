@@ -1,7 +1,7 @@
 //
 //  iCarousel.m
 //
-//  Version 1.8 beta 9
+//  Version 1.8 beta 10
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2011 Charcoal Design
@@ -1922,6 +1922,13 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gesture shouldReceiveTouch:(UITouch *)touch
 {
+    if (_scrollEnabled)
+    {
+        _dragging = NO;
+        _scrolling = NO;
+        _decelerating = NO;
+    }
+    
     if ([gesture isKindOfClass:[UITapGestureRecognizer class]])
     {
         //handle tap
@@ -1987,11 +1994,16 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     NSInteger index = [self indexOfItemView:[tapGesture.view.subviews lastObject]];
     if (!_delegate || [_delegate carousel:self shouldSelectItemAtIndex:index])
     {
-        if (_centerItemWhenSelected && index != self.currentItemIndex)
+        if ((index != self.currentItemIndex && _centerItemWhenSelected) ||
+            (index == self.currentItemIndex && _scrollToItemBoundary))
         {
             [self scrollToItemAtIndex:index animated:YES];
         }
         [_delegate carousel:self didSelectItemAtIndex:index];
+    }
+    else if (_scrollEnabled && _scrollToItemBoundary)
+    {
+        [self scrollToItemAtIndex:self.currentItemIndex animated:YES];
     }
 }
 

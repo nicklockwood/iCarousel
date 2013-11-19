@@ -14,6 +14,7 @@
 - (IBAction)reloadAndScroll;
 {
 	[self.carousel reloadData];
+    self.carousel.scrollToItemBoundary = NO;
     [self.carousel scrollByOffset:4.5 duration:0.0];
 }
 
