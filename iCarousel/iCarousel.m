@@ -1,7 +1,7 @@
 //
 //  iCarousel.m
 //
-//  Version 1.8 beta 10
+//  Version 1.8 beta 11
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2011 Charcoal Design
@@ -1878,33 +1878,33 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (BOOL)viewOrSuperview:(UIView *)view implementsSelector:(SEL)selector
 {
+    if (!view || view == self.contentView)
+    {
+        return NO;
+    }
+    
     //thanks to @mattjgalloway and @shaps for idea
     //https://gist.github.com/mattjgalloway/6279363
     //https://gist.github.com/shaps80/6279008
     
     Class viewClass = [view class];
-	while (viewClass && viewClass != [UIView class])
+    while (viewClass && viewClass != [UIView class])
     {
-		unsigned int numberOfMethods;
-		Method *methods = class_copyMethodList(viewClass, &numberOfMethods);
-		for (unsigned int i = 0; i < numberOfMethods; i++)
+        unsigned int numberOfMethods;
+        Method *methods = class_copyMethodList(viewClass, &numberOfMethods);
+        for (unsigned int i = 0; i < numberOfMethods; i++)
         {
-			if (method_getName(methods[i]) == selector)
+            if (method_getName(methods[i]) == selector)
             {
                 free(methods);
-				return YES;
-			}
-		}
+                return YES;
+            }
+        }
         if (methods) free(methods);
-		viewClass = [viewClass superclass];
-	}
-    
-    if (view.superview && view.superview != self.contentView)
-    {
-        return [self viewOrSuperview:view.superview implementsSelector:selector];
+        viewClass = [viewClass superclass];
     }
     
-	return NO;
+    return [self viewOrSuperview:view.superview implementsSelector:selector];
 }
 
 - (id)viewOrSuperview:(UIView *)view ofClass:(Class)class
