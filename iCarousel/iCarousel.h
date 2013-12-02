@@ -1,7 +1,7 @@
 //
 //  iCarousel.h
 //
-//  Version 1.8 beta 11
+//  Version 1.8 beta 12
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2011 Charcoal Design
@@ -127,6 +127,7 @@ iCarouselOption;
 @property (nonatomic, readonly) CGFloat itemWidth;
 @property (nonatomic, strong, readonly) UIView *contentView;
 @property (nonatomic, readonly) CGFloat toggle;
+@property (nonatomic, assign) CGFloat autoscroll;
 @property (nonatomic, assign) BOOL stopAtItemBoundary;
 @property (nonatomic, assign) BOOL scrollToItemBoundary;
 @property (nonatomic, assign) BOOL ignorePerpendicularSwipes;

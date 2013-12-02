@@ -2,6 +2,7 @@ Verson 1.8 beta
 
 - iCarousel now requires ARC
 - iCarousel now requires 64-bit processors on Mac OS 10.6
+- Added autoscroll property to set carousel rotating at a constant speed
 - Added pagingEnabled property to force carousel to only move a single index per swipe
 - Fixed bug which occasionally caused carousel item views to pop-in from right
 - Removed all deprecated methods and APIs
@@ -18,7 +19,7 @@ Version 1.7.6
 Version 1.7.5
 
 - Fixed an issue with latest llvm compiler
-- Fixed confict between iCarousel animation and UIScrollView scrolling
+- Fixed conflict between iCarousel animation and UIScrollView scrolling
 
 Version 1.7.4
 
