@@ -42,7 +42,6 @@
 
 #define MIN_TOGGLE_DURATION 0.2f
 #define MAX_TOGGLE_DURATION 0.4f
-#define SCROLL_DURATION 0.4f
 #define INSERT_DURATION 0.4f
 #define DECELERATE_THRESHOLD 0.1f
 #define SCROLL_SPEED_THRESHOLD 2.0f
@@ -97,7 +96,6 @@
 @property (nonatomic, assign) CGFloat offsetMultiplier;
 @property (nonatomic, assign) CGFloat startOffset;
 @property (nonatomic, assign) CGFloat endOffset;
-@property (nonatomic, assign) NSTimeInterval scrollDuration;
 @property (nonatomic, assign, getter = isScrolling) BOOL scrolling;
 @property (nonatomic, assign) NSTimeInterval startTime;
 @property (nonatomic, assign) NSTimeInterval lastTime;
@@ -135,6 +133,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     _scrollToItemBoundary = YES;
     _ignorePerpendicularSwipes = YES;
     _centerItemWhenSelected = YES;
+    _scrollDuration = 0.4f;
     
     _contentView = [[UIView alloc] initWithFrame:self.bounds];
     
@@ -309,6 +308,14 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 - (void)popAnimationState
 {
     [CATransaction commit];
+}
+
+-(void)setScrollDuration:(NSTimeInterval)scrollDuration
+{
+    if (_scrollDuration != scrollDuration)
+    {
+        _scrollDuration = scrollDuration;
+    }
 }
 
 
@@ -1424,7 +1431,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (void)scrollToItemAtIndex:(NSInteger)index animated:(BOOL)animated
 {   
-    [self scrollToItemAtIndex:index duration:animated? SCROLL_DURATION: 0];
+    [self scrollToItemAtIndex:index duration:animated? scrollDuration: 0];
 }
 
 - (void)removeItemAtIndex:(NSInteger)index animated:(BOOL)animated
