@@ -1,7 +1,7 @@
 //
 //  iCarousel.m
 //
-//  Version 1.8 beta 12
+//  Version 1.8 beta 13
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2011 Charcoal Design
@@ -795,6 +795,9 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     //update alpha
     view.superview.alpha = [self alphaForItemWithOffset:offset];
     
+    //enable/disable interaction
+    view.superview.userInteractionEnabled = (!_centerItemWhenSelected || index == self.currentItemIndex);
+    
 #else
     
     //center view
@@ -880,12 +883,6 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         NSInteger index = [number integerValue];
         UIView *view = _itemViews[number];
         [self transformItemView:view atIndex:index];
-        
-#ifdef ICAROUSEL_IOS
-        
-        view.userInteractionEnabled = (!_centerItemWhenSelected || index == self.currentItemIndex);
-#endif
-        
     }
 }
 
@@ -1781,9 +1778,9 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
             }
         }
     }
-    else if (_autoscroll && !_dragging)
+    else if (_autoscroll)
     {
-        self.scrollOffset += delta * _autoscroll;
+        if (!_dragging) self.scrollOffset = [self clampedOffset:_scrollOffset + delta * _autoscroll];
     }
     else if (_toggle == 0.0f)
     {

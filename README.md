@@ -205,7 +205,7 @@ This is actually not a property of iCarousel but is inherited from UIView. It's 
 
     @property (nonatomic, assign) CGFloat autoscroll;
 
-This property can be used to set the carousel scrolling at a constant speed. A value of 1.0 would scroll the carousel forwards at a rate of one item per second. The autoscroll value can be positive or negative and defaults to 0.0 (stationary). Autoscrolling will stop if the user interacts with the carousel, and resume when they stop.
+This property can be used to set the carousel scrolling at a constant speed. A value of 1.0 would scroll the carousel forwards at a rate of one item per second. The autoscroll value can be positive or negative and defaults to 0.0 (stationary). Autoscrolling will stop if the user interacts with the carousel, and will resume when they stop.
 
 
 Methods

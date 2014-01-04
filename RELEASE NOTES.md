@@ -5,6 +5,7 @@ Verson 1.8 beta
 - Added autoscroll property to set carousel rotating at a constant speed
 - Added pagingEnabled property to force carousel to only move a single index per swipe
 - Fixed bug which occasionally caused carousel item views to pop-in from right
+- Fixed bug where views with userInteractionEnabled = NO would get re-enabled
 - Removed all deprecated methods and APIs
 - Added iCarouselOptionFadeMinAlpha option for setting minimum fade
 - Setting scrollOffset now lets you exactly mirror behaviour from one carousel to another
