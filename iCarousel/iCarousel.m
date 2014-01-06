@@ -796,7 +796,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     view.superview.alpha = [self alphaForItemWithOffset:offset];
     
     //enable/disable interaction
-    view.superview.userInteractionEnabled = (!_centerItemWhenSelected || index == self.currentItemIndex);
+    view.superview.userInteractionEnabled = (_centerItemWhenSelected || index == self.currentItemIndex);
     
 #else
     
