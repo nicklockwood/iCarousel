@@ -1,7 +1,7 @@
 //
 //  iCarousel.h
 //
-//  Version 1.8 beta 13
+//  Version 1.8 beta 14
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2011 Charcoal Design
@@ -146,6 +146,7 @@ iCarouselOption;
 - (NSInteger)indexOfItemView:(UIView *)view;
 - (NSInteger)indexOfItemViewOrSubview:(UIView *)view;
 - (CGFloat)offsetForItemAtIndex:(NSInteger)index;
+- (UIView *)itemViewAtPoint:(CGPoint)point;
 
 - (void)removeItemAtIndex:(NSInteger)index animated:(BOOL)animated;
 - (void)insertItemAtIndex:(NSInteger)index animated:(BOOL)animated;

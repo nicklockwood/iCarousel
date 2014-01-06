@@ -253,6 +253,10 @@ This method gives you the item index of either the view passed or the view conta
 
 Returns the offset for the specified item index in multiples of `itemWidth` from the center position. This is the same value used for calculating the view transform and alpha, and can be used to customise item views based on their position in the carousel. This value can be expected to change for each view whenever the `carouselDidScroll:` delegate method is called.
 
+    - (UIView *)itemViewAtPoint:(CGPoint)point;
+
+Returns the frontmost item view at the specified point within the bounds of the carousel. Useful for implementing your own tap detection.
+
 	- (void)removeItemAtIndex:(NSInteger)index animated:(BOOL)animated;
 
 This removes an item from the carousel. The remaining items will slide across to fill the gap. Note that the data source is not automatically updated when this method is called, so a subsequent call to reloadData will restore the removed item.

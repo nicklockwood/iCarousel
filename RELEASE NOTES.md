@@ -4,6 +4,7 @@ Verson 1.8 beta
 - iCarousel now requires 64-bit processors on Mac OS 10.6
 - Added autoscroll property to set carousel rotating at a constant speed
 - Added pagingEnabled property to force carousel to only move a single index per swipe
+- Added itemViewAtPoint: method
 - Fixed bug which occasionally caused carousel item views to pop-in from right
 - Fixed bug where views with userInteractionEnabled = NO would get re-enabled
 - Removed all deprecated methods and APIs
