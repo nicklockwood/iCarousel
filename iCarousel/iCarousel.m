@@ -733,11 +733,11 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     CGFloat offset = index - _scrollOffset;
     if (_wrapEnabled)
     {
-        if (offset > _numberOfItems/2)
+        if (offset > _numberOfItems/2.0f)
         {
             offset -= _numberOfItems;
         }
-        else if (offset < -_numberOfItems/2)
+        else if (offset < -_numberOfItems/2.0f)
         {
             offset += _numberOfItems;
         }
@@ -1226,7 +1226,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     
     //calculate visible view indices
     NSMutableSet *visibleIndices = [NSMutableSet setWithCapacity:_numberOfVisibleItems];
-    NSInteger min = -(int)ceilf((CGFloat)_numberOfPlaceholdersToShow/2.0f);
+    NSInteger min = -(NSInteger)ceilf((CGFloat)_numberOfPlaceholdersToShow/2.0f);
     NSInteger max = _numberOfItems - 1 + _numberOfPlaceholdersToShow/2;
     NSInteger offset = self.currentItemIndex - _numberOfVisibleItems/2;
     if (!_wrapEnabled)

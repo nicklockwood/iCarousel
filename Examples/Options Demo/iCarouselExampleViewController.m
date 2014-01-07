@@ -26,7 +26,7 @@
 	self.items = [NSMutableArray array];
 	for (int i = 0; i < 1000; i++)
 	{
-		[_items addObject:[NSNumber numberWithInt:i]];
+		[_items addObject:@(i)];
 	}
 }
 
@@ -154,7 +154,7 @@
 - (IBAction)insertItem
 {
     NSInteger index = MAX(0, _carousel.currentItemIndex);
-    [_items insertObject:[NSNumber numberWithInt:_carousel.numberOfItems] atIndex:index];
+    [_items insertObject:@(_carousel.numberOfItems) atIndex:index];
     [_carousel insertItemAtIndex:index animated:YES];
 }
 
@@ -230,7 +230,7 @@
     //views outside of the `if (view == nil) {...}` check otherwise
     //you'll get weird issues with carousel item content appearing
     //in the wrong place in the carousel
-    label.text = [[_items objectAtIndex:index] stringValue];
+    label.text = [_items[index] stringValue];
     
     return view;
 }
