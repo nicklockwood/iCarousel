@@ -742,6 +742,14 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     tapGesture.delegate = (id <UIGestureRecognizerDelegate>)self;
     [containerView addGestureRecognizer:tapGesture];
     
+    if (_delegate != nil && [_delegate respondsToSelector:@selector(carousel:didDoubleTapSelectItemAtIndex:)]) {
+        //Added Double Tap recognizer.
+        UITapGestureRecognizer *doubleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didDoubleTap:)];
+        doubleTapGesture.numberOfTapsRequired = 2;
+        [containerView addGestureRecognizer:doubleTapGesture];
+        [tapGesture requireGestureRecognizerToFail:doubleTapGesture];
+    }
+    
 #else
     
     //clipping works differently on Mac OS
@@ -1956,6 +1964,16 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         [self scrollToItemAtIndex:index animated:YES];
     }
     [_delegate carousel:self didSelectItemAtIndex:index];
+}
+
+- (void)didDoubleTap:(UITapGestureRecognizer *)tapGesture
+{
+    NSInteger index = [self indexOfItemView:[tapGesture.view.subviews lastObject]];
+    if (_centerItemWhenSelected && index != self.currentItemIndex)
+    {
+        [self scrollToItemAtIndex:index animated:YES];
+    }
+    [_delegate carousel:self didDoubleTapSelectItemAtIndex:index];
 }
 
 - (void)didPan:(UIPanGestureRecognizer *)panGesture

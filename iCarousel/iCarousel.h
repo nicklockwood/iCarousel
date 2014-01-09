@@ -182,6 +182,12 @@ iCarouselOption;
 
 - (BOOL)carousel:(iCarousel *)carousel shouldSelectItemAtIndex:(NSInteger)index;
 - (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index;
+/**
+ If carousel didDoubleTapSelectItemAtIndex: is implemented, the double tap feature will automatically be enabled.
+ Caution with implementing this method as it does cause slight latency in order to differentiate between
+ single and double clicks.
+ **/
+- (void)carousel:(iCarousel *)carousel didDoubleTapSelectItemAtIndex:(NSInteger)index;
 
 - (CGFloat)carouselItemWidth:(iCarousel *)carousel;
 - (CATransform3D)carousel:(iCarousel *)carousel itemTransformForOffset:(CGFloat)offset baseTransform:(CATransform3D)transform;
