@@ -49,6 +49,8 @@
 #define SCROLL_DISTANCE_THRESHOLD 0.1f
 #define DECELERATION_MULTIPLIER 30.0f
 
+#define kiCarouselAccessibilityLabel @"iCarousel"
+#define kiCarouselAccessibilityHint @"swipe to next item"
 
 #ifdef ICAROUSEL_MACOS
 #define MAX_VISIBLE_ITEMS 50
@@ -152,6 +154,12 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     tapGesture.delegate = (id <UIGestureRecognizerDelegate>)self;
     [_contentView addGestureRecognizer:tapGesture];
     
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(voiceOverChanged:) name:UIAccessibilityVoiceOverStatusChanged object:nil];
+  
+  if(UIAccessibilityIsVoiceOverRunning()){
+    [self setupAccessibilty];
+  }
+  
 #else
     
     [_contentView setWantsLayer:YES];
@@ -781,6 +789,12 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     //clipping works differently on Mac OS
     [containerView setBoundsSize:view.frame.size];
 
+  //configure double tap gesture recogniser for voiceOver users
+   UITapGestureRecognizer *doubleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTap:)];
+  doubleTapGesture.numberOfTapsRequired = 2;
+  doubleTapGesture.delegate = (id <UIGestureRecognizerDelegate>)self;
+  [containerView addGestureRecognizer:doubleTapGesture];
+  
 #endif
     
     //set view frame
@@ -2022,6 +2036,10 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     //check for tapped view
     NSInteger index = [self indexOfItemView:[self itemViewAtPoint:[tapGesture locationInView:_contentView]]];
     if (index != NSNotFound)
+  if (UIAccessibilityIsVoiceOverRunning() && tapGesture.numberOfTapsRequired == 1){
+    [_delegate carouselDidTapNotificationWithVoiceOverOn:self];
+    return;
+  }
     {
         if (!_delegate || [_delegate carousel:self shouldSelectItemAtIndex:index])
         {
@@ -2120,6 +2138,21 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     }
 }
 
+#pragma mark -
+#pragma mark Accessibility
+
+- (void)voiceOverChanged:(NSNotification *)notification {
+  if(UIAccessibilityIsVoiceOverRunning()){
+    [self setupAccessibilty];
+  }
+}
+
+- (void)setupAccessibilty{
+  self.accessibilityTraits = UIAccessibilityTraitAllowsDirectInteraction;
+  self.isAccessibilityElement = YES;
+  self.accessibilityLabel = kiCarouselAccessibilityLabel;
+  self.accessibilityHint = kiCarouselAccessibilityHint;
+}
 #else
 
 

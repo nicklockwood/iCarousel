@@ -184,6 +184,7 @@ iCarouselOption;
 
 - (BOOL)carousel:(iCarousel *)carousel shouldSelectItemAtIndex:(NSInteger)index;
 - (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index;
+- (void)carouselDidTapNotificationWithVoiceOverOn:(iCarousel *)carousel;
 
 - (CGFloat)carouselItemWidth:(iCarousel *)carousel;
 - (CATransform3D)carousel:(iCarousel *)carousel itemTransformForOffset:(CGFloat)offset baseTransform:(CATransform3D)transform;
