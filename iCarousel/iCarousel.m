@@ -1471,7 +1471,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         [UIView commitAnimations];
         
 #else
-        
+		[NSAnimationContext beginGrouping];
+		[[NSAnimationContext currentContext] setAllowsImplicitAnimation:YES];
         [CATransaction begin];
         [CATransaction setAnimationDuration:0.1];
         [CATransaction setCompletionBlock:^{
@@ -1492,7 +1493,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         _scrollOffset = self.currentItemIndex;
         [self didScroll];
         [CATransaction commit];
-        
+		[NSAnimationContext endGrouping];        
 #endif
         
     }
@@ -1525,12 +1526,13 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     [UIView commitAnimations];
     
 #else
-    
+	[NSAnimationContext beginGrouping];
+	[[NSAnimationContext currentContext] setAllowsImplicitAnimation:YES];
     [CATransaction begin];
     [CATransaction setAnimationDuration:0.1f];
     itemView.superview.layer.opacity = alpha;
     [CATransaction commit];
-    
+	[NSAnimationContext endGrouping];
 #endif
     
 }
@@ -1564,7 +1566,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         [UIView commitAnimations];
         
 #else
-        
+		[NSAnimationContext beginGrouping];
+		[[NSAnimationContext currentContext] setAllowsImplicitAnimation:YES];
         [CATransaction begin];
         [CATransaction setAnimationDuration:INSERT_DURATION];
         [CATransaction setCompletionBlock:^{
@@ -1572,7 +1575,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         }];
         [self transformItemViews];
         [CATransaction commit];
-        
+		[NSAnimationContext endGrouping];
 #endif
         
         [self performSelector:@selector(fadeInItemView:) withObject:itemView afterDelay:INSERT_DURATION - 0.1f];
