@@ -13,6 +13,7 @@
 
 - (void)play;
 - (void)pause;
+- (void)prepareToPlay;
 - (void)stop;
 
 @end

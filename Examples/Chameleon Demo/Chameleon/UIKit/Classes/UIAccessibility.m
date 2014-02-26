@@ -41,6 +41,7 @@ UIAccessibilityTraits UIAccessibilityTraitSummaryElement = 128;
 UIAccessibilityTraits UIAccessibilityTraitNotEnabled = 256;
 UIAccessibilityTraits UIAccessibilityTraitUpdatesFrequently = 512;
 UIAccessibilityTraits UIAccessibilityTraitSearchField = 1024;
+UIAccessibilityTraits UIAccessibilityTraitHeader = 2048;
 
 UIAccessibilityNotifications UIAccessibilityScreenChangedNotification = 1000;
 UIAccessibilityNotifications UIAccessibilityLayoutChangedNotification = 1001;
@@ -100,6 +101,24 @@ UIAccessibilityNotifications UIAccessibilityPageScrolledNotification = 1003;
 }
 
 - (void)setAccessibilityFrame:(CGRect)frame
+{
+}
+
+- (BOOL)accessibilityViewIsModal
+{
+    return NO;
+}
+
+- (void)setAccessibilityViewIsModal:(BOOL)isModal
+{
+}
+
+- (BOOL)accessibilityElementsHidden
+{
+    return NO;
+}
+
+- (void)setAccessibilityElementsHidden:(BOOL)accessibilityElementsHidden
 {
 }
 

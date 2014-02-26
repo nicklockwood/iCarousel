@@ -380,7 +380,7 @@ static NSString *kSSSegmentedControlEnabledKey = @"enabled";
         return nil;
     }
     
-    NSString *key = [NSString stringWithFormat:@"%lu", index];
+    NSString *key = [NSString stringWithFormat:@"%lu", (unsigned long)index];
     return [_segmentMeta objectForKey:key];
 }
 
@@ -405,7 +405,7 @@ static NSString *kSSSegmentedControlEnabledKey = @"enabled";
         _segmentMeta = [[NSMutableDictionary alloc] init];
     }
     
-    [_segmentMeta setValue:meta forKey:[NSString stringWithFormat:@"%lu", index]];
+    [_segmentMeta setValue:meta forKey:[NSString stringWithFormat:@"%lu", (unsigned long)index]];
     [self setNeedsDisplay];
 }
 
@@ -423,6 +423,17 @@ static NSString *kSSSegmentedControlEnabledKey = @"enabled";
     }
     
     [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+}
+
+#pragma mark Appearance
+
+- (void)setTitleTextAttributes:(NSDictionary *)attributes forState:(UIControlState)state
+{
+}
+
+- (NSDictionary *)titleTextAttributesForState:(UIControlState)state
+{
+    return nil;
 }
 
 @end

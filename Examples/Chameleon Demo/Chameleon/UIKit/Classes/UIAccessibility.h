@@ -43,6 +43,7 @@ extern UIAccessibilityTraits UIAccessibilityTraitStaticText;
 extern UIAccessibilityTraits UIAccessibilityTraitSummaryElement;
 extern UIAccessibilityTraits UIAccessibilityTraitNotEnabled;
 extern UIAccessibilityTraits UIAccessibilityTraitUpdatesFrequently;
+extern UIAccessibilityTraits UIAccessibilityTraitHeader;
 
 
 typedef uint32_t UIAccessibilityNotifications;
@@ -53,18 +54,14 @@ extern UIAccessibilityNotifications UIAccessibilityPageScrolledNotification;
 
 
 @interface NSObject (UIAccessibility)
-- (BOOL)isAccessibilityElement;
-- (void)setIsAccessibilityElement:(BOOL)isElement;
-- (NSString *)accessibilityLabel;
-- (void)setAccessibilityLabel:(NSString *)label;
-- (NSString *)accessibilityHint;
-- (void)setAccessibilityHint:(NSString *)hint;
-- (NSString *)accessibilityValue;
-- (void)setAccessibilityValue:(NSString *)value;
-- (UIAccessibilityTraits)accessibilityTraits;
-- (void)setAccessibilityTraits:(UIAccessibilityTraits)traits;
-- (CGRect)accessibilityFrame;
-- (void)setAccessibilityFrame:(CGRect)frame;
+@property (nonatomic) BOOL isAccessibilityElement;
+@property (nonatomic) NSString *accessibilityLabel;
+@property (nonatomic) NSString *accessibilityHint;
+@property (nonatomic) NSString *accessibilityValue;
+@property (nonatomic) UIAccessibilityTraits accessibilityTraits;
+@property (nonatomic) CGRect accessibilityFrame;
+@property (nonatomic) BOOL accessibilityViewIsModal;
+@property (nonatomic) BOOL accessibilityElementsHidden;
 @end
 
 @interface NSObject (UIAccessibilityContainer)

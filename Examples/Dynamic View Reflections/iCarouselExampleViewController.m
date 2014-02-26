@@ -19,7 +19,6 @@
     carousel.delegate = nil;
     carousel.dataSource = nil;
     [carousel release];
-    [super dealloc];
 }
 
 #pragma mark -

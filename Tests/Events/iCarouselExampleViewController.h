@@ -12,7 +12,7 @@
 
 @interface iCarouselExampleViewController : UIViewController <iCarouselDataSource, iCarouselDelegate>
 
-@property (nonatomic, retain) IBOutlet iCarousel *carousel;
+@property (nonatomic, strong) IBOutlet iCarousel *carousel;
 
 - (IBAction)toggleButtons:(UIButton *)button;
 

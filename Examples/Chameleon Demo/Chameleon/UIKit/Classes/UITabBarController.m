@@ -57,7 +57,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@: %p; selectedViewController = %@; viewControllers = %@; selectedIndex = %lu; tabBar = %@>", [self className], self, self.selectedViewController, self.viewControllers, self.selectedIndex, self.tabBar];
+    return [NSString stringWithFormat:@"<%@: %p; selectedViewController = %@; viewControllers = %@; selectedIndex = %lu; tabBar = %@>", [self className], self, self.selectedViewController, self.viewControllers, (unsigned long)self.selectedIndex, self.tabBar];
 }
 
 @end

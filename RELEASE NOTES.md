@@ -1,3 +1,28 @@
+Verson 1.8 beta
+
+- iCarousel now requires ARC
+- iCarousel now requires 64-bit processors on Mac OS 10.6
+- Added autoscroll property to set carousel rotating at a constant speed
+- Added pagingEnabled property to force carousel to only move a single index per swipe
+- Added itemViewAtPoint: method
+- Fixed bug which occasionally caused carousel item views to pop-in from right
+- Fixed bug where views with userInteractionEnabled = NO would get re-enabled
+- Removed all deprecated methods and APIs
+- Added iCarouselOptionFadeMinAlpha option for setting minimum fade
+- Setting scrollOffset now lets you exactly mirror behaviour from one carousel to another
+- Fixed bug where item indexes were selected incorrectly when tapping views in vertical mode
+- Perspective and viewpointOffset properties can now be animated
+- Now conforms to -Wextra warning level
+
+Version 1.7.6
+
+- Fixed animation timer bug when using ARC
+
+Version 1.7.5
+
+- Fixed an issue with latest llvm compiler
+- Fixed conflict between iCarousel animation and UIScrollView scrolling
+
 Version 1.7.4
 
 - Fixed deprecation warnings when using Xcode 4.6

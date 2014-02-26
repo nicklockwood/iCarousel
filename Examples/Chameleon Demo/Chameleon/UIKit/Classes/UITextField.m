@@ -48,7 +48,7 @@ NSString *const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 @synthesize delegate=_delegate, background=_background, disabledBackground=_disabledBackground, editing=_editing, clearsOnBeginEditing=_clearsOnBeginEditing;
 @synthesize adjustsFontSizeToFitWidth=_adjustsFontSizeToFitWidth, clearButtonMode=_clearButtonMode, leftView=_leftView, rightView=_rightView;
 @synthesize leftViewMode=_leftViewMode, rightViewMode=_rightViewMode, placeholder=_placeholder, borderStyle=_borderStyle;
-@synthesize inputAccessoryView=_inputAccessoryView, inputView=_inputView;
+@synthesize inputAccessoryView=_inputAccessoryView, inputView=_inputView, minimumFontSize=_minimumFontSize;
 
 - (id)initWithFrame:(CGRect)frame
 {

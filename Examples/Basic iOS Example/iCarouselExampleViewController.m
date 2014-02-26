@@ -11,15 +11,12 @@
 
 @interface iCarouselExampleViewController ()
 
-@property (nonatomic, retain) NSMutableArray *items;
+@property (nonatomic, strong) NSMutableArray *items;
 
 @end
 
 
 @implementation iCarouselExampleViewController
-
-@synthesize carousel;
-@synthesize items;
 
 - (void)awakeFromNib
 {
@@ -31,7 +28,7 @@
     self.items = [NSMutableArray array];
     for (int i = 0; i < 100; i++)
     {
-        [items addObject:[NSNumber numberWithInt:i]];
+        [_items addObject:@(i)];
     }
 }
 
@@ -41,12 +38,8 @@
     //sending messages to a deallocated viewcontroller
     //this is true even if your project is using ARC, unless
     //you are targeting iOS 5 as a minimum deployment target
-    carousel.delegate = nil;
-    carousel.dataSource = nil;
-    
-    [carousel release];
-    [items release];
-    [super dealloc];
+    _carousel.delegate = nil;
+    _carousel.dataSource = nil;
 }
 
 #pragma mark -
@@ -57,7 +50,7 @@
     [super viewDidLoad];
     
     //configure carousel
-    carousel.type = iCarouselTypeCoverFlow2;
+    _carousel.type = iCarouselTypeCoverFlow2;
 }
 
 - (void)viewDidUnload
@@ -79,7 +72,7 @@
 - (NSUInteger)numberOfItemsInCarousel:(iCarousel *)carousel
 {
     //return the total number of items in the carousel
-    return [items count];
+    return [_items count];
 }
 
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
@@ -92,11 +85,11 @@
         //don't do anything specific to the index within
         //this `if (view == nil) {...}` statement because the view will be
         //recycled and used with other index values later
-        view = [[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200.0f, 200.0f)] autorelease];
+        view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200.0f, 200.0f)];
         ((UIImageView *)view).image = [UIImage imageNamed:@"page.png"];
         view.contentMode = UIViewContentModeCenter;
         
-        label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
+        label = [[UILabel alloc] initWithFrame:view.bounds];
         label.backgroundColor = [UIColor clearColor];
         label.textAlignment = NSTextAlignmentCenter;
         label.font = [label.font fontWithSize:50];
@@ -114,7 +107,7 @@
     //views outside of the `if (view == nil) {...}` check otherwise
     //you'll get weird issues with carousel item content appearing
     //in the wrong place in the carousel
-    label.text = [[items objectAtIndex:index] stringValue];
+    label.text = [_items[index] stringValue];
     
     return view;
 }

@@ -32,6 +32,11 @@
 #import <AppKit/AppKit.h>
 #import "UIGraphics.h"
 
+NSString *const UITextAttributeFont = @"UITextAttributeFont";
+NSString *const UITextAttributeTextColor = @"UITextAttributeTextColor";
+NSString *const UITextAttributeTextShadowColor = @"UITextAttributeTextShadowColor";
+NSString *const UITextAttributeTextShadowOffset = @"UITextAttributeTextShadowOffset";
+
 static CFArrayRef CreateCTLinesForString(NSString *string, CGSize constrainedToSize, UIFont *font, UILineBreakMode lineBreakMode, CGSize *renderSize)
 {
     CFMutableArrayRef lines = CFArrayCreateMutable(NULL, 0, &kCFTypeArrayCallBacks);

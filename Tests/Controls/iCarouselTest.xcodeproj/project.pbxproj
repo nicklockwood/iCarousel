@@ -16,6 +16,7 @@
 		0148359413A36C3700E687AC /* iCarouselExampleAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0148358D13A36C3700E687AC /* iCarouselExampleAppDelegate.m */; };
 		0148359513A36C3700E687AC /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0148358F13A36C3700E687AC /* MainWindow.xib */; };
 		0148359613A36C3700E687AC /* iCarouselExampleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0148359113A36C3700E687AC /* iCarouselExampleViewController.xib */; };
+		01C5BF7C17A43F8300B7B0BC /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01C5BF7B17A43F8300B7B0BC /* Default-568h@2x.png */; };
 		01F7B75014636C7A00F0AE19 /* ItemView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01F7B74F14636C7A00F0AE19 /* ItemView.xib */; };
 		B2E5E749146155E300EADB7A /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = B2E5E748146155E300EADB7A /* iCarousel.m */; };
 /* End PBXBuildFile section */
@@ -36,6 +37,7 @@
 		0148359013A36C3700E687AC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = SOURCE_ROOT; };
 		0148359213A36C3700E687AC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/iCarouselExampleViewController.xib; sourceTree = SOURCE_ROOT; };
 		018BBCB413A375AF005CA505 /* iCarouselTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iCarouselTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		01C5BF7B17A43F8300B7B0BC /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = SOURCE_ROOT; };
 		01F7B74F14636C7A00F0AE19 /* ItemView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ItemView.xib; sourceTree = SOURCE_ROOT; };
 		B2E5E747146155E300EADB7A /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		B2E5E748146155E300EADB7A /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 		01308D9913491C3500453707 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				01C5BF7B17A43F8300B7B0BC /* Default-568h@2x.png */,
 				0148358313A36C2000E687AC /* main.m */,
 				0148358413A36C2000E687AC /* iCarouselTest-Prefix.pch */,
 				0148358513A36C2000E687AC /* iCarouselTest-Info.plist */,
@@ -148,7 +151,7 @@
 		01308D8513491C3500453707 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0460;
 			};
 			buildConfigurationList = 01308D8813491C3500453707 /* Build configuration list for PBXProject "iCarouselTest" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -175,6 +178,7 @@
 				0148359513A36C3700E687AC /* MainWindow.xib in Resources */,
 				0148359613A36C3700E687AC /* iCarouselExampleViewController.xib in Resources */,
 				01F7B75014636C7A00F0AE19 /* ItemView.xib in Resources */,
+				01C5BF7C17A43F8300B7B0BC /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -262,10 +266,12 @@
 					armv6,
 					armv7,
 				);
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iCarouselTest-Prefix.pch";
+				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "iCarouselTest-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
@@ -283,9 +289,11 @@
 					armv6,
 					armv7,
 				);
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iCarouselTest-Prefix.pch";
+				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "iCarouselTest-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;

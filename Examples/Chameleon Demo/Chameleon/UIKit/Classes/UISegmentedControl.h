@@ -80,4 +80,7 @@ enum {
 - (void)setEnabled:(BOOL)enabled forSegmentAtIndex:(NSUInteger)segment;
 - (BOOL)isEnabledForSegmentAtIndex:(NSUInteger)segment;
 
+- (void)setTitleTextAttributes:(NSDictionary *)attributes forState:(UIControlState)state;
+- (NSDictionary *)titleTextAttributesForState:(UIControlState)state;
+
 @end

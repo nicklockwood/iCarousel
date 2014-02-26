@@ -24,11 +24,6 @@
 @synthesize chameleonNSView;
 @synthesize iPhoneAppDelegate;
 
-- (void)dealloc
-{
-    [iPhoneAppDelegate release];
-    [super dealloc];
-}
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {

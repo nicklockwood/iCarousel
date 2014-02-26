@@ -17,8 +17,6 @@
 {
     carousel.delegate = nil;
     carousel.dataSource = nil;
-    [carousel release];
-    [super dealloc];
 }
 
 #pragma mark -
@@ -84,11 +82,11 @@
 	//get item index for button
 	NSInteger index = [carousel indexOfItemViewOrSubview:sender];
 	
-    [[[[UIAlertView alloc] initWithTitle:@"Button Tapped"
+    [[[UIAlertView alloc] initWithTitle:@"Button Tapped"
                                  message:[NSString stringWithFormat:@"You tapped button number %i", index]
                                 delegate:nil
                        cancelButtonTitle:@"OK"
-                       otherButtonTitles:nil] autorelease] show];
+                       otherButtonTitles:nil] show];
 }
 
 @end

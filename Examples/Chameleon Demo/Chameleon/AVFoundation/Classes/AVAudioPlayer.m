@@ -79,7 +79,7 @@
 {
     BOOL r = NO;
     @synchronized (self) {
-        r = _isPaused? [_player resume] : [_player play];
+        r = _isPaused? [(NSSound *)_player resume] : [(NSSound *)_player play];
         _isPaused = NO;
     }
     return r;
@@ -176,8 +176,10 @@
                 } else if (notifyDelegate) {
                     [_delegate audioPlayerDidFinishPlaying:self successfully:YES];
                 }
-            } else {
-                [_delegate audioPlayerDidFinishPlaying:self successfully:NO];
+// According to the docs audioPlayerDidFinishPlaying should only be called if the audio finished playing
+// See: http://developer.apple.com/library/mac/#documentation/AVFoundation/Reference/AVAudioPlayerDelegateProtocolReference/Reference/Reference.html#//apple_ref/doc/uid/TP40008068                
+//            } else {
+//                [_delegate audioPlayerDidFinishPlaying:self successfully:NO];
             }
         }
     }

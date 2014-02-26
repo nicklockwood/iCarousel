@@ -254,4 +254,12 @@ static UIColor *ClearColor = nil;
     return [NSString stringWithFormat:@"<%@: %p; colorSpace = %@; components = %@>", [self className], self, colorSpace, componentsString];
 }
 
+- (BOOL) isEqual:(id)object {
+    if (![object isKindOfClass:[self class]]) {
+        return NO;
+    }
+    UIColor* color = (UIColor*) object;    
+    return CGColorEqualToColor(self.CGColor, color.CGColor);
+}
+
 @end

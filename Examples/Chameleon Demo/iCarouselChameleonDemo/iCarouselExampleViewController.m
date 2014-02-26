@@ -13,10 +13,10 @@
 
 @interface iCarouselExampleViewController () <iCarouselDataSource, iCarouselDelegate, UIActionSheetDelegate>
 
-@property (nonatomic, retain) iCarousel *carousel;
-@property (nonatomic, retain) UINavigationItem *navItem;
+@property (nonatomic, strong) iCarousel *carousel;
+@property (nonatomic, strong) UINavigationItem *navItem;
 @property (nonatomic, assign) BOOL wrap;
-@property (nonatomic, retain) NSMutableArray *items;
+@property (nonatomic, strong) NSMutableArray *items;
 
 @end
 
@@ -49,10 +49,6 @@
 	carousel.delegate = nil;
 	carousel.dataSource = nil;
 	
-    [carousel release];
-    [navItem release];
-	[items release];
-    [super dealloc];
 }
 
 #pragma mark -
@@ -65,7 +61,7 @@
     wrap = YES;
 	
 	//add background
-	UIImageView *backgroundView = [[[UIImageView alloc] initWithFrame:self.view.bounds] autorelease];
+	UIImageView *backgroundView = [[UIImageView alloc] initWithFrame:self.view.bounds];
 	backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	backgroundView.image = [UIImage imageNamed:@"background.png"];
 	[self.view addSubview:backgroundView];
@@ -83,23 +79,21 @@
 	//add top bar
 	UINavigationBar *navbar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 44)];
 	navbar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-	self.navItem = [[[UINavigationItem alloc] initWithTitle:@"Coverflow2"] autorelease];
-	navItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"Switch Type" style:UIBarButtonItemStyleBordered target:self action:@selector(switchCarouselType)] autorelease];
-	navItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"Wrap: ON" style:UIBarButtonItemStyleBordered target:self action:@selector(toggleWrap)] autorelease];
+	self.navItem = [[UINavigationItem alloc] initWithTitle:@"Coverflow2"];
+	navItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Switch Type" style:UIBarButtonItemStyleBordered target:self action:@selector(switchCarouselType)];
+	navItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Wrap: ON" style:UIBarButtonItemStyleBordered target:self action:@selector(toggleWrap)];
 	[navbar setItems:[NSArray arrayWithObject:navItem]];
 	[self.view addSubview:navbar];
-	[navbar release];
 	
 	//add bottom bar
 	UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 44, self.view.bounds.size.width, 44)];
 	toolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
 	[toolbar setItems:[NSArray arrayWithObjects:
-					   [[[UIBarButtonItem alloc] initWithTitle:@"Insert Item" style:UIBarButtonItemStyleBordered target:self action:@selector(insertItem)] autorelease],
-					   [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:NULL] autorelease],
-					   [[[UIBarButtonItem alloc] initWithTitle:@"Delete Item" style:UIBarButtonItemStyleBordered target:self action:@selector(removeItem)] autorelease],
+					   [[UIBarButtonItem alloc] initWithTitle:@"Insert Item" style:UIBarButtonItemStyleBordered target:self action:@selector(insertItem)],
+					   [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:NULL],
+					   [[UIBarButtonItem alloc] initWithTitle:@"Delete Item" style:UIBarButtonItemStyleBordered target:self action:@selector(removeItem)],
 					   nil]];
 	[self.view addSubview:toolbar];
-	[toolbar release];
 }
 
 - (void)viewDidUnload
@@ -131,7 +125,6 @@
 		[sheet addButtonWithTitle:title];
 	}
     [sheet showInView:self.view];
-    [sheet release];
 }
 
 - (IBAction)toggleWrap
@@ -185,10 +178,10 @@
 	//create new view if no view is available for recycling
 	if (view == nil)
 	{
-		view = [[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200.0f, 200.0f)] autorelease];
+		view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200.0f, 200.0f)];
         ((UIImageView *)view).image = [UIImage imageNamed:@"page.png"];
         view.contentMode = UIViewContentModeCenter;
-		label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
+		label = [[UILabel alloc] initWithFrame:view.bounds];
 		label.backgroundColor = [UIColor clearColor];
 		label.textAlignment = UITextAlignmentCenter;
 		label.font = [label.font fontWithSize:50];
@@ -212,8 +205,8 @@
 	//create new view if no view is available for recycling
 	if (view == nil)
 	{
-		view = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]] autorelease];
-		label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
+		view = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"page.png"]];
+		label = [[UILabel alloc] initWithFrame:view.bounds];
 		label.backgroundColor = [UIColor clearColor];
 		label.textAlignment = UITextAlignmentCenter;
 		label.font = [label.font fontWithSize:50.0f];
