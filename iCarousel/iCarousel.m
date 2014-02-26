@@ -40,10 +40,12 @@
 #endif
 
 
-#define MIN_TOGGLE_DURATION 0.2
-#define MAX_TOGGLE_DURATION 0.4
-#define SCROLL_DURATION 0.4
-#define INSERT_DURATION 0.4
+#import "iCarousel.h"
+
+
+#define MIN_TOGGLE_DURATION 0.2f
+#define MAX_TOGGLE_DURATION 0.4f
+#define INSERT_DURATION 0.4f
 #define DECELERATE_THRESHOLD 0.1f
 #define SCROLL_SPEED_THRESHOLD 2.0f
 #define SCROLL_DISTANCE_THRESHOLD 0.1f
@@ -117,6 +119,51 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 @implementation iCarousel
 
+@synthesize dataSource = _dataSource;
+@synthesize delegate = _delegate;
+@synthesize type = _type;
+@synthesize perspective = _perspective;
+@synthesize numberOfItems = _numberOfItems;
+@synthesize numberOfPlaceholders = _numberOfPlaceholders;
+@synthesize numberOfPlaceholdersToShow = _numberOfPlaceholdersToShow;
+@synthesize numberOfVisibleItems = _numberOfVisibleItems;
+@synthesize contentView = _contentView;
+@synthesize itemViews = _itemViews;
+@synthesize itemViewPool = _itemViewPool;
+@synthesize placeholderViewPool = _placeholderViewPool;
+@synthesize previousItemIndex = _previousItemIndex;
+@synthesize itemWidth = _itemWidth;
+@synthesize scrollOffset = _scrollOffset;
+@synthesize offsetMultiplier = _offsetMultiplier;
+@synthesize startVelocity = _startVelocity;
+@synthesize timer = _timer;
+@synthesize decelerating = _decelerating;
+@synthesize scrollEnabled = _scrollEnabled;
+@synthesize decelerationRate = _decelerationRate;
+@synthesize bounceDistance = _bounceDistance;
+@synthesize bounces = _bounces;
+@synthesize contentOffset = _contentOffset;
+@synthesize viewpointOffset = _viewpointOffset;
+@synthesize startOffset = _startOffset;
+@synthesize endOffset = _endOffset;
+@synthesize scrollDuration = _scrollDuration;
+@synthesize startTime = _startTime;
+@synthesize scrolling = _scrolling;
+@synthesize previousTranslation = _previousTranslation;
+@synthesize wrapEnabled = _wrapEnabled;
+@synthesize vertical = _vertical;
+@synthesize dragging = _dragging;
+@synthesize didDrag = _didDrag;
+@synthesize scrollSpeed = _scrollSpeed;
+@synthesize toggleTime = _toggleTime;
+@synthesize toggle = _toggle;
+@synthesize stopAtItemBoundary = _stopAtItemBoundary;
+@synthesize scrollToItemBoundary = _scrollToItemBoundary;
+@synthesize ignorePerpendicularSwipes = _ignorePerpendicularSwipes;
+@synthesize animationDisableCount = _animationDisableCount;
+@synthesize centerItemWhenSelected = _centerItemWhenSelected;
+@synthesize animationDuration = _animationDuration;
+
 #pragma mark -
 #pragma mark Initialisation
 
@@ -135,6 +182,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     _scrollToItemBoundary = YES;
     _ignorePerpendicularSwipes = YES;
     _centerItemWhenSelected = YES;
+    _animationDuration = 0.4f;
     
     _contentView = [[UIView alloc] initWithFrame:self.bounds];
     
@@ -1436,7 +1484,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (void)scrollToItemAtIndex:(NSInteger)index animated:(BOOL)animated
 {   
-    [self scrollToItemAtIndex:index duration:animated? SCROLL_DURATION: 0];
+    [self scrollToItemAtIndex:index duration:animated? _animationDuration: 0];
 }
 
 - (void)removeItemAtIndex:(NSInteger)index animated:(BOOL)animated
