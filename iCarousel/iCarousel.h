@@ -1,7 +1,7 @@
 //
 //  iCarousel.h
 //
-//  Version 1.8 beta 14
+//  Version 1.8 beta 15
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2011 Charcoal Design
@@ -59,7 +59,7 @@ typedef NSView UIView;
 #endif
 
 
-typedef enum
+typedef NS_ENUM(NSUInteger, iCarouselType)
 {
     iCarouselTypeLinear = 0,
     iCarouselTypeRotary,
@@ -73,11 +73,10 @@ typedef enum
     iCarouselTypeTimeMachine,
     iCarouselTypeInvertedTimeMachine,
     iCarouselTypeCustom
-}
-iCarouselType;
+};
 
 
-typedef enum
+typedef NS_ENUM(NSUInteger, iCarouselOption)
 {
     iCarouselOptionWrap = 0,
     iCarouselOptionShowBackfaces,
@@ -93,8 +92,7 @@ typedef enum
     iCarouselOptionFadeMax,
     iCarouselOptionFadeRange,
     iCarouselOptionFadeMinAlpha
-}
-iCarouselOption;
+};
 
 
 @protocol iCarouselDataSource, iCarouselDelegate;

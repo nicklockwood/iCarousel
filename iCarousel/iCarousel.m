@@ -1,7 +1,7 @@
 //
 //  iCarousel.m
 //
-//  Version 1.8 beta 14
+//  Version 1.8 beta 15
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2011 Charcoal Design
@@ -1988,6 +1988,11 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
                 return !scrollView.scrollEnabled ||
                 (self.vertical && scrollView.contentSize.height <= scrollView.frame.size.height) ||
                 (!self.vertical && scrollView.contentSize.width <= scrollView.frame.size.width);
+            }
+            if ([self viewOrSuperview:touch.view ofClass:[UIButton class]] ||
+                [self viewOrSuperview:touch.view ofClass:[UIBarButtonItem class]])
+            {
+                return YES;
             }
             return NO;
         }
