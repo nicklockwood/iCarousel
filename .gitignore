@@ -1,0 +1,14 @@
+*~
+.DS_Store
+.svn
+*.swp
+*.orig
+*.save
+._*
+*.bak
+
+xcuserdata/
+project.xcworkspace/
+
+IOSInjectionProject/
+.idea/
