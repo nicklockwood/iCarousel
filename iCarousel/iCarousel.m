@@ -865,6 +865,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     //we can't just set the layer.doubleSided property because it doesn't block interaction
     //instead we'll calculate if the view is front-facing based on the transform
     view.superview.hidden = !(showBackfaces ?: (transform.m33 > 0.0f));
+    
+    [self.delegate carousel:self itemModifyForOffset:offset withItem:view];
 }
 
 #ifdef ICAROUSEL_MACOS
