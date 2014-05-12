@@ -1,7 +1,7 @@
 //
 //  iCarousel.m
 //
-//  Version 1.8 beta 15
+//  Version 1.8 beta 16
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2011 Charcoal Design
@@ -90,6 +90,7 @@
 @property (nonatomic, strong) NSMutableDictionary *itemViews;
 @property (nonatomic, strong) NSMutableSet *itemViewPool;
 @property (nonatomic, strong) NSMutableSet *placeholderViewPool;
+@property (nonatomic, assign) CGFloat previousScrollOffset;
 @property (nonatomic, assign) NSInteger previousItemIndex;
 @property (nonatomic, assign) NSInteger numberOfPlaceholdersToShow;
 @property (nonatomic, assign) NSInteger numberOfVisibleItems;
@@ -137,6 +138,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     _centerItemWhenSelected = YES;
     
     _contentView = [[UIView alloc] initWithFrame:self.bounds];
+    
     
 #ifdef ICAROUSEL_IOS
     
@@ -1056,6 +1058,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     [self updateNumberOfVisibleItems];
     
     //prevent false index changed event
+    _previousScrollOffset = self.scrollOffset;
     _previousItemIndex = self.currentItemIndex;
     
     //update offset multiplier
@@ -1722,7 +1725,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 {
     [self pushAnimationState:NO];
     NSTimeInterval currentTime = CACurrentMediaTime();
-    double delta = _lastTime - currentTime;
+    double delta = currentTime - _lastTime;
     _lastTime = currentTime;
     
     if (_toggle != 0.0f)
@@ -1756,7 +1759,6 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         CGFloat acceleration = -_startVelocity/_scrollDuration;
         CGFloat distance = _startVelocity * time + 0.5f * acceleration * powf(time, 2.0f);
         _scrollOffset = _startOffset + distance;
-        
         [self didScroll];
         if (time == (CGFloat)_scrollDuration)
         {
@@ -1795,7 +1797,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     }
     else if (_autoscroll)
     {
-        if (!_dragging) self.scrollOffset = [self clampedOffset:_scrollOffset + delta * _autoscroll];
+        //autoscroll goes backwards from what you'd expect, for historical reasons
+        if (!_dragging) self.scrollOffset = [self clampedOffset:_scrollOffset - delta * _autoscroll];
     }
     else if (_toggle == 0.0f)
     {
@@ -1870,11 +1873,15 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     [self loadUnloadViews];    
     [self transformItemViews];
     
-    [self pushAnimationState:YES];
-    [_delegate carouselDidScroll:self];
-    [self popAnimationState];
+    //notify delegate of offset change
+    if (fabs(_scrollOffset - _previousScrollOffset) > 0.000001)
+    {
+        [self pushAnimationState:YES];
+        [_delegate carouselDidScroll:self];
+        [self popAnimationState];
+    }
     
-    //notify delegate of change index
+    //notify delegate of index change
     if ([self clampedIndex:_previousItemIndex] != self.currentItemIndex)
     {
         [self pushAnimationState:YES];
@@ -1883,6 +1890,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     }
 
     //update previous index
+    _previousScrollOffset = _scrollOffset;
     _previousItemIndex = currentIndex;
 } 
 
