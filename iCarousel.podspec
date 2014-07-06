@@ -6,7 +6,7 @@ Pod::Spec.new do |s|
   s.homepage     = "https://github.com/nicklockwood/iCarousel"
   s.authors      = { "Nick Lockwood" => "support@charcoaldesign.co.uk" }  
   s.source       = { :git => "https://github.com/nicklockwood/iCarousel.git", :tag => "1.7.6" }
-  s.source_files = 'iCarousel'
+  s.source_files = 'iCarousel/*.{h,m}'
   s.requires_arc = true
   s.frameworks = 'QuartzCore'
   s.ios.deployment_target = '4.3'
