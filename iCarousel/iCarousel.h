@@ -152,6 +152,8 @@ typedef NS_ENUM(NSUInteger, iCarouselOption)
 
 - (void)reloadData;
 
+- (void)realignAllViews;
+
 @end
 
 
