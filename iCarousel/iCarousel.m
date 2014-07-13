@@ -775,6 +775,9 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     frame.size.width = _vertical? frame.size.width: _itemWidth;
     frame.size.height = _vertical? _itemWidth: frame.size.height;
     UIView *containerView = [[UIView alloc] initWithFrame:frame];
+
+    // ronaldoxgh:201407130948
+    containerView.autoresizesSubviews = NO;
     
 #ifdef ICAROUSEL_MACOS
 
@@ -898,6 +901,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     }
 }
 
+// ronaldoxgh:201407130948
 - (void)realignAllViews
 {
     for (NSNumber *number in _itemViews)
