@@ -152,6 +152,9 @@ typedef NS_ENUM(NSUInteger, iCarouselOption)
 
 - (void)reloadData;
 
+// ronaldoxgh:201407130948
+- (void)realignAllViews;
+
 @end
 
 
