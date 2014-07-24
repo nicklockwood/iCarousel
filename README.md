@@ -416,6 +416,11 @@ Note that taps and gestures will be ignored on any item view except the currentl
 
 On Mac OS there is no easy way to embed controls within iCarousel item views currently. You cannot just supply an NSButton as or inside your item view because the transforms applied to the item views mean that hit detection doesn't work properly. I'm investigating possible solutions to this (if you know a good way to fix this, please get in touch, or fork the project on github).
 
+Accessibility
+-------------
+This implementation is based on the approach of making part of the UI not subject to VoiceOver gestures. 
+As a result VoiceOver doesn’t "steal" the iCarousel single finger swipe. Delegate methods are used to process additional Accessibility announcement upon swipe or single tap. Double tap is used for item selection with VoiceOver on. On thing that should be noted is that due to the fact that the usual VoiceOver single finger swipe gesture does not "exit" the carousel, additional work is required in the iCarousel's container view in order to fully support Accessibility.
+Credits to Boris Dusek for his answer on  http://stackoverflow.com/questions/20710991/when-voiceover-is-on-is-there-a-way-an-app-can-detect-a-single-finger-left-rig?rq=1 
 
 Example projects
 ------------------
