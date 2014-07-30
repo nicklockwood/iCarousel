@@ -13,7 +13,7 @@
 
 - (IBAction)reloadAndScroll;
 {
-	[self.carousel reloadData];
+    [self.carousel reloadData];
     self.carousel.scrollToItemBoundary = NO;
     [self.carousel scrollByOffset:4.5 duration:0.0];
 }
@@ -57,12 +57,12 @@
 #pragma mark -
 #pragma mark iCarousel methods
 
-- (NSUInteger)numberOfItemsInCarousel:(iCarousel *)carousel
+- (NSInteger)numberOfItemsInCarousel:(iCarousel *)carousel
 {
     return 1000;
 }
 
-- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
+- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSInteger)index reusingView:(UIView *)view
 {
     //create a numbered view
     view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200.0f, 200.0f)];

@@ -1,7 +1,7 @@
 //
 //  iCarousel.m
 //
-//  Version 1.8 beta 16
+//  Version 1.8 beta 17
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2011 Charcoal Design
@@ -38,6 +38,17 @@
 #if !__has_feature(objc_arc)
 #error This class requires automatic reference counting
 #endif
+
+
+#pragma GCC diagnostic ignored "-Wreceiver-is-weak"
+#pragma GCC diagnostic ignored "-Warc-repeated-use-of-weak"
+#pragma GCC diagnostic ignored "-Wobjc-missing-property-synthesis"
+#pragma GCC diagnostic ignored "-Wdirect-ivar-access"
+#pragma GCC diagnostic ignored "-Wunused-macros"
+#pragma GCC diagnostic ignored "-Wconversion"
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
+#pragma GCC diagnostic ignored "-Wselector"
+#pragma GCC diagnostic ignored "-Wgnu"
 
 
 #define MIN_TOGGLE_DURATION 0.2
@@ -260,7 +271,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     _startOffset = scrollOffset;
     _endOffset = scrollOffset;
     
-    if (_scrollOffset != scrollOffset)
+    if (fabs(_scrollOffset - scrollOffset) > 0.0)
     {
         _scrollOffset = scrollOffset;
         [self depthSortViews];
@@ -275,11 +286,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (void)setPerspective:(CGFloat)perspective
 {
-    if (_perspective != perspective)
-    {
-        _perspective = perspective;
-        [self transformItemViews];
-    }
+    _perspective = perspective;
+    [self transformItemViews];
 }
 
 - (void)setViewpointOffset:(CGSize)viewpointOffset
@@ -302,11 +310,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (void)setAutoscroll:(CGFloat)autoscroll
 {
-    if (_autoscroll != autoscroll)
-    {
-        _autoscroll = autoscroll;
-        if (autoscroll != 0.0f) [self startAnimation];
-    }
+    _autoscroll = autoscroll;
+    if (autoscroll != 0.0f) [self startAnimation];
 }
 
 - (void)pushAnimationState:(BOOL)enabled
@@ -444,7 +449,16 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
             fadeMin = 0.0f;
             break;
         }
-        default:
+        case iCarouselTypeCoverFlow:
+        case iCarouselTypeCoverFlow2:
+        case iCarouselTypeCustom:
+        case iCarouselTypeCylinder:
+        case iCarouselTypeInvertedCylinder:
+        case iCarouselTypeRotary:
+        case iCarouselTypeInvertedRotary:
+        case iCarouselTypeWheel:
+        case iCarouselTypeInvertedWheel:
+        case iCarouselTypeLinear:
         {
             //do nothing
         }
@@ -855,7 +869,17 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
                 showBackfaces = NO;
                 break;
             }
-            default:
+            case iCarouselTypeCoverFlow:
+            case iCarouselTypeCoverFlow2:
+            case iCarouselTypeCustom:
+            case iCarouselTypeCylinder:
+            case iCarouselTypeRotary:
+            case iCarouselTypeInvertedRotary:
+            case iCarouselTypeWheel:
+            case iCarouselTypeInvertedWheel:
+            case iCarouselTypeLinear:
+            case iCarouselTypeTimeMachine:
+            case iCarouselTypeInvertedTimeMachine:
             {
                 showBackfaces = YES;
                 break;
@@ -1009,11 +1033,15 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
             count = MIN(_numberOfItems + _numberOfPlaceholdersToShow, count);
             break;
         }
-        default:
+        case iCarouselTypeCoverFlow:
+        case iCarouselTypeCoverFlow2:
+        case iCarouselTypeTimeMachine:
+        case iCarouselTypeInvertedTimeMachine:
+        case iCarouselTypeLinear:
+        case iCarouselTypeCustom:
         {
             //not used for non-circular carousels
             return _numberOfItems + _numberOfPlaceholdersToShow;
-            break;
         }
     }
     return [self valueForOption:iCarouselOptionCount withDefault:count];
@@ -1040,7 +1068,12 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
             _wrapEnabled = YES;
             break;
         }
-        default:
+        case iCarouselTypeCoverFlow:
+        case iCarouselTypeCoverFlow2:
+        case iCarouselTypeTimeMachine:
+        case iCarouselTypeInvertedTimeMachine:
+        case iCarouselTypeLinear:
+        case iCarouselTypeCustom:
         {
             _wrapEnabled = NO;
             break;
@@ -1070,7 +1103,16 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
             _offsetMultiplier = 2.0f;
             break;
         }
-        default:
+        case iCarouselTypeCylinder:
+        case iCarouselTypeInvertedCylinder:
+        case iCarouselTypeWheel:
+        case iCarouselTypeInvertedWheel:
+        case iCarouselTypeRotary:
+        case iCarouselTypeInvertedRotary:
+        case iCarouselTypeTimeMachine:
+        case iCarouselTypeInvertedTimeMachine:
+        case iCarouselTypeLinear:
+        case iCarouselTypeCustom:
         {
             _offsetMultiplier = 1.0f;
             break;
@@ -1146,7 +1188,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     UIView *view = nil;
     if (index < 0)
     {
-        view = [_dataSource carousel:self placeholderViewAtIndex:(int)ceilf((CGFloat)_numberOfPlaceholdersToShow/2.0f) + index reusingView:[self dequeuePlaceholderView]];
+        view = [_dataSource carousel:self placeholderViewAtIndex:(NSInteger)(ceilf((CGFloat)_numberOfPlaceholdersToShow/2.0f)) + index reusingView:[self dequeuePlaceholderView]];
     }
     else if (index >= _numberOfItems)
     {
@@ -1229,7 +1271,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     
     //calculate visible view indices
     NSMutableSet *visibleIndices = [NSMutableSet setWithCapacity:_numberOfVisibleItems];
-    NSInteger min = -(NSInteger)ceilf((CGFloat)_numberOfPlaceholdersToShow/2.0f);
+    NSInteger min = -(NSInteger)(ceilf((CGFloat)_numberOfPlaceholdersToShow/2.0f));
     NSInteger max = _numberOfItems - 1 + _numberOfPlaceholdersToShow/2;
     NSInteger offset = self.currentItemIndex - _numberOfVisibleItems/2;
     if (!_wrapEnabled)
@@ -1551,7 +1593,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     UIView *itemView = [self loadViewAtIndex:index];
     itemView.superview.layer.opacity = 0.0f;
     
-    if (_itemWidth == 0)
+    if (fabs(_itemWidth) < 0.0001)
     {
         [self updateItemWidth];
     }
@@ -1733,7 +1775,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         NSTimeInterval toggleDuration = _startVelocity? fminf(1.0, fmaxf(0.0, 1.0 / fabsf(_startVelocity))): 1.0;
         toggleDuration = MIN_TOGGLE_DURATION + (MAX_TOGGLE_DURATION - MIN_TOGGLE_DURATION) * toggleDuration;
         NSTimeInterval time = fminf(1.0f, (currentTime - _toggleTime) / toggleDuration);
-        CGFloat delta = [self easeInOut:time];
+        delta = [self easeInOut:time];
         _toggle = (_toggle < 0.0f)? (delta - 1.0f): (1.0f - delta);
         [self didScroll];
     }
@@ -1741,7 +1783,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     if (_scrolling)
     {
         NSTimeInterval time = fminf(1.0f, (currentTime - _startTime) / _scrollDuration);
-        CGFloat delta = [self easeInOut:time];
+        delta = [self easeInOut:time];
         _scrollOffset = _startOffset + (_endOffset - _startOffset) * delta;
         [self didScroll];
         if (time == 1.0f)
@@ -1760,7 +1802,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         CGFloat distance = _startVelocity * time + 0.5f * acceleration * powf(time, 2.0f);
         _scrollOffset = _startOffset + distance;
         [self didScroll];
-        if (time == (CGFloat)_scrollDuration)
+        if (fabs(time - _scrollDuration) < 0.0001)
         {
             _decelerating = NO;
             [self pushAnimationState:YES];
@@ -2072,6 +2114,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
             }
             case UIGestureRecognizerStateEnded:
             case UIGestureRecognizerStateCancelled:
+            case UIGestureRecognizerStateFailed:
             {
                 _dragging = NO;
                 _didDrag = YES;
@@ -2118,7 +2161,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
                 }
                 break;
             }
-            default:
+            case UIGestureRecognizerStateChanged:
             {
                 CGFloat translation = (_vertical? [panGesture translationInView:self].y: [panGesture translationInView:self].x) - _previousTranslation;
                 CGFloat factor = 1.0f;
@@ -2131,6 +2174,12 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
                 _startVelocity = -(_vertical? [panGesture velocityInView:self].y: [panGesture velocityInView:self].x) * factor * _scrollSpeed / _itemWidth;
                 _scrollOffset -= translation * factor * _offsetMultiplier / _itemWidth;
                 [self didScroll];
+                break;
+            }
+            case UIGestureRecognizerStatePossible:
+            {
+                //do nothing
+                break;
             }
         }
     }

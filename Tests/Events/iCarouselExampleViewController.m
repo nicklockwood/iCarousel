@@ -59,12 +59,12 @@
 #pragma mark -
 #pragma mark iCarousel methods
 
-- (NSUInteger)numberOfItemsInCarousel:(iCarousel *)carousel
+- (NSInteger)numberOfItemsInCarousel:(iCarousel *)carousel
 {
     return 1000;
 }
 
-- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
+- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSInteger)index reusingView:(UIView *)view
 {
     if (useButtons)
     {  

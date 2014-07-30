@@ -22,21 +22,35 @@
 
 @implementation iCarouselExampleViewController
 
-- (void)awakeFromNib
+- (id)initWithCoder:(NSCoder *)aDecoder
 {
-    //set up data
-    //this is an array of arrays
-    self.items = [NSMutableArray array];
-    for (int i = 0; i < 100; i++)
+    if ((self = [super initWithCoder:aDecoder]))
     {
-        NSMutableArray *subitems = [NSMutableArray array];
-        for (int j = 0; j < 20; j++)
+        //set up data
+        //this is an array of arrays
+        self.items = [NSMutableArray array];
+        for (int i = 0; i < 100; i++)
         {
-            [subitems addObject:[NSNumber numberWithInt:j]];
+            NSMutableArray *subitems = [NSMutableArray array];
+            for (int j = 0; j < 20; j++)
+            {
+                [subitems addObject:[NSNumber numberWithInt:j]];
+            }
+            [_items addObject:subitems];
         }
-        [_items addObject:subitems];
     }
-    [_carousel reloadData];
+    return self;
+}
+
+- (void)updatePerspective
+{
+    for (iCarousel *subCarousel in _carousel.visibleItemViews)
+    {
+        NSInteger index = subCarousel.tag;
+        CGFloat offset = [_carousel offsetForItemAtIndex:index];
+        subCarousel.viewpointOffset = CGSizeMake(-offset * _carousel.itemWidth, 0.0f);
+        subCarousel.contentOffset = CGSizeMake(-offset * _carousel.itemWidth, 0.0f);
+    }
 }
 
 - (void)dealloc
@@ -59,6 +73,13 @@
     //configure outer carousel
     _carousel.type = iCarouselTypeLinear;
     _carousel.centerItemWhenSelected = NO;
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+  
+    [self updatePerspective];
 }
 
 - (void)viewDidUnload
@@ -89,7 +110,7 @@
     }
 }
 
-- (NSUInteger)numberOfItemsInCarousel:(iCarousel *)carousel
+- (NSInteger)numberOfItemsInCarousel:(iCarousel *)carousel
 {
     if (carousel == _carousel)
     {
@@ -102,7 +123,7 @@
     }
 }
 
-- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
+- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSInteger)index reusingView:(UIView *)view
 {
     if (carousel == _carousel)
     {
@@ -168,13 +189,7 @@
         //adjust perspective for inner carousels
         //every time the outer carousel is moved
         //for 2D carousel styles this wouldn't be neccesary
-        for (iCarousel *subCarousel in _carousel.visibleItemViews)
-        {
-            NSInteger index = subCarousel.tag;
-            CGFloat offset = [_carousel offsetForItemAtIndex:index];
-            subCarousel.viewpointOffset = CGSizeMake(-offset * _carousel.itemWidth, 0.0f);
-            subCarousel.contentOffset = CGSizeMake(-offset * _carousel.itemWidth, 0.0f);
-        }
+        [self updatePerspective];
     }
     else if (SYNCHRONIZE_CAROUSELS)
     {

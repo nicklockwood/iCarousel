@@ -8,8 +8,8 @@
 
 import UIKit
 
-class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate  {
-    
+class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
+{
     var items: [Int] = []
     @IBOutlet var carousel : iCarousel!
     

@@ -9,6 +9,9 @@
 #import "iCarouselExampleViewController.h"
 
 
+#pragma GCC diagnostic ignored "-Wgnu"
+
+
 @interface iCarouselExampleViewController () <UIActionSheetDelegate>
 
 @property (nonatomic, assign) BOOL wrap;
@@ -29,11 +32,11 @@
 - (void)setUp
 {
     //set up data
-    wrap = YES;
+    self.wrap = YES;
     self.items = [NSMutableArray array];
     for (int i = 0; i < 1000; i++)
     {
-        [items addObject:@(i)];
+        [self.items addObject:@(i)];
     }
 }
 
@@ -72,8 +75,8 @@
     [super viewDidLoad];
     
     //configure carousel
-    carousel.type = iCarouselTypeCoverFlow2;
-    navItem.title = @"CoverFlow2";
+    self.carousel.type = iCarouselTypeCoverFlow2;
+    self.navItem.title = @"CoverFlow2";
 }
 
 - (void)viewDidUnload
@@ -85,7 +88,7 @@
     self.wrapBarItem = nil;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+- (BOOL)shouldAutorotateToInterfaceOrientation:(__unused UIInterfaceOrientation)interfaceOrientation
 {
     return YES;
 }
@@ -104,34 +107,34 @@
 {
     //carousel orientation can be animated
     [UIView beginAnimations:nil context:nil];
-    carousel.vertical = !carousel.vertical;
+    self.carousel.vertical = !self.carousel.vertical;
     [UIView commitAnimations];
     
     //update button
-    orientationBarItem.title = carousel.vertical? @"Vertical": @"Horizontal";
+    self.orientationBarItem.title = self.carousel.vertical? @"Vertical": @"Horizontal";
 }
 
 - (IBAction)toggleWrap
 {
-    wrap = !wrap;
-    wrapBarItem.title = wrap? @"Wrap: ON": @"Wrap: OFF";
-    [carousel reloadData];
+    self.wrap = !self.wrap;
+    self.wrapBarItem.title = self.wrap? @"Wrap: ON": @"Wrap: OFF";
+    [self.carousel reloadData];
 }
 
 - (IBAction)insertItem
 {
-    NSInteger index = MAX(0, carousel.currentItemIndex);
-    [items insertObject:@(carousel.numberOfItems) atIndex:index];
-    [carousel insertItemAtIndex:index animated:YES];
+    NSInteger index = MAX(0, self.carousel.currentItemIndex);
+    [self.items insertObject:@(self.carousel.numberOfItems) atIndex:(NSUInteger)index];
+    [self.carousel insertItemAtIndex:index animated:YES];
 }
 
 - (IBAction)removeItem
 {
-    if (carousel.numberOfItems > 0)
+    if (self.carousel.numberOfItems > 0)
     {
-        NSInteger index = carousel.currentItemIndex;
-        [items removeObjectAtIndex:index];
-        [carousel removeItemAtIndex:index animated:YES];
+        NSInteger index = self.carousel.currentItemIndex;
+        [self.items removeObjectAtIndex:(NSUInteger)index];
+        [self.carousel removeItemAtIndex:index animated:YES];
     }
 }
 
@@ -147,23 +150,23 @@
         
         //carousel can smoothly animate between types
         [UIView beginAnimations:nil context:nil];
-        carousel.type = type;
+        self.carousel.type = type;
         [UIView commitAnimations];
         
         //update title
-        navItem.title = [actionSheet buttonTitleAtIndex:buttonIndex];
+        self.navItem.title = [actionSheet buttonTitleAtIndex:buttonIndex];
     }
 }
 
 #pragma mark -
 #pragma mark iCarousel methods
 
-- (NSUInteger)numberOfItemsInCarousel:(iCarousel *)carousel
+- (NSInteger)numberOfItemsInCarousel:(__unused iCarousel *)carousel
 {
-    return [items count];
+    return (NSInteger)[self.items count];
 }
 
-- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view
+- (UIView *)carousel:(__unused iCarousel *)carousel viewForItemAtIndex:(NSInteger)index reusingView:(UIView *)view
 {
     UILabel *label = nil;
     
@@ -191,18 +194,18 @@
     //views outside of the `if (view == nil) {...}` check otherwise
     //you'll get weird issues with carousel item content appearing
     //in the wrong place in the carousel
-    label.text = [items[index] stringValue];
+    label.text = [self.items[(NSUInteger)index] stringValue];
     
     return view;
 }
 
-- (NSUInteger)numberOfPlaceholdersInCarousel:(iCarousel *)carousel
+- (NSInteger)numberOfPlaceholdersInCarousel:(__unused iCarousel *)carousel
 {
     //note: placeholder views are only displayed on some carousels if wrapping is disabled
     return 2;
 }
 
-- (UIView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index reusingView:(UIView *)view
+- (UIView *)carousel:(__unused iCarousel *)carousel placeholderViewAtIndex:(NSInteger)index reusingView:(UIView *)view
 {
     UILabel *label = nil;
     
@@ -239,14 +242,14 @@
     return view;
 }
 
-- (CATransform3D)carousel:(iCarousel *)_carousel itemTransformForOffset:(CGFloat)offset baseTransform:(CATransform3D)transform
+- (CATransform3D)carousel:(__unused iCarousel *)carousel itemTransformForOffset:(CGFloat)offset baseTransform:(CATransform3D)transform
 {
     //implement 'flip3D' style carousel
     transform = CATransform3DRotate(transform, M_PI / 8.0f, 0.0f, 1.0f, 0.0f);
-    return CATransform3DTranslate(transform, 0.0f, 0.0f, offset * carousel.itemWidth);
+    return CATransform3DTranslate(transform, 0.0f, 0.0f, offset * self.carousel.itemWidth);
 }
 
-- (CGFloat)carousel:(iCarousel *)_carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value
+- (CGFloat)carousel:(__unused iCarousel *)carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value
 {
     //customize carousel display
     switch (option)
@@ -254,7 +257,7 @@
         case iCarouselOptionWrap:
         {
             //normally you would hard-code this to YES or NO
-            return wrap;
+            return self.wrap;
         }
         case iCarouselOptionSpacing:
         {
@@ -263,14 +266,24 @@
         }
         case iCarouselOptionFadeMax:
         {
-            if (carousel.type == iCarouselTypeCustom)
+            if (self.carousel.type == iCarouselTypeCustom)
             {
                 //set opacity based on distance from camera
                 return 0.0f;
             }
             return value;
         }
-        default:
+        case iCarouselOptionShowBackfaces:
+        case iCarouselOptionRadius:
+        case iCarouselOptionAngle:
+        case iCarouselOptionArc:
+        case iCarouselOptionTilt:
+        case iCarouselOptionCount:
+        case iCarouselOptionFadeMin:
+        case iCarouselOptionFadeMinAlpha:
+        case iCarouselOptionFadeRange:
+        case iCarouselOptionOffsetMultiplier:
+        case iCarouselOptionVisibleItems:
         {
             return value;
         }
@@ -280,9 +293,9 @@
 #pragma mark -
 #pragma mark iCarousel taps
 
-- (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index
+- (void)carousel:(__unused iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index
 {
-    NSNumber *item = (self.items)[index];
+    NSNumber *item = (self.items)[(NSUInteger)index];
     NSLog(@"Tapped view number: %@", item);
 }
 

@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "01308D8D13491C3500453707"
-               BuildableName = "iCarouselNoNibDemo.app"
-               BlueprintName = "iCarouselNoNibDemo"
-               ReferencedContainer = "container:iCarouselNoNibDemo.xcodeproj">
+               BlueprintIdentifier = "01FA10BC145E9951001906CB"
+               BuildableName = "iCarouselExample.app"
+               BlueprintName = "iCarouselExample"
+               ReferencedContainer = "container:iCarouselExample.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,10 +32,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "01308D8D13491C3500453707"
-            BuildableName = "iCarouselNoNibDemo.app"
-            BlueprintName = "iCarouselNoNibDemo"
-            ReferencedContainer = "container:iCarouselNoNibDemo.xcodeproj">
+            BlueprintIdentifier = "01FA10BC145E9951001906CB"
+            BuildableName = "iCarouselExample.app"
+            BlueprintName = "iCarouselExample"
+            ReferencedContainer = "container:iCarouselExample.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -51,10 +51,10 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "01308D8D13491C3500453707"
-            BuildableName = "iCarouselNoNibDemo.app"
-            BlueprintName = "iCarouselNoNibDemo"
-            ReferencedContainer = "container:iCarouselNoNibDemo.xcodeproj">
+            BlueprintIdentifier = "01FA10BC145E9951001906CB"
+            BuildableName = "iCarouselExample.app"
+            BlueprintName = "iCarouselExample"
+            ReferencedContainer = "container:iCarouselExample.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -69,10 +69,10 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "01308D8D13491C3500453707"
-            BuildableName = "iCarouselNoNibDemo.app"
-            BlueprintName = "iCarouselNoNibDemo"
-            ReferencedContainer = "container:iCarouselNoNibDemo.xcodeproj">
+            BlueprintIdentifier = "01FA10BC145E9951001906CB"
+            BuildableName = "iCarouselExample.app"
+            BlueprintName = "iCarouselExample"
+            ReferencedContainer = "container:iCarouselExample.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

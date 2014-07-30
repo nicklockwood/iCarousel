@@ -1,7 +1,7 @@
 //
 //  FXImageView.h
 //
-//  Version 1.2.3
+//  Version 1.3.3
 //
 //  Created by Nick Lockwood on 31/10/2011.
 //  Copyright (c) 2011 Charcoal Design
@@ -30,7 +30,11 @@
 //  3. This notice may not be removed or altered from any source distribution.
 //
 
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wobjc-missing-property-synthesis"
 #import <UIKit/UIKit.h>
+#import <QuartzCore/QuartzCore.h>
 
 
 @interface FXImageView : UIImageView
@@ -39,6 +43,7 @@
 + (NSCache *)processedImageCache;
 
 @property (nonatomic, assign, getter = isAsynchronous) BOOL asynchronous;
+@property (nonatomic, assign) NSTimeInterval crossfadeDuration;
 @property (nonatomic, assign) CGFloat reflectionGap;
 @property (nonatomic, assign) CGFloat reflectionScale;
 @property (nonatomic, assign) CGFloat reflectionAlpha;
@@ -47,6 +52,7 @@
 @property (nonatomic, assign) CGFloat shadowBlur;
 @property (nonatomic, assign) CGFloat cornerRadius;
 @property (nonatomic, strong) UIImage *processedImage;
+@property (nonatomic, assign) UIViewContentMode contentMode;
 
 @property (nonatomic, copy) UIImage *(^customEffectsBlock)(UIImage *image);
 @property (nonatomic, copy) NSString *cacheKey;
@@ -55,3 +61,6 @@
 - (void)setImageWithContentsOfURL:(NSURL *)URL;
 
 @end
+
+
+#pragma GCC diagnostic pop

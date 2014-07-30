@@ -14,10 +14,10 @@
 @synthesize window;
 @synthesize viewController;
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+- (BOOL)application:(__unused UIApplication *)application didFinishLaunchingWithOptions:(__unused NSDictionary *)launchOptions
 {
-    [window addSubview:viewController.view];
-    [window makeKeyAndVisible];
+    [self.window addSubview:self.viewController.view];
+    [self.window makeKeyAndVisible];
     return YES;
 }
 

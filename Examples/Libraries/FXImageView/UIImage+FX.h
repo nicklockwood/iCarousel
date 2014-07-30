@@ -1,7 +1,7 @@
 //
 //  UIImage+FX.h
 //
-//  Version 1.2.3
+//  Version 1.3.3
 //
 //  Created by Nick Lockwood on 31/10/2011.
 //  Copyright (c) 2011 Charcoal Design
@@ -51,6 +51,5 @@
 - (UIImage *)imageWithMask:(UIImage *)maskImage;
 
 - (UIImage *)maskImageFromImageAlpha;
-
 
 @end

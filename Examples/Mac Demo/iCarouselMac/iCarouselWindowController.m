@@ -91,12 +91,12 @@
 #pragma mark -
 #pragma mark iCarousel methods
 
-- (NSUInteger)numberOfItemsInCarousel:(iCarousel *)carousel
+- (NSInteger)numberOfItemsInCarousel:(iCarousel *)carousel
 {
     return [items count];
 }
 
-- (NSView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(NSView *)view
+- (NSView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSInteger)index reusingView:(NSView *)view
 {
     NSTextField *label = nil;
     
@@ -139,13 +139,13 @@
 	return view;
 }
 
-- (NSUInteger)numberOfPlaceholdersInCarousel:(iCarousel *)carousel
+- (NSInteger)numberOfPlaceholdersInCarousel:(iCarousel *)carousel
 {
 	//note: placeholder views are only displayed if wrapping is disabled
 	return 2;
 }
 
-- (NSView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index reusingView:(NSView *)view
+- (NSView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSInteger)index reusingView:(NSView *)view
 {
 	NSTextField *label = nil;
     
