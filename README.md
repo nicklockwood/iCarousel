@@ -335,6 +335,10 @@ Returns the width of each item in the carousel - i.e. the spacing for each item 
 
 This method can be used to provide a custom transform for each carousel view. The offset argument is the distance of the view from the middle of the carousel. The currently centred item view would have an offset of 0.0, the one to the right would have an offset value of 1.0, the one to the left an offset value of -1.0, and so on. To implement the linear carousel style, you would therefore simply multiply the offset value by the item width and use it as the x value of the transform. This method is only called if the carousel type is iCarouselTypeCustom.
 
+	- (void)carousel:(iCarousel *)carousel itemModifyForOffset: (CGFloat)offset withItem:(UIView *)itemView;
+
+This method can be used to modify the item based on the offset. Take a look at "carousel: itemTransformForOffset: baseTransform:" for more details regarding "offset". This method lets you easily modify item's color or images, essentially letting you do cool things like darkening (without transparency) side items, more granual control of item's transparency, and etc.
+
 	- (CGFloat)carousel:(iCarousel *)carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value;
 
 This method is used to customise the parameters of the standard carousel types. By implementing this method, you can tweak options such as the number of items displayed in a circular carousel, or the amount of tilt in a coverflow carousel, as well as whether the carousel should wrap and if it should fade out at the ends, etc. For any option you are not interested in tweaking, just return the default value. The meaning of these options is listed below under *iCarouselOption values*. Check the *Options Demo* for an advanced example of using this method.

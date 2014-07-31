@@ -189,6 +189,7 @@ typedef NS_ENUM(NSInteger, iCarouselOption)
 
 - (CGFloat)carouselItemWidth:(iCarousel *)carousel;
 - (CATransform3D)carousel:(iCarousel *)carousel itemTransformForOffset:(CGFloat)offset baseTransform:(CATransform3D)transform;
+- (void)carousel:(iCarousel *)carousel itemModifyForOffset: (CGFloat)offset withItem:(UIView *)itemView;
 - (CGFloat)carousel:(iCarousel *)carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value;
 
 @end
