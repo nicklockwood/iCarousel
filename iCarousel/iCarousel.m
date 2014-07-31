@@ -196,17 +196,13 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 #ifdef ICAROUSEL_IOS
 
 - (id)initWithFrame:(CGRect)frame
-{
-    if ((self = [super initWithFrame:frame]))
-    {
-        [self setUp];
-    }
-    return self;
-}
 
 #else
 
 - (id)initWithFrame:(NSRect)frame
+
+#endif
+
 {
     if ((self = [super initWithFrame:frame]))
     {
@@ -214,8 +210,6 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     }
     return self;
 }
-
-#endif
 
 - (void)dealloc
 {   
@@ -1222,10 +1216,13 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         
         //set container frame
         CGRect frame = containerView.bounds;
-        if(_vertical) {
+        if(_vertical)
+        {
             frame.size.width = view.frame.size.width;
             frame.size.height = MIN(_itemWidth, view.frame.size.height);
-        } else {
+        }
+        else
+        {
             frame.size.width = MIN(_itemWidth, view.frame.size.width);
             frame.size.height = view.frame.size.height;
         }
