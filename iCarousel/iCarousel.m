@@ -147,6 +147,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     _scrollToItemBoundary = YES;
     _ignorePerpendicularSwipes = YES;
     _centerItemWhenSelected = YES;
+    _bounceSingleItem = NO;
     
     _contentView = [[UIView alloc] initWithFrame:self.bounds];
     
@@ -760,7 +761,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     }
     
     //handle special case for one item
-    if (_numberOfItems + _numberOfPlaceholdersToShow == 1)
+    if (!_bounceSingleItem && _numberOfItems + _numberOfPlaceholdersToShow == 1)
     {
         offset = 0.0f;
     }
