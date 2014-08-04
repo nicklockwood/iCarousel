@@ -13,12 +13,7 @@
 @synthesize window;
 @synthesize windowController;
 
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
-{
-    // Insert code here to initialize your application
-}
-
-- (BOOL) applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(__unused NSApplication *)sender
 {
     return YES;
 }

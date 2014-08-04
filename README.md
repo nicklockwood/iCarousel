@@ -546,7 +546,7 @@ FAQ
 Release Notes
 ----------------
 
-Verson 1.8 beta
+Verson 1.8
 
 - iCarousel now requires ARC
 - iCarousel now requires 64-bit processors on Mac OS 10.6
@@ -560,6 +560,8 @@ Verson 1.8 beta
 - Setting scrollOffset now lets you exactly mirror behaviour from one carousel to another
 - Fixed bug where item indexes were selected incorrectly when tapping views in vertical mode
 - Perspective and viewpointOffset properties can now be animated
+- Added some minimal accessibility support
+- Single items now bounce by default (set scrollEnabled = NO to disable)
 - Now conforms to the -Weverything warning level
 
 Version 1.7.6

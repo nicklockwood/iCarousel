@@ -34,7 +34,7 @@
     //set up data
     self.wrap = YES;
     self.items = [NSMutableArray array];
-    for (int i = 0; i < 1000; i++)
+    for (int i = 0; i < 10; i++)
     {
         [self.items addObject:@(i)];
     }
@@ -297,6 +297,11 @@
 {
     NSNumber *item = (self.items)[(NSUInteger)index];
     NSLog(@"Tapped view number: %@", item);
+}
+
+- (void)carouselCurrentItemIndexDidChange:(__unused iCarousel *)carousel
+{
+    NSLog(@"Index: %@", @(self.carousel.currentItemIndex));
 }
 
 @end

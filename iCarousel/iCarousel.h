@@ -1,7 +1,7 @@
 //
 //  iCarousel.h
 //
-//  Version 1.8 beta 17
+//  Version 1.8
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2011 Charcoal Design
@@ -88,7 +88,7 @@ typedef NS_ENUM(NSInteger, iCarouselOption)
     iCarouselOptionVisibleItems,
     iCarouselOptionCount,
     iCarouselOptionArc,
-	iCarouselOptionAngle,
+    iCarouselOptionAngle,
     iCarouselOptionRadius,
     iCarouselOptionTilt,
     iCarouselOptionSpacing,

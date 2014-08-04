@@ -9,12 +9,8 @@
 #import <Cocoa/Cocoa.h>
 
 @interface iCarouselMacAppDelegate : NSObject <NSApplicationDelegate>
-{
-    NSWindow *__weak window;
-    NSWindowController *__weak windowController;
-}
 
-@property (weak) IBOutlet NSWindow *window;
-@property (weak) IBOutlet NSWindowController *windowController;
+@property (nonatomic, strong) IBOutlet NSWindow *window;
+@property (nonatomic, strong) IBOutlet NSWindowController *windowController;
 
 @end

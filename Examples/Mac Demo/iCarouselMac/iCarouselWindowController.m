@@ -41,8 +41,8 @@
 - (void)awakeFromNib
 {
     //configure carousel
-    carousel.type = iCarouselTypeCoverFlow2;
-    [self.window makeFirstResponder:carousel];
+    self.carousel.type = iCarouselTypeCoverFlow2;
+    [self.window makeFirstResponder:self.carousel];
 }
 
 - (void)dealloc
@@ -56,47 +56,47 @@
 
 - (IBAction)switchCarouselType:(id)sender
 {
-	//restore view opacities to normal
-    for (NSView *view in carousel.visibleItemViews)
+    //restore view opacities to normal
+    for (NSView *view in self.carousel.visibleItemViews)
     {
         view.layer.opacity = 1.0;
     }
 	
-    carousel.type = (iCarouselType)[sender tag];
+    self.carousel.type = (iCarouselType)[sender tag];
 }
 
 - (IBAction)toggleVertical:(id)sender
 {
-    carousel.vertical = !carousel.vertical;
-    [sender setState:carousel.vertical? NSOnState: NSOffState];
+    self.carousel.vertical = !self.carousel.vertical;
+    [sender setState:self.carousel.vertical? NSOnState: NSOffState];
 }
 
 - (IBAction)toggleWrap:(id)sender
 {
-    wrap = !wrap;
-    [sender setState:wrap? NSOnState: NSOffState];
-    [carousel reloadData];
+    self.wrap = !self.wrap;
+    [sender setState:self.wrap? NSOnState: NSOffState];
+    [self.carousel reloadData];
 }
 
-- (IBAction)insertItem:(id)sender
+- (IBAction)insertItem:(__unused id)sender
 {
-    [carousel insertItemAtIndex:carousel.currentItemIndex animated:YES];
+    [self.carousel insertItemAtIndex:self.carousel.currentItemIndex animated:YES];
 }
 
-- (IBAction)removeItem:(id)sender
+- (IBAction)removeItem:(__unused id)sender
 {
-    [carousel removeItemAtIndex:carousel.currentItemIndex animated:YES];
+    [self.carousel removeItemAtIndex:self.carousel.currentItemIndex animated:YES];
 }
 
 #pragma mark -
 #pragma mark iCarousel methods
 
-- (NSInteger)numberOfItemsInCarousel:(iCarousel *)carousel
+- (NSInteger)numberOfItemsInCarousel:(__unused iCarousel *)carousel
 {
-    return [items count];
+    return (NSInteger)[self.items count];
 }
 
-- (NSView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSInteger)index reusingView:(NSView *)view
+- (NSView *)carousel:(__unused iCarousel *)carousel viewForItemAtIndex:(NSInteger)index reusingView:(NSView *)view
 {
     NSTextField *label = nil;
     
@@ -139,13 +139,13 @@
 	return view;
 }
 
-- (NSInteger)numberOfPlaceholdersInCarousel:(iCarousel *)carousel
+- (NSInteger)numberOfPlaceholdersInCarousel:(__unused iCarousel *)carousel
 {
 	//note: placeholder views are only displayed if wrapping is disabled
 	return 2;
 }
 
-- (NSView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSInteger)index reusingView:(NSView *)view
+- (NSView *)carousel:(__unused iCarousel *)carousel placeholderViewAtIndex:(NSInteger)index reusingView:(NSView *)view
 {
 	NSTextField *label = nil;
     
@@ -185,21 +185,21 @@
     return view;
 }
 
-- (CGFloat)carouselItemWidth:(iCarousel *)carousel
+- (CGFloat)carouselItemWidth:(__unused iCarousel *)carousel
 {
     //set correct view size
     //because the background image on the views makes them too large
     return 200.0f;
 }
 
-- (CATransform3D)carousel:(iCarousel *)_carousel itemTransformForOffset:(CGFloat)offset baseTransform:(CATransform3D)transform
+- (CATransform3D)carousel:(__unused iCarousel *)_carousel itemTransformForOffset:(CGFloat)offset baseTransform:(CATransform3D)transform
 {
     //implement 'flip3D' style carousel
     transform = CATransform3DRotate(transform, M_PI / 8.0f, 0.0f, 1.0f, 0.0f);
-    return CATransform3DTranslate(transform, 0.0f, 0.0f, offset * carousel.itemWidth);
+    return CATransform3DTranslate(transform, 0.0f, 0.0f, offset * self.carousel.itemWidth);
 }
 
-- (CGFloat)carousel:(iCarousel *)_carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value
+- (CGFloat)carousel:(__unused iCarousel *)_carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value
 {
     //customize carousel display
     switch (option)
@@ -207,7 +207,7 @@
         case iCarouselOptionWrap:
         {
             //normally you would hard-code this to YES or NO
-            return wrap;
+            return self.wrap;
         }
         case iCarouselOptionSpacing:
         {
@@ -217,14 +217,24 @@
         }
         case iCarouselOptionFadeMax:
         {
-            if (carousel.type == iCarouselTypeCustom)
+            if (self.carousel.type == iCarouselTypeCustom)
             {
                 //set opacity based on distance from camera
                 return 0.0f;
             }
             return value;
         }
-        default:
+        case iCarouselOptionShowBackfaces:
+        case iCarouselOptionRadius:
+        case iCarouselOptionAngle:
+        case iCarouselOptionArc:
+        case iCarouselOptionTilt:
+        case iCarouselOptionCount:
+        case iCarouselOptionFadeMin:
+        case iCarouselOptionFadeMinAlpha:
+        case iCarouselOptionFadeRange:
+        case iCarouselOptionOffsetMultiplier:
+        case iCarouselOptionVisibleItems:
         {
             return value;
         }
