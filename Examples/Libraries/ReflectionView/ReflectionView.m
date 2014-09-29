@@ -1,15 +1,14 @@
 //
 //  ReflectionView.m
 //
-//  Version 1.1
+//  Version 1.2
 //
 //  Created by Nick Lockwood on 19/07/2011.
 //  Copyright 2011 Charcoal Design
 //
 //  Distributed under the permissive zlib license
-//  Get the latest version from either of these locations:
+//  Get the latest version from here:
 //
-//  http://charcoaldesign.co.uk/source/cocoa#reflectionview
 //  https://github.com/nicklockwood/ReflectionView
 //
 //  This software is provided 'as-is', without any express or implied
@@ -31,7 +30,24 @@
 //  3. This notice may not be removed or altered from any source distribution.
 //
 
+
 #import "ReflectionView.h"
+
+
+#import <Availability.h>
+#if !__has_feature(objc_arc)
+#error This class requires automatic reference counting
+#endif
+
+
+#pragma GCC diagnostic ignored "-Wreceiver-is-weak"
+#pragma GCC diagnostic ignored "-Warc-repeated-use-of-weak"
+#pragma GCC diagnostic ignored "-Wobjc-missing-property-synthesis"
+#pragma GCC diagnostic ignored "-Wdirect-ivar-access"
+#pragma GCC diagnostic ignored "-Wunused-macros"
+#pragma GCC diagnostic ignored "-Wconversion"
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
+#pragma GCC diagnostic ignored "-Wgnu"
 
 
 @interface ReflectionView ()
@@ -43,13 +59,6 @@
 
 
 @implementation ReflectionView
-
-@synthesize reflectionGap = _reflectionGap;
-@synthesize reflectionScale = _reflectionScale;
-@synthesize reflectionAlpha = _reflectionAlpha;
-@synthesize gradientLayer = _gradientLayer;
-@synthesize reflectionView = _reflectionView;
-@synthesize dynamic = _dynamic;
 
 + (Class)layerClass
 {
@@ -80,11 +89,9 @@
         {
             _gradientLayer = [[CAGradientLayer alloc] init];
             self.layer.mask = _gradientLayer;
-            _gradientLayer.colors = [NSArray arrayWithObjects:
+            _gradientLayer.colors = @[(__bridge id)[UIColor blackColor].CGColor,
                                      (__bridge id)[UIColor blackColor].CGColor,
-                                     (__bridge id)[UIColor blackColor].CGColor,
-                                     (__bridge id)[UIColor clearColor].CGColor,
-                                     nil];
+                                     (__bridge id)[UIColor clearColor].CGColor];
         }
         
         //update mask
@@ -93,11 +100,7 @@
         CGFloat total = layer.bounds.size.height * 2.0f + _reflectionGap;
         CGFloat halfWay = (layer.bounds.size.height + _reflectionGap) / total - 0.01f;
         _gradientLayer.frame = CGRectMake(0.0f, 0.0f, self.bounds.size.width, total);
-        _gradientLayer.locations = [NSArray arrayWithObjects:
-                                    [NSNumber numberWithFloat:0.0f],
-                                    [NSNumber numberWithFloat:halfWay],
-                                    [NSNumber numberWithFloat:halfWay + (1.0f - halfWay) * _reflectionScale],
-                                    nil];
+        _gradientLayer.locations = @[@0.0f, @(halfWay), @(halfWay + (1.0f - halfWay) * _reflectionScale)];
         [CATransaction commit];
     }
     else
@@ -220,13 +223,7 @@
 - (void)layoutSubviews
 {
     [self update];
-}
-
-- (void)dealloc
-{
-    [_gradientLayer release];
-    [_reflectionView release];
-    [super ah_dealloc];
+    [super layoutSubviews];
 }
 
 @end

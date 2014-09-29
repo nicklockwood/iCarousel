@@ -18,7 +18,6 @@
 {
     carousel.delegate = nil;
     carousel.dataSource = nil;
-    [carousel release];
 }
 
 #pragma mark -
@@ -63,10 +62,10 @@
 	if (view == nil)
 	{
         //set up reflection view
-		view = [[[ReflectionView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 200.0f, 200.0f)] autorelease];
+		view = [[ReflectionView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 200.0f, 200.0f)];
         
         //set up content
-		label = [[[UILabel alloc] initWithFrame:view.bounds] autorelease];
+		label = [[UILabel alloc] initWithFrame:view.bounds];
 		label.backgroundColor = [UIColor lightGrayColor];
 		label.layer.borderColor = [UIColor whiteColor].CGColor;
         label.layer.borderWidth = 4.0f;
@@ -82,7 +81,7 @@
 	}
 	
     //set label
-	label.text = [NSString stringWithFormat:@"%i", index];
+	label.text = [NSString stringWithFormat:@"%zd", index];
     
     //update reflection
     //this step is expensive, so if you don't need

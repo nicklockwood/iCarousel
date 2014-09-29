@@ -57,9 +57,6 @@
     //sending messages to a deallocated viewcontroller
     carousel.delegate = nil;
     carousel.dataSource = nil;
-    
-    [carousel release];
-    [items release];
 }
 
 #pragma mark -
@@ -100,7 +97,7 @@
     //create new view if no view is available for recycling
     if (view == nil)
     {
-        view = [[[AsyncImageView alloc] initWithFrame:CGRectMake(0, 0, 200.0f, 200.0f)] autorelease];
+        view = [[AsyncImageView alloc] initWithFrame:CGRectMake(0, 0, 200.0f, 200.0f)];
         view.contentMode = UIViewContentModeScaleAspectFit;
     }
     
