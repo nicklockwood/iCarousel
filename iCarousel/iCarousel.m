@@ -1,7 +1,7 @@
 //
 //  iCarousel.m
 //
-//  Version 1.8
+//  Version 1.8.1
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2011 Charcoal Design
@@ -1252,8 +1252,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     {
         [_contentView addSubview:[self containView:view]];
     }
-    [self transformItemView:view atIndex:index];
     view.superview.layer.opacity = 0.0;
+    [self transformItemView:view atIndex:index];
     
     [self popAnimationState];
     

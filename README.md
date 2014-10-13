@@ -546,7 +546,11 @@ FAQ
 Release Notes
 ----------------
 
-Verson 1.8
+Version 1.8.1
+
+- Fixed bug where item views could be left invible after reloading
+
+Version 1.8
 
 - iCarousel now requires ARC
 - iCarousel now requires 64-bit processors on Mac OS 10.6
