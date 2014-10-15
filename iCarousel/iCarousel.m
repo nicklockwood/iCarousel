@@ -121,6 +121,7 @@
 @property (nonatomic, assign, getter = isDragging) BOOL dragging;
 @property (nonatomic, assign) BOOL didDrag;
 @property (nonatomic, assign) NSTimeInterval toggleTime;
+@property (nonatomic, assign, getter = isInternalScrollEnabled) BOOL internalScrollEnabled;
 
 NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *self);
 
@@ -135,7 +136,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 - (void)setUp
 {
     _decelerationRate = 0.95;
-    _scrollEnabled = YES;
+    _internalScrollEnabled = _scrollEnabled = YES;
     _bounces = YES;
     _offsetMultiplier = 1.0;
     _perspective = -1.0/500.0;
@@ -1345,6 +1346,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     _numberOfVisibleItems = 0;
     _numberOfItems = [_dataSource numberOfItemsInCarousel:self];
     _numberOfPlaceholders = [_dataSource numberOfPlaceholdersInCarousel:self];
+	_internalScrollEnabled = _scrollEnabled && ((_numberOfItems + _numberOfPlaceholdersToShow) > 1);
 
     //reset view pools
     self.itemViews = [NSMutableDictionary dictionary];
@@ -1986,7 +1988,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gesture shouldReceiveTouch:(UITouch *)touch
 {
-    if (_scrollEnabled)
+    if (_internalScrollEnabled)
     {
         _dragging = NO;
         _scrolling = NO;
@@ -2012,7 +2014,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     }
     else if ([gesture isKindOfClass:[UIPanGestureRecognizer class]])
     {
-        if (!_scrollEnabled)
+        if (!_internalScrollEnabled)
         {
             return NO;
         }
@@ -2073,7 +2075,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
             }
             [_delegate carousel:self didSelectItemAtIndex:index];
         }
-        else if (_scrollEnabled && _scrollToItemBoundary && _autoscroll)
+        else if (_internalScrollEnabled && _scrollToItemBoundary && _autoscroll)
         {
             [self scrollToItemAtIndex:self.currentItemIndex animated:YES];
         }
@@ -2085,7 +2087,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (void)didPan:(UIPanGestureRecognizer *)panGesture
 {
-    if (_scrollEnabled && _numberOfItems)
+    if (_internalScrollEnabled && (_numberOfItems > 1))
     {
         switch (panGesture.state)
         {
@@ -2186,7 +2188,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 - (void)mouseDragged:(NSEvent *)theEvent
 {
     _didDrag = YES;
-    if (_scrollEnabled)
+    if (_internalScrollEnabled)
     {
         if (!_dragging)
         {
@@ -2238,7 +2240,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
             }
         }
     }
-    else if (_scrollEnabled)
+    else if (_internalScrollEnabled)
     {
         _dragging = NO;
         if ([self shouldDecelerate])
@@ -2284,7 +2286,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 - (void)keyDown:(NSEvent *)theEvent
 {
     NSString *characters = [theEvent charactersIgnoringModifiers];
-    if (_scrollEnabled && !_scrolling && [characters length])
+    if (_internalScrollEnabled && !_scrolling && [characters length])
     {
         if (_vertical)
         {
