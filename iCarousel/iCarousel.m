@@ -82,6 +82,7 @@
 - (void)carouselDidEndDecelerating:(__unused iCarousel *)carousel {}
 
 - (BOOL)carousel:(__unused iCarousel *)carousel shouldSelectItemAtIndex:(__unused NSInteger)index { return YES; }
+- (void)carousel:(__unused iCarousel *)carousel willSelectItemAtIndex:(__unused NSInteger)index {}
 - (void)carousel:(__unused iCarousel *)carousel didSelectItemAtIndex:(__unused NSInteger)index {}
 
 - (CGFloat)carouselItemWidth:(__unused iCarousel *)carousel { return 0; }
@@ -1487,6 +1488,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (void)scrollToItemAtIndex:(NSInteger)index duration:(NSTimeInterval)duration
 {
+    [_delegate carousel:self willSelectItemAtIndex:index];
     [self scrollToOffset:index duration:duration];
 }
 
