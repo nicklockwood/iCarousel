@@ -61,6 +61,31 @@ You can also implement your own bespoke carousel styles using `iCarouselTypeCust
 
 NOTE: The difference between `iCarouselTypeCoverFlow` and `iCarouselTypeCoverFlow2` types is quite subtle, however the logic for `iCarouselTypeCoverFlow2` is substantially more complex. If you flick the carousel they are basically identical, but if you drag the carousel slowly with your finger the difference should be apparent. `iCarouselTypeCoverFlow2` is designed to simulate the standard Apple CoverFlow effect as closely as possible and may change subtly in future in the interests of that goal.
 
+## Display Type Visual Examples 
+
+----
+### Linear
+![Linear](http://g.recordit.co/xt86iK3A7f.gif)
+### Rotary
+![Rotary](http://g.recordit.co/Z7DsqjjBY3.gif)
+### Inverted Rotary
+![Inverted Rotary](http://g.recordit.co/a8H2tsIw7A.gif)
+### Cylinder
+![Cylinder](http://g.recordit.co/TqlTGGoz37.gif)
+### Inverted Cylinder
+![Inverted Cylinder](http://g.recordit.co/Try1zdrBoW.gif)
+### Wheel
+![Wheel](http://recordit.co/oAyZbMlhXe)
+### Inverted Wheel
+![Inverted Wheel](http://g.recordit.co/IhFCxwgOig.gif)
+### Cover Flow
+![Cover Flow](http://g.recordit.co/Qp2E5Y6MAe.gif)
+### Cover Flow2
+![Cover Flow2](http://g.recordit.co/m5tc1vAKMY.gif)
+### Time Machine
+![Time Machine](http://g.recordit.co/Ux40G7G0eW.gif)
+### Inverted Time Machine
+![Inverted Time Machine](http://g.recordit.co/F7N7nIT8Oh.gif)
 
 Properties
 --------------
