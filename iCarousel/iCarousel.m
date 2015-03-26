@@ -1353,6 +1353,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     
     //layout views
     [self setNeedsLayout];
+    [self layoutIfNeeded];
     
     //fix scroll offset
     if (_numberOfItems > 0 && _scrollOffset < 0.0)
