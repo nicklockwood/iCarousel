@@ -1,0 +1,580 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		7EE501851B31BB40000D5662 /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EE501841B31BB40000D5662 /* iCarousel.m */; };
+		7EE501901B31BB63000D5662 /* iCarousel-iOS-dynamic.h in Headers */ = {isa = PBXBuildFile; fileRef = 7EE5018F1B31BB63000D5662 /* iCarousel-iOS-dynamic.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7EE501A41B31BB8E000D5662 /* iCarousel.h in Headers */ = {isa = PBXBuildFile; fileRef = 7EE501831B31BB40000D5662 /* iCarousel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7EE501A51B31BB94000D5662 /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EE501841B31BB40000D5662 /* iCarousel.m */; };
+		7EE501B01B31BBA0000D5662 /* iCarousel-iOS-static.h in Headers */ = {isa = PBXBuildFile; fileRef = 7EE501AF1B31BBA0000D5662 /* iCarousel-iOS-static.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7EE501C41B31BBBB000D5662 /* iCarousel.h in Headers */ = {isa = PBXBuildFile; fileRef = 7EE501831B31BB40000D5662 /* iCarousel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7EE501C51B31BBBF000D5662 /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EE501841B31BB40000D5662 /* iCarousel.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		7EE501671B31BB2D000D5662 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		7EE501691B31BB2D000D5662 /* libiCarousel-iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libiCarousel-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7EE5017A1B31BB2D000D5662 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7EE501831B31BB40000D5662 /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iCarousel.h; path = ../../iCarousel.h; sourceTree = "<group>"; };
+		7EE501841B31BB40000D5662 /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = iCarousel.m; path = ../../iCarousel.m; sourceTree = "<group>"; };
+		7EE5018B1B31BB63000D5662 /* iCarousel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = iCarousel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7EE5018E1B31BB63000D5662 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7EE5018F1B31BB63000D5662 /* iCarousel-iOS-dynamic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iCarousel-iOS-dynamic.h"; sourceTree = "<group>"; };
+		7EE5019B1B31BB63000D5662 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7EE5019C1B31BB63000D5662 /* iCarousel_iOS_dynamicTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iCarousel_iOS_dynamicTests.m; sourceTree = "<group>"; };
+		7EE501AB1B31BBA0000D5662 /* iCarousel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = iCarousel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7EE501AE1B31BBA0000D5662 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7EE501AF1B31BBA0000D5662 /* iCarousel-iOS-static.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iCarousel-iOS-static.h"; sourceTree = "<group>"; };
+		7EE501BB1B31BBA0000D5662 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7EE501BC1B31BBA0000D5662 /* iCarousel_iOS_staticTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iCarousel_iOS_staticTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7EE501661B31BB2D000D5662 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7EE501871B31BB63000D5662 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7EE501A71B31BBA0000D5662 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		7EE501601B31BB2D000D5662 = {
+			isa = PBXGroup;
+			children = (
+				7EE5016B1B31BB2D000D5662 /* iCarousel-iOS */,
+				7EE501781B31BB2D000D5662 /* iCarousel-iOSTests */,
+				7EE5018C1B31BB63000D5662 /* iCarousel-iOS-dynamic */,
+				7EE501991B31BB63000D5662 /* iCarousel-iOS-dynamicTests */,
+				7EE501AC1B31BBA0000D5662 /* iCarousel-iOS-static */,
+				7EE501B91B31BBA0000D5662 /* iCarousel-iOS-staticTests */,
+				7EE5016A1B31BB2D000D5662 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		7EE5016A1B31BB2D000D5662 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7EE501691B31BB2D000D5662 /* libiCarousel-iOS.a */,
+				7EE5018B1B31BB63000D5662 /* iCarousel.framework */,
+				7EE501AB1B31BBA0000D5662 /* iCarousel.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7EE5016B1B31BB2D000D5662 /* iCarousel-iOS */ = {
+			isa = PBXGroup;
+			children = (
+				7EE501831B31BB40000D5662 /* iCarousel.h */,
+				7EE501841B31BB40000D5662 /* iCarousel.m */,
+			);
+			path = "iCarousel-iOS";
+			sourceTree = "<group>";
+		};
+		7EE501781B31BB2D000D5662 /* iCarousel-iOSTests */ = {
+			isa = PBXGroup;
+			children = (
+				7EE501791B31BB2D000D5662 /* Supporting Files */,
+			);
+			path = "iCarousel-iOSTests";
+			sourceTree = "<group>";
+		};
+		7EE501791B31BB2D000D5662 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				7EE5017A1B31BB2D000D5662 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		7EE5018C1B31BB63000D5662 /* iCarousel-iOS-dynamic */ = {
+			isa = PBXGroup;
+			children = (
+				7EE5018F1B31BB63000D5662 /* iCarousel-iOS-dynamic.h */,
+				7EE5018D1B31BB63000D5662 /* Supporting Files */,
+			);
+			path = "iCarousel-iOS-dynamic";
+			sourceTree = "<group>";
+		};
+		7EE5018D1B31BB63000D5662 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				7EE5018E1B31BB63000D5662 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		7EE501991B31BB63000D5662 /* iCarousel-iOS-dynamicTests */ = {
+			isa = PBXGroup;
+			children = (
+				7EE5019C1B31BB63000D5662 /* iCarousel_iOS_dynamicTests.m */,
+				7EE5019A1B31BB63000D5662 /* Supporting Files */,
+			);
+			path = "iCarousel-iOS-dynamicTests";
+			sourceTree = "<group>";
+		};
+		7EE5019A1B31BB63000D5662 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				7EE5019B1B31BB63000D5662 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		7EE501AC1B31BBA0000D5662 /* iCarousel-iOS-static */ = {
+			isa = PBXGroup;
+			children = (
+				7EE501AF1B31BBA0000D5662 /* iCarousel-iOS-static.h */,
+				7EE501AD1B31BBA0000D5662 /* Supporting Files */,
+			);
+			path = "iCarousel-iOS-static";
+			sourceTree = "<group>";
+		};
+		7EE501AD1B31BBA0000D5662 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				7EE501AE1B31BBA0000D5662 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		7EE501B91B31BBA0000D5662 /* iCarousel-iOS-staticTests */ = {
+			isa = PBXGroup;
+			children = (
+				7EE501BC1B31BBA0000D5662 /* iCarousel_iOS_staticTests.m */,
+				7EE501BA1B31BBA0000D5662 /* Supporting Files */,
+			);
+			path = "iCarousel-iOS-staticTests";
+			sourceTree = "<group>";
+		};
+		7EE501BA1B31BBA0000D5662 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				7EE501BB1B31BBA0000D5662 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		7EE501881B31BB63000D5662 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7EE501A41B31BB8E000D5662 /* iCarousel.h in Headers */,
+				7EE501901B31BB63000D5662 /* iCarousel-iOS-dynamic.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7EE501A81B31BBA0000D5662 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7EE501C41B31BBBB000D5662 /* iCarousel.h in Headers */,
+				7EE501B01B31BBA0000D5662 /* iCarousel-iOS-static.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		7EE501681B31BB2D000D5662 /* iCarousel-iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7EE5017D1B31BB2D000D5662 /* Build configuration list for PBXNativeTarget "iCarousel-iOS" */;
+			buildPhases = (
+				7EE501651B31BB2D000D5662 /* Sources */,
+				7EE501661B31BB2D000D5662 /* Frameworks */,
+				7EE501671B31BB2D000D5662 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "iCarousel-iOS";
+			productName = "iCarousel-iOS";
+			productReference = 7EE501691B31BB2D000D5662 /* libiCarousel-iOS.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		7EE5018A1B31BB63000D5662 /* iCarousel-iOS-dynamic */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7EE5019E1B31BB63000D5662 /* Build configuration list for PBXNativeTarget "iCarousel-iOS-dynamic" */;
+			buildPhases = (
+				7EE501861B31BB63000D5662 /* Sources */,
+				7EE501871B31BB63000D5662 /* Frameworks */,
+				7EE501881B31BB63000D5662 /* Headers */,
+				7EE501891B31BB63000D5662 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "iCarousel-iOS-dynamic";
+			productName = "iCarousel-iOS-dynamic";
+			productReference = 7EE5018B1B31BB63000D5662 /* iCarousel.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		7EE501AA1B31BBA0000D5662 /* iCarousel-iOS-static */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7EE501BE1B31BBA0000D5662 /* Build configuration list for PBXNativeTarget "iCarousel-iOS-static" */;
+			buildPhases = (
+				7EE501A61B31BBA0000D5662 /* Sources */,
+				7EE501A71B31BBA0000D5662 /* Frameworks */,
+				7EE501A81B31BBA0000D5662 /* Headers */,
+				7EE501A91B31BBA0000D5662 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "iCarousel-iOS-static";
+			productName = "iCarousel-iOS-static";
+			productReference = 7EE501AB1B31BBA0000D5662 /* iCarousel.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7EE501611B31BB2D000D5662 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0630;
+				ORGANIZATIONNAME = healthjoy;
+				TargetAttributes = {
+					7EE501681B31BB2D000D5662 = {
+						CreatedOnToolsVersion = 6.3.2;
+					};
+					7EE5018A1B31BB63000D5662 = {
+						CreatedOnToolsVersion = 6.3.2;
+					};
+					7EE501AA1B31BBA0000D5662 = {
+						CreatedOnToolsVersion = 6.3.2;
+					};
+				};
+			};
+			buildConfigurationList = 7EE501641B31BB2D000D5662 /* Build configuration list for PBXProject "iCarousel-iOS" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 7EE501601B31BB2D000D5662;
+			productRefGroup = 7EE5016A1B31BB2D000D5662 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7EE501681B31BB2D000D5662 /* iCarousel-iOS */,
+				7EE5018A1B31BB63000D5662 /* iCarousel-iOS-dynamic */,
+				7EE501AA1B31BBA0000D5662 /* iCarousel-iOS-static */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7EE501891B31BB63000D5662 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7EE501A91B31BBA0000D5662 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7EE501651B31BB2D000D5662 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7EE501851B31BB40000D5662 /* iCarousel.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7EE501861B31BB63000D5662 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7EE501A51B31BB94000D5662 /* iCarousel.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7EE501A61B31BBA0000D5662 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7EE501C51B31BBBF000D5662 /* iCarousel.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		7EE5017B1B31BB2D000D5662 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		7EE5017C1B31BB2D000D5662 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		7EE5017E1B31BB2D000D5662 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		7EE5017F1B31BB2D000D5662 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		7EE5019F1B31BB63000D5662 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "iCarousel-iOS-dynamic/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = iCarousel;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		7EE501A01B31BB63000D5662 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "iCarousel-iOS-dynamic/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = iCarousel;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		7EE501BF1B31BBA0000D5662 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "iCarousel-iOS-static/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = iCarousel;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		7EE501C01B31BBA0000D5662 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "iCarousel-iOS-static/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = iCarousel;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7EE501641B31BB2D000D5662 /* Build configuration list for PBXProject "iCarousel-iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7EE5017B1B31BB2D000D5662 /* Debug */,
+				7EE5017C1B31BB2D000D5662 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7EE5017D1B31BB2D000D5662 /* Build configuration list for PBXNativeTarget "iCarousel-iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7EE5017E1B31BB2D000D5662 /* Debug */,
+				7EE5017F1B31BB2D000D5662 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		7EE5019E1B31BB63000D5662 /* Build configuration list for PBXNativeTarget "iCarousel-iOS-dynamic" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7EE5019F1B31BB63000D5662 /* Debug */,
+				7EE501A01B31BB63000D5662 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		7EE501BE1B31BBA0000D5662 /* Build configuration list for PBXNativeTarget "iCarousel-iOS-static" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7EE501BF1B31BBA0000D5662 /* Debug */,
+				7EE501C01B31BBA0000D5662 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 7EE501611B31BB2D000D5662 /* Project object */;
+}
