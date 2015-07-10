@@ -8,8 +8,8 @@
 
 import UIKit
 
-class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
-{
+class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate {
+    
     var items: [Int] = []
     @IBOutlet var carousel : iCarousel!
     
@@ -33,31 +33,41 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         return items.count
     }
     
-    func carousel(carousel: iCarousel!, viewForItemAtIndex index: Int, var reusingView view: UIView!) -> UIView!
+    
+    @objc func carousel(carousel: iCarousel!, viewForItemAtIndex index: Int, reusingView view: UIView!) -> UIView!
     {
         var label: UILabel! = nil
+        var newView = view
         
         //create new view if no view is available for recycling
-        if (view == nil)
+        if (newView == nil)
         {
             //don't do anything specific to the index within
             //this `if (view == nil) {...}` statement because the view will be
             //recycled and used with other index values later
-            view = UIImageView(frame:CGRectMake(0, 0, 200, 200))
-            (view as UIImageView!).image = UIImage(named: "page.png")
-            view.contentMode = .Center
+            newView = UIImageView(frame:CGRectMake(0, 0, 200, 200))
+            (newView as! UIImageView!).image = UIImage(named: "page.png")
+            newView.contentMode = .Center
             
-            label = UILabel(frame:view.bounds)
+            label = UILabel(frame:newView.bounds)
             label.backgroundColor = UIColor.clearColor()
             label.textAlignment = .Center
             label.font = label.font.fontWithSize(50)
             label.tag = 1
-            view.addSubview(label)
+            newView.addSubview(label)
+            
+            var button:UIButton = UIButton.buttonWithType(UIButtonType.Custom) as! UIButton
+            button.frame = CGRectMake(0, 0, 200, 200)
+            
+            button.addTarget(self, action: "buttonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
+            
+            newView.addSubview(button)
+            newView.userInteractionEnabled = true
         }
         else
         {
             //get a reference to the label in the recycled view
-            label = view.viewWithTag(1) as UILabel!
+            label = newView.viewWithTag(1) as! UILabel!
         }
         
         //set item label
@@ -67,7 +77,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         //in the wrong place in the carousel
         label.text = "\(items[index])"
         
-        return view
+        return newView
     }
     
     func carousel(carousel: iCarousel!, valueForOption option: iCarouselOption, withDefault value: CGFloat) -> CGFloat
@@ -77,6 +87,14 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
             return value * 1.1
         }
         return value
+    }
+    
+    func buttonTapped(sender: UIButton!) {
+        let index = carousel.indexOfItemViewOrSubview(sender)
+        
+        let alert = UIAlertController(title: nil, message: "You tapped: " + String(index), preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
+        self.presentViewController(alert, animated: true, completion: nil)
     }
 
 }
