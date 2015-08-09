@@ -121,4 +121,9 @@
     return view;
 }
 
+- (NSString *)accessibilityAnnoucement:(NSInteger)index isForwarded:(BOOL)forwarded{
+    NSString *announcement = [NSString stringWithFormat:@"%@, Page %ld of %ld", forwarded ? @"Scrolling Forward" : @"Scrolling Backward", (long)index, (long)_items.count];
+    return announcement;
+}
+
 @end

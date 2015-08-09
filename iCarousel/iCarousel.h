@@ -143,6 +143,7 @@ typedef NS_ENUM(NSInteger, iCarouselOption)
 - (void)scrollByNumberOfItems:(NSInteger)itemCount duration:(NSTimeInterval)duration;
 - (void)scrollToItemAtIndex:(NSInteger)index duration:(NSTimeInterval)duration;
 - (void)scrollToItemAtIndex:(NSInteger)index animated:(BOOL)animated;
+- (void)scrollToItemAtIndex:(NSInteger)index animated:(BOOL)animated completionHandler:(void (^)(NSInteger currentItemIndex))completionHandler;
 
 - (UIView *)itemViewAtIndex:(NSInteger)index;
 - (NSInteger)indexOfItemView:(UIView *)view;
@@ -190,6 +191,8 @@ typedef NS_ENUM(NSInteger, iCarouselOption)
 - (CGFloat)carouselItemWidth:(iCarousel *)carousel;
 - (CATransform3D)carousel:(iCarousel *)carousel itemTransformForOffset:(CGFloat)offset baseTransform:(CATransform3D)transform;
 - (CGFloat)carousel:(iCarousel *)carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value;
+
+- (NSString *)accessibilityAnnoucement:(NSInteger)index isForwarded:(BOOL)forwarded;
 
 @end
 
