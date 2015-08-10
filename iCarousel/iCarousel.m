@@ -1511,6 +1511,9 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 - (void)scrollToItemAtIndex:(NSInteger)index animated:(BOOL)animated completionHandler:(void (^)(NSInteger currentItemIndex))completionHandler{
     self.completionHandler = completionHandler;
     [self scrollToItemAtIndex:index animated:animated];
+    if(!animated){
+        completionHandler(self.currentItemIndex);
+    }
 }
 
 - (void)removeItemAtIndex:(NSInteger)index animated:(BOOL)animated
