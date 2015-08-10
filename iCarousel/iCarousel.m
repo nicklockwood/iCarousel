@@ -2078,6 +2078,10 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
             [self scrollToItemAtIndex:self.currentItemIndex animated:YES];
         }
     }
+    else 
+    {
+    	[self scrollToItemAtIndex:self.currentItemIndex animated:YES];
+    }
 }
 
 - (void)didPan:(UIPanGestureRecognizer *)panGesture
