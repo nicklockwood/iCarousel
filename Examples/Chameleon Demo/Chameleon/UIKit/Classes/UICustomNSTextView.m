@@ -287,7 +287,7 @@ static const CGFloat LargeNumberForText = 1.0e7; // Any larger dimensions and th
 
 - (void)forcedSpellCheck
 {
-    [self checkTextInRange:NSMakeRange(0,[[self string] length]) types:[self enabledTextCheckingTypes] options:nil];
+    [self checkTextInRange:NSMakeRange(0,[[self string] length]) types:[self enabledTextCheckingTypes] options:@{}];
 }
 
 // Because drawing the misspelling underline squiggle doesn't seem to work when the text view is used on a layer-backed NSView, we have to draw them

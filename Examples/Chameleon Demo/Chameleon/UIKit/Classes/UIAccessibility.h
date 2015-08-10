@@ -45,6 +45,8 @@ extern UIAccessibilityTraits UIAccessibilityTraitNotEnabled;
 extern UIAccessibilityTraits UIAccessibilityTraitUpdatesFrequently;
 extern UIAccessibilityTraits UIAccessibilityTraitHeader;
 
+extern UIAccessibilityTraits UIAccessibilityTraitAllowsDirectInteraction;
+
 
 typedef uint32_t UIAccessibilityNotifications;
 extern UIAccessibilityNotifications UIAccessibilityScreenChangedNotification;

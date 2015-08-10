@@ -7,7 +7,7 @@ iCarousel is a class designed to simplify the implementation of various types of
 Supported OS & SDK Versions
 -----------------------------
 
-* Supported build target - iOS 8.0 / Mac OS 10.9 (Xcode 6.0, Apple LLVM compiler 6.0)
+* Supported build target - iOS 8.0 / Mac OS 10.10 (Xcode 6.4, Apple LLVM compiler 6.1)
 * Earliest supported deployment target - iOS 5.0 / Mac OS 10.7
 * Earliest compatible deployment target - iOS 4.3 / Mac OS 10.6
 
@@ -494,7 +494,7 @@ This example demonstrates how to use UITableViews inside your iCarousel item vie
 FAQ
 ------------
 
-    Q. I upgrade to the new version of iCarousel and it broke my project, how do I get the old one back?
+    Q. I upgraded to the new version of iCarousel and it broke my project, how do I get the old one back?
     A. Every previous release of iCarousel is tagged as a separate download on github - look in the tags tab.
 
     Q. Can I use iCarousel without a nib file?
@@ -527,7 +527,7 @@ FAQ
     Q. If the views in my carousel all have completely different layouts, should I still use the `reusingView` parameter?
     A. Probably not, and unless you have hundreds of views in your carousel, it's unlikely to be worth the trouble.
 
-    Q. How can I make iCarousl behave like a UIScrollView with paging enabled?
+    Q. How can I make iCarousel behave like a UIScrollView with paging enabled?
     A. As of version 1.8, iCarousel has a pagingEnabled property that emulates the behaviour of a UIScrollView (see the *Paging Example* project). The bounce physics are not quite the same though, and you may want to consider using the SwipeView library instead (https://github.com/nicklockwood/SwipeView) which is very similar to iCarousel, but based on a UIScrollView under the hood.
     
     Q. I want my carousel items to have a real reflection, but the reflection in the examples is just drawn on. How can I render reflections dynamically?
@@ -545,6 +545,11 @@ FAQ
 
 Release Notes
 ----------------
+
+Version 1.8.2
+
+- Fixed some warnings and updated examples for Xcode 7 beta
+- Scrolling now goes the right way when using Chameleon
 
 Version 1.8.1
 

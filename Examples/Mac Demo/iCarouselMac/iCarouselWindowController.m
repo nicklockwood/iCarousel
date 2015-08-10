@@ -68,13 +68,13 @@
 - (IBAction)toggleVertical:(id)sender
 {
     self.carousel.vertical = !self.carousel.vertical;
-    [sender setState:self.carousel.vertical? NSOnState: NSOffState];
+    [(NSMenuItem *)sender setState:self.carousel.vertical? NSOnState: NSOffState];
 }
 
 - (IBAction)toggleWrap:(id)sender
 {
     self.wrap = !self.wrap;
-    [sender setState:self.wrap? NSOnState: NSOffState];
+    [(NSMenuItem *)sender setState:self.wrap? NSOnState: NSOffState];
     [self.carousel reloadData];
 }
 
@@ -116,7 +116,7 @@
         [label setBordered:NO];
         [label setSelectable:NO];
         [label setAlignment:NSCenterTextAlignment];
-        [label setFont:[NSFont fontWithName:[[label font] fontName] size:50]];
+        [label setFont:[NSFont fontWithName:[(NSFont * __nonnull)[label font] fontName] size:50]];
         label.tag = 1;
         [view addSubview:label];
 	}
@@ -162,7 +162,7 @@
         [label setBordered:NO];
         [label setSelectable:NO];
         [label setAlignment:NSCenterTextAlignment];
-        [label setFont:[NSFont fontWithName:[[label font] fontName] size:50]];
+        [label setFont:[NSFont fontWithName:[(NSFont * __nonnull)[label font] fontName] size:50]];
         label.tag = 1;
         [view addSubview:label];
 	}

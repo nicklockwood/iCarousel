@@ -1,7 +1,7 @@
 //
 //  iCarousel.h
 //
-//  Version 1.8.1
+//  Version 1.8.2
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2011 Charcoal Design
@@ -31,8 +31,10 @@
 //
 
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wobjc-missing-property-synthesis"
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunknown-pragmas"
+#pragma clang diagnostic ignored "-Wreserved-id-macro"
+#pragma clang diagnostic ignored "-Wobjc-missing-property-synthesis"
 
 
 #import <Availability.h>
@@ -193,5 +195,5 @@ typedef NS_ENUM(NSInteger, iCarouselOption)
 
 @end
 
-#pragma GCC diagnostic pop
+#pragma clang diagnostic pop
 

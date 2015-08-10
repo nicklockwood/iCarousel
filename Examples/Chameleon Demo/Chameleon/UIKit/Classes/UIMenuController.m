@@ -194,7 +194,7 @@ NSString *const UIMenuControllerMenuFrameDidChangeNotification = @"UIMenuControl
 {
     UIApplication *app = [UIApplication sharedApplication];
     UIResponder *firstResponder = [app.keyWindow _firstResponder];
-    NSArray *allItems = [[isa _defaultMenuItems] arrayByAddingObjectsFromArray:_menuItems];
+    NSArray *allItems = [[[self class] _defaultMenuItems] arrayByAddingObjectsFromArray:_menuItems];
 
     [_enabledMenuItems removeAllObjects];
 

@@ -43,8 +43,8 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
             //don't do anything specific to the index within
             //this `if (view == nil) {...}` statement because the view will be
             //recycled and used with other index values later
-            view = UIImageView(frame:CGRectMake(0, 0, 200, 200))
-            (view as UIImageView!).image = UIImage(named: "page.png")
+            view = UIImageView(frame:CGRect(x:0, y:0, width:200, height:200))
+            (view as! UIImageView!).image = UIImage(named: "page.png")
             view.contentMode = .Center
             
             label = UILabel(frame:view.bounds)
@@ -57,7 +57,7 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         else
         {
             //get a reference to the label in the recycled view
-            label = view.viewWithTag(1) as UILabel!
+            label = view.viewWithTag(1) as! UILabel!
         }
         
         //set item label

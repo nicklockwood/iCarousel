@@ -1,7 +1,7 @@
 //
 //  iCarousel.m
 //
-//  Version 1.8.1
+//  Version 1.8.2
 //
 //  Created by Nick Lockwood on 01/04/2011.
 //  Copyright 2011 Charcoal Design
@@ -726,7 +726,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 {
     for (UIView *view in [[_itemViews allValues] sortedArrayUsingFunction:(NSInteger (*)(id, id, void *))compareViewDepth context:(__bridge void *)self])
     {
-        [_contentView bringSubviewToFront:view.superview];
+        [_contentView bringSubviewToFront:(UIView *__nonnull)view.superview];
     }
 }
 
@@ -2092,6 +2092,12 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
                 _scrolling = NO;
                 _decelerating = NO;
                 _previousTranslation = _vertical? [panGesture translationInView:self].y: [panGesture translationInView:self].x;
+
+#if USING_CHAMELEON
+
+                _previousTranslation = -_previousTranslation;
+#endif
+
                 [_delegate carouselWillBeginDragging:self];
                 break;
             }
@@ -2146,16 +2152,25 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
             }
             case UIGestureRecognizerStateChanged:
             {
-                CGFloat translation = (_vertical? [panGesture translationInView:self].y: [panGesture translationInView:self].x) - _previousTranslation;
+                CGFloat translation = _vertical? [panGesture translationInView:self].y: [panGesture translationInView:self].x;
+                CGFloat velocity = _vertical? [panGesture velocityInView:self].y: [panGesture velocityInView:self].x;
+
+#if USING_CHAMELEON
+
+                translation = -translation;
+                velocity = -velocity;
+#endif
+
                 CGFloat factor = 1.0;
                 if (!_wrapEnabled && _bounces)
                 {
-                    factor = 1.0 - MIN(fabs(_scrollOffset - [self clampedOffset:_scrollOffset]), _bounceDistance) / _bounceDistance;
+                    factor = 1.0 - MIN(fabs(_scrollOffset - [self clampedOffset:_scrollOffset]),
+                                       _bounceDistance) / _bounceDistance;
                 }
                 
-                _previousTranslation = _vertical? [panGesture translationInView:self].y: [panGesture translationInView:self].x;
-                _startVelocity = -(_vertical? [panGesture velocityInView:self].y: [panGesture velocityInView:self].x) * factor * _scrollSpeed / _itemWidth;
-                _scrollOffset -= translation * factor * _offsetMultiplier / _itemWidth;
+                _startVelocity = -velocity * factor * _scrollSpeed / _itemWidth;
+                _scrollOffset -= (translation - _previousTranslation) * factor * _offsetMultiplier / _itemWidth;
+                _previousTranslation = translation;
                 [self didScroll];
                 break;
             }
