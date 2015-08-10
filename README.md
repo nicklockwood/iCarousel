@@ -575,6 +575,7 @@ Version 1.8.2
 
 - Fixed some warnings and updated examples for Xcode 7 beta
 - Scrolling now goes the right way when using Chameleon
+- Added nullability qualifiers to improve Swift interop
 
 Version 1.8.1
 

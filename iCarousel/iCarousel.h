@@ -101,12 +101,14 @@ typedef NS_ENUM(NSInteger, iCarouselOption)
 };
 
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol iCarouselDataSource, iCarouselDelegate;
 
 @interface iCarousel : UIView
 
-@property (nonatomic, weak_delegate) IBOutlet id<iCarouselDataSource> dataSource;
-@property (nonatomic, weak_delegate) IBOutlet id<iCarouselDelegate> delegate;
+@property (nonatomic, weak_delegate) IBOutlet __nullable id<iCarouselDataSource> dataSource;
+@property (nonatomic, weak_delegate) IBOutlet __nullable id<iCarouselDelegate> delegate;
 @property (nonatomic, assign) iCarouselType type;
 @property (nonatomic, assign) CGFloat perspective;
 @property (nonatomic, assign) CGFloat decelerationRate;
@@ -124,7 +126,7 @@ typedef NS_ENUM(NSInteger, iCarouselOption)
 @property (nonatomic, readonly) NSInteger numberOfItems;
 @property (nonatomic, readonly) NSInteger numberOfPlaceholders;
 @property (nonatomic, assign) NSInteger currentItemIndex;
-@property (nonatomic, strong, readonly) UIView *currentItemView;
+@property (nonatomic, strong, readonly) UIView * __nullable currentItemView;
 @property (nonatomic, strong, readonly) NSArray *indexesForVisibleItems;
 @property (nonatomic, readonly) NSInteger numberOfVisibleItems;
 @property (nonatomic, strong, readonly) NSArray *visibleItemViews;
@@ -146,11 +148,11 @@ typedef NS_ENUM(NSInteger, iCarouselOption)
 - (void)scrollToItemAtIndex:(NSInteger)index duration:(NSTimeInterval)duration;
 - (void)scrollToItemAtIndex:(NSInteger)index animated:(BOOL)animated;
 
-- (UIView *)itemViewAtIndex:(NSInteger)index;
+- (nullable UIView *)itemViewAtIndex:(NSInteger)index;
 - (NSInteger)indexOfItemView:(UIView *)view;
 - (NSInteger)indexOfItemViewOrSubview:(UIView *)view;
 - (CGFloat)offsetForItemAtIndex:(NSInteger)index;
-- (UIView *)itemViewAtPoint:(CGPoint)point;
+- (nullable UIView *)itemViewAtPoint:(CGPoint)point;
 
 - (void)removeItemAtIndex:(NSInteger)index animated:(BOOL)animated;
 - (void)insertItemAtIndex:(NSInteger)index animated:(BOOL)animated;
@@ -164,12 +166,12 @@ typedef NS_ENUM(NSInteger, iCarouselOption)
 @protocol iCarouselDataSource <NSObject>
 
 - (NSInteger)numberOfItemsInCarousel:(iCarousel *)carousel;
-- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSInteger)index reusingView:(UIView *)view;
+- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSInteger)index reusingView:(nullable UIView *)view;
 
 @optional
 
 - (NSInteger)numberOfPlaceholdersInCarousel:(iCarousel *)carousel;
-- (UIView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSInteger)index reusingView:(UIView *)view;
+- (UIView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSInteger)index reusingView:(nullable UIView *)view;
 
 @end
 
@@ -194,6 +196,8 @@ typedef NS_ENUM(NSInteger, iCarouselOption)
 - (CGFloat)carousel:(iCarousel *)carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value;
 
 @end
+
+NS_ASSUME_NONNULL_END
 
 #pragma clang diagnostic pop
 
