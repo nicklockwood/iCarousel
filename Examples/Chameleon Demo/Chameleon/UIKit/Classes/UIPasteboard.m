@@ -69,7 +69,7 @@ static NSPasteboardItem *PasteBoardItemWithDictionary(NSDictionary *item)
                 [fileWrapper setPreferredFilename:@"image.gif"];
                 NSTextAttachment *attachment = [[NSTextAttachment alloc] initWithFileWrapper:fileWrapper];
                 NSAttributedString *str = [NSAttributedString attributedStringWithAttachment:attachment];
-                [pasteboardItem setData:[str RTFDFromRange:NSMakeRange(0, [str length]) documentAttributes:nil] forType:(NSString *)kUTTypeFlatRTFD];
+                [pasteboardItem setData:[str RTFDFromRange:NSMakeRange(0, [str length]) documentAttributes:@{}] forType:(NSString *)kUTTypeFlatRTFD];
                 [attachment release];
                 [fileWrapper release];
             }

@@ -164,8 +164,8 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
     [super layoutSubviews];
 
     const CGRect bounds = self.bounds;	
-    _backgroundView.frame = [isa backgroundRectForBounds:bounds];
-    _contentContainerView.frame = [isa contentRectForBounds:bounds withNavigationBar:NO];
+    _backgroundView.frame = [[self class] backgroundRectForBounds:bounds];
+    _contentContainerView.frame = [[self class] contentRectForBounds:bounds withNavigationBar:NO];
     _contentView.frame = _contentContainerView.bounds;
 }
 
@@ -312,7 +312,7 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
 - (void)setContentSize:(CGSize)aSize animated:(BOOL)animated
 {
     CGRect frame = self.frame;
-    frame.size = [isa frameSizeForContentSize:aSize withNavigationBar:NO];
+    frame.size = [[self class] frameSizeForContentSize:aSize withNavigationBar:NO];
 
     [UIView animateWithDuration:animated? 0.2 : 0
                      animations:^(void) {

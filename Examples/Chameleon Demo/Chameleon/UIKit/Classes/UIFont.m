@@ -191,7 +191,7 @@ static NSArray *_getFontCollectionNames(CTFontCollectionRef collection, CFString
 {
     CTFontRef newFont = CTFontCreateCopyWithAttributes(_font, fontSize, NULL, NULL);
     if (newFont) {
-        UIFont *theFont = [isa _fontWithCTFont:newFont];
+        UIFont *theFont = [[self class] _fontWithCTFont:newFont];
         CFRelease(newFont);
         return theFont;
     } else {

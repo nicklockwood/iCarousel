@@ -28,36 +28,38 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         carousel.type = .CoverFlow2
     }
     
-    func numberOfItemsInCarousel(carousel: iCarousel!) -> Int
+    func numberOfItemsInCarousel(carousel: iCarousel) -> Int
     {
         return items.count
     }
-    
-    func carousel(carousel: iCarousel!, viewForItemAtIndex index: Int, var reusingView view: UIView!) -> UIView!
+
+    func carousel(carousel: iCarousel, viewForItemAtIndex index: Int, reusingView view: UIView?) -> UIView
     {
-        var label: UILabel! = nil
-        
+        var label: UILabel
+        var itemView: UIImageView
+
         //create new view if no view is available for recycling
         if (view == nil)
         {
             //don't do anything specific to the index within
             //this `if (view == nil) {...}` statement because the view will be
             //recycled and used with other index values later
-            view = UIImageView(frame:CGRectMake(0, 0, 200, 200))
-            (view as UIImageView!).image = UIImage(named: "page.png")
-            view.contentMode = .Center
+            itemView = UIImageView(frame:CGRect(x:0, y:0, width:200, height:200))
+            itemView.image = UIImage(named: "page.png")
+            itemView.contentMode = .Center
             
-            label = UILabel(frame:view.bounds)
+            label = UILabel(frame:itemView.bounds)
             label.backgroundColor = UIColor.clearColor()
             label.textAlignment = .Center
             label.font = label.font.fontWithSize(50)
             label.tag = 1
-            view.addSubview(label)
+            itemView.addSubview(label)
         }
         else
         {
             //get a reference to the label in the recycled view
-            label = view.viewWithTag(1) as UILabel!
+            itemView = view as! UIImageView;
+            label = itemView.viewWithTag(1) as! UILabel!
         }
         
         //set item label
@@ -67,10 +69,10 @@ class ViewController: UIViewController, iCarouselDataSource, iCarouselDelegate
         //in the wrong place in the carousel
         label.text = "\(items[index])"
         
-        return view
+        return itemView
     }
     
-    func carousel(carousel: iCarousel!, valueForOption option: iCarouselOption, withDefault value: CGFloat) -> CGFloat
+    func carousel(carousel: iCarousel, valueForOption option: iCarouselOption, withDefault value: CGFloat) -> CGFloat
     {
         if (option == .Spacing)
         {

@@ -83,7 +83,7 @@ static CGFloat DistanceBetweenTwoPoints(CGPoint A, CGPoint B)
 {
     if (_waiting) {
         _waiting = NO;
-        [isa cancelPreviousPerformRequestsWithTarget:self selector:@selector(_beginGesture) object:nil];
+        [[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(_beginGesture) object:nil];
     }
 }
 
