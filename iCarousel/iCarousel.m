@@ -121,6 +121,7 @@
 @property (nonatomic, assign, getter = isDragging) BOOL dragging;
 @property (nonatomic, assign) BOOL didDrag;
 @property (nonatomic, assign) NSTimeInterval toggleTime;
+@property (nonatomic, assign) NSTimer *autoNextTimer;
 
 NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *self);
 
@@ -147,6 +148,9 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     _scrollToItemBoundary = YES;
     _ignorePerpendicularSwipes = YES;
     _centerItemWhenSelected = YES;
+    _autoNextEnabled = NO;
+    _autoNextTimeInterval = 5;
+    _autoNextAnimate = YES;
     
     _contentView = [[UIView alloc] initWithFrame:self.bounds];
     
@@ -1648,6 +1652,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (void)startAnimation
 {
+    [self resetAutoNextTimer];
+    
     if (!_timer)
     {
         self.timer = [NSTimer timerWithTimeInterval:1.0/60.0
@@ -1917,7 +1923,42 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     //update previous index
     _previousScrollOffset = _scrollOffset;
     _previousItemIndex = self.currentItemIndex;
-} 
+}
+
+
+#pragma mark -
+#pragma mark Auto Next
+
+- (void) resetAutoNextTimer{
+    if (_autoNextTimer != nil) {
+        [_autoNextTimer invalidate];
+        _autoNextTimer = nil;
+    }
+    
+    if (_autoNextTimeInterval <= 0) {
+        _autoNextTimeInterval = 5;
+    }
+    
+    if (_autoNextEnabled && !_autoscroll) {
+        _autoNextTimer = [NSTimer scheduledTimerWithTimeInterval: _autoNextTimeInterval target: self
+                                                        selector: @selector(controlAutoNext) userInfo: nil repeats: YES];
+    }
+}
+
+- (void)controlAutoNext{
+    [self goToNextItemAnimated:_autoNextAnimate];
+}
+
+- (void)goToNextItemAnimated:(BOOL)animated{
+    NSInteger currentPage = self.currentItemIndex;
+    NSInteger nextPage = self.currentItemIndex + 1;
+    
+    if (nextPage > _numberOfItems - 1) {
+        nextPage = 0;
+    }
+    
+    [self scrollToItemAtIndex:nextPage animated:animated];
+}
 
 
 #ifdef ICAROUSEL_IOS

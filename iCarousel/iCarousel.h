@@ -142,6 +142,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, getter = isDecelerating) BOOL decelerating;
 @property (nonatomic, readonly, getter = isScrolling) BOOL scrolling;
 
+@property (nonatomic, assign) BOOL autoNextEnabled;
+@property (nonatomic, assign) BOOL autoNextAnimate;
+@property (nonatomic, assign) NSTimeInterval autoNextTimeInterval;
+
 - (void)scrollByOffset:(CGFloat)offset duration:(NSTimeInterval)duration;
 - (void)scrollToOffset:(CGFloat)offset duration:(NSTimeInterval)duration;
 - (void)scrollByNumberOfItems:(NSInteger)itemCount duration:(NSTimeInterval)duration;
@@ -159,6 +163,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)reloadItemAtIndex:(NSInteger)index animated:(BOOL)animated;
 
 - (void)reloadData;
+
+- (void)goToNextItemAnimated:(BOOL)animated;
 
 @end
 
