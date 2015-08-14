@@ -1937,7 +1937,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     if (_pageControlEnabled && !_pageControl) {
         
         _pageControl = [PageControl new];
-        _pageControl.frame = CGRectMake((self.frame.size.width - (_numberOfItems * 13 + 15))/2, 4, _numberOfItems * 13 + 15, 23);
+        _pageControl.frame = CGRectMake((self.frame.size.width - (_numberOfItems * 13 + 15))/2, 10, _numberOfItems * 13 + 15, 23);
         _pageControl.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin;
         _pageControl.numberOfPages = _numberOfItems;
         _pageControl.currentPage = 0;
