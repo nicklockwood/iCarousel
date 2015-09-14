@@ -35,7 +35,7 @@
 
 static void drawPatternImage(void *info, CGContextRef ctx)
 {
-    UIImageRep *rep = [(UIColorRep *)info patternImageRep];
+    UIImageRep *rep = [(__bridge UIColorRep *)info patternImageRep];
 
     UIGraphicsPushContext(ctx);
     CGContextSaveGState(ctx);

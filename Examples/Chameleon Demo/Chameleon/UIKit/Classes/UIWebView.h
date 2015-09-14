@@ -79,7 +79,7 @@ typedef NSUInteger UIWebViewNavigationType;
 @property (nonatomic, readonly, getter=canGoBack) BOOL canGoBack;
 @property (nonatomic, readonly, getter=canGoForward) BOOL canGoForward;
 @property (nonatomic, assign) BOOL scalesPageToFit; // not implemented
-@property (nonatomic, readonly, retain) NSURLRequest *request;
+@property (nonatomic, readonly, strong) NSURLRequest *request;
 @property (nonatomic) UIDataDetectorTypes dataDetectorTypes;
 
 @end

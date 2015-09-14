@@ -76,8 +76,8 @@ typedef enum {
 @property (nonatomic, readonly) NSTimeInterval timestamp;
 @property (nonatomic, readonly) NSUInteger tapCount;
 @property (nonatomic, readonly) UITouchPhase phase;
-@property (nonatomic, readonly, retain) UIView *view;
-@property (nonatomic, readonly, retain) UIWindow *window;
+@property (nonatomic, readonly, strong) UIView *view;
+@property (nonatomic, readonly, strong) UIWindow *window;
 @property (nonatomic,readonly,copy) NSArray *gestureRecognizers;
 
 @end

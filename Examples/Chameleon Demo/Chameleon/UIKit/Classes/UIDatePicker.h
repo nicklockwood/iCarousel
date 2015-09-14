@@ -54,15 +54,15 @@ typedef enum {
     NSTimeInterval _countDownDuration;
 }
 
-@property (nonatomic, retain) NSCalendar *calendar;
-@property (nonatomic, retain) NSDate *date;
-@property (nonatomic, retain) NSLocale *locale;
-@property (nonatomic, retain) NSTimeZone *timeZone;
+@property (nonatomic, strong) NSCalendar *calendar;
+@property (nonatomic, strong) NSDate *date;
+@property (nonatomic, strong) NSLocale *locale;
+@property (nonatomic, strong) NSTimeZone *timeZone;
 
 @property (nonatomic, assign) UIDatePickerMode datePickerMode;
 
-@property (nonatomic, retain) NSDate *minimumDate;
-@property (nonatomic, retain) NSDate *maximumDate;
+@property (nonatomic, strong) NSDate *minimumDate;
+@property (nonatomic, strong) NSDate *maximumDate;
 @property (nonatomic, assign) NSInteger minuteInterval;
 @property (nonatomic, assign) NSTimeInterval countDownDuration;
 

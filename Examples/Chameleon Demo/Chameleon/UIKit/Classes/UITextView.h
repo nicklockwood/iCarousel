@@ -75,13 +75,13 @@ extern NSString *const UITextViewTextDidEndEditingNotification;
 @property (nonatomic) NSRange selectedRange;
 @property (nonatomic, getter=isEditable) BOOL editable;
 @property (nonatomic, copy) NSString *text;
-@property (nonatomic, retain) UIColor *textColor;
-@property (nonatomic, retain) UIFont *font;
+@property (nonatomic, strong) UIColor *textColor;
+@property (nonatomic, strong) UIFont *font;
 @property (nonatomic) UIDataDetectorTypes dataDetectorTypes;
 @property (nonatomic, assign) id<UITextViewDelegate> delegate;
 
-@property (nonatomic, readwrite, retain) UIView *inputAccessoryView;
-@property (nonatomic, readwrite, retain) UIView *inputView;
+@property (nonatomic, readwrite, strong) UIView *inputAccessoryView;
+@property (nonatomic, readwrite, strong) UIView *inputView;
 
 - (BOOL)hasText;
 

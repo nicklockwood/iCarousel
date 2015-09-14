@@ -69,9 +69,9 @@
 - (UINavigationItem *)popNavigationItemAnimated:(BOOL)animated;
 
 @property (nonatomic, assign) UIBarStyle barStyle;
-@property (nonatomic, retain) UIColor *tintColor;
-@property (nonatomic, readonly, retain) UINavigationItem *topItem;
-@property (nonatomic, readonly, retain) UINavigationItem *backItem;
+@property (nonatomic, strong) UIColor *tintColor;
+@property (nonatomic, readonly, strong) UINavigationItem *topItem;
+@property (nonatomic, readonly, strong) UINavigationItem *backItem;
 @property (nonatomic, copy) NSArray *items;
 @property (nonatomic, assign) id delegate;
 

@@ -174,10 +174,10 @@ typedef enum {
 @property (nonatomic, assign) id<UITableViewDataSource> dataSource;
 @property (nonatomic) CGFloat rowHeight;
 @property (nonatomic) UITableViewCellSeparatorStyle separatorStyle;
-@property (nonatomic, retain) UIColor *separatorColor;
-@property (nonatomic, retain) UIView *tableHeaderView;
-@property (nonatomic, retain) UIView *tableFooterView;
-@property (nonatomic, retain) UIView *backgroundView;
+@property (nonatomic, strong) UIColor *separatorColor;
+@property (nonatomic, strong) UIView *tableHeaderView;
+@property (nonatomic, strong) UIView *tableFooterView;
+@property (nonatomic, strong) UIView *backgroundView;
 @property (nonatomic) BOOL allowsSelection;
 @property (nonatomic) BOOL allowsSelectionDuringEditing;	// not implemented
 @property (nonatomic, getter=isEditing) BOOL editing;

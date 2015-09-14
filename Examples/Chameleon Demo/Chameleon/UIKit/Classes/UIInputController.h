@@ -41,8 +41,8 @@
 
 - (void)setInputVisible:(BOOL)visible animated:(BOOL)animated;
 
-@property (nonatomic, retain) UIView *inputAccessoryView;
-@property (nonatomic, retain) UIView *inputView;
+@property (nonatomic, strong) UIView *inputAccessoryView;
+@property (nonatomic, strong) UIView *inputView;
 @property (nonatomic, assign) BOOL inputVisible;
 
 

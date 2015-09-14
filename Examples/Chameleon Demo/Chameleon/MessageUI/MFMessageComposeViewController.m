@@ -39,10 +39,6 @@
 
 @implementation MFMessageComposeViewController
 
-@synthesize messageComposeDelegate = _messageComposeDelegate;
-@synthesize recipients = _recipients;
-@synthesize body = _body;
-
 + (BOOL)canSendText {
   return NO; // most likely we can't send messages on a mac ;)
 }
