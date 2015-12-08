@@ -31,8 +31,15 @@ iCarousel is derived from UIView and - as with all UIKit components - it should 
 Installation
 --------------
 
+### Manual
 To use the iCarousel class in an app, just drag the iCarousel class files (demo files and assets are not needed) into your project and add the QuartzCore framework.
 
+### Cocoapods
+iCarousel is available through CocoaPods. To install it, simply add the following line to your Podfile:
+
+```ruby
+pod "iCarousel"
+```
 
 Chameleon Support
 -------------------
