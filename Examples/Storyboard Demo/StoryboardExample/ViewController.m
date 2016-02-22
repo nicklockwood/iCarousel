@@ -51,6 +51,9 @@
     
     //configure carousel
     carousel.type = iCarouselTypeCoverFlow2;
+    //carousel bindings
+    carousel.delegate = self;
+    carousel.dataSource = self;
 }
 
 - (void)viewDidUnload
