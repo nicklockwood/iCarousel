@@ -142,6 +142,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     _contentOffset = CGSizeZero;
     _viewpointOffset = CGSizeZero;
     _scrollSpeed = 1.0;
+    _defaultScrollDuration = SCROLL_DURATION;
     _bounceDistance = 1.0;
     _stopAtItemBoundary = YES;
     _scrollToItemBoundary = YES;
@@ -1492,7 +1493,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (void)scrollToItemAtIndex:(NSInteger)index animated:(BOOL)animated
 {   
-    [self scrollToItemAtIndex:index duration:animated? SCROLL_DURATION: 0];
+    [self scrollToItemAtIndex:index duration:animated? self.defaultScrollDuration: 0];
 }
 
 - (void)removeItemAtIndex:(NSInteger)index animated:(BOOL)animated

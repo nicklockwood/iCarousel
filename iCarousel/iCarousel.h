@@ -113,6 +113,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) CGFloat perspective;
 @property (nonatomic, assign) CGFloat decelerationRate;
 @property (nonatomic, assign) CGFloat scrollSpeed;
+@property (nonatomic, assign) NSTimeInterval defaultScrollDuration;
 @property (nonatomic, assign) CGFloat bounceDistance;
 @property (nonatomic, assign, getter = isScrollEnabled) BOOL scrollEnabled;
 @property (nonatomic, assign, getter = isPagingEnabled) BOOL pagingEnabled;
