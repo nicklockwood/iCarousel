@@ -824,7 +824,9 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
   
     //account for retina
     view.superview.layer.rasterizationScale = [UIScreen mainScreen].scale;
-    
+
+    [view layoutIfNeeded];
+
 #else
     
     //center view
