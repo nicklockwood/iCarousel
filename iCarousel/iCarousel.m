@@ -1122,7 +1122,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     //align
     if (!_scrolling && !_decelerating && !_autoscroll)
     {
-        if (_scrollToItemBoundary)
+        if (_scrollToItemBoundary && self.currentItemIndex != -1)
         {
             [self scrollToItemAtIndex:self.currentItemIndex animated:YES];
         }
