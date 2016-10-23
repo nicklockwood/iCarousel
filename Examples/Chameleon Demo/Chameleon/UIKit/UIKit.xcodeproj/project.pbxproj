@@ -282,8 +282,6 @@
 		7011107D133BE0F400C86512 /* UIDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 7011107B133BE0F300C86512 /* UIDatePicker.m */; };
 		7806ED2A133A1D7500273BC6 /* UITabBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 7806ED28133A1D7500273BC6 /* UITabBar.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7806ED2B133A1D7500273BC6 /* UITabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 7806ED29133A1D7500273BC6 /* UITabBar.m */; };
-		789CF898133A3CD500250AB4 /* NSFetchedResultsController.h in Headers */ = {isa = PBXBuildFile; fileRef = 789CF896133A3CD500250AB4 /* NSFetchedResultsController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		789CF899133A3CD500250AB4 /* NSFetchedResultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 789CF897133A3CD500250AB4 /* NSFetchedResultsController.m */; };
 		78CB48AC133A9C51008636DA /* UISearchBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 78CB48AA133A9C51008636DA /* UISearchBar.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		78CB48AD133A9C51008636DA /* UISearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 78CB48AB133A9C51008636DA /* UISearchBar.m */; };
 		78CB48B0133AA536008636DA /* UITabBarItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 78CB48AE133AA535008636DA /* UITabBarItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -983,7 +981,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				789CF898133A3CD500250AB4 /* NSFetchedResultsController.h in Headers */,
 				78CB48D9133AB922008636DA /* UISlider.h in Headers */,
 				78CB48B4133AA8AF008636DA /* UISegmentedControl.h in Headers */,
 				14CC840611EFA8AF005988CC /* UIRoundedRectButton.h in Headers */,
@@ -1155,7 +1152,7 @@
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0800;
 			};
 			buildConfigurationList = 1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "UIKit" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -1224,7 +1221,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				789CF899133A3CD500250AB4 /* NSFetchedResultsController.m in Sources */,
 				78CB48B1133AA536008636DA /* UITabBarItem.m in Sources */,
 				78CB48AD133A9C51008636DA /* UISearchBar.m in Sources */,
 				14CC840711EFA8AF005988CC /* UIRoundedRectButton.m in Sources */,
@@ -1369,6 +1365,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1390,11 +1387,27 @@
 		1DEB91B208733DA50010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1405,10 +1418,26 @@
 		1DEB91B308733DA50010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "3rd Party Mac Developer Application";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				PROVISIONING_PROFILE = "";

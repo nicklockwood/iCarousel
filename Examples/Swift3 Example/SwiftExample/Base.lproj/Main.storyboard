@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="vXZ-lx-hvc">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Data Source-->
+        <scene sceneID="ufC-wZ-h7g">
+            <objects>
+                <viewController id="vXZ-lx-hvc" customClass="ViewController" customModule="SwiftExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
+                        <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="background" translatesAutoresizingMaskIntoConstraints="NO" id="Ong-qD-mZa"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BbD-YH-2l2" customClass="iCarousel">
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="vXZ-lx-hvc" id="81k-26-bEM"/>
+                                    <outlet property="delegate" destination="vXZ-lx-hvc" id="JlC-QR-hSh"/>
+                                </connections>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="Ong-qD-mZa" firstAttribute="leading" secondItem="BbD-YH-2l2" secondAttribute="leading" id="1VL-G2-Xhc"/>
+                            <constraint firstItem="BbD-YH-2l2" firstAttribute="trailing" secondItem="Ong-qD-mZa" secondAttribute="trailing" id="984-lT-xjV"/>
+                            <constraint firstItem="BbD-YH-2l2" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="BpJ-Vc-Nsz"/>
+                            <constraint firstItem="BbD-YH-2l2" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="Hpu-YS-P4H"/>
+                            <constraint firstAttribute="trailing" secondItem="BbD-YH-2l2" secondAttribute="trailing" id="O0y-HU-dA7"/>
+                            <constraint firstItem="Ong-qD-mZa" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" constant="-7" id="SDg-hl-xRh"/>
+                            <constraint firstAttribute="bottom" secondItem="BbD-YH-2l2" secondAttribute="bottom" id="gqH-fQ-Cbb"/>
+                            <constraint firstAttribute="bottom" secondItem="Ong-qD-mZa" secondAttribute="bottom" constant="-5" id="w78-4z-5dB"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="carousel" destination="BbD-YH-2l2" id="sTF-F8-DQJ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="background" width="50" height="468"/>
+    </resources>
+</document>

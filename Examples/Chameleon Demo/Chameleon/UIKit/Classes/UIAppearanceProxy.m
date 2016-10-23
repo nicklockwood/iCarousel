@@ -143,73 +143,10 @@ static void DidSetPropertyWithAxisValues(id self, SEL cmd, NSInteger numberOfAxi
     [self _appearancePropertyDidChange:[[[UIAppearanceProperty alloc] initWithSelector:cmd axisValues:values] autorelease]];
 }
 
-// this evil macro is used to generate type-specific setter overrides
-// it currently only supports up to 4 axis values. if more are needed, just add more cases here following the pattern. easy!
-#define UIAppearanceSetterOverride(TYPE) \
-static void UIAppearanceSetterOverride_##TYPE(id self, SEL cmd, TYPE property, ...) { \
-    IMP imp = GetOriginalMethodIMP(self, cmd); \
-    const NSInteger numberOfAxisValues = [[self methodSignatureForSelector:cmd] numberOfArguments] - 3; \
-    if (imp && numberOfAxisValues >= 0) { \
-        va_list args; va_start(args, property); \
-        NSInteger axisValues[numberOfAxisValues]; \
-        if (numberOfAxisValues == 0) { \
-            imp(self, cmd, property); \
-        } else if (numberOfAxisValues == 1) { \
-            axisValues[0]=va_arg(args, NSInteger); \
-            imp(self, cmd, property, axisValues[0]); \
-        } else if (numberOfAxisValues == 2) { \
-            axisValues[0]=va_arg(args, NSInteger); axisValues[1]=va_arg(args, NSInteger); \
-            imp(self, cmd, property, axisValues[0], axisValues[1]); \
-        } else if (numberOfAxisValues == 3) { \
-            axisValues[0]=va_arg(args, NSInteger); axisValues[1]=va_arg(args, NSInteger); axisValues[2]=va_arg(args, NSInteger); \
-            imp(self, cmd, property, axisValues[0], axisValues[1], axisValues[2]); \
-        } else if (numberOfAxisValues == 4) { \
-            axisValues[0]=va_arg(args, NSInteger); axisValues[1]=va_arg(args, NSInteger); axisValues[2]=va_arg(args, NSInteger); axisValues[3]=va_arg(args, NSInteger); \
-            imp(self, cmd, property, axisValues[0], axisValues[1], axisValues[2], axisValues[3]); \
-        } else { \
-            @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"argument count mismatch" userInfo:nil]; \
-        } \
-        DidSetPropertyWithAxisValues(self, cmd, numberOfAxisValues, axisValues); \
-        va_end(args); \
-    } else { \
-        @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"something terrible has happened" userInfo:nil]; \
-    } \
-}
-
-// curse you, static language!
-UIAppearanceSetterOverride(NSInteger)
-UIAppearanceSetterOverride(NSUInteger)
-UIAppearanceSetterOverride(id)
-UIAppearanceSetterOverride(CGFloat)
-UIAppearanceSetterOverride(CGPoint)
-UIAppearanceSetterOverride(CGSize)
-UIAppearanceSetterOverride(CGRect)
-UIAppearanceSetterOverride(UIEdgeInsets)
-UIAppearanceSetterOverride(UIOffset)
-
 static IMP ImplementationForPropertyType(const char *t)
 {
-    if (TypeIsSignedInteger(t)) {
-        return (IMP)UIAppearanceSetterOverride_NSInteger;
-    } else if (TypeIsUnsignedInteger(t)) {
-        return (IMP)UIAppearanceSetterOverride_NSUInteger;
-    } else if (TypeIsObject(t)) {
-        return (IMP)UIAppearanceSetterOverride_id;
-    } else if (TypeIsCGFloat(t)) {
-        return (IMP)UIAppearanceSetterOverride_CGFloat;
-    } else if (TypeIsCGPoint(t)) {
-        return (IMP)UIAppearanceSetterOverride_CGPoint;
-    } else if (TypeIsCGSize(t)) {
-        return (IMP)UIAppearanceSetterOverride_CGSize;
-    } else if (TypeIsCGRect(t)) {
-        return (IMP)UIAppearanceSetterOverride_CGRect;
-    } else if (TypeIsUIEdgeInsets(t)) {
-        return (IMP)UIAppearanceSetterOverride_UIEdgeInsets;
-    } else if (TypeIsUIOffset(t)) {
-        return (IMP)UIAppearanceSetterOverride_UIOffset;
-    } else {
-        @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"no setter implementation for property type" userInfo:nil];
-    }
+    @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                   reason:@"no setter implementation for property type" userInfo:nil];
 }
 
 @implementation UIAppearanceProxy

@@ -1,6 +1,6 @@
 {
   "name": "iCarousel",
-  "version": "1.8.2",
+  "version": "1.8.3",
   "license": {
     "type": "zlib",
     "file": "LICENCE.md"
@@ -12,7 +12,7 @@
   },
   "source": {
     "git": "https://github.com/nicklockwood/iCarousel.git",
-    "tag": "1.8.2"
+    "tag": "1.8.3"
   },
   "source_files": "iCarousel/iCarousel.{h,m}",
   "requires_arc": true,

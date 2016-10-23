@@ -189,14 +189,14 @@
 {
     //set correct view size
     //because the background image on the views makes them too large
-    return 200.0f;
+    return 200.0;
 }
 
 - (CATransform3D)carousel:(__unused iCarousel *)_carousel itemTransformForOffset:(CGFloat)offset baseTransform:(CATransform3D)transform
 {
     //implement 'flip3D' style carousel
-    transform = CATransform3DRotate(transform, M_PI / 8.0f, 0.0f, 1.0f, 0.0f);
-    return CATransform3DTranslate(transform, 0.0f, 0.0f, offset * self.carousel.itemWidth);
+    transform = CATransform3DRotate(transform, M_PI / 8.0, 0.0, 1.0, 0.0);
+    return CATransform3DTranslate(transform, 0.0, 0.0, offset * self.carousel.itemWidth);
 }
 
 - (CGFloat)carousel:(__unused iCarousel *)_carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value
@@ -213,14 +213,14 @@
         {
             //reduce item spacing to compensate
             //for drop shadow and reflection around views
-            return value * 1.05f;
+            return value * 1.05;
         }
         case iCarouselOptionFadeMax:
         {
             if (self.carousel.type == iCarouselTypeCustom)
             {
                 //set opacity based on distance from camera
-                return 0.0f;
+                return 0.0;
             }
             return value;
         }

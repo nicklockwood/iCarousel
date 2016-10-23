@@ -70,7 +70,7 @@
 		label.layer.borderColor = [UIColor whiteColor].CGColor;
         label.layer.borderWidth = 4.0f;
         label.layer.cornerRadius = 8.0f;
-        label.textAlignment = UITextAlignmentCenter;
+        label.textAlignment = NSTextAlignmentCenter;
 		label.font = [label.font fontWithSize:50];
         label.tag = 9999;
 		[view addSubview:label];

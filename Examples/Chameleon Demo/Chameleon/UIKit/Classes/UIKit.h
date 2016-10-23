@@ -113,8 +113,5 @@
 #import "UIKey.h"
 #import "UIScrollWheelGestureRecognizer.h"
 
-// only add if core data is included on 10.6
-#import "NSFetchedResultsController.h"
-
 // SystemConfiguration-Helper
 #define kSCNetworkReachabilityFlagsIsWWAN kSCNetworkReachabilityFlagsConnectionOnDemand

@@ -26,6 +26,8 @@
 
 - (void)awakeFromNib
 {
+    [super awakeFromNib];
+
     //set up data sources
     self.items1 = [NSMutableArray array];
     for (int i = 0; i < 100; i++)
@@ -100,7 +102,7 @@
         view.contentMode = UIViewContentModeCenter;
         label = [[UILabel alloc] initWithFrame:view.bounds];
         label.backgroundColor = [UIColor clearColor];
-        label.textAlignment = UITextAlignmentCenter;
+        label.textAlignment = NSTextAlignmentCenter;
         label.font = [label.font fontWithSize:50];
         [view addSubview:label];
     }
