@@ -81,14 +81,14 @@ static BOOL _animationsEnabled = YES;
 - (id)initWithFrame:(CGRect)theFrame
 {
     if ((self=[super init])) {
-        _implementsDrawRect = [isa _instanceImplementsDrawRect];
+        _implementsDrawRect = [[self class] _instanceImplementsDrawRect];
         _clearsContextBeforeDrawing = YES;
         _autoresizesSubviews = YES;
         _userInteractionEnabled = YES;
         _subviews = [[NSMutableSet alloc] init];
         _gestureRecognizers = [[NSMutableSet alloc] init];
 
-        _layer = [[[isa layerClass] alloc] init];
+        _layer = [[[[self class] layerClass] alloc] init];
         _layer.delegate = self;
         _layer.layoutManager = [UIViewLayoutManager layoutManager];
 

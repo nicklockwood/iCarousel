@@ -102,13 +102,13 @@ typedef enum {
 
 
 @property (nonatomic, readonly, copy) NSString *nibName;		// always returns nil
-@property (nonatomic, readonly, retain) NSBundle *nibBundle;	// always returns nil
-@property (nonatomic, retain) UIView *view;
+@property (nonatomic, readonly, strong) NSBundle *nibBundle;	// always returns nil
+@property (nonatomic, strong) UIView *view;
 @property (nonatomic, assign) BOOL wantsFullScreenLayout;		// doesn't do anything right now
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, readonly) UIInterfaceOrientation interfaceOrientation;	// always returns UIInterfaceOrientationLandscapeLeft
-@property (nonatomic, readonly, retain) UINavigationItem *navigationItem;
-@property (nonatomic, retain) NSArray *toolbarItems;
+@property (nonatomic, readonly, strong) UINavigationItem *navigationItem;
+@property (nonatomic, strong) NSArray *toolbarItems;
 @property (nonatomic, getter=isEditing) BOOL editing;
 @property (nonatomic) BOOL hidesBottomBarWhenPushed;
 
@@ -120,12 +120,12 @@ typedef enum {
 @property (nonatomic, assign) UIModalTransitionStyle modalTransitionStyle;		// not used right now
 
 @property (nonatomic, readonly) UIViewController *parentViewController;
-@property (nonatomic, readonly, retain) UINavigationController *navigationController;
-@property (nonatomic, readonly, retain) UISplitViewController *splitViewController;
-@property (nonatomic, readonly, retain) UISearchDisplayController *searchDisplayController; // stub
+@property (nonatomic, readonly, strong) UINavigationController *navigationController;
+@property (nonatomic, readonly, strong) UISplitViewController *splitViewController;
+@property (nonatomic, readonly, strong) UISearchDisplayController *searchDisplayController; // stub
 
 // stubs
-@property (nonatomic, retain) UITabBarItem *tabBarItem;
-@property (nonatomic, readonly, retain) UITabBarController *tabBarController;
+@property (nonatomic, strong) UITabBarItem *tabBarItem;
+@property (nonatomic, readonly, strong) UITabBarController *tabBarController;
 
 @end

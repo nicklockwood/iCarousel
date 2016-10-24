@@ -51,10 +51,10 @@
 }
 
 @property (nonatomic, copy) NSString *text;
-@property (nonatomic, retain) UIFont *font;
-@property (nonatomic, retain) UIColor *textColor;
-@property (nonatomic, retain) UIColor *highlightedTextColor;
-@property (nonatomic, retain) UIColor *shadowColor;
+@property (nonatomic, strong) UIFont *font;
+@property (nonatomic, strong) UIColor *textColor;
+@property (nonatomic, strong) UIColor *highlightedTextColor;
+@property (nonatomic, strong) UIColor *shadowColor;
 @property (nonatomic) CGSize shadowOffset;
 @property (nonatomic) UITextAlignment textAlignment;
 @property (nonatomic) UILineBreakMode lineBreakMode;

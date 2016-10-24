@@ -7,7 +7,7 @@ iCarousel is a class designed to simplify the implementation of various types of
 Supported OS & SDK Versions
 -----------------------------
 
-* Supported build target - iOS 8.0 / Mac OS 10.9 (Xcode 6.0, Apple LLVM compiler 6.0)
+* Supported build target - iOS 10.0 / Mac OS 10.12 (Xcode 8.0, Apple LLVM compiler 8.0)
 * Earliest supported deployment target - iOS 5.0 / Mac OS 10.7
 * Earliest compatible deployment target - iOS 4.3 / Mac OS 10.6
 
@@ -31,7 +31,7 @@ iCarousel is derived from UIView and - as with all UIKit components - it should 
 Installation
 --------------
 
-To use the iCarousel class in an app, just drag the iCarousel class files (demo files and assets are not needed) into your project and add the QuartzCore framework.
+To use the iCarousel class in an app, just drag the iCarousel class files (demo files and assets are not needed) into your project and add the QuartzCore framework. You can also install it using Cocoapods in the normal way.
 
 
 Chameleon Support
@@ -61,6 +61,31 @@ You can also implement your own bespoke carousel styles using `iCarouselTypeCust
 
 NOTE: The difference between `iCarouselTypeCoverFlow` and `iCarouselTypeCoverFlow2` types is quite subtle, however the logic for `iCarouselTypeCoverFlow2` is substantially more complex. If you flick the carousel they are basically identical, but if you drag the carousel slowly with your finger the difference should be apparent. `iCarouselTypeCoverFlow2` is designed to simulate the standard Apple CoverFlow effect as closely as possible and may change subtly in future in the interests of that goal.
 
+## Display Type Visual Examples 
+
+----
+### Linear
+![Linear](http://g.recordit.co/xt86iK3A7f.gif)
+### Rotary
+![Rotary](http://g.recordit.co/Z7DsqjjBY3.gif)
+### Inverted Rotary
+![Inverted Rotary](http://g.recordit.co/a8H2tsIw7A.gif)
+### Cylinder
+![Cylinder](http://g.recordit.co/TqlTGGoz37.gif)
+### Inverted Cylinder
+![Inverted Cylinder](http://g.recordit.co/Try1zdrBoW.gif)
+### Wheel
+![Wheel](http://recordit.co/oAyZbMlhXe)
+### Inverted Wheel
+![Inverted Wheel](http://g.recordit.co/IhFCxwgOig.gif)
+### Cover Flow
+![Cover Flow](http://g.recordit.co/Qp2E5Y6MAe.gif)
+### Cover Flow2
+![Cover Flow2](http://g.recordit.co/m5tc1vAKMY.gif)
+### Time Machine
+![Time Machine](http://g.recordit.co/Ux40G7G0eW.gif)
+### Inverted Time Machine
+![Inverted Time Machine](http://g.recordit.co/F7N7nIT8Oh.gif)
 
 Properties
 --------------
@@ -494,7 +519,10 @@ This example demonstrates how to use UITableViews inside your iCarousel item vie
 FAQ
 ------------
 
-    Q. I upgrade to the new version of iCarousel and it broke my project, how do I get the old one back?
+    Q. Does iCarousel support Swift?
+    A. Yes, check out Swift Example and Swift3 Example projects.
+
+    Q. I upgraded to the new version of iCarousel and it broke my project, how do I get the old one back?
     A. Every previous release of iCarousel is tagged as a separate download on github - look in the tags tab.
 
     Q. Can I use iCarousel without a nib file?
@@ -527,7 +555,7 @@ FAQ
     Q. If the views in my carousel all have completely different layouts, should I still use the `reusingView` parameter?
     A. Probably not, and unless you have hundreds of views in your carousel, it's unlikely to be worth the trouble.
 
-    Q. How can I make iCarousl behave like a UIScrollView with paging enabled?
+    Q. How can I make iCarousel behave like a UIScrollView with paging enabled?
     A. As of version 1.8, iCarousel has a pagingEnabled property that emulates the behaviour of a UIScrollView (see the *Paging Example* project). The bounce physics are not quite the same though, and you may want to consider using the SwipeView library instead (https://github.com/nicklockwood/SwipeView) which is very similar to iCarousel, but based on a UIScrollView under the hood.
     
     Q. I want my carousel items to have a real reflection, but the reflection in the examples is just drawn on. How can I render reflections dynamically?
@@ -546,7 +574,22 @@ FAQ
 Release Notes
 ----------------
 
-Verson 1.8
+Version 1.8.3
+
+- Fixed warnings and updated examples for Xcode 8
+- Added Swift 3 example
+
+Version 1.8.2
+
+- Fixed some warnings and updated examples for Xcode 7 beta
+- Scrolling now goes the right way when using Chameleon
+- Added nullability qualifiers to improve Swift interop
+
+Version 1.8.1
+
+- Fixed bug where item views could be left invible after reloading
+
+Version 1.8
 
 - iCarousel now requires ARC
 - iCarousel now requires 64-bit processors on Mac OS 10.6

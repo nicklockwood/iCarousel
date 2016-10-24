@@ -20,6 +20,8 @@
 
 - (void)awakeFromNib
 {
+    [super awakeFromNib];
+
     //set up data
     //your carousel should always be driven by an array of
     //data of some kind - don't store data in your item views
@@ -116,7 +118,7 @@
 {
     if (option == iCarouselOptionSpacing)
     {
-        return value * 1.1f;
+        return value * 1.1;
     }
     return value;
 }

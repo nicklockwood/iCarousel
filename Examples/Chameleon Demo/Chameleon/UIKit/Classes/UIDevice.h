@@ -65,13 +65,13 @@ typedef enum {
 
 + (UIDevice *)currentDevice;
 
-@property (nonatomic, readonly, retain) NSString *name;
+@property (nonatomic, readonly, strong) NSString *name;
 @property (nonatomic, readonly) UIUserInterfaceIdiom userInterfaceIdiom;					// always returns UIUserInterfaceIdiomDesktop
 @property (nonatomic, readonly) UIDeviceOrientation orientation;							// always returns UIDeviceOrientationPortrait
 @property (nonatomic, readonly,getter=isMultitaskingSupported) BOOL multitaskingSupported;	// always returns YES
-@property (nonatomic, readonly, retain) NSString *systemName;
-@property (nonatomic, readonly, retain) NSString *systemVersion;
-@property (nonatomic, readonly, retain) NSString *model;
+@property (nonatomic, readonly, strong) NSString *systemName;
+@property (nonatomic, readonly, strong) NSString *systemVersion;
+@property (nonatomic, readonly, strong) NSString *model;
 @property (nonatomic, readonly, getter=isGeneratingDeviceOrientationNotifications) BOOL generatesDeviceOrientationNotifications; // aways returns NO
 
 - (void)beginGeneratingDeviceOrientationNotifications;  // no effect

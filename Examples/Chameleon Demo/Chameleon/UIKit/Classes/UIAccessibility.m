@@ -43,6 +43,8 @@ UIAccessibilityTraits UIAccessibilityTraitUpdatesFrequently = 512;
 UIAccessibilityTraits UIAccessibilityTraitSearchField = 1024;
 UIAccessibilityTraits UIAccessibilityTraitHeader = 2048;
 
+UIAccessibilityTraits UIAccessibilityTraitAllowsDirectInteraction = 8192;
+
 UIAccessibilityNotifications UIAccessibilityScreenChangedNotification = 1000;
 UIAccessibilityNotifications UIAccessibilityLayoutChangedNotification = 1001;
 UIAccessibilityNotifications UIAccessibilityAnnouncementNotification = 1002;

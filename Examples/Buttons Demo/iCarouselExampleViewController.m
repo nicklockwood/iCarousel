@@ -69,7 +69,7 @@
 	}
 	
 	//set button label
-	[button setTitle:[NSString stringWithFormat:@"%i", index] forState:UIControlStateNormal];
+	[button setTitle:[NSString stringWithFormat:@"%zd", index] forState:UIControlStateNormal];
 	
 	return button;
 }
@@ -83,7 +83,7 @@
 	NSInteger index = [carousel indexOfItemViewOrSubview:sender];
 	
     [[[UIAlertView alloc] initWithTitle:@"Button Tapped"
-                                 message:[NSString stringWithFormat:@"You tapped button number %i", index]
+                                 message:[NSString stringWithFormat:@"You tapped button number %zd", index]
                                 delegate:nil
                        cancelButtonTitle:@"OK"
                        otherButtonTitles:nil] show];

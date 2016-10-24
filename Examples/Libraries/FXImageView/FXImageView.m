@@ -1,7 +1,7 @@
 //
 //  FXImageView.m
 //
-//  Version 1.3.3
+//  Version 1.3.5
 //
 //  Created by Nick Lockwood on 31/10/2011.
 //  Copyright (c) 2011 Charcoal Design
@@ -82,6 +82,7 @@
 @synthesize cacheKey = _cacheKey;
 @synthesize contentMode = _contentMode;
 
+
 #pragma mark -
 #pragma mark Shared storage
 
@@ -160,6 +161,7 @@
     [self setUp];
 }
 
+
 #pragma mark -
 #pragma mark Caching
 
@@ -221,6 +223,7 @@
 {
     return [[[self class] processedImageCache] objectForKey:[self cacheKey]];
 }
+
 
 #pragma mark -
 #pragma mark Processing
@@ -398,37 +401,37 @@
     //create processing operation
     FXImageOperation *operation = [[FXImageOperation alloc] init];
     operation.target = self;
-  
+    
     //set operation thread priority
-  
+
 #if __IPHONE_OS_VERSION_MIN_REQUIRED < 80000
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
-  
+    
     if (![operation respondsToSelector:@selector(setQualityOfService:)])
     {
-      
+        
 #endif
-      
+        
         [operation setThreadPriority:1.0];
-      
+        
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
-      
+        
     }
     else
-
+        
 #endif
 #endif
-      
+        
     {
-  
+        
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
-  
+        
         [operation setQualityOfService:NSQualityOfServiceUtility];
-      
+        
 #endif
-
+        
     }
-  
+    
     //queue operation
     [self queueProcessingOperation:operation];
 }
@@ -463,6 +466,16 @@
     if (_imageContentURL || self.image)
     {
         [self updateProcessedImage];
+    }
+}
+
+- (void)didMoveToWindow
+{
+    if (self.window && (id)self.processedImage.CGImage != self.layer.contents)
+    {
+        //fixes issue where image would be reset to unprocessed version
+        //if offscreen layer contents was cleared due to memory warning
+        [self setProcessedImageInternal:self.processedImage];
     }
 }
 
@@ -505,6 +518,11 @@
         self.originalImage = image;
         [self updateProcessedImage];
     }
+}
+
+- (void)setHighlighted:(__unused BOOL)highlighted
+{
+    //highlighted images are not currently supported
 }
 
 - (void)setReflectionGap:(CGFloat)reflectionGap

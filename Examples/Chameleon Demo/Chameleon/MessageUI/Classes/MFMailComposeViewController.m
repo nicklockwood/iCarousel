@@ -30,7 +30,6 @@
 #import "MFMailComposeViewController.h"
 
 @implementation MFMailComposeViewController
-@synthesize mailComposeDelegate=_mailComposeDelegate;
 
 + (BOOL)canSendMail
 {

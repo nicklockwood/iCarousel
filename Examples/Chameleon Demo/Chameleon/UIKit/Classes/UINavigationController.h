@@ -76,11 +76,11 @@ typedef enum {
 - (void)setNavigationBarHidden:(BOOL)navigationBarHidden animated:(BOOL)animated; // doesn't animate yet
 
 @property (nonatomic, copy) NSArray *viewControllers;
-@property (nonatomic, readonly, retain) UIViewController *visibleViewController;
+@property (nonatomic, readonly, strong) UIViewController *visibleViewController;
 @property (nonatomic, readonly) UINavigationBar *navigationBar;
 @property (nonatomic, readonly) UIToolbar *toolbar;                               // toolbar support is not really implemented yet
 @property (nonatomic, assign) id<UINavigationControllerDelegate> delegate;
-@property (nonatomic, readonly, retain) UIViewController *topViewController;
+@property (nonatomic, readonly, strong) UIViewController *topViewController;
 @property (nonatomic,getter=isNavigationBarHidden) BOOL navigationBarHidden;
 @property (nonatomic,getter=isToolbarHidden) BOOL toolbarHidden;                  // toolbar support is not really implemented yet
 
