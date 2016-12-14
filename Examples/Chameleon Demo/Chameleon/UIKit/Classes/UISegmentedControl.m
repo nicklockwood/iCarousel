@@ -15,15 +15,15 @@
 static NSString *kSSSegmentedControlEnabledKey = @"enabled";
 
 @interface UISegmentedControl ()
-@property (nonatomic, retain) UIImage *buttonImage;
-@property (nonatomic, retain) UIImage *highlightedButtonImage;
-@property (nonatomic, retain) UIImage *dividerImage;
-@property (nonatomic, retain) UIImage *highlightedDividerImage;
+@property (nonatomic, strong) UIImage *buttonImage;
+@property (nonatomic, strong) UIImage *highlightedButtonImage;
+@property (nonatomic, strong) UIImage *dividerImage;
+@property (nonatomic, strong) UIImage *highlightedDividerImage;
 
-@property (nonatomic, retain) UIFont *font;
-@property (nonatomic, retain) UIColor *textColor;
-@property (nonatomic, retain) UIColor *disabledTextColor;
-@property (nonatomic, retain) UIColor *textShadowColor;
+@property (nonatomic, strong) UIFont *font;
+@property (nonatomic, strong) UIColor *textColor;
+@property (nonatomic, strong) UIColor *disabledTextColor;
+@property (nonatomic, strong) UIColor *textShadowColor;
 @property (nonatomic, assign) CGSize textShadowOffset;
 @property (nonatomic, assign) UIEdgeInsets textEdgeInsets;
 

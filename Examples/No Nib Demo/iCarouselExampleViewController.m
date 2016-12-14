@@ -73,17 +73,17 @@
 	UINavigationBar *navbar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 44)];
 	navbar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	self.navItem = [[UINavigationItem alloc] initWithTitle:@"Coverflow2"];
-	_navItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Switch Type" style:UIBarButtonItemStyleBordered target:self action:@selector(switchCarouselType)];
-	_navItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Wrap: ON" style:UIBarButtonItemStyleBordered target:self action:@selector(toggleWrap)];
+	_navItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Switch Type" style:UIBarButtonItemStylePlain target:self action:@selector(switchCarouselType)];
+	_navItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Wrap: ON" style:UIBarButtonItemStylePlain target:self action:@selector(toggleWrap)];
 	[navbar setItems:@[_navItem]];
 	[self.view addSubview:navbar];
 	
 	//add bottom bar
 	UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 44, self.view.bounds.size.width, 44)];
 	toolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
-	[toolbar setItems:@[[[UIBarButtonItem alloc] initWithTitle:@"Insert Item" style:UIBarButtonItemStyleBordered target:self action:@selector(insertItem)],
+	[toolbar setItems:@[[[UIBarButtonItem alloc] initWithTitle:@"Insert Item" style:UIBarButtonItemStylePlain target:self action:@selector(insertItem)],
 					   [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:NULL],
-					   [[UIBarButtonItem alloc] initWithTitle:@"Delete Item" style:UIBarButtonItemStyleBordered target:self action:@selector(removeItem)]]];
+					   [[UIBarButtonItem alloc] initWithTitle:@"Delete Item" style:UIBarButtonItemStylePlain target:self action:@selector(removeItem)]]];
 	[self.view addSubview:toolbar];
 }
 
@@ -173,7 +173,7 @@
         view.contentMode = UIViewContentModeCenter;
         label = [[UILabel alloc] initWithFrame:view.bounds];
         label.backgroundColor = [UIColor clearColor];
-        label.textAlignment = UITextAlignmentCenter;
+        label.textAlignment = NSTextAlignmentCenter;
         label.font = [label.font fontWithSize:50];
         label.tag = 1;
         [view addSubview:label];

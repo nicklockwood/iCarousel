@@ -81,7 +81,7 @@ typedef enum {
 
 @property (nonatomic) UIBarButtonItemStyle style;
 @property (nonatomic) CGFloat width;
-@property (nonatomic, retain) UIView *customView;
+@property (nonatomic, strong) UIView *customView;
 @property (nonatomic, assign) id target;
 @property (nonatomic) SEL action;
 

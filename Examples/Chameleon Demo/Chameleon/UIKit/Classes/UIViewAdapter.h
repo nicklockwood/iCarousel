@@ -39,6 +39,6 @@
 
 - (id)initWithNSView:(NSView *)aNSView;
 
-@property (nonatomic, retain) NSView *NSView;
+@property (nonatomic, strong) NSView *NSView;
 
 @end

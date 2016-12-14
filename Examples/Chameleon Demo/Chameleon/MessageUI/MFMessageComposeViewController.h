@@ -42,18 +42,12 @@ enum MessageComposeResult {
 };
 typedef enum MessageComposeResult MessageComposeResult;
 
-@interface MFMessageComposeViewController : NSObject {
-  __unsafe_unretained id<MFMessageComposeViewControllerDelegate> _messageComposeDelegate;
-  NSArray *_recipients;
-  NSString *_body;
-}
-
+@interface MFMessageComposeViewController : NSObject
 + (BOOL)canSendText;
 
 @property (nonatomic, assign) id<MFMessageComposeViewControllerDelegate> messageComposeDelegate;
-@property(nonatomic,copy) NSArray *recipients;
-@property(nonatomic,copy) NSString *body;
-
+@property(nonatomic, copy) NSArray *recipients;
+@property(nonatomic, copy) NSString *body;
 @end
 
 

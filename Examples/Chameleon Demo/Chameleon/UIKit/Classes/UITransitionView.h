@@ -58,7 +58,7 @@ typedef enum {
 
 - (id)initWithFrame:(CGRect)frame view:(UIView *)aView;
 
-@property (nonatomic, retain) UIView *view;
+@property (nonatomic, strong) UIView *view;
 @property (nonatomic, assign) UITransition transition;
 @property (nonatomic, assign) id<UITransitionViewDelegate> delegate;
 

@@ -111,24 +111,24 @@ typedef enum {
 @property (nonatomic, assign) UITextAlignment textAlignment;
 @property (nonatomic, copy) NSString *placeholder;
 @property (nonatomic, copy) NSString *text;
-@property (nonatomic, retain) UIFont *font;
+@property (nonatomic, strong) UIFont *font;
 @property (nonatomic) UITextBorderStyle borderStyle;
-@property (nonatomic, retain) UIColor *textColor;
+@property (nonatomic, strong) UIColor *textColor;
 @property (nonatomic, readonly, getter=isEditing) BOOL editing;
 @property (nonatomic) BOOL clearsOnBeginEditing;
 @property (nonatomic) BOOL adjustsFontSizeToFitWidth;
 @property (nonatomic) CGFloat minimumFontSize;
 
-@property (nonatomic, retain) UIImage *background;
-@property (nonatomic, retain) UIImage *disabledBackground;
+@property (nonatomic, strong) UIImage *background;
+@property (nonatomic, strong) UIImage *disabledBackground;
 
 @property (nonatomic) UITextFieldViewMode clearButtonMode;
-@property (nonatomic, retain) UIView *leftView;
+@property (nonatomic, strong) UIView *leftView;
 @property (nonatomic) UITextFieldViewMode leftViewMode;
-@property (nonatomic, retain) UIView *rightView;
+@property (nonatomic, strong) UIView *rightView;
 @property (nonatomic) UITextFieldViewMode rightViewMode;
 
-@property (nonatomic, readwrite, retain) UIView *inputAccessoryView;
-@property (nonatomic, readwrite, retain) UIView *inputView;
+@property (nonatomic, readwrite, strong) UIView *inputAccessoryView;
+@property (nonatomic, readwrite, strong) UIView *inputView;
 
 @end

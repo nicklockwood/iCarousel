@@ -22,6 +22,8 @@
 
 - (void)awakeFromNib
 {
+    [super awakeFromNib];
+
     //set up data
     //your carousel should always be driven by an array of
     //data of some kind - don't store data in your item views

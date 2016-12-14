@@ -246,7 +246,6 @@
         
         [_modalViewController.view removeFromSuperview];
         [_modalViewController _setParentViewController:nil];
-        [_modalViewController autorelease];
         _modalViewController = nil;
 
         [self viewDidAppear:animated];

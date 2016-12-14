@@ -1,7 +1,5 @@
 iCarousel
 
-Version 1.8.1, October 13th, 2014
-
 Copyright (C) 2011 Charcoal Design
 
 This software is provided 'as-is', without any express or implied

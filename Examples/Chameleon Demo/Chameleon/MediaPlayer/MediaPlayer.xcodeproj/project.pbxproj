@@ -13,8 +13,8 @@
 		14EFB1BB1211DB5300D19B0C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14EFB1BA1211DB5300D19B0C /* Cocoa.framework */; };
 		4C1677D913C70F1A00814195 /* MPMoviePlayerController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1677D713C70F1900814195 /* MPMoviePlayerController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C1677DA13C70F1A00814195 /* MPMoviePlayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1677D813C70F1900814195 /* MPMoviePlayerController.m */; };
-		4C16781613C71E4900814195 /* MPMediaPlayback.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C16781513C71E4900814195 /* MPMediaPlayback.h */; };
-		4C16781A13C71E6200814195 /* UIInternalMovieView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C16781813C71E6200814195 /* UIInternalMovieView.h */; };
+		4C16781613C71E4900814195 /* MPMediaPlayback.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C16781513C71E4900814195 /* MPMediaPlayback.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C16781A13C71E6200814195 /* UIInternalMovieView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C16781813C71E6200814195 /* UIInternalMovieView.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4C16781B13C71E6200814195 /* UIInternalMovieView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C16781913C71E6200814195 /* UIInternalMovieView.m */; };
 		4C16787D13C71FB900814195 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C16787C13C71FB900814195 /* UIKit.framework */; };
 		4C16789F13C7206500814195 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C16789E13C7206500814195 /* QTKit.framework */; };
@@ -191,7 +191,7 @@
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0510;
 			};
 			buildConfigurationList = 1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "MediaPlayer" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -306,7 +306,6 @@
 		1DEB91B208733DA50010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
@@ -321,7 +320,6 @@
 		1DEB91B308733DA50010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CODE_SIGN_IDENTITY = "3rd Party Mac Developer Application";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;

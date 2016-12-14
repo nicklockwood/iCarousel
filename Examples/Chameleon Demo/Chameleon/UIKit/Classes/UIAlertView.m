@@ -35,7 +35,7 @@
 #import <AppKit/NSButton.h>
 
 @interface UIAlertView ()
-@property (nonatomic, retain) NSMutableArray *buttonTitles;
+@property (nonatomic, strong) NSMutableArray *buttonTitles;
 @end
 
 @implementation UIAlertView

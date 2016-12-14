@@ -48,10 +48,10 @@
 - (void)stopAnimating;
 - (BOOL)isAnimating;
 
-@property (nonatomic, retain) UIImage *highlightedImage;
+@property (nonatomic, strong) UIImage *highlightedImage;
 @property (nonatomic, getter=isHighlighted) BOOL highlighted;
 
-@property (nonatomic, retain) UIImage *image;
+@property (nonatomic, strong) UIImage *image;
 @property (nonatomic, copy) NSArray *animationImages;
 @property (nonatomic, copy) NSArray *highlightedAnimationImages;
 @property (nonatomic) NSTimeInterval animationDuration;

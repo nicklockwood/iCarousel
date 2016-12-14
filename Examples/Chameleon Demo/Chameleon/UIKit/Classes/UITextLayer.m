@@ -105,7 +105,7 @@
     clipView.parentLayer = self;
     clipView.behaviorDelegate = self;
 
-    [[[containerView window].screen UIKitView] addSubview:clipView];
+    [[[[containerView window] screen] UIKitView] addSubview:clipView];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateScrollViewContentOffset) name:NSViewBoundsDidChangeNotification object:clipView];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hierarchyDidChangeNotification:) name:UIViewFrameDidChangeNotification object:nil];
@@ -298,13 +298,13 @@
 // be less than ideal. This makes it ideal. Awesome.
 - (BOOL)hitTestForClipViewPoint:(NSPoint)point
 {
-    UIScreen *screen = [containerView window].screen;
+    UIScreen *screen = [[containerView window] screen];
     
     if (screen) {
         if (![[screen UIKitView] isFlipped]) {
             point.y = screen.bounds.size.height - point.y - 1;
         }
-        return (containerView == [[containerView window].screen _hitTest:NSPointToCGPoint(point) event:nil]);
+        return (containerView == [[[containerView window] screen] _hitTest:NSPointToCGPoint(point) event:nil]);
     }
 
     return NO;
@@ -427,7 +427,7 @@
 - (BOOL)resignFirstResponder
 {
     changingResponderStatus = YES;
-    const BOOL result = [[textView window] makeFirstResponder:[[containerView window].screen UIKitView]];
+    const BOOL result = [[textView window] makeFirstResponder:[[[containerView window] screen] UIKitView]];
     changingResponderStatus = NO;
     return result;
 }

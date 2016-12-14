@@ -91,16 +91,16 @@ typedef enum {
 - (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated;
 - (void)prepareForReuse;
 
-@property (nonatomic, readonly, retain) UIView *contentView;
-@property (nonatomic, readonly, retain) UILabel *textLabel;
-@property (nonatomic, readonly, retain) UILabel *detailTextLabel;
-@property (nonatomic, readonly, retain) UIImageView *imageView;
-@property (nonatomic, retain) UIView *backgroundView;
-@property (nonatomic, retain) UIView *selectedBackgroundView;
+@property (nonatomic, readonly, strong) UIView *contentView;
+@property (nonatomic, readonly, strong) UILabel *textLabel;
+@property (nonatomic, readonly, strong) UILabel *detailTextLabel;
+@property (nonatomic, readonly, strong) UIImageView *imageView;
+@property (nonatomic, strong) UIView *backgroundView;
+@property (nonatomic, strong) UIView *selectedBackgroundView;
 @property (nonatomic) UITableViewCellSelectionStyle selectionStyle;
 @property (nonatomic) NSInteger indentationLevel;
 @property (nonatomic) UITableViewCellAccessoryType accessoryType;
-@property (nonatomic, retain) UIView *accessoryView;
+@property (nonatomic, strong) UIView *accessoryView;
 @property (nonatomic) UITableViewCellAccessoryType editingAccessoryType;
 @property (nonatomic, getter=isSelected) BOOL selected;
 @property (nonatomic, getter=isHighlighted) BOOL highlighted;

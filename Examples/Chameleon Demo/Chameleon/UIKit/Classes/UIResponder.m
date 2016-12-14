@@ -114,7 +114,7 @@
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender
 {
-    if ([isa instancesRespondToSelector:action]) {
+    if ([[self class] instancesRespondToSelector:action]) {
         return YES;
     } else {
         return [[self nextResponder] canPerformAction:action withSender:sender];

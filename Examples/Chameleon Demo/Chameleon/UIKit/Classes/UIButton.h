@@ -79,8 +79,8 @@ typedef enum {
 - (CGRect)imageRectForContentRect:(CGRect)contentRect;
 
 @property (nonatomic, readonly) UIButtonType buttonType;
-@property (nonatomic,readonly,retain) UILabel *titleLabel;
-@property (nonatomic,readonly,retain) UIImageView *imageView;
+@property (nonatomic, readonly, strong) UILabel *titleLabel;
+@property (nonatomic, readonly, strong) UIImageView *imageView;
 @property (nonatomic) BOOL reversesTitleShadowWhenHighlighted;
 @property (nonatomic) BOOL adjustsImageWhenHighlighted;
 @property (nonatomic) BOOL adjustsImageWhenDisabled;
@@ -89,11 +89,11 @@ typedef enum {
 @property (nonatomic) UIEdgeInsets titleEdgeInsets;
 @property (nonatomic) UIEdgeInsets imageEdgeInsets;
 
-@property (nonatomic, readonly, retain) NSString *currentTitle;
-@property (nonatomic, readonly, retain) UIColor *currentTitleColor;
-@property (nonatomic, readonly, retain) UIColor *currentTitleShadowColor;
-@property (nonatomic, readonly, retain) UIImage *currentImage;
-@property (nonatomic, readonly, retain) UIImage *currentBackgroundImage;
+@property (nonatomic, readonly, strong) NSString *currentTitle;
+@property (nonatomic, readonly, strong) UIColor *currentTitleColor;
+@property (nonatomic, readonly, strong) UIColor *currentTitleShadowColor;
+@property (nonatomic, readonly, strong) UIImage *currentImage;
+@property (nonatomic, readonly, strong) UIImage *currentBackgroundImage;
 
 
 @end

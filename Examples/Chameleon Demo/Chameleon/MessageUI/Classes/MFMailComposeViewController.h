@@ -44,11 +44,7 @@ typedef enum MFMailComposeResult MFMailComposeResult;
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error;
 @end
 
-@interface MFMailComposeViewController : UINavigationController {
-@private
-    __unsafe_unretained id<MFMailComposeViewControllerDelegate> _mailComposeDelegate;
-}
-
+@interface MFMailComposeViewController : UINavigationController
 + (BOOL)canSendMail;
 
 - (void)setSubject:(NSString*)subject;
@@ -58,6 +54,5 @@ typedef enum MFMailComposeResult MFMailComposeResult;
 - (void)setBccRecipients:(NSArray*)bccRecipients;
 - (void)addAttachmentData:(NSData*)attachment mimeType:(NSString*)mimeType fileName:(NSString*)filename;
 
-@property (nonatomic,assign) id<MFMailComposeViewControllerDelegate> mailComposeDelegate;
-
+@property (nonatomic, assign) id<MFMailComposeViewControllerDelegate> mailComposeDelegate;
 @end

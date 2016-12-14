@@ -77,8 +77,8 @@ extern NSString *const UIKeyboardBoundsUserInfoKey;
 - (void)sendEvent:(UIEvent *)event;
 
 @property (nonatomic, readonly, getter=isKeyWindow) BOOL keyWindow;
-@property (nonatomic, retain) UIScreen *screen;
+@property (nonatomic, strong) UIScreen *screen;
 @property (nonatomic, assign) UIWindowLevel windowLevel;
-@property (nonatomic,retain) UIViewController *rootViewController;
+@property (nonatomic, strong) UIViewController *rootViewController;
 
 @end
