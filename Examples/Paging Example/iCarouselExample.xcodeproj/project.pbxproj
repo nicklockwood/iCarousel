@@ -17,6 +17,7 @@
 		0148359413A36C3700E687AC /* iCarouselExampleAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0148358D13A36C3700E687AC /* iCarouselExampleAppDelegate.m */; };
 		0148359513A36C3700E687AC /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0148358F13A36C3700E687AC /* MainWindow.xib */; };
 		0148359613A36C3700E687AC /* iCarouselExampleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0148359113A36C3700E687AC /* iCarouselExampleViewController.xib */; };
+		1D39196B1B77995700798841 /* iCarousel+AccessiblityButtons.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D39196A1B77995700798841 /* iCarousel+AccessiblityButtons.m */; };
 		B2E5E6C1146145C900EADB7A /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = B2E5E6C0146145C900EADB7A /* iCarousel.m */; };
 /* End PBXBuildFile section */
 
@@ -37,6 +38,8 @@
 		0148359013A36C3700E687AC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = SOURCE_ROOT; };
 		0148359213A36C3700E687AC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/iCarouselExampleViewController.xib; sourceTree = SOURCE_ROOT; };
 		018BBCB413A375AF005CA505 /* iCarouselExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iCarouselExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D3919691B77995700798841 /* iCarousel+AccessiblityButtons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "iCarousel+AccessiblityButtons.h"; sourceTree = "<group>"; };
+		1D39196A1B77995700798841 /* iCarousel+AccessiblityButtons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "iCarousel+AccessiblityButtons.m"; sourceTree = "<group>"; };
 		B2E5E6BF146145C900EADB7A /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		B2E5E6C0146145C900EADB7A /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -116,6 +119,8 @@
 			children = (
 				B2E5E6BF146145C900EADB7A /* iCarousel.h */,
 				B2E5E6C0146145C900EADB7A /* iCarousel.m */,
+				1D3919691B77995700798841 /* iCarousel+AccessiblityButtons.h */,
+				1D39196A1B77995700798841 /* iCarousel+AccessiblityButtons.m */,
 			);
 			name = iCarousel;
 			path = ../../iCarousel;
@@ -187,6 +192,7 @@
 				0148358813A36C2000E687AC /* main.m in Sources */,
 				0148359313A36C3700E687AC /* iCarouselExampleViewController.m in Sources */,
 				0148359413A36C3700E687AC /* iCarouselExampleAppDelegate.m in Sources */,
+				1D39196B1B77995700798841 /* iCarousel+AccessiblityButtons.m in Sources */,
 				B2E5E6C1146145C900EADB7A /* iCarousel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

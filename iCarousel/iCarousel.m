@@ -126,6 +126,7 @@
 @property (nonatomic, assign, getter = isDragging) BOOL dragging;
 @property (nonatomic, assign) BOOL didDrag;
 @property (nonatomic, assign) NSTimeInterval toggleTime;
+@property (nonatomic, copy) void (^completionHandler)(NSInteger currentItemIndex);
 
 NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *self);
 
@@ -170,10 +171,6 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     tapGesture.delegate = (id <UIGestureRecognizerDelegate>)self;
     [_contentView addGestureRecognizer:tapGesture];
     
-    //set up accessibility
-    self.accessibilityTraits = UIAccessibilityTraitAllowsDirectInteraction;
-    self.isAccessibilityElement = YES;
-    
 #else
     
     [_contentView setWantsLayer:YES];
@@ -186,6 +183,19 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     {
         [self reloadData];
     }
+    
+    //set up accessibility
+    if([self respondsToSelector:@selector(setUpAccessiblity)]){
+        [self performSelector:@selector(setUpAccessiblity)];
+    }
+}
+
+-(void) setUpAccessiblity{
+    //leave the implementation to the accessibility category or subclass
+}
+
+-(void) cleanUpAccessiblity{
+    //leave the implementation to the accessibility category or subclass
 }
 
 #ifndef USING_CHAMELEON
@@ -224,7 +234,10 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 }
 
 - (void)dealloc
-{   
+{
+    if([self respondsToSelector:@selector(cleanUpAccessiblity)]){
+        [self performSelector:@selector(cleanUpAccessiblity)];
+    }
     [self stopAnimation];
 }
 
@@ -1502,6 +1515,16 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     [self scrollToItemAtIndex:index duration:animated? SCROLL_DURATION: 0];
 }
 
+- (void)scrollToItemAtIndex:(NSInteger)index animated:(BOOL)animated completionHandler:(void (^)(NSInteger currentItemIndex))completionHandler{
+    if(animated){
+        self.completionHandler = completionHandler;
+    }
+    [self scrollToItemAtIndex:index animated:animated];
+    if(!animated){
+        completionHandler(self.currentItemIndex);
+    }
+}
+
 - (void)removeItemAtIndex:(NSInteger)index animated:(BOOL)animated
 {
     index = [self clampedIndex:index];
@@ -1771,6 +1794,10 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
             _scrolling = NO;
             [self depthSortViews];
             [self pushAnimationState:YES];
+            if(self.completionHandler){
+                self.completionHandler(self.currentItemIndex);
+                self.completionHandler = nil;
+            }
             [_delegate carouselDidEndScrollingAnimation:self];
             [self popAnimationState];
         }
