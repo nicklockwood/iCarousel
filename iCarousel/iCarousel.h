@@ -142,6 +142,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, getter = isDecelerating) BOOL decelerating;
 @property (nonatomic, readonly, getter = isScrolling) BOOL scrolling;
 
+@property (nonatomic, assign) BOOL pageControlEnabled;
+@property (nonatomic, strong) UIColor *pageControlDotColorCurrentPage;
+@property (nonatomic, strong) UIColor *pageControlDotColorOtherPage;
+
 - (void)scrollByOffset:(CGFloat)offset duration:(NSTimeInterval)duration;
 - (void)scrollToOffset:(CGFloat)offset duration:(NSTimeInterval)duration;
 - (void)scrollByNumberOfItems:(NSInteger)itemCount duration:(NSTimeInterval)duration;

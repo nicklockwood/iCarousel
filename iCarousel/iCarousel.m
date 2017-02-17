@@ -31,6 +31,7 @@
 //
 
 #import "iCarousel.h"
+#import "PageControl.h"
 #import <objc/message.h>
 #import <tgmath.h>
 
@@ -126,6 +127,7 @@
 @property (nonatomic, assign, getter = isDragging) BOOL dragging;
 @property (nonatomic, assign) BOOL didDrag;
 @property (nonatomic, assign) NSTimeInterval toggleTime;
+@property (nonatomic, strong) PageControl *pageControl;
 
 NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *self);
 
@@ -152,6 +154,10 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     _scrollToItemBoundary = YES;
     _ignorePerpendicularSwipes = YES;
     _centerItemWhenSelected = YES;
+    
+    _pageControlEnabled = YES;
+    _pageControlDotColorCurrentPage = [UIColor colorWithWhite:1 alpha:1];
+    _pageControlDotColorOtherPage = [UIColor colorWithWhite:1 alpha:0.4];
     
     _contentView = [[UIView alloc] initWithFrame:self.bounds];
     
@@ -1495,6 +1501,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 - (void)scrollToItemAtIndex:(NSInteger)index duration:(NSTimeInterval)duration
 {
     [self scrollToOffset:index duration:duration];
+    _pageControl.currentPage = index;
 }
 
 - (void)scrollToItemAtIndex:(NSInteger)index animated:(BOOL)animated
@@ -1655,6 +1662,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (void)startAnimation
 {
+    [self creatPageControl];
+    
     if (!_timer)
     {
         self.timer = [NSTimer timerWithTimeInterval:1.0/60.0
@@ -1924,7 +1933,27 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     //update previous index
     _previousScrollOffset = _scrollOffset;
     _previousItemIndex = self.currentItemIndex;
-} 
+}
+
+
+#pragma mark -
+#pragma mark Page Control
+
+- (void) creatPageControl{
+    
+    if (_pageControlEnabled && !_pageControl) {
+        
+        _pageControl = [PageControl new];
+        _pageControl.frame = CGRectMake((self.frame.size.width - (_numberOfItems * 13 + 15))/2, 10, _numberOfItems * 13 + 15, 23);
+        _pageControl.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin;
+        _pageControl.numberOfPages = _numberOfItems;
+        _pageControl.currentPage = 0;
+        _pageControl.dotColorCurrentPage = _pageControlDotColorCurrentPage;
+        _pageControl.dotColorOtherPage = _pageControlDotColorOtherPage;
+        [self addSubview:_pageControl];
+        
+    }
+}
 
 
 #ifdef ICAROUSEL_IOS
