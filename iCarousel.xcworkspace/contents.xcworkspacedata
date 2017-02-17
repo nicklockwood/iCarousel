@@ -160,13 +160,6 @@
       name = "Tests">
       <Group
          location = "container:"
-         name = "Controls">
-         <FileRef
-            location = "group:Tests/Controls/iCarouselTest.xcodeproj">
-         </FileRef>
-      </Group>
-      <Group
-         location = "container:"
          name = "Events">
          <FileRef
             location = "group:Tests/Events/iCarouselTest.xcodeproj">
