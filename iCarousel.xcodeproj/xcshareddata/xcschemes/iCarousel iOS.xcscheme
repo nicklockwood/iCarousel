@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0800"
+   LastUpgradeVersion = "0820"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "018BBC6313A37041005CA505"
-               BuildableName = "iCarouselMac.app"
-               BlueprintName = "iCarouselMac"
-               ReferencedContainer = "container:iCarouselMac.xcodeproj">
+               BlueprintIdentifier = "8215072A1E57468200C75711"
+               BuildableName = "iCarousel.framework"
+               BlueprintName = "iCarousel iOS"
+               ReferencedContainer = "container:iCarousel.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -29,15 +29,6 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "018BBC6313A37041005CA505"
-            BuildableName = "iCarouselMac.app"
-            BlueprintName = "iCarouselMac"
-            ReferencedContainer = "container:iCarouselMac.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -51,16 +42,15 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "018BBC6313A37041005CA505"
-            BuildableName = "iCarouselMac.app"
-            BlueprintName = "iCarouselMac"
-            ReferencedContainer = "container:iCarouselMac.xcodeproj">
+            BlueprintIdentifier = "8215072A1E57468200C75711"
+            BuildableName = "iCarousel.framework"
+            BlueprintName = "iCarousel iOS"
+            ReferencedContainer = "container:iCarousel.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -70,16 +60,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "018BBC6313A37041005CA505"
-            BuildableName = "iCarouselMac.app"
-            BlueprintName = "iCarouselMac"
-            ReferencedContainer = "container:iCarouselMac.xcodeproj">
+            BlueprintIdentifier = "8215072A1E57468200C75711"
+            BuildableName = "iCarousel.framework"
+            BlueprintName = "iCarousel iOS"
+            ReferencedContainer = "container:iCarousel.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

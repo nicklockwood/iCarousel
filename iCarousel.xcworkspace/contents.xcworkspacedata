@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:iCarousel.xcodeproj">
+   </FileRef>
+   <Group
+      location = "container:"
+      name = "Examples">
+      <Group
+         location = "container:"
+         name = "Advanced iOS Demo">
+         <FileRef
+            location = "group:Examples/Advanced iOS Demo/iCarouselExample.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "container:"
+         name = "Basic iOS Example">
+         <FileRef
+            location = "group:Examples/Basic iOS Example/iCarouselExample.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "container:"
+         name = "Buttons Demo">
+         <FileRef
+            location = "group:Examples/Buttons Demo/iCarouselButtonsDemo.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "container:"
+         name = "Chameleon Demo">
+         <FileRef
+            location = "group:Examples/Chameleon Demo/iCarouselChameleonDemo.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "container:"
+         name = "Controls Demo">
+         <FileRef
+            location = "group:Examples/Controls Demo/iCarouselControlsDemo.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "container:"
+         name = "Downloads &amp; Effects">
+         <FileRef
+            location = "group:Examples/Downloads &amp; Effects/iCarouselExample.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "container:"
+         name = "Dynamic Downloads">
+         <FileRef
+            location = "group:Examples/Dynamic Downloads/iCarouselExample.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "container:"
+         name = "Dynamic Image Effects">
+         <FileRef
+            location = "group:Examples/Dynamic Image Effects/iCarouselExample.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "container:"
+         name = "Dynamic View Reflections">
+         <FileRef
+            location = "group:Examples/Dynamic View Reflections/iCarouselReflectionsDemo.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "container:"
+         name = "Fading Demo">
+         <FileRef
+            location = "group:Examples/Fading Demo/iCarouselExample.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "container:"
+         name = "Mac Demo">
+         <FileRef
+            location = "group:Examples/Mac Demo/iCarouselMac.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "container:"
+         name = "Multiple Carousels">
+         <FileRef
+            location = "group:Examples/Multiple Carousels/MultipleCarousels.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "container:"
+         name = "Nested Carousels">
+         <FileRef
+            location = "group:Examples/Nested Carousels/iCarouselExample.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "container:"
+         name = "No Nib Demo">
+         <FileRef
+            location = "group:Examples/No Nib Demo/iCarouselNoNibDemo.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "container:"
+         name = "Offsets Demo">
+         <FileRef
+            location = "group:Examples/Offsets Demo/iCarouselExample.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "container:"
+         name = "Options Demo">
+         <FileRef
+            location = "group:Examples/Options Demo/iCarouselOptionsDemo.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "container:"
+         name = "Paging Example">
+         <FileRef
+            location = "group:Examples/Paging Example/iCarouselExample.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "container:"
+         name = "Storyboard Demo">
+         <FileRef
+            location = "group:Examples/Storyboard Demo/StoryboardExample.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "container:"
+         name = "Swift Example">
+         <FileRef
+            location = "group:Examples/Swift Example/SwiftExample.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "container:"
+         name = "Swift3 Example">
+         <FileRef
+            location = "group:Examples/Swift3 Example/SwiftExample.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "container:"
+         name = "Tables Demo">
+         <FileRef
+            location = "group:Examples/Tables Demo/iCarouselTest.xcodeproj">
+         </FileRef>
+      </Group>
+   </Group>
+   <Group
+      location = "container:"
+      name = "Tests">
+      <Group
+         location = "container:"
+         name = "Events">
+         <FileRef
+            location = "group:Tests/Events/iCarouselTest.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "container:"
+         name = "Scrolling">
+         <FileRef
+            location = "group:Tests/Scrolling/iCarouselTest.xcodeproj">
+         </FileRef>
+      </Group>
+   </Group>
+</Workspace>
