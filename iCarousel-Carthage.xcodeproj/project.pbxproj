@@ -1,0 +1,136 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		7EE501D31B31BC90000D5662 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7EE501CD1B31BC90000D5662 /* iCarousel-iOS.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7EE501691B31BB2D000D5662;
+			remoteInfo = "iCarousel-iOS";
+		};
+		7EE501D51B31BC90000D5662 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7EE501CD1B31BC90000D5662 /* iCarousel-iOS.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7EE5018B1B31BB63000D5662;
+			remoteInfo = "iCarousel-iOS-dynamic";
+		};
+		7EE501D71B31BC90000D5662 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7EE501CD1B31BC90000D5662 /* iCarousel-iOS.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7EE501AB1B31BBA0000D5662;
+			remoteInfo = "iCarousel-iOS-static";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		7EE501CD1B31BC90000D5662 /* iCarousel-iOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "iCarousel-iOS.xcodeproj"; path = "iCarousel/iCarousel-iOS/iCarousel-iOS.xcodeproj"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		7EE501C61B31BC75000D5662 = {
+			isa = PBXGroup;
+			children = (
+				7EE501CD1B31BC90000D5662 /* iCarousel-iOS.xcodeproj */,
+			);
+			sourceTree = "<group>";
+		};
+		7EE501CE1B31BC90000D5662 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7EE501D41B31BC90000D5662 /* libiCarousel-iOS.a */,
+				7EE501D61B31BC90000D5662 /* iCarousel.framework */,
+				7EE501D81B31BC90000D5662 /* iCarousel.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXProject section */
+		7EE501C71B31BC75000D5662 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0630;
+			};
+			buildConfigurationList = 7EE501CA1B31BC75000D5662 /* Build configuration list for PBXProject "iCarousel-Carthage" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 7EE501C61B31BC75000D5662;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 7EE501CE1B31BC90000D5662 /* Products */;
+					ProjectRef = 7EE501CD1B31BC90000D5662 /* iCarousel-iOS.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		7EE501D41B31BC90000D5662 /* libiCarousel-iOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libiCarousel-iOS.a";
+			remoteRef = 7EE501D31B31BC90000D5662 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7EE501D61B31BC90000D5662 /* iCarousel.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = iCarousel.framework;
+			remoteRef = 7EE501D51B31BC90000D5662 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		7EE501D81B31BC90000D5662 /* iCarousel.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = iCarousel.framework;
+			remoteRef = 7EE501D71B31BC90000D5662 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin XCBuildConfiguration section */
+		7EE501CB1B31BC75000D5662 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		7EE501CC1B31BC75000D5662 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7EE501CA1B31BC75000D5662 /* Build configuration list for PBXProject "iCarousel-Carthage" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7EE501CB1B31BC75000D5662 /* Debug */,
+				7EE501CC1B31BC75000D5662 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 7EE501C71B31BC75000D5662 /* Project object */;
+}
