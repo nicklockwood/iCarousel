@@ -16,7 +16,7 @@
 
 - (BOOL)application:(__unused UIApplication *)application didFinishLaunchingWithOptions:(__unused NSDictionary *)launchOptions
 {
-    [self.window addSubview:self.viewController.view];
+     [self.window setRootViewController:viewController];
     [self.window makeKeyAndVisible];
     return YES;
 }

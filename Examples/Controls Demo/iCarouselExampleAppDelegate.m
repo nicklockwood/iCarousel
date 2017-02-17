@@ -16,7 +16,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [window addSubview:viewController.view];
+    // iOS7 or higher requires root view controller
+    [window setRootViewController:viewController];
     [window makeKeyAndVisible];
     return YES;
 }

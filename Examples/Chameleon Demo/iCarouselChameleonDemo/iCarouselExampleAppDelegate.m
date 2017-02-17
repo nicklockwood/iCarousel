@@ -21,7 +21,7 @@
     viewController = [[iCarouselExampleViewController alloc] init];
     viewController.view.frame = window.screen.applicationFrame;
     viewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    [window addSubview:viewController.view];
+     [self.window setRootViewController:viewController];
     [window makeKeyAndVisible];
     return YES;
 }
