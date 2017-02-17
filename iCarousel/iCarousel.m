@@ -127,6 +127,9 @@
 @property (nonatomic, assign) BOOL didDrag;
 @property (nonatomic, assign) NSTimeInterval toggleTime;
 
+@property (atomic) BOOL doStop;
+@property (atomic) BOOL isAnimating;
+
 NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *self);
 
 @end
@@ -152,7 +155,11 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     _scrollToItemBoundary = YES;
     _ignorePerpendicularSwipes = YES;
     _centerItemWhenSelected = YES;
-    
+
+    _doStop = YES;
+    _isAnimating = NO;
+    _autoscrollDelay = 2;
+
     _contentView = [[UIView alloc] initWithFrame:self.bounds];
     
     
@@ -1773,6 +1780,13 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
             [self pushAnimationState:YES];
             [_delegate carouselDidEndScrollingAnimation:self];
             [self popAnimationState];
+
+            _isAnimating = NO;
+
+            if (!_doStop) {
+                [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(next) object:nil];
+                [self performSelector:@selector(next) withObject:nil afterDelay:_autoscrollDelay];
+            }
         }
     }
     else if (_decelerating)
@@ -2347,5 +2361,78 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 }
 
 #endif
+
+
+#pragma mark - Autoscroll methods
+
+- (void)start
+{
+    _doStop = NO;
+    [self next];
+}
+
+- (void)stop
+{
+    _doStop = YES;
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(next) object:nil];
+}
+
+- (void)next
+{
+    if (!_isAnimating && (self.dataSource && _numberOfItems >1)) {
+
+        if ([self.delegate respondsToSelector:@selector(carouselWillShowNext:)]) {
+            [self.delegate carouselWillShowNext:self];
+        }
+
+        // Next Image
+        NSUInteger nextIndex = (self.currentItemIndex+1) % _numberOfItems;
+
+        // Animate
+        [self scrollToItemAtIndex:nextIndex animated:YES];
+
+        // Call delegate
+        if([self.delegate respondsToSelector:@selector(carouselDidShowNext:)]){
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, SCROLL_DURATION * NSEC_PER_SEC);
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                if (self.window){
+                    [self.delegate carouselDidShowNext:self];
+                }
+            });
+        }
+    }
+}
+
+- (void)previous
+{
+    if (!_isAnimating && (self.dataSource && _numberOfItems >1)) {
+
+        if ([self.delegate respondsToSelector:@selector(carouselWillShowPrevious:)]) {
+            [self.delegate carouselWillShowPrevious:self];
+        }
+
+        // Previous image
+        NSUInteger prevIndex;
+        if (self.currentItemIndex == 0){
+            prevIndex = _numberOfItems - 1;
+        } else {
+            prevIndex = (self.currentItemIndex - 1) % _numberOfItems;
+        }
+
+        // Animate
+        [self scrollToItemAtIndex:prevIndex animated:YES];
+
+        // Call delegate
+        if ([self.delegate respondsToSelector:@selector(carouselDidShowPrevious:)]) {
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, SCROLL_DURATION * NSEC_PER_SEC);
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+                if (self.window) {
+                    [self.delegate carouselDidShowPrevious:self];
+                }
+            });
+        }
+    }
+    
+}
 
 @end

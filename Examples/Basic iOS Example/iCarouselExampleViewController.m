@@ -55,6 +55,13 @@
     _carousel.type = iCarouselTypeCoverFlow2;
 }
 
+-(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+
+    // Uncomment this line for testing autoscrolling.
+//    [_carousel start];
+}
+
 - (void)viewDidUnload
 {
     [super viewDidUnload];

@@ -141,6 +141,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, getter = isDragging) BOOL dragging;
 @property (nonatomic, readonly, getter = isDecelerating) BOOL decelerating;
 @property (nonatomic, readonly, getter = isScrolling) BOOL scrolling;
+@property (nonatomic, assign) CGFloat autoscrollDelay;
 
 - (void)scrollByOffset:(CGFloat)offset duration:(NSTimeInterval)duration;
 - (void)scrollToOffset:(CGFloat)offset duration:(NSTimeInterval)duration;
@@ -157,6 +158,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)removeItemAtIndex:(NSInteger)index animated:(BOOL)animated;
 - (void)insertItemAtIndex:(NSInteger)index animated:(BOOL)animated;
 - (void)reloadItemAtIndex:(NSInteger)index animated:(BOOL)animated;
+
+// Autoscroll methods
+- (void)start;
+- (void)stop;
+- (void)previous;
+- (void)next;
 
 - (void)reloadData;
 
@@ -194,6 +201,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (CGFloat)carouselItemWidth:(iCarousel *)carousel;
 - (CATransform3D)carousel:(iCarousel *)carousel itemTransformForOffset:(CGFloat)offset baseTransform:(CATransform3D)transform;
 - (CGFloat)carousel:(iCarousel *)carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value;
+
+// Autoscroll delegates
+- (void)carouselDidShowNext:(iCarousel *)carousel;
+- (void)carouselDidShowPrevious:(iCarousel *)carousel;
+- (void)carouselWillShowNext:(iCarousel *)carousel;
+- (void)carouselWillShowPrevious:(iCarousel *)carousel;
 
 @end
 
