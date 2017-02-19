@@ -34,6 +34,8 @@
 #import <objc/message.h>
 #import <tgmath.h>
 
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
 
 #import <Availability.h>
 #if !__has_feature(objc_arc)
