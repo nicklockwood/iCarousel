@@ -1771,7 +1771,9 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
             _scrolling = NO;
             [self depthSortViews];
             [self pushAnimationState:YES];
-            [_delegate carouselDidEndScrollingAnimation:self];
+            if (_delegate) {
+                [_delegate carouselDidEndScrollingAnimation:self];
+            }
             [self popAnimationState];
         }
     }
