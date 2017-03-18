@@ -515,6 +515,9 @@ This example demonstrates how to use iCarousel with Swift instead of Objective-C
     
 This example demonstrates how to use UITableViews inside your iCarousel item views and connect up the datasources without needing to use container controllers.
 
+Other Platforms
+------------
+ * [Xamarin.iOS](https://github.com/jzeferino/Xamarin.iOS.iCarousel)
 
 FAQ
 ------------
