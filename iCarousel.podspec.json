@@ -11,7 +11,7 @@
     "Nick Lockwood": "support@charcoaldesign.co.uk"
   },
   "source": {
-    "git": "git@github.com:xhzengAIB/iCarousel.git",
+    "git": "https://github.com/xhzengAIB/iCarousel.git",
     "tag": "1.0.0"
   },
   "source_files": "iCarousel/iCarousel.{h,m}",
