@@ -1,6 +1,6 @@
 {
-  "name": "iCarousel",
-  "version": "1.8.3",
+  "name": "iCarousel-CATransform3D",
+  "version": "1.0.0",
   "license": {
     "type": "zlib",
     "file": "LICENCE.md"
@@ -11,8 +11,8 @@
     "Nick Lockwood": "support@charcoaldesign.co.uk"
   },
   "source": {
-    "git": "https://github.com/nicklockwood/iCarousel.git",
-    "tag": "1.8.3"
+    "git": "git@github.com:xhzengAIB/iCarousel.git",
+    "tag": "1.0.0"
   },
   "source_files": "iCarousel/iCarousel.{h,m}",
   "requires_arc": true,
