@@ -863,8 +863,13 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     CATransform3D transform = [self transformForItemViewWithOffset:offset];
   
     //transform view
-    view.superview.layer.transform = transform;
-    
+    CABasicAnimation *basicAnimation = [CABasicAnimation animationWithKeyPath:@"transform"];
+    basicAnimation.fillMode = kCAFillModeForwards;
+    basicAnimation.removedOnCompletion = NO;
+    basicAnimation.duration = 0.15;
+    basicAnimation.toValue = [NSValue valueWithCATransform3D:transform];
+    [view.superview.layer addAnimation:basicAnimation forKey:nil];
+
     //backface culling
     BOOL showBackfaces = view.layer.doubleSided;
     if (showBackfaces)
