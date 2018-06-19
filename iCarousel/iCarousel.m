@@ -170,10 +170,6 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     tapGesture.delegate = (id <UIGestureRecognizerDelegate>)self;
     [_contentView addGestureRecognizer:tapGesture];
     
-    //set up accessibility
-    self.accessibilityTraits = UIAccessibilityTraitAllowsDirectInteraction;
-    self.isAccessibilityElement = YES;
-    
 #else
     
     [_contentView setWantsLayer:YES];
