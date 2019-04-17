@@ -37,11 +37,11 @@
 		0148358C13A36C3700E687AC /* iCarouselExampleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarouselExampleViewController.h; sourceTree = SOURCE_ROOT; };
 		0148358D13A36C3700E687AC /* iCarouselExampleAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarouselExampleAppDelegate.m; sourceTree = SOURCE_ROOT; };
 		0148358E13A36C3700E687AC /* iCarouselExampleAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarouselExampleAppDelegate.h; sourceTree = SOURCE_ROOT; };
-		0148359013A36C3700E687AC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = SOURCE_ROOT; };
-		0148359213A36C3700E687AC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/iCarouselExampleViewController.xib; sourceTree = SOURCE_ROOT; };
 		016334CC159BB378007DECD4 /* Images.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Images.plist; sourceTree = SOURCE_ROOT; };
 		018AE992179D85FF00FB7311 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = SOURCE_ROOT; };
 		018BBCB413A375AF005CA505 /* iCarouselExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iCarouselExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A57FEA07226733EA00B7EC19 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainWindow.xib; sourceTree = "<group>"; };
+		A57FEA08226733EB00B7EC19 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/iCarouselExampleViewController.xib; sourceTree = "<group>"; };
 		B2BCBA90159C8D81004942A1 /* AsyncImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncImageView.h; sourceTree = "<group>"; };
 		B2BCBA91159C8D81004942A1 /* AsyncImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncImageView.m; sourceTree = "<group>"; };
 		B2E5E6BF146145C900EADB7A /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
@@ -178,14 +178,15 @@
 		01308D8513491C3500453707 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0600;
+				LastUpgradeCheck = 1020;
 			};
 			buildConfigurationList = 01308D8813491C3500453707 /* Build configuration list for PBXProject "iCarouselExample" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 01308D8313491C3500453707;
 			productRefGroup = 01308D8F13491C3500453707 /* Products */;
@@ -240,7 +241,7 @@
 		0148358F13A36C3700E687AC /* MainWindow.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				0148359013A36C3700E687AC /* en */,
+				A57FEA07226733EA00B7EC19 /* Base */,
 			);
 			name = MainWindow.xib;
 			sourceTree = "<group>";
@@ -248,7 +249,7 @@
 		0148359113A36C3700E687AC /* iCarouselExampleViewController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				0148359213A36C3700E687AC /* en */,
+				A57FEA08226733EB00B7EC19 /* Base */,
 			);
 			name = iCarouselExampleViewController.xib;
 			sourceTree = "<group>";
@@ -259,7 +260,9 @@
 		01308DAD13491C3500453707 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
@@ -267,7 +270,7 @@
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
@@ -276,12 +279,13 @@
 		01308DAE13491C3500453707 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 			};
@@ -299,6 +303,7 @@
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "iCarouselExample-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.charcoaldesign.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = iCarouselExample;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
@@ -316,6 +321,7 @@
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "iCarouselExample-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.charcoaldesign.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = iCarouselExample;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
