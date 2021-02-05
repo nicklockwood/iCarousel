@@ -17,3 +17,6 @@ DerivedData
 .idea/
 Pods
 Podfile.lock
+
+# Swift Package Manager
+.swiftpm/
