@@ -23,9 +23,9 @@
 		138BCA6C1989946E0009467C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		138BCA6F1989946E0009467C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		138BCA711989946E0009467C /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		13F10FE9198997000066DA2E /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		13F10FEA198997000066DA2E /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
 		13F10FEC198997560066DA2E /* SwiftExample-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SwiftExample-Bridging-Header.h"; sourceTree = "<group>"; };
+		968B6A8825CD865900D5AA46 /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,11 +83,19 @@
 		13F10FE8198997000066DA2E /* iCarousel */ = {
 			isa = PBXGroup;
 			children = (
-				13F10FE9198997000066DA2E /* iCarousel.h */,
+				968B6A8725CD865900D5AA46 /* include */,
 				13F10FEA198997000066DA2E /* iCarousel.m */,
 			);
 			name = iCarousel;
 			path = ../../iCarousel;
+			sourceTree = "<group>";
+		};
+		968B6A8725CD865900D5AA46 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				968B6A8825CD865900D5AA46 /* iCarousel.h */,
+			);
+			path = include;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -131,6 +139,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
