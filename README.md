@@ -7,7 +7,7 @@ iCarousel is a class designed to simplify the implementation of various types of
 Supported OS & SDK Versions
 -----------------------------
 
-* Supported build target - iOS 10.0 / Mac OS 10.12 (Xcode 8.0, Apple LLVM compiler 8.0)
+* Supported build target - iOS 14.4 / Mac OS 11.2 (Xcode 12.4, Apple LLVM compiler 12.0)
 * Earliest supported deployment target - iOS 5.0 / Mac OS 10.7
 * Earliest compatible deployment target - iOS 4.3 / Mac OS 10.6
 
@@ -30,9 +30,18 @@ iCarousel is derived from UIView and - as with all UIKit components - it should 
 
 Installation
 --------------
+### Manual
 
-To use the iCarousel class in an app, just drag the iCarousel class files (demo files and assets are not needed) into your project and add the QuartzCore framework. You can also install it using Cocoapods in the normal way.
+To use the iCarousel class in an app, just drag the iCarousel class files (demo files and assets are not needed) into your project and add the QuartzCore framework. 
 
+### Cocoapods
+
+You can also install it using Cocoapods in the normal way.
+``` ruby
+pod 'iCarousel'
+```
+### Swift Package Manager
+From version 1.9.0 you can add iCarousel to your project via SPM. Paste link to this repo in SPM configuration window and you're good to go.
 
 Chameleon Support
 -------------------

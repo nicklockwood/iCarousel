@@ -24,6 +24,7 @@
 
 /* Begin PBXFileReference section */
 		0134E14B177C85B10007BF1A /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		968B6A8625CD865000D5AA46 /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		B2E56E57158250730090ECAC /* StoryboardExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StoryboardExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2E56E5B158250730090ECAC /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		B2E56E5D158250730090ECAC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -37,7 +38,6 @@
 		B2E56E6E158250740090ECAC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		B2E56E70158250740090ECAC /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		B2E56E71158250740090ECAC /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		B2E56E81158250C20090ECAC /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		B2E56E82158250C20090ECAC /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
 		B2E56E86158250D30090ECAC /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
 		B2E56E87158250D30090ECAC /* page.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page.png; sourceTree = "<group>"; };
@@ -59,6 +59,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		968B6A8525CD865000D5AA46 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				968B6A8625CD865000D5AA46 /* iCarousel.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
 		B2E56E4C158250730090ECAC = {
 			isa = PBXGroup;
 			children = (
@@ -117,7 +125,7 @@
 		B2E56E80158250C20090ECAC /* iCarousel */ = {
 			isa = PBXGroup;
 			children = (
-				B2E56E81158250C20090ECAC /* iCarousel.h */,
+				968B6A8525CD865000D5AA46 /* include */,
 				B2E56E82158250C20090ECAC /* iCarousel.m */,
 			);
 			name = iCarousel;
@@ -167,6 +175,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = B2E56E4C158250730090ECAC;

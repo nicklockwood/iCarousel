@@ -54,7 +54,6 @@
 		0153204D14A71F0100C4A088 /* MacAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MacAppDelegate.h; sourceTree = "<group>"; };
 		0153204E14A71F0100C4A088 /* MacAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MacAppDelegate.m; sourceTree = "<group>"; };
 		0153205114A71F0200C4A088 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		0153220514A71FC700C4A088 /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		0153220614A71FC700C4A088 /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
 		0153230814A7F50200C4A088 /* iCarouselExampleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarouselExampleViewController.m; sourceTree = "<group>"; };
 		0153230914A7F50200C4A088 /* iCarouselExampleAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarouselExampleAppDelegate.m; sourceTree = "<group>"; };
@@ -65,6 +64,7 @@
 		0153231314A7F78000C4A088 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		0153231E14A7F9FD00C4A088 /* UIKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = UIKit.xcodeproj; path = Chameleon/UIKit/UIKit.xcodeproj; sourceTree = "<group>"; };
 		0153233114A7FB5D00C4A088 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		968B6A6A25CD85C600D5AA46 /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,7 +155,7 @@
 		0153220414A71FC700C4A088 /* iCarousel */ = {
 			isa = PBXGroup;
 			children = (
-				0153220514A71FC700C4A088 /* iCarousel.h */,
+				968B6A6925CD85C600D5AA46 /* include */,
 				0153220614A71FC700C4A088 /* iCarousel.m */,
 			);
 			name = iCarousel;
@@ -186,6 +186,14 @@
 				0153231E14A7F9FD00C4A088 /* UIKit.xcodeproj */,
 			);
 			name = Chameleon;
+			sourceTree = "<group>";
+		};
+		968B6A6925CD85C600D5AA46 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				968B6A6A25CD85C600D5AA46 /* iCarousel.h */,
+			);
+			path = include;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

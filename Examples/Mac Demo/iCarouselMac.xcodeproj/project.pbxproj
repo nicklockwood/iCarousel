@@ -36,8 +36,8 @@
 		018BBC7B13A37041005CA505 /* iCarouselMacAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iCarouselMacAppDelegate.m; sourceTree = "<group>"; };
 		018BBC9C13A37314005CA505 /* iCarouselWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarouselWindowController.h; sourceTree = "<group>"; };
 		018BBC9D13A37314005CA505 /* iCarouselWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarouselWindowController.m; sourceTree = "<group>"; };
+		968B6A7825CD860A00D5AA46 /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		B2E5E6F2146151F900EADB7A /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		B2E5E6FA1461524900EADB7A /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		B2E5E6FB1461524900EADB7A /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
 		B2E5E6FE1461526300EADB7A /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
 		B2E5E6FF1461526300EADB7A /* page.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page.png; sourceTree = "<group>"; };
@@ -120,10 +120,18 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		968B6A7725CD860A00D5AA46 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				968B6A7825CD860A00D5AA46 /* iCarousel.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
 		B2E5E6F91461524800EADB7A /* iCarousel */ = {
 			isa = PBXGroup;
 			children = (
-				B2E5E6FA1461524900EADB7A /* iCarousel.h */,
+				968B6A7725CD860A00D5AA46 /* include */,
 				B2E5E6FB1461524900EADB7A /* iCarousel.m */,
 			);
 			name = iCarousel;
@@ -173,6 +181,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 018BBC5913A37041005CA505;

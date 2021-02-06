@@ -40,11 +40,11 @@
 		0148359213A36C3700E687AC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/iCarouselExampleViewController.xib; sourceTree = SOURCE_ROOT; };
 		018AE9A5179D8F3200FB7311 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = SOURCE_ROOT; };
 		018BBCB413A375AF005CA505 /* iCarouselReflectionsDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iCarouselReflectionsDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		968B6A7425CD85F100D5AA46 /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		B29BD7B614A3476C00BB4E68 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
 		B29BD7B714A3476C00BB4E68 /* page.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page.png; sourceTree = "<group>"; };
 		B2BCBA99159C8DF5004942A1 /* ReflectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReflectionView.h; sourceTree = "<group>"; };
 		B2BCBA9A159C8DF5004942A1 /* ReflectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReflectionView.m; sourceTree = "<group>"; };
-		B2E5E747146155E300EADB7A /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		B2E5E748146155E300EADB7A /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -120,6 +120,14 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		968B6A7325CD85F100D5AA46 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				968B6A7425CD85F100D5AA46 /* iCarousel.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
 		B29BD7B514A3476C00BB4E68 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -143,7 +151,7 @@
 		B2E5E746146155E300EADB7A /* iCarousel */ = {
 			isa = PBXGroup;
 			children = (
-				B2E5E747146155E300EADB7A /* iCarousel.h */,
+				968B6A7325CD85F100D5AA46 /* include */,
 				B2E5E748146155E300EADB7A /* iCarousel.m */,
 			);
 			name = iCarousel;
@@ -183,6 +191,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 01308D8313491C3500453707;

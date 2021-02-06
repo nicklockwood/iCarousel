@@ -39,9 +39,9 @@
 		0148359213A36C3700E687AC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/iCarouselExampleViewController.xib; sourceTree = SOURCE_ROOT; };
 		018AE98B179D7F6A00FB7311 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = SOURCE_ROOT; };
 		018BBCB413A375AF005CA505 /* iCarouselButtonsDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iCarouselButtonsDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		968B6A6725CD85A900D5AA46 /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		B29BD7B614A3476C00BB4E68 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
 		B29BD7B714A3476C00BB4E68 /* page.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page.png; sourceTree = "<group>"; };
-		B2E5E747146155E300EADB7A /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		B2E5E748146155E300EADB7A /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -116,6 +116,14 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		968B6A6625CD85A900D5AA46 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				968B6A6725CD85A900D5AA46 /* iCarousel.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
 		B29BD7B514A3476C00BB4E68 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -129,7 +137,7 @@
 		B2E5E746146155E300EADB7A /* iCarousel */ = {
 			isa = PBXGroup;
 			children = (
-				B2E5E747146155E300EADB7A /* iCarousel.h */,
+				968B6A6625CD85A900D5AA46 /* include */,
 				B2E5E748146155E300EADB7A /* iCarousel.m */,
 			);
 			name = iCarousel;
@@ -169,6 +177,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 01308D8313491C3500453707;

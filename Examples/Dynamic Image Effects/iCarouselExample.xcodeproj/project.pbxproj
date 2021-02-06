@@ -27,7 +27,6 @@
 
 /* Begin PBXFileReference section */
 		018AE994179D866100FB7311 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = SOURCE_ROOT; };
-		018AE997179D868F00FB7311 /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		018AE998179D868F00FB7311 /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
 		01FA10BD145E9951001906CB /* iCarouselExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iCarouselExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		01FA10C1145E9951001906CB /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -42,6 +41,7 @@
 		01FA10D3145E9951001906CB /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		01FA10D4145E9951001906CB /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		01FA10D7145E9951001906CB /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController.xib; sourceTree = "<group>"; };
+		968B6A7225CD85EC00D5AA46 /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		B2F2748015A4555700513759 /* FXImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXImageView.h; sourceTree = "<group>"; };
 		B2F2748115A4555700513759 /* FXImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXImageView.m; sourceTree = "<group>"; };
 		B2F2748215A4555700513759 /* UIImage+FX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+FX.h"; sourceTree = "<group>"; };
@@ -70,7 +70,7 @@
 		018AE996179D868F00FB7311 /* iCarousel */ = {
 			isa = PBXGroup;
 			children = (
-				018AE997179D868F00FB7311 /* iCarousel.h */,
+				968B6A7125CD85EC00D5AA46 /* include */,
 				018AE998179D868F00FB7311 /* iCarousel.m */,
 			);
 			name = iCarousel;
@@ -134,6 +134,14 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		968B6A7125CD85EC00D5AA46 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				968B6A7225CD85EC00D5AA46 /* iCarousel.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
 		B2F2747F15A4555700513759 /* FXImageView */ = {
 			isa = PBXGroup;
 			children = (
@@ -189,6 +197,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 01FA10B2145E994F001906CB;

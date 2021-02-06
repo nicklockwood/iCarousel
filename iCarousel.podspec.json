@@ -1,6 +1,6 @@
 {
   "name": "iCarousel",
-  "version": "1.8.3",
+  "version": "1.9.0",
   "license": {
     "type": "zlib",
     "file": "LICENCE.md"
@@ -12,9 +12,9 @@
   },
   "source": {
     "git": "https://github.com/nicklockwood/iCarousel.git",
-    "tag": "1.8.3"
+    "tag": "1.9.0"
   },
-  "source_files": "iCarousel/iCarousel.{h,m}",
+  "source_files": "iCarousel/**/*.{h,m}",
   "requires_arc": true,
   "frameworks": "QuartzCore",
   "platforms": {
