@@ -63,6 +63,7 @@
 			);
 			path = iCarousel;
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		8215073B1E5746F400C75711 /* Supporting Files */ = {
 			isa = PBXGroup;
@@ -150,7 +151,7 @@
 			};
 			buildConfigurationList = 821507251E57468200C75711 /* Build configuration list for PBXProject "iCarousel" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
@@ -404,6 +405,7 @@
 				821507491E57475B00C75711 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
