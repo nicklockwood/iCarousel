@@ -73,17 +73,6 @@
 #endif
 
 
-@implementation NSObject (iCarousel)
-
-- (NSUInteger)numberOfPlaceholdersInCarousel:(__unused iCarousel *)carousel { return 0; }
-
-- (CATransform3D)carousel:(__unused iCarousel *)carousel
-   itemTransformForOffset:(__unused CGFloat)offset
-            baseTransform:(CATransform3D)transform { return transform; }
-
-@end
-
-
 @interface iCarousel ()
 
 @property (nonatomic, strong) UIView *contentView;
@@ -482,7 +471,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (CGFloat)valueForOption:(iCarouselOption)option withDefault:(CGFloat)value
 {
-    if ([_delegate respondsToSelector:@selector(carousel:valueForOption:withDefault:)]) {
+    if ([_delegate respondsToSelector:@selector(carousel:valueForOption:withDefault:)])
+    {
         return [_delegate carousel:self valueForOption:option withDefault:value];
     }
     return value;
@@ -500,7 +490,14 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     {
         case iCarouselTypeCustom:
         {
-            return [_delegate carousel:self itemTransformForOffset:offset baseTransform:transform];
+            if ([_delegate respondsToSelector:@selector(carousel:itemTransformForOffset:baseTransform:)])
+            {
+                return [_delegate carousel:self itemTransformForOffset:offset baseTransform:transform];
+            }
+            else
+            {
+                return transform;
+            }
         }
         case iCarouselTypeLinear:
         {
@@ -920,7 +917,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (void)updateItemWidth
 {
-    if ([_delegate respondsToSelector:@selector(carouselItemWidth:)]) {
+    if ([_delegate respondsToSelector:@selector(carouselItemWidth:)])
+    {
         _itemWidth = [_delegate carouselItemWidth:self] ?: _itemWidth;
     }
     if (_numberOfItems > 0)
@@ -1340,7 +1338,14 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     //get number of items and placeholders
     _numberOfVisibleItems = 0;
     _numberOfItems = [_dataSource numberOfItemsInCarousel:self];
-    _numberOfPlaceholders = [_dataSource numberOfPlaceholdersInCarousel:self];
+    if ([_dataSource respondsToSelector:@selector(numberOfPlaceholdersInCarousel:)])
+    {
+        _numberOfPlaceholders = [_dataSource numberOfPlaceholdersInCarousel:self];
+    }
+    else
+    {
+        _numberOfPlaceholders = 0;
+    }
 
     //reset view pools
     self.itemViews = [NSMutableDictionary dictionary];
@@ -1442,7 +1447,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         {
             _endOffset = [self clampedOffset:_endOffset];
         }
-        if ([_delegate respondsToSelector:@selector(carouselWillBeginScrollingAnimation:)]) {
+        if ([_delegate respondsToSelector:@selector(carouselWillBeginScrollingAnimation:)])
+        {
             [_delegate carouselWillBeginScrollingAnimation:self];
         }
         [self startAnimation];
@@ -1761,7 +1767,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         {
             _scrolling = NO;
             [self depthSortViews];
-            if ([_delegate respondsToSelector:@selector(carouselDidEndScrollingAnimation:)]) {
+            if ([_delegate respondsToSelector:@selector(carouselDidEndScrollingAnimation:)])
+            {
                 [self pushAnimationState:YES];
                 [_delegate carouselDidEndScrollingAnimation:self];
                 [self popAnimationState];
@@ -1778,7 +1785,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         if (fabs(time - _scrollDuration) < FLOAT_ERROR_MARGIN)
         {
             _decelerating = NO;
-            if ([_delegate respondsToSelector:@selector(carouselDidEndDecelerating:)]) {
+            if ([_delegate respondsToSelector:@selector(carouselDidEndDecelerating:)])
+            {
                 [self pushAnimationState:YES];
                 [_delegate carouselDidEndDecelerating:self];
                 [self popAnimationState];
@@ -1903,7 +1911,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     //notify delegate of offset change
     if (fabs(_scrollOffset - _previousScrollOffset) > FLOAT_ERROR_MARGIN)
     {
-        if ([_delegate respondsToSelector:@selector(carouselDidScroll:)]) {
+        if ([_delegate respondsToSelector:@selector(carouselDidScroll:)])
+        {
             [self pushAnimationState:YES];
             [_delegate carouselDidScroll:self];
             [self popAnimationState];
@@ -1913,7 +1922,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     //notify delegate of index change
     if (_previousItemIndex != self.currentItemIndex)
     {
-        if ([_delegate respondsToSelector:@selector(carouselCurrentItemIndexDidChange:)]) {
+        if ([_delegate respondsToSelector:@selector(carouselCurrentItemIndexDidChange:)])
+        {
             [self pushAnimationState:YES];
             [_delegate carouselCurrentItemIndexDidChange:self];
             [self popAnimationState];
@@ -2111,7 +2121,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
                 _previousTranslation = -_previousTranslation;
 #endif
 
-                if ([_delegate respondsToSelector:@selector(carouselWillBeginDragging:)]) {
+                if ([_delegate respondsToSelector:@selector(carouselWillBeginDragging:)])
+                {
                     [_delegate carouselWillBeginDragging:self];
                 }
                 break;
@@ -2128,7 +2139,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
                     [self startDecelerating];
                 }
                 
-                if ([_delegate respondsToSelector:@selector(carouselDidEndDragging:willDecelerate:)]) {
+                if ([_delegate respondsToSelector:@selector(carouselDidEndDragging:willDecelerate:)])
+                {
                     [self pushAnimationState:YES];
                     [_delegate carouselDidEndDragging:self willDecelerate:_decelerating];
                     [self popAnimationState];
@@ -2161,7 +2173,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
                 }
                 else
                 {
-                    if ([_delegate respondsToSelector:@selector(carouselWillBeginDecelerating:)]) {
+                    if ([_delegate respondsToSelector:@selector(carouselWillBeginDecelerating:)])
+                    {
                         [self pushAnimationState:YES];
                         [_delegate carouselWillBeginDecelerating:self];
                         [self popAnimationState];
@@ -2222,7 +2235,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         if (!_dragging)
         {
             _dragging = YES;
-            if ([_delegate respondsToSelector:@selector(carouselWillBeginDragging:)]) {
+            if ([_delegate respondsToSelector:@selector(carouselWillBeginDragging:)])
+            {
                 [_delegate carouselWillBeginDragging:self];
             }
         }
@@ -2283,7 +2297,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
             [self startDecelerating];
         }
         
-        if ([_delegate respondsToSelector:@selector(carouselDidEndDragging:willDecelerate:)]) {
+        if ([_delegate respondsToSelector:@selector(carouselDidEndDragging:willDecelerate:)])
+        {
             [self pushAnimationState:YES];
             [_delegate carouselDidEndDragging:self willDecelerate:_decelerating];
             [self popAnimationState];
@@ -2303,7 +2318,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         }
         else
         {
-            if ([_delegate respondsToSelector:@selector(carouselWillBeginDecelerating:)]) {
+            if ([_delegate respondsToSelector:@selector(carouselWillBeginDecelerating:)])
+            {
                 [self pushAnimationState:YES];
                 [_delegate carouselWillBeginDecelerating:self];
                 [self popAnimationState];
